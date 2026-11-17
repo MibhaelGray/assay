@@ -42,7 +42,7 @@ case "$1" in
   options-etfs) exec uv run fr options --group etfs ;;
   bars)         exec uv run fr bars ;;
   paper-open|paper-check|paper-midday|paper-close|paper-sync)
-    # Nothing to do until the paper account is set up in .env (README, "Paper trading").
+    # Nothing to do until the paper account is set up in .env (docs/paper-trading.md).
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
     uv run fr trading-day || exit 0
     exec uv run fr paper "${1#paper-}" ;;

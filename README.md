@@ -1,216 +1,84 @@
 # ETF Factor Rotation
 
-What this project is for, and the rules it is built by: [PROJECT.md](PROJECT.md). Read that first.
+A research and paper-trading project. It collects daily bars from Yahoo Finance and option chains from IBKR for the largest ETFs and stocks, turns them into positioning, volatility and technical signals, and screens about 1,060 names for trade setups. Three times a day a Claude research pass judges the screen and ranks every candidate. A paper book trades only its best one to three ideas, and every verdict and its reasoning is kept and scored.
 
-Collects daily bars from Yahoo Finance and option chains from IBKR for the largest ETFs and their top constituents, turns them into positioning, volatility and technical signals, screens them each night for trade setups, and runs a paper book that takes only the candidates a research pass believes in, with every verdict and its reasoning kept and scored.
+What the project is for, and the rules it is built by: [PROJECT.md](PROJECT.md). Read that first.
 
-## Pieces
+## How it runs
 
-Data collection runs on the collector: a Mac that stays on, plugged in and logged in, with the IB Gateway running for option pulls. It can be a second Mac or the main one; the nightly job stashes any edits in progress around its `git pull` and commits only the files it writes. The main Mac runs the research passes and records their verdicts.
+Everything runs on one Mac through launchd (times Central, trading days):
 
-Bars and earnings dates come from Yahoo Finance through `yfinance`, with no login. Option chains, and the borrow figures that arrive with them, come from IBKR and are the only thing that needs the gateway; without it, those sections of the brief and dashboard are empty and everything else runs. Option data doesn't inform a trade decision. The IBKR connector, which doesn't need the gateway, supplies the night's market numbers, pre-market quotes and live marks. Web research feeds the research passes as context, not as stored data.
-
-Since 2026-11-16 the live IBKR account subscribes to US market data (the US Securities Snapshot and Futures Value Bundle and the US Equity and Options Add-On Streaming Bundle, non-professional) and shares it with the paper account, so the paper gateway quotes stocks in regular hours over the API as well as outside them (before that, regular-hours quotes were refused with IBKR error 10089). The paper account borrows the live login's data, so logging in to the live account anywhere else (Client Portal in a browser, the mobile app, TWS) cuts the gateway's quotes off with error 10197. Log out there and restart the gateway (`docker restart deploy-ib-gateway-paper-1`); `fr paper enter` restarts it on its own when it sees that error.
-
-Yahoo is unofficial and can miss a split on its first day. `fr bars` repairs that for ETFs (QUAL and MTUM on 2026-11-05) and lists any other move of 40% or more in the last five sessions as `suspect`, so read its output.
-
-| Command | Runs on | When (ET, trading days) | Writes |
-|---|---|---|---|
-| `fr options --group all` | collector | 10:00, 15:30 | `options_raw/`, `options_underlying/`, `exposures/`, `exposures_by_strike/` |
-| `fr options --group etfs` | collector | 11:00–14:00 hourly | same, SPX and the ETFs only |
-| `fr bars` | collector | 16:30 | `bars_daily/`, from Yahoo: the ETFs and stocks, the leveraged funds, AGG, and VIX, VIX3M and the 10-year yield |
-| `deploy/run.sh nightly` | collector | 19:00 | runs `fr brief` and the rows below, commits what it and the day's passes wrote under `journal/`, pushes |
-| `fr brief` | collector | in the nightly job | `journal/briefs/<as_of>.json`: regime, factor pairs, technicals, forced flows |
-| `fr earnings` | collector | in the nightly job | `journal/reference/earnings.json`: earnings dates for every stock the screen covers, from Yahoo Finance: the largest stocks, basket members and held names nightly, the wider tier 150 a night (see "The universe") |
-| `fr gaps` | collector | in the nightly job | `journal/reference/earnings_gaps.json`: what stocks did after earnings gaps, against SPY |
-| `fr scan` | collector | in the nightly job | `journal/scans/<as_of>.json`: tonight's stock and basket candidates |
-| `fr screen` | collector | in the nightly job | `journal/screens/<as_of>.json`: every stock, ETF, basket and factor pair checked against the setups in `journal.SETUPS`; the best 20 with what triggered each and a one-line chart verdict. Where a research pass looks |
-| `fr paper side` | Mac | 10:15 PM and 11:45 PM (Sun-Thu), 11:15 AM and 2:15 PM ET | `journal/paper/side/`: side facts from Yahoo for each stock in the night's verdicts (short interest, estimate changes, ratings and targets, insider dealing), pulled once before the open. No research pass reads them; `fr paper side report` scores each fact against how the stocks then did, night by night |
-| `fr paper holds` | Mac | any time | every idea, taken or passed, scored as if held 1 to 10 sessions, with and without its stop: where the result builds, and how long the takes' and the ranking's edge lasts. Rebuilt from the proposals and the bars each time; nothing stored. No research pass runs it |
-| `fr paper depth` | Mac, inside a pass | before judging | how much research each candidate got, read from the pass's own Claude Code transcripts: each name's agents, searches and pages opened, names with no agent or sharing a crowded one, and the pass's and agents' models against the rule (Fable 5.2 high judges, Opus 5.5 medium researches). `fr paper propose` keeps the night's measurement in `journal/paper/research/` |
-| `fr baskets check` | anywhere | monthly, and before adding a basket | prints whether each themed basket is a real basket: over 120 sessions, each member's daily return after its hedge's part is taken out must correlate at least 0.25 with the rest of its basket's, and the basket must average 0.35 (`basket_check.py`). It changes nothing; `--json` for the numbers |
-| `fr market` | Mac | after `git pull` | tonight's market rows for the dashboard: factor board, regime, dealer gamma, forced flows |
-| `fr serve` | Mac | any time | serves the dashboard at http://localhost:8765 with a Refresh button that updates every panel in about 2.5 seconds: the paper account's fills, today's bar for every name from one bulk Yahoo quote (a five-day pull runs behind the first refresh each day to catch dividends and splits), the book's 15-minute P/L, and the brief and screen rebuilt from those bars for display only (a refresh never writes them to the journal; the research passes read the 7:00 PM ET ones). Earnings dates over 12 hours old update in the background, so they can't hold it up |
-| `fr dashboard` | anywhere | any time | `dashboard/local.html`, a local copy of the dashboard built from the journal, and opens it |
-
-**The swing book (live since the night of 2026-11-15).** `fr paper restart --execute` archived the first book and the intraday book to `journal/archive/first-book-2026-11-15/` and started one swing book with $1,000,000 (`journal/paper/book.json`). Three research passes a day judge the live screen, and an order job trades what they record (the `swing-pass` skill; prompts in `deploy/passes/swing-*.md`; schedule from `python3 deploy/launchd/install.py --design three-pass`). The rules a pass works under are in the skill and PROJECT.md: it ranks every candidate and the best one to three takes at conviction 3 or more are entered, $10,000 a side, each with its own time limit (1-10 sessions) and stop (1-8%).
-
-| Command | Runs on | When (Central) | Writes |
-|---|---|---|---|
-| `fr pass night\|morning\|midday` | Mac (launchd `pass-night`, `pass-morning`, `pass-midday`) | 7:30 PM (Sun-Thu), 8:45 AM, 12:00 PM | runs the pass headless (see "Research passes outside the Claude app"); its result in `data/pass-logs/<session>-<pass>.json`, its research note in `journal/research/<session>-<pass>.md` |
-| `fr screen --live night\|morning\|midday` | Mac, inside a pass | at the start of each pass | `journal/screens/live/<session>-<pass>.json`: the whole universe screened on the latest Yahoo prices (after-hours, pre-market or regular session) |
-| `fr paper propose <draft>` | Mac, inside a pass | when the pass finishes | the pass's verdicts and ranks in `journal/paper/proposals/`, and its hold, exit or extend for each open trade in `journal/paper/pass_reviews/` |
-| `fr paper enter` | collector | every minute | `journal/paper/entries/`: once a pass has recorded, its best 1 to 3 takes as limit orders at IBKR's bid or ask, and the exits it asked for. No quote, or a spread over 2%: it waits and retries every 15 minutes until 2:40 PM |
-| `fr paper close` | collector | 2:45 PM | `journal/paper/exits/`: stops and time limits, sent into the closing auction |
-| `fr paper sync` | collector | 3:20 PM | `journal/paper/fills/`: the day's fills, commissions, positions and account value |
-
-The night pass skips Friday nights; the morning and midday passes run only on trading days. A by-hand order labelled `cleanup-<trade id>` (no `|SYMBOL`) is counted against that trade in the fill's own symbol, as the CTVA cover of 2026-11-16 was, so a sync that rewrites the day's fills can't reopen it.
-
-The dashboard page lives in `dashboard/page.html`, the same file published to claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv). The Refresh button only appears under `fr serve`; the claude.ai page can't run a pull. A refresh during the session stores a partial bar for the day, so the screen and the proposals' plan results wait for a session until its bars have been pulled after 4:15 PM ET. `fr dashboard` wraps it with `dashboard/shim.js` (a stand-in for the claude.ai runtime) and `dashboard/tokens.css`, and embeds tonight's market rows, so it opens from disk with no server. Tonight's market rows need the option data in `data/`, so on a machine without it that section shows as failed. Charts load d3 from a CDN.
-
-Market data lives on the collector's disk under `FR_DATA_ROOT` (default `data/` in the repo). The journal (briefs, scans, screens and the paper book) travels through GitHub: the nightly job commits and pushes what it wrote and what the day's research passes recorded.
-
-## Options data
-
-Option chains are pulled for the S&P 500 index (SPX), the 46 ETFs and the 30 largest stocks (`universe.option_universe()`). SPX carries most of the index's dealer gamma (far more open interest than SPY), so it's pulled in every run, including the hourly ETF runs. Two of its classes are kept: SPXW (the dailies and weeklies, settled at the close) and SPX (the traditional monthlies, settled on the morning's opening prints, so their greeks run to 09:30). SPX can't be a trade's leg: an index can't be bought. For each underlying, the collector takes:
-- the 5 nearest expiries within 8 days, where most dealer gamma sits
-- the next 3 monthly expiries, out to 120 days for ETFs or 75 days for stocks
-
-Strikes are kept within ±2 standard deviations of spot, using the underlying's IV, with a floor of 3% and a cap of 10% for ETFs and SPX or 15% for stocks. Within 3% of spot every strike is kept; beyond that only round strikes (every $5 on SPY, every 50 points on SPX). That keeps SPY near 850 contracts, SPX near 2,200 (SPXW's 8 expiries plus SPX's 3 monthlies) and a full run near 17,000, while the strikes and expiries that drive gamma, walls and skew stay in. Contract ids are cached per underlying and trading class until expiry, along with the built strikes IBKR doesn't list, so each strike is looked up once. Each contract stores:
-- bid, ask and sizes
-- last price, volume and open interest
-- IBKR's model greeks
-
-`fr options` then computes our own greeks for every contract. It implies a forward from put-call parity near the money, solves IV from the quote mid on the out-of-the-money side of each strike, and uses those to compute delta, gamma, vega, theta, vanna and charm. From those it computes, per underlying:
-- **Positioning:** total and 0DTE gamma exposure (GEX), the gamma flip level, call and put walls, vanna and charm exposure
-- **Volatility surface:** ATM IV at 30 and 90 days, term slope, 25-delta skew
-- **Flow:** put/call ratios by volume and open interest, premium traded, 0DTE share, and unusual volume (volume above open interest)
-
-GEX assumes dealers are long calls and short puts. Open interest updates once a day, overnight.
-
-## Forced flows
-
-The brief's `forced_flows` section estimates trading that has to happen regardless of anyone's view, from the same stored data:
-- **Calendar:** monthly and quarterly option expiries, VIX expiry, month and quarter ends, in sessions from tonight.
-- **Dealer gamma by expiry:** each upcoming expiry's share of gamma and delta-weighted open interest, for the index ETFs and largest names (`expiry_profile` in `exposures/`).
-- **Leveraged ETFs:** the close-of-day hedge of 18 leveraged and inverse funds, grouped by index: net assets × L(L−1) × the index return. Net assets come from IBKR into `journal/reference/leveraged_assets.json` (refreshed weekly) and are scaled by each fund's close.
-- **Month- and quarter-end rebalancing:** drift of a 60/40 SPY/AGG portfolio, ranked against completed periods.
-- **Vol-control funds:** exposure of a 10% vol-target fund on SPY (EWMA vol), and how a −3% to +2% session would change it.
-- **Trend followers:** a 20/60/120/250-day trend score per asset and the price where each lookback flips in the next session.
-- **Borrow:** shortable shares and IBKR's shortable indicator from the underlying snapshot (generic tick 236), compared with five sessions earlier.
-
-The leveraged funds and AGG are pulled as daily bars only; they aren't option underlyings or trade legs (`universe.idea_universe()`).
-
-## The screen and the dashboard
-
-At 7:00 PM ET the nightly job builds the brief, refreshes earnings dates and earnings-gap history, and runs the scan and the screen. The screen (`fr screen`) checks every stock, ETF, basket and factor pair against the setups in `journal.SETUPS` (about 1,040 names since 2026-11-12; see "The universe" below) and keeps the best 20, each with what triggered it, default legs and a default plan. Every stock and ETF candidate also carries two chart measures: how tight its daily ranges were over the 10 sessions before the signal against the 50 before, and whether its trend is up, down or mixed (the 50-day average against the 200-day, and its direction over 20 sessions). They move the ranking only for breakouts: a tight base adds a little and a breakout inside a downtrend loses a little more (`TIGHT_BASE` and `ADJUST` in `screen.py`, with the five-year check behind them). The shortlist is built so its 20 slots hold different ideas: a name the paper book holds or closed in the last three sessions is left out (and listed under `in_book`), no setup takes more than five slots, funds that gave the same signal and move together count once, and each stock's default hedge is the market, sector or industry fund it has moved with most over 60 sessions (`hedge_fit`; `weak` when nothing moves with it). That shortlist is all the screen decides: the evening research pass judges each candidate, and only its takes are traded (see "The automatic book" below).
-
-A trade's side is one symbol or a basket of stocks in equal weight. A pair is dollar-neutral; an outright long or short carries the market's move. A leg can be any US-listed stock or ETF, not only the standard universe: `fr bars` adds the paper book's legs and every basket member to its pull, and the nightly job runs `fr bars --pending` in case a proposal arrived after the 4:30 PM pull. Indexes such as SPX or VIX can't be legs.
-
-**The universe** (`universe.py`, widened 2026-11-12) has two tiers. The core is the original 46 ETFs and the 110 largest stocks: option chains, the intraday book and the brief's stock technicals stay on it. The swing tier adds 18 industry ETFs (`MORE_INDUSTRIES`: SOXX, XSD, CIBR, IBB, IHI, KBE, KIE, IYT, JETS, XHB, PAVE, XAR, OIH, XME, COPX, GDX, URA, TAN) and the rest of the S&P 500 and S&P 400 that trades at least $20M a day (`INDEX_STOCKS`, 741 names in `src/factor_rotation/index_stocks.json` with each one's index, GICS sector and sub-industry; refresh it when the indexes reconstitute). The screen, the nightly bars, earnings dates and the hedge choices (`fr paper hedges`, the screen's default hedge) cover both tiers, and four factor pairs use the new funds (transports, gold miners against gold, small against large biotech, metals). Yahoo refuses earnings-date calls after about 500 in quick succession, so `fr earnings` pulls the core names every night and the wider tier 150 a night, names reporting within 3 days before or 10 after today first, then the stalest (`WIDE_PER_NIGHT` in `earnings.py`); a name that fails keeps its last dates.
-
-`journal/reference/baskets.json` holds a watchlist of themed baskets, each with its hedge ETF, the story behind it, a reason for every member and a snapshot of the day's moves from IBKR. `fr bars` pulls daily bars for every member, `fr market` adds the baskets' spread against their hedge to the market rows, and the dashboard shows them on its Baskets page (`#baskets`). The watchlist isn't scored; a basket is scored only when a proposal trades it. Since 2026-11-16 every basket must pass `fr baskets check` (see the table above): a group that only moves with its sector fund, or a member that doesn't move with the rest, is cut. The list holds 36 baskets, including Genomics and diagnostics (Natera and its peers, against XLV) and App and game advertising (AppLovin, Unity, Digital Turbine, Magnite, against IGV), both added that night. Basket members are screened like any other name. The Baskets page has two views: a sortable table, and a heat map that draws every basket as one block of a treemap, each member a tile sized by the square root of its 90-day dollar volume and coloured by its move today, over 5 days or over 20 days; click a basket's name for its story and members.
-
-The dashboard's Chart page (`#chart=NVDA`) only works under `fr serve`, because the claude.ai page can't pull live data. Type a ticker, or click one in Baskets or Earnings, to see its last 60 days of 15-minute bars from Yahoo with daily and 15-minute averages, RSI, ATR and the nightly brief's technicals. It covers the names on the dashboard, pulls when opened, and saves nothing. Indicators on 15-minute bars use the regular session only. Yahoo reports no pre-market or after-hours volume, and its highs and lows there can be bad prints, so those candles show only the open and close. The chart loads Lightweight Charts from a CDN.
-
-The dashboard's Earnings page (`#earnings`) lists who reports in the next ten sessions and how reports from the last five traded. Reactions come from our daily bars: the gap and the day on the first session that traded on the report, alone and against the name's basket hedge. Some Yahoo dates are estimates until the company confirms them.
-
-The nightly and morning idea books (`fr record`, `fr check`, `fr morning`, `fr score`, the scorecard and the dashboard's Ideas and Track record views) were retired on 2026-11-09, along with the `factor-ideas` skill. Their files stay under `journal/ideas`, `checks`, `morning`, `scores`, `outcomes` and `intraday` as history; nothing reads them.
-
-## Paper trading
-
-**History.** This section and "The automatic book" below describe the first book as it ran from 2026-11-09 to 11-15, kept for its record; its files are in `journal/archive/first-book-2026-11-15/`. The live book is the swing book above. What carries over: the broker guards, the no-order-without-a-quote rule, the 2% spread limit, `fr paper halt` and the 10% pause.
-
-The automatic book (called `dynamic` in the files) trades on an IBKR **paper** account, so its trades get real fills, slippage, borrow and commissions. It takes only what a research pass believes in: the pass judges every candidate on the screen, and its takes are traded, up to 5 a session at $10,000 a side, each with the plan the pass wrote (see "The automatic book" below). Caps are 60 open trades, $900,000 gross and $30,000 net in one symbol. Entries can start outside regular hours: `fr paper early` runs at 9:00 PM ET (Sunday to Thursday, after the evening pass), 4:05 AM ET and 9:00 AM ET (after the pre-open pass; until 2026-11-12 these were 8:05 PM and 8:50 AM, which could run before the passes had recorded), and sends each take's legs as day limit orders that cross the book so they fill at once: a buy at the paper gateway's ask, a sell at its bid, with the limit 0.5% beyond so a small move doesn't leave it resting (quotes on their own client id, 76). No order goes out without the gateway's own bid and ask for it: a leg with no quote waits, the gateway is asked up to three times, and the run's record keeps its reason for each missing quote (`no_quote` in the early file, also in the warning and the Mac notification). Until 2026-11-13 a missing quote fell back to 0.5% through Yahoo's latest price with no spread check; that morning the gateway had no pre-market quotes, YETI's short went in alone on Yahoo's price and its hedge waited for the open. The one exception, in both books, is a book wider than a limit (set 2026-11-12): 2% of the midpoint for the swing book (`rules.MAX_CROSS_SPREAD`), whose exits are in regular hours so it pays only half the spread, against stops of 4-8%: that leg isn't crossed, and if nothing of its trade has filled yet the whole trade waits for the next run or the opening auction, so a pair never goes in one side at a time. A leg with no quote is treated the same way. The intraday book's after-hours and overnight orders cross inside 1% (`extended.MAX_CROSS_SPREAD`), since those trades pay the spread both ways and aim for 1-2% (until 2026-11-12 they crossed only inside a quarter of the name's daily ATR); beyond it they rest at the midpoint. In regular hours every order is a market order or an auction order, so it fills at once anyway. Until 2026-11-12 the limit was 0.5% through Yahoo's price, and on the night of 11-11 four of six legs rested because the bids had drifted under it. After 8:00 PM ET they go to IBKR's overnight venue and end at 3:50 AM; after-hours orders end at 8:00 PM, and pre-market orders are good until 9:25 AM ET so none meets the open. Each run cancels the early orders still working and sends what is left at the current price; a take the pre-open pass stands down is cancelled. Trades are sized at the first run that sees them and kept in `journal/paper/early/<session>.json`. A trade is in the book from the moment it is written there, before its first order goes out, so the stops, the checks and the dashboard see it even if the 9:15 AM entry job never runs (until 2026-11-12 it only counted once that job had written the day's plan, and on 11-12 the job failed and left two filled trades unwatched). Whatever is left goes in as market-on-open orders sent at 9:15 AM ET, which also cancel any early order still working and close at the open a take stood down after it filled early. Exits are not sent outside regular hours. Whether IBKR's paper account fills overnight orders the way a live account does is untested. A midday check (a pass at about 12:15 PM ET, `fr paper midday-check <draft>`, kept in `journal/paper/midday/<session>.json`) gives every open trade a hold or an exit; an exit needs the thesis broken or played out, and the `paper-midday` job closes it with market orders at 1:15 PM ET, or at 2:15 PM ET if the check came in late. It opens and extends nothing, and an exit that doesn't fill goes again into the close. At 9:40 AM ET the fills are checked: a trade with no fills wasn't taken, and a trade with one side filled and the other dead has its filled side closed with a plain market order, so half a pair doesn't sit unhedged all day. Exits are decided at 3:45 PM ET on Yahoo prices and sent as market-on-close orders; an earlier exit that never filled is sent again, unless the account's positions say it did fill.
-
-Prices come from Yahoo, asked up to four times at the open and three at the close, because a Mac that has just woken for the job may have no network yet. The paper gateway can't stand in: it has no market data while the live session is logged in. If no pre-market price arrives, trades are sized on the last close. If no price arrives at 3:45 PM ET, that trade's stop isn't checked that day. Each of these, and any order the gateway cancels or comments on, is written as a warning in the job's file, shown on the dashboard's Swing research page and in `fr paper report`, and raised as a Mac notification. The gateway keeps no reason for a cancelled order. The dashboard's Paper view shows every trade, the book's result and the difference between paper fills and the daily-bar model. Its profit and loss chart is built from the fills, after commissions, with open positions marked at each close. 1M, 3M and All use daily closes; under `fr serve`, 1D and 1W use 15-minute Yahoo bars, which are pulled when you open the view and not stored.
-
-### The automatic book
-
-The screen (`fr screen`) shortlists about 20 candidates a night. A research pass, run by Claude from the `automatic-book` skill, judges each one and records a verdict with `fr paper propose`: take or pass, a conviction from 1 to 5, and for a take the five steps of reasoning, what would prove it wrong, the legs and the plan. Code copies the screen's numbers into each record, fills in the mechanical legs and plan where the pass gave none, and records a candidate the pass never reached as "not reviewed", so every candidate has a record. The 9:15 AM job trades the takes, strongest conviction first, and takes nothing on a day with no proposals. The pass never sizes a trade or sends an order. The pass ranks what it judged and takes the best one to three that reach conviction 3; a night with no takes has to say why. An agent challenges each take, and a take is dropped only for a wrong fact, a thesis the price has already contradicted, or a pair that doesn't express the thesis. The pass can also add up to three ideas of its own from dated events the research turned up.
-
-The pass runs three times a day:
-
-| Pass | When (ET) | What it records |
+| When | Job | What it does |
 |---|---|---|
-| Evening | about 7:30 PM, after the screen | post-mortems for closed trades, the lessons file, and a verdict on every candidate for the next open |
-| Pre-open | about 8:30 AM, in by 9:14 AM | each take stands or is stood down on the overnight session; verdicts on anything new |
-| Pre-close | about 3:00 PM, in by 3:44 PM | hold, exit or extend for every open automatic trade (`fr paper review`) |
+| 9:00 AM, 2:30 PM; ETFs hourly 10 AM–1 PM | `fr options` | option chains from IBKR into `data/` |
+| 3:30 PM | `fr bars` | daily bars from Yahoo |
+| 6:00 PM | nightly | brief, earnings dates, scan and screen; commits and pushes `journal/` |
+| 7:30 PM (Sun–Thu) | night pass | judges the after-hours screen for the next session |
+| 8:45 AM | morning pass | judges the pre-market and first minutes of trading |
+| 12:00 PM | midday pass | judges the morning's trading, reviews open trades |
+| every minute | `fr paper enter` | sends a recorded pass's takes and exits to the paper account |
+| 2:45 PM | `fr paper close` | stops and time limits, into the closing auction |
+| 3:20 PM | `fr paper sync` | fills, positions and account value |
 
-A plan is the pass's call inside outer limits in `paper/rules.py`: a time limit of 1 to 10 sessions and a stop between 1% and 8% of one side, checked at each close. A take needs conviction 3 or more, and one whose leg reports earnings inside the time limit must say why it holds through. At the pre-close review the pass can close a trade early for a stated reason, or ask for a trade on its last session to run 1 to 3 sessions longer, once; the 3:45 PM job grants that only if the trade is in profit. It can never widen a stop or keep a loser past its time limit: stops, time limits and broken pairs are enforced by code whatever the review says.
+Each pass runs Claude Code headless (`fr pass <name>`). The judge is Fable 5.2 at high effort, and its research agents are Opus 5.5 at medium effort. Each pass screens on live prices (`fr screen --live`), researches the candidates on the web, gives every one a verdict, a conviction (1–5) and a rank, and records them with `fr paper propose`. The pass never sends an order itself.
 
-Learning runs on three records. Every proposal, taken or passed, is scored against its own plan on daily bars (first open to its stop or time limit, before costs), so the passes are the control for the takes. The evening pass also ranks every verdict of the night from best to worst (`rank` in the draft; `fr paper propose` refuses a draft without it), and `learn.rank_table()` scores the ranking: the rank correlation between rank and plan result within each night, averaged over nights, with the results of each night's top, middle and bottom third. That uses all twenty or so verdicts a night, so it can show whether the judgment predicts anything well before there are enough takes to test. Each closed trade gets a post-mortem (`fr paper postmortem`): right for the reason given, right by luck, the reasoning broke, or noise, with a one-line lesson. And `journal/paper/lessons.md` holds the standing lessons the pass keeps. `fr paper learn` prints all of it on one page: results by verdict, conviction and setup, trades the review managed against their original plans, open trades with what would prove each wrong, and the lessons. Every pass reads it first, because the pass remembers nothing between runs. `fr paper hedges SYMBOL` lists each ETF's 60-session correlation and beta with a name, for choosing what goes on the other side. The dashboard's Paper view lists every verdict under "Research verdicts".
+## The swing book
 
-In the first book the passes were scheduled tasks in the Claude desktop app (`automatic-book-evening-pass`, `-pre-open-pass`, `-pre-close-review`); the swing book's passes are launchd jobs instead (see "Research passes outside the Claude app"), and the app's tasks are paused. `fr paper halt` stops new entries whatever the passes record. Tests for the paper jobs and the research gate run against a stand-in broker: `uv run python -m unittest discover -s tests`.
+One paper book of $1,000,000 on an IBKR paper account, live since the night of 2026-11-15:
 
-A job that sends orders (`fr paper early`, `open`, `check`, `close`, and the intraday ticks) only looks when it is run by hand: it prints the orders it would send and sends none. `deploy/run.sh` exports `FR_SCHEDULED=1`, so the scheduled jobs trade as usual, and `--execute` makes a run by hand count. This sits in front of `FR_PAPER_SEND`, so a by-hand run can't trade just because `.env` turns sending on.
+- A pass takes its best one to three ideas at conviction 3 or more, $10,000 a side, each with its own stop (1–8%) and time limit (1–10 sessions). The rules are in the `swing-pass` skill and `paper/rules.py`.
+- Every order needs the paper gateway's own bid and ask. A leg whose spread is over 2% isn't crossed. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
+- A book down 10% of its capital from its high pauses itself until `fr paper resume`. `fr paper halt` stops new entries by hand.
 
-`paper/broker.py` is the only code that can send an order. It refuses unless the port is a paper port (4002 or 7497, never the collector's), `FR_PAPER_ACCOUNT` is a DU account, and every account on the gateway is a paper account. Orders can only be market-on-open, market-on-close, the plain market order the 9:40 AM check uses to close a half-filled trade, or a day limit order outside regular hours for an early entry. Without `FR_PAPER_SEND=1` every job is a dry run that prints its orders and writes nothing. `.env` supplies that setting whenever it isn't already set, so a job run by hand sends real paper orders unless you put `FR_PAPER_SEND=0` on the command line. `fr paper halt --reason "..."` stops new entries (exits still go out) until `fr paper resume`; the 10% pause (`drawdown.py`, PROJECT.md) does the same for one book on its own when that book is down 10% of its capital from its high ($100,000 for the swing book's $1,000,000 since the restart; $90,000 swing and $10,000 intraday before it): it writes `journal/paper/PAUSE-<book>`, every entry job (the 9:15 AM open, early entries, both intraday ticks) checks it before sending, and it stays until `fr paper resume --book <book>`, which starts the high again from the book's value then. `fr paper status` and the Accounts band show where each book would pause; `fr paper close --flatten` exits everything at today's close. `fr paper status` connects read-only and compares the account's positions with the books; `fr paper report` prints the results.
+## Safety
 
-Setup, once:
-1. In Client Portal, open the paper account (Settings → Account Settings → Paper Trading Account) and note its username and DU account number. It has its own login, so it never competes with the collector or your own live sessions.
-2. Install Docker Desktop and turn on Settings → General → "Start Docker Desktop when you sign in".
-3. Put the paper username and password in `.env.paper` (`TWS_USERID=` and `TWS_PASSWORD=`; git ignores the file), then start the paper gateway: `docker compose -f deploy/docker-compose.yml up -d ib-gateway-paper`. IBC logs it in, restarts it at 11:55 PM ET each night and logs back in, and Docker restarts it if it stops. `docker logs -f` with the container's name shows the login. It publishes the paper API on 127.0.0.1:4002 only, with the API's read-only switch off and the order precaution dialogs bypassed. The collector's live gateway is separate and stays read-only on 4001.
-4. Add `FR_PAPER_ACCOUNT=DU...` to `.env` (`FR_PAPER_PORT=4002` is the default) and run `uv run fr paper status` to check the connection and the account.
-5. The schedules (step 6 below) include `paper-open`, `paper-check`, `paper-close` and `paper-sync`; they skip quietly while `FR_PAPER_ACCOUNT` is unset. Jobs are dry runs, printing their orders to `~/Library/Logs/factor-rotation/paper-*.log`, until `FR_PAPER_SEND=1` is in `.env`. A job that starts after its auction cutoff (late from sleep, say) sends nothing.
+- **Paper only.** `paper/broker.py` is the only code that sends orders. It refuses anything but a paper port and a paper (DU) account.
+- **By-hand runs are dry runs.** A job run by hand prints what it would send unless given `--execute`. Set `FR_PAPER_SEND=0` to be sure.
+- **Passes can't trade.** A pass runs with a fixed allowlist of commands. It records verdicts; only the order job trades them.
 
-
-## Research passes outside the Claude app
-
-Since 2026-11-16 the swing book's three passes run as launchd jobs, not as Claude app tasks: `deploy/run.sh pass-night` (and `pass-morning`, `pass-midday`) runs `fr pass <name>` (`passes.py`), which starts Claude Code headless with the pass's prompt from `deploy/passes/`. A headless run pins the models, which the app can't: the judge runs on Fable 5.2 at high effort (`--model claude-fable-5-2 --effort high`) and every research agent on Opus 5.5 at medium effort (`CLAUDE_CODE_SUBAGENT_MODEL=claude-opus-5-5`, and the prompt tells it to spawn agents with `model: "opus"`, `effort: "medium"`); `fr paper depth` checks both in the record. It signs in with `FR_CLAUDE_TOKEN` from `.env` (from `claude setup-token`) and finds the Claude Code installed by the desktop app.
-
-The run uses `--permission-mode dontAsk` with an allowlist: it can read files, search the web, spawn research agents, write its draft to `data/pass-drafts/`, write its research note under `journal/research/` and edit `journal/paper/lessons.md`, and run only `fr screen --live <pass>`, `fr paper propose` (its own draft), `fr paper postmortem`, `fr paper depth`, `fr paper hedges` and `fr paper status`. Everything else is refused. It has no IBKR connector, so market numbers come from `uv run fr quotes SPY QQQ IWM ^VIX ^TNX CL=F ES=F NQ=F` (Yahoo). A pass has 150 minutes. Each run's result (turns, agents, minutes, anything refused, the final message) is in `data/pass-logs/<session>-<pass>.json` and its output in `~/Library/Logs/factor-rotation/pass-<name>.log`.
-
-`fr pass <name> --shadow` runs a pass on a copy of the journal in `data/shadow-journal` with `FR_PAPER_SEND=0`, so it records and trades nothing that counts: use it to try a prompt change. The first book's pre-close review ran this way from 2026-11-10 (the `pass-pre-close` job, now retired).
-
-## Portfolio view
-
-The dashboard's Portfolio page (`#portfolio`) shows both paper books the way a broker does, in four parts. A summary strip gives the account's value, the profit of the books in view, the change since the last close, a card for each book (click one to see only that book) and net exposure as a long-against-short bar; the other figures (returns three ways, money at work, commissions, pause levels, the unassigned remainder) sit in a fold-out table under it. The profit-and-loss chart shows the S&P 500's change over the same time and can draw each book as its own line ("Split by book"), with 1D, 1W, 1M, MTD, 3M, YTD and All. Positions are listed by trade (one row per open trade with its exposure, today's change, total, result and room to its stop; click a row for its legs, plan and reasoning) or by symbol, with filters for long, short, winners and losers and sorting on every column; tickers open the Chart page. A last panel is the closed-trade history for both books (latest session, the week, or everything), where a swing trade opens to its legs, plan and reasoning.
-
-Portfolio is the only page that shows money: positions, the profit-and-loss chart and every closed trade. The Swing research page (`#paper`) and the Intraday signals page (`#intraday`) hold the decision record instead: the verdicts and signals, the reasoning, and how takes did against passes. A trade on Portfolio links to its verdict, and a taken verdict links back to its trade. `portfolio.py` builds it from each book's fills: positions by symbol at average cost, marked at the latest daily bar, and the running profit and loss after commissions at each session's close. Under `fr serve`, 1D and 1W use 15-minute Yahoo bars (`/api/portfolio/pnl?book=`). The published claude.ai copy has the daily frames only.
-
-Since the restart of 2026-11-15 there is one book, the swing book, with $1,000,000 of capital (`journal/paper/book.json`); the rest of this paragraph describes how the first two books were split. Both books traded the one IBKR paper account, so each was kept as a sub-account (`portfolio.accounts()`, `CAPITAL` in `portfolio.py`, set 2026-11-12): the swing book had $900,000 of capital and the intraday book $100,000, and each one's value is its capital plus the realized and open profit and loss from its own fills, after commissions. Open positions are marked at IBKR's own prices from the last sync (`marks` in `journal/paper/fills/<session>.json`, the prices the account's value is struck at), falling back to the latest daily close. What the account is worth beyond the two books is shown as unassigned: about $27,000 at the start, the account's value before the books began plus interest and borrow fees. It should move slowly; a jump means a position or cost no book accounts for. The summary strip and the fold-out table under it show the account, both books and the unassigned remainder, which always add up to IBKR's value. "Today" is each book's profit and loss at IBKR's prices less what it was at the close before the latest session (`day_pnl` in `portfolio.rows()`); the chart's 1D figure uses Yahoo's 15-minute prices, so the two can differ by a few dollars. Each book's return is shown two ways: on its own capital, and on the whole account's value when the books began ($1,026,380 at the first sync, 2026-11-09), so the two books' account returns add up to the account's. The Portfolio page's profit-and-loss chart shows the same account percentage beside the dollar figure. A third return is on capital deployed (`portfolio.deployed()`): the book's gross exposure at cost, longs plus shorts, after every fill, averaged over calendar time since its first fill, so a book that sits flat overnight has its idle hours counted against it. The fold-out table shows that return with the average, current and peak amount deployed.
-
-## Intraday book
-
-**Stopped at the restart of 2026-11-15.** Its jobs (`intraday-tick`, `intraday-ext`) are retired and its record is in `journal/archive/first-book-2026-11-15/intraday/`. The rest of this section describes it as it ran.
-
-A second book that trades the same ideas on a 15-minute clock, flat by 3:45 PM ET. Since 2026-11-12 Haiku's takes are traded on the paper account; passes and unjudged signals are only followed.
+## Quick start
 
 ```bash
-uv run fr intraday bars      # 15-minute bars from Yahoo for the liquid names, into data/bars_15m/
-uv run fr intraday replay    # run the setups over those bars with no model; writes journal/intraday/replay.json
-uv run fr intraday tick      # one live tick: move today's signals along, judge the new ones, send the takes' orders
-uv run fr intraday ext       # one extended-hours tick: after-hours, overnight or pre-market, whichever is trading
-                             #   run by hand it only looks; add --execute to make it count
-uv run fr intraday report    # takes against passes, regular session and extended hours
+uv sync
+uv run fr bars                # backfill five years of daily bars (no IBKR needed)
+uv run fr serve               # dashboard at http://localhost:8765, with a Refresh button
+uv run fr dashboard           # or a static copy built from the journal
+uv run fr paper status        # the account against the book (read-only)
+uv run fr baskets check       # is every themed basket a real basket?
+uv run python -m unittest discover -s tests
 ```
 
-The `intraday-tick` launchd job runs the tick a minute after each 15-minute bar closes, 10:01 AM to 3:46 PM ET. Each new signal goes to Claude Haiku, which researches the name on the web before it gives a take or a pass (`intraday/model.py`; see "Haiku's research" below), and takes and passes are both tracked to their exit by the same rules, in `journal/intraday/days/<date>.json`. The setups and exit rules are in `intraday/signals.py`. Results assume 8 bp of costs a trade.
+Setting up the collector (IBKR login, gateway, launchd): [docs/operations.md](docs/operations.md#collector-setup-macos).
 
-Since 2026-11-12 the prompt (version 2, kept on each verdict as `prompt`) leans toward taking: a take needs the case for the move to be at least as good as the case against, heavy volume with a lead over the hedge counts without a headline, and a pass needs a specific reason. Version 1 told Haiku to pass on most signals and to distrust a breakout with no news, and it took none of 14. Re-judged on the same 19 signals and headlines, version 2 took 6 (AMD, AVGO, MTUM, PLD, COHR, HUM), which averaged −79 bp after costs against −58 bp for its 13 passes.
+## Dashboard
 
-Paper orders (`intraday/orders.py`): each take goes out at the tick that judges it as two market orders, the name and its hedge at $10,000 a side, on the swing book's paper account with the same guards. They fill about a minute after the signal bar closes, near the model's fill at the next bar's open. The tick whose check ends the trade (stop, target, time limit) sends the exit the same way, and the 3:46 PM tick closes whatever is still open. A pair with one leg dead is closed at the next tick, and an exit that didn't fill is sent again. Order refs start with the signal's id (`I-MMDD-SYM`), so the swing book's jobs ignore these fills, and its position check counts what the intraday book holds. The limits are 5 takes a day and 3 open at once. `journal/paper/HALT` stops new entries but not exits, `FR_PAPER_SEND=0` makes the orders a dry run, and the tick connects with its own client id (`FR_INTRADAY_CLIENT_ID`, 72) so it can overlap a swing book job. Each take's orders, fills and result after commissions are under `paper` in the day's file, beside its model result. If the Mac sleeps through the 3:46 PM tick, a position can stay open overnight, and the 4:20 PM sync reports it as a mismatch.
+`fr serve` serves `dashboard/page.html`, which has these pages:
 
-### Outside regular hours
+- **Today**
+- **Portfolio:** positions, P/L and closed trades
+- **Swing research:** every verdict and its reasoning
+- **Market:** regime, factor board, dealer gamma and forced flows
+- **Baskets:** a table or a treemap heat map
+- **Earnings**
+- **Hormuz**
+- **Chart**
 
-Since 2026-11-11 the intraday book also trades after-hours (4:00-8:00 PM ET), overnight (8:00 PM-3:50 AM ET, Sunday to Thursday nights, on IBKR's OVERNIGHT venue) and pre-market (4:00-9:30 AM ET), each session flat by its end: 7:45 PM, 3:35 AM and 9:20 AM ET (`intraday/extended.py`, the `intraday-ext` launchd job every 15 minutes from 4:46 PM to 9:16 AM ET, plus 9:31 AM). The signal is a news mover: a stock (funds are hedges only) that has moved at least 1 daily ATR against its hedge, beta-adjusted, since the 4:00 PM close, on at least $1M traded since the close. A name is skipped, and so is its hedge, when its bid-ask spread is wider than a quarter of its daily ATR: outside the regular session there are often no trades at all, so the price is the midpoint of the book, and a midpoint taken from a wide book says nothing about a move. Measured at 11:00 PM ET on 2026-11-11, 109 of 247 names were inside that limit; the liquid ones (NVDA, TSLA, QQQ, MU) were inside a hundredth of their ATR, while the median name sat at a third of it and the worst at 95 times. It trades with the move; Haiku takes or passes with the headlines, at most 4 judged a tick, 5 takes a night and 3 open. Earnings reporters aren't skipped here. Every signal is followed to its stop, target (the day book's ATR rules) or flat time on each tick's prices, so takes and passes are scored alike in `fr intraday report`.
+The same page is published to claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv).
 
-Takes go to the paper account as limit orders, $10,000 a side. Entries and exits both cross the book to fill at once (a buy at the ask, a sell at the bid, with the limit 0.5% beyond) when the spread is inside that same quarter-ATR limit; across a wider book an entry rests 0.5% through the midpoint, and an exit rests there until the 9:31 AM market order finishes it. An entry unfilled at the next tick is cancelled, and a pair with one side filled is closed. An exit that hasn't filled is repriced every tick, into the next session if it must, and anything still held at 9:31 AM ET goes out at the market. Prices come from the paper gateway, read-only on its own client id (`FR_EXT_DATA_CLIENT_ID`, 73): quotes, and 15-minute bars for the volume since the close (after-hours and overnight venue together; the figure includes the closing auction prints IBKR stamps 4:00 PM). Yahoo stands in before 8:00 PM and after 4:00 AM if the gateway has no data, for finding and following signals only: since 2026-11-13 no order goes out without the gateway's own bid and ask, so on Yahoo's prices a take is recorded as not sent with the gateway's reason, and an exit without a quote waits for the next tick or the 9:31 AM market order. Overnight there is no stand-in. The gateway's market data on the regular exchanges stops while the live IBKR account is logged in anywhere else, IBKR Desktop on this Mac included (IBKR error 10197); its overnight-venue quotes kept coming regardless on 2026-11-11 to 11-13, when it quoted 49 of 49 overnight ticks and none of 49 after-hours or pre-market ones. Each night is in `journal/intraday/nights/<session>.json`, named for the session it leads into. The `keep-awake` launchd job (4:40 PM ET on weekdays, 7:55 PM ET on Sundays) holds off idle sleep until 9:40 AM ET so these ticks and the early entries run; a closed lid or a flat battery still stops them, so leave the Mac open and plugged in.
+## Layout
 
-**Haiku's research.** Since 2026-11-12 (prompt version 4) Haiku researches each signal before it decides, in both the regular and the extended sessions. It starts from the name's Yahoo headlines and has web search and page reads, and nothing else: no files, no commands. It looks for why the name is moving (with dates and sources), whether the move is the name's own or its group's, what is scheduled inside the trade's window, and anything that makes the name trade unlike its setup, in about eight to twelve lookups. The verdict keeps `catalyst`, `why`, `against`, `coming`, up to five `sources`, and how many steps and seconds the research took; the dashboard shows them under each signal. A tick's signals (up to 4) are researched side by side, so the delay is the slowest one: about a minute on the signals tried on 2026-11-11, with a 4-minute limit after which the signal is recorded as undecided. Orders go out after the research, at the price then. Versions 1 to 3 judged on the Yahoo headlines alone, with no tools.
+| Path | Holds |
+|---|---|
+| `src/factor_rotation/` | the `fr` command and everything behind it |
+| `journal/` | what the project decides, in git: briefs, screens, research notes, the paper book (`journal/paper/`), reference lists such as `baskets.json`, and the first book's archive |
+| `data/` | market data on the collector's disk, not in git: bars, option chains, pass logs |
+| `dashboard/` | the dashboard page and its local wrapper |
+| `deploy/` | launchd and systemd schedules, `run.sh`, the gateway's docker-compose file, the pass prompts |
+| `.claude/skills/swing-pass/` | what a research pass is told |
 
-Haiku runs through Claude Code headless, which needs a long-lived login for unattended jobs: run `claude setup-token` once and put the token in `.env` as `FR_CLAUDE_TOKEN`. Without it every signal is recorded as undecided and only the bare rules are tracked.
+## More detail
 
-## Collector setup (macOS)
-
-1. **IBKR login:** the account must be on IBKR Pro (Lite accounts can't use the API). Create a second username in Client Portal (Settings → Users & Access Rights) and subscribe it to US options (OPRA) and US equity market data. Its own subscriptions mean your own TWS or phone sessions never cut off the collector. Expect an IB Key approval on your phone about once a week, when the gateway's session expires.
-2. **Software:** install Docker Desktop (Settings → General → Start Docker Desktop when you sign in), `uv` and git. Clone this repo, set `git config user.name` and `user.email` in it, and give the Mac an SSH key with write access to the GitHub repo and no passphrase, so the nightly job can push unattended.
-3. **Settings:** copy `.env.example` to `.env` and fill in the login.
-4. **Start the gateway:** `docker compose -f deploy/docker-compose.yml up -d`. It restarts with Docker Desktop.
-5. **Keep it awake on power.** Jobs that come due while the Mac sleeps run late, when it wakes, so the snapshots would be mistimed. In System Settings, turn on automatic login, and under Battery → Options turn on "Prevent automatic sleeping on power adapter when the display is off". Or from a terminal:
-   ```bash
-   sudo pmset -c sleep 0 disksleep 0
-   ```
-   Leave the lid open, or closed with an external display attached; a closed lid without one sleeps regardless. Each job also runs under `caffeinate`, so the Mac stays awake until it finishes.
-6. **Install the schedules:** `python3 deploy/launchd/install.py --design three-pass` (the live swing book; without the flag it installs the first book's jobs). It converts the New York schedule to the Mac's time zone (rerun it if that changes) and installs one launchd agent per job. `--dry-run` shows the plists without installing, `--uninstall` removes them.
-7. **First run:** `uv run fr bars` (backfills 5 years of bars, no gateway needed), then `uv run fr options --symbols SPY,QQQ` to check permissions and timing.
-
-Logs: `~/Library/Logs/factor-rotation/<job>.log`. To run a job now: `launchctl kickstart gui/$(id -u)/com.factor-rotation.nightly`.
-
-A Linux box works too: `deploy/systemd/` holds the same schedule as systemd timers, with the repo at `/opt/factor-rotation`.
-
-## Moving the collector to another Mac
-
-1. Set up the new Mac with steps 1–6 above, but don't start the gateway yet.
-2. On the old one: `python3 deploy/launchd/install.py --uninstall`, then `docker compose -f deploy/docker-compose.yml down`. One gateway per username, so stop this one first.
-3. Copy the market data across (Remote Login on, on the new Mac): `rsync -az data/ newmac.local:<repo path>/data/`. Past option chains can't be re-downloaded, so check the file counts match before deleting anything.
-4. On the new Mac: start the gateway, install the schedules and kickstart `bars` to check it connects.
-
-## Backup
-
-The collector's disk holds the only copy of the market data, and past option chains can't be re-downloaded. Copy it to the main Mac now and then (turn on System Settings → General → Sharing → Remote Login on the collector first):
-
-```bash
-rsync -az collector.local:<repo path>/data/ ~/Documents/"ETF Factor Rotation"/data/
-```
+- [docs/operations.md](docs/operations.md): data sources, every job, the headless passes, collector setup, moving and backup
+- [docs/signals.md](docs/signals.md): options data, forced flows, the screen and universe, themed baskets, the dashboard, the Portfolio view
+- [docs/paper-trading.md](docs/paper-trading.md): order rules and guards, and the first book (2026-11-09 to 11-15)
+- [docs/intraday-book.md](docs/intraday-book.md): the intraday book, archived at the restart
