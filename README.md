@@ -37,6 +37,16 @@ Yahoo is unofficial and can miss a split on its first day. `fr bars` repairs tha
 | `fr serve` | Mac | any time | serves the dashboard at http://localhost:8765 with a Refresh button that updates every panel in about 2.5 seconds: the paper account's fills, today's bar for every name from one bulk Yahoo quote (a five-day pull runs behind the first refresh each day to catch dividends and splits), the book's 15-minute P/L, and the brief and screen rebuilt from those bars for display only (a refresh never writes them to the journal; the research passes read the 7:00 PM ET ones). Earnings dates over 12 hours old update in the background, so they can't hold it up |
 | `fr dashboard` | anywhere | any time | `dashboard/local.html`, a local copy of the dashboard built from the journal, and opens it |
 
+**The restarted book (built 2026-11-15, not switched on yet).** `fr paper restart --execute` archives the first book and the intraday book to `journal/archive/` and starts one swing book with $1,000,000 (`journal/paper/book.json`). From then on three passes a day replace the passes and order jobs above (the `swing-pass` skill; prompts in `deploy/passes/`; schedule from `deploy/launchd/install.py --design three-pass`):
+
+| Command | Runs on | When (Central) | Writes |
+|---|---|---|---|
+| `fr screen --live night\|morning\|midday` | Mac, inside a pass | 7:30 PM (Sun-Thu), 8:45 AM, 12:00 PM | `journal/screens/live/<session>-<pass>.json`: the whole universe screened on the latest Yahoo prices (after-hours, pre-market or regular session) |
+| `fr paper propose <draft>` | Mac, inside a pass | when the pass finishes | the pass's verdicts and ranks in `journal/paper/proposals/`, and its hold, exit or extend for each open trade in `journal/paper/pass_reviews/` |
+| `fr paper enter` | collector | every minute | `journal/paper/entries/`: once a pass has recorded, its best 1 to 3 takes as limit orders at IBKR's bid or ask, and the exits it asked for. No quote, or a spread over 2%: it waits and retries every 15 minutes until 2:40 PM |
+| `fr paper close` | collector | 2:45 PM | stops and time limits, as before |
+| `fr paper sync` | collector | 3:20 PM | fills, as before |
+
 The dashboard page lives in `dashboard/page.html`, the same file published to claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv). The Refresh button only appears under `fr serve`; the claude.ai page can't run a pull. A refresh during the session stores a partial bar for the day, so the screen and the proposals' plan results wait for a session until its bars have been pulled after 4:15 PM ET. `fr dashboard` wraps it with `dashboard/shim.js` (a stand-in for the claude.ai runtime) and `dashboard/tokens.css`, and embeds tonight's market rows, so it opens from disk with no server. Tonight's market rows need the option data in `data/`, so on a machine without it that section shows as failed. Charts load d3 from a CDN.
 
 Market data lives on the collector's disk under `FR_DATA_ROOT` (default `data/` in the repo). The journal (briefs, scans, screens and the paper book) travels through GitHub: the nightly job commits and pushes what it wrote and what the day's research passes recorded.

@@ -85,7 +85,7 @@ def _records(df: pd.DataFrame) -> list[dict]:
 LEVERAGED_ASSETS = JOURNAL / "reference" / "leveraged_assets.json"
 
 # The setup a proposal came from, kept with it so results can be compared by setup. The screen (`fr screen`)
-# finds the first sixteen; "catalyst" and "other" cover the research pass's own ideas.
+# finds the first sixteen, and the live screen adds live_move; "catalyst" and "other" cover the research pass's own ideas.
 SETUPS = {
     "earnings_gap_held": "gapped at least 1.5 ATR on earnings, closed strong on heavy volume and held",
     "earnings_gap_faded": "gapped on earnings and closed weak, or good news sold / bad news bought",
@@ -103,6 +103,7 @@ SETUPS = {
     "basket_stretched": "a basket's spread at least 2 standard deviations from its 50-day average",
     "factor_turn": "a stretched factor pair turned against the stretch",
     "factor_stretched": "a factor pair at least 2 standard deviations from its 50-day average",
+    "live_move": "moving at least 2 ATR right now: outside regular hours on steady trading, or today on heavy volume",
     "catalyst": "built around a scheduled event",
     "other": "none of the above",
 }

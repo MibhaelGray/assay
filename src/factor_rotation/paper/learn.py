@@ -19,7 +19,7 @@ from statistics import mean, median
 import pandas as pd
 
 from .. import bars, journal
-from ..config import NY
+from ..config import CT, NY
 from ..universe import ETFS
 from . import book, proposals, rules
 
@@ -67,7 +67,7 @@ def record_review(draft: dict, now: datetime | None = None) -> Path:
     if session != now.date() or not journal.is_trading_day(session):
         raise ValueError(f"the review is recorded during the session it is for, not for {session}")
     if now >= datetime.combine(session, REVIEW_CUTOFF, NY):
-        raise ValueError("the review must be in by 3:44 PM ET, before the exit check; today's exits go by stops and time limits alone")
+        raise ValueError("the review must be in by 2:44 PM CT, before the exit check; today's exits go by stops and time limits alone")
     path = proposals.root() / "reviews" / f"{session}.json"
     if path.exists():
         raise FileExistsError(f"{path} exists; today's review is already recorded")
@@ -118,7 +118,7 @@ def record_midday(draft: dict, now: datetime | None = None) -> Path:
     if session != now.date() or not journal.is_trading_day(session):
         raise ValueError(f"the midday check is recorded during the session it is for, not for {session}")
     if not MIDDAY_WINDOW[0] <= now.time() <= MIDDAY_WINDOW[1]:
-        raise ValueError("the midday check is recorded between 10:00 AM and 2:45 PM ET; after that the pre-close review decides")
+        raise ValueError("the midday check is recorded between 9:00 AM and 1:45 PM CT; after that the pre-close review decides")
     path = proposals.root() / "midday" / f"{session}.json"
     if path.exists():
         raise FileExistsError(f"{path} exists; today's midday check is already recorded")
@@ -196,6 +196,52 @@ def _verdict(p: dict) -> str:
     return p["decision"]
 
 
+def _mark_outcome(p: dict, px: pd.DataFrame) -> dict | None:
+    """The plan result of a verdict from one of the three daily passes: from each leg's price when the order job
+    first acted on the pass (entries marks: the same moment for a take and a pass) to the close where its stop
+    is hit or its time limit ends, before costs. A morning or midday verdict is already partway through its
+    session, so that day's close only checks the stop and the time limit counts from the next session, as it
+    does for the trade itself. None until the pass has been marked; status "open" while sessions remain."""
+    from . import entries
+
+    session = date.fromisoformat(p["session"])
+    m = entries.marks(session, p["pass"])
+    if not m:
+        return None
+    legs = [*p["long"], *p["short"]]
+    entry = m["prices"]
+    if lost := [s for s in [*legs, "SPY"] if s not in entry]:
+        return {"status": "unpriced", "note": f"no price for {', '.join(lost)} when the {p['pass']} pass was acted on"}
+    horizon = p["plan"]["horizon_days"]
+    first = entries.first_session(p["pass"], session)
+    days = ([session] if first != session else []) + journal.sessions_from(first, horizon)
+    close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in px[px["symbol"].isin([*legs, "SPY"])].groupby("symbol")}
+    w = journal._weights({"long": p["long"] or None, "short": p["short"] or None})
+    stop = p["plan"].get("stop") or {}
+    path, status, note = [], "open", ""
+    for d in days:
+        if any(s not in close or d not in close[s].index for s in [*legs, "SPY"]) or not journal._bars_settled(d):
+            break
+        ret = sum(w[s] * (close[s][d] / entry[s] - 1) for s in legs)
+        path.append((d, ret, close["SPY"][d] / entry["SPY"] - 1))
+        hits = [f"{r['symbol']} closed at {close[r['symbol']][d]:,.2f} ({journal.rule_text(r)})"
+                for r in stop.get("rules", []) if journal._rule_hit(r, close[r["symbol"]][d])]
+        if "spread_pct" in stop and ret * 100 <= stop["spread_pct"]:
+            hits.append(f"down {abs(ret) * 100:.1f}% from the pass's price, past the {abs(stop['spread_pct']):g}% stop")
+        if hits:
+            status, note = "stopped", f"Stopped at the close of {d}: " + "; ".join(hits)
+            break
+        if d == days[-1]:
+            status, note = "time", f"Held to the time limit, {horizon} session{'s' if horizon > 1 else ''}"
+    if not path:
+        return {"status": "open", "note": "its first close hasn't settled"}
+    d, ret, spy = path[-1]
+    rets = [x[1] for x in path]
+    return {"status": status, "note": note, "exit_date": d.isoformat(), "sessions": len(path), "horizon_days": horizon,
+            "bps": round(ret * 1e4, 1), "spy_bps": round(spy * 1e4, 1), "best_bps": round(max(rets) * 1e4, 1),
+            "worst_bps": round(min(rets) * 1e4, 1), "hit": bool(ret > 0)}
+
+
 def outcomes() -> list[dict]:
     """One row per proposal: the verdict, the result of its own plan on daily bars (`plan_bps`, before costs,
     None until it finishes), and for a take that was traded, the paper result after commissions."""
@@ -209,7 +255,9 @@ def outcomes() -> list[dict]:
     out = []
     for p in props:
         plan = None
-        if p["plan"] and (p["long"] or p["short"]) and not px.empty:
+        if p["plan"] and (p["long"] or p["short"]) and not px.empty and p.get("pass") in proposals.NEW_PASSES:
+            plan = _mark_outcome(p, px)
+        elif p["plan"] and (p["long"] or p["short"]) and not px.empty:
             idea = {"long": p["long"] or None, "short": p["short"] or None, **p["plan"]}
             plan = journal._outcome(idea, date.fromisoformat(p["session"]), px)
         done = bool(plan) and plan["status"] in ("time", "stopped")
@@ -219,7 +267,7 @@ def outcomes() -> list[dict]:
         m = tags.get((r or {}).get("id"))
         out.append({
             "id": p["id"], "session": p["session"], "name": p["name"], "kind": p["kind"], "setup": p["setup"], "direction": p["direction"],
-            "source": p["source"], "verdict": _verdict(p), "decision": p["decision"], "conviction": p["conviction"], "reason": p["reason"],
+            "source": p["source"], "pass": p.get("pass"), "verdict": _verdict(p), "decision": p["decision"], "conviction": p["conviction"], "reason": p["reason"],
             "rank": p.get("rank"), "ranked": p.get("ranked"), "recorded_at": p.get("recorded_at"),
             "legs": " / ".join(filter(None, [", ".join(p["long"]) and f"long {', '.join(p['long'])}", ", ".join(p["short"]) and f"short {', '.join(p['short'])}"])),
             "horizon_days": (p["plan"] or {}).get("horizon_days"), "stop_pct": ((p["plan"] or {}).get("stop") or {}).get("spread_pct"),
@@ -320,13 +368,16 @@ def brief() -> str:
     post-mortem, and the standing lessons."""
     rows = outcomes()
     t = tables(rows)
-    lines = [f"Automatic book record, {datetime.now(NY):%Y-%m-%d %-I:%M %p} ET: {t['proposals']} proposals, {t['finished']} with a finished plan result.",
-             "Plan result = the proposal's own plan on daily bars, first open to its stop or time limit, before costs. "
-             "The passes are the control: the takes have to beat them.", "", "By verdict"]
+    from .. import portfolio
+    three = bool(portfolio.restart())
+    lines = [f"{'Swing' if three else 'Automatic'} book record, {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} with a finished plan result.",
+             ("Plan result = the proposal's own plan from the price when its pass was acted on to its stop or time limit, at daily closes, before costs. "
+              if three else "Plan result = the proposal's own plan on daily bars, first open to its stop or time limit, before costs. ")
+             + "The passes are the control: the takes have to beat them.", "", "By verdict"]
     lines += [_line(k, s) for k, s in t["by_verdict"].items()] or ["  nothing finished yet"]
     lines += ["", "By conviction"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing finished yet"])
     rk = t["rank"]
-    lines += ["", "By rank (1 = the night's best idea; the ranking works if better-ranked ideas do better)"]
+    lines += ["", "By rank (1 = the best idea of its pass; the ranking works if better-ranked ideas do better)"]
     if rk["nights"]:
         lines.append(f"  rank correlation {rk['ic']:+.2f} on average over {rk['nights']} night{'s' if rk['nights'] != 1 else ''}"
                      + (f", t {rk['t']:+.1f}" if rk["t"] is not None else "")
@@ -353,6 +404,12 @@ def brief() -> str:
                          + (f"{r['bps']:+.0f} bp" if r["bps"] is not None else "no fills yet")
                          + (f", {r['stop_room_pct']:+.1f}% from its stop" if r["stop_room_pct"] is not None else "")
                          + (f". Wrong if: {r['wrong_if']}" if r.get("wrong_if") else ""))
+    from . import entries
+    if still := entries.waiting(entries.entry_session(datetime.now(NY))):
+        lines += ["", "Takes still waiting to enter (review each: hold keeps trying, exit stands it down)"]
+        for w in still:
+            got = ", ".join(f"{s} {n}/{next(leg['shares'] for leg in w['legs'] if leg['symbol'] == s)}" for s, n in w["filled"].items())
+            lines.append(f"  {w['id']} {w['name']} ({w['setup']}, from the {w.get('pass')} pass): filled {got}. Wrong if: {w.get('wrong_if')}")
     path = proposals.root() / LESSONS
     lines += ["", f"Standing lessons ({path})", path.read_text().strip() if path.exists() else "  none written yet"]
     return "\n".join(lines)

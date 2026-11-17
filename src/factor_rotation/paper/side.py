@@ -156,10 +156,16 @@ def pull(symbol: str, now: datetime) -> dict:
 
 def record(now: datetime | None = None, puller=pull, dry: bool = False, pause: float = PAUSE) -> dict:
     """Pull the facts for the next session's ideas that don't have them yet. Returns what the run did."""
+    from .. import portfolio
+    from . import entries
+
     now = now or datetime.now(NY)
-    session = proposals.next_entry_session(now)
+    # The three-pass book (since its restart) records verdicts during the session too, so a name's facts are pulled
+    # at the first run after its pass, whatever the hour: within an hour or so of the verdict, and still once.
+    three = bool(portfolio.restart())
+    session = entries.entry_session(now) if three else proposals.next_entry_session(now)
     out = {"session": session.isoformat(), "at": now.isoformat(timespec="seconds"), "pulled": [], "failed": [], "dry_run": dry}
-    if now >= datetime.combine(session, OPEN, NY):
+    if not three and now >= datetime.combine(session, OPEN, NY):
         return {**out, "note": "the session has opened, so nothing is pulled"}
     props = (proposals.load(session) or {}).get("proposals") or []
     if not props:

@@ -19,7 +19,8 @@ class Pause(unittest.TestCase):
         for target, name, v in ((drawdown.journal, "JOURNAL", self.root),
                                 (portfolio, "accounts", lambda: {"books": [{"book": b, "value": x} for b, x in self.value.items()]}),
                                 (portfolio, "fills", lambda b: [b] if self.history[b] else []),
-                                (book, "pnl_by_session", lambda fs: self.history[fs[0]])):
+                                (book, "pnl_by_session", lambda fs: self.history[fs[0]]),
+                                (portfolio, "restart", lambda: None)):   # the first book's split, not the live book.json
             p = mock.patch.object(target, name, v)
             p.start()
             self.addCleanup(p.stop)

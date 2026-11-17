@@ -18,7 +18,7 @@ import logging
 from datetime import date, datetime
 
 from . import journal
-from .config import NY
+from .config import CT, NY
 
 log = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ def status(book_: str, value: float | None = None) -> dict:
     from . import portfolio
     from .paper import book
 
-    capital = portfolio.CAPITAL[book_]
+    capital = portfolio.capital(book_)
     limit = round(capital * LIMIT, 2)
     if value is None:
         value = next(b["value"] for b in portfolio.accounts()["books"] if b["book"] == book_)
@@ -74,7 +74,7 @@ def paused(book_: str) -> str | None:
     if s["drop"] < s["limit"]:
         return None
     why = (f"the {book_} book is down ${s['drop']:,.0f} from its high of ${s['peak']:,.0f}, past its "
-           f"${s['limit']:,.0f} limit (10% of its capital); paused {datetime.now(NY):%Y-%m-%d %-I:%M %p} ET "
+           f"${s['limit']:,.0f} limit (10% of its capital); paused {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT "
            f"until fr paper resume --book {book_}")
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(why + "\n")

@@ -27,7 +27,7 @@ from time import sleep
 import pandas as pd
 
 from .. import bars, drawdown, journal, storage
-from ..config import NY
+from ..config import CT, NY
 from . import proposals, rules
 from .broker import WORKING, DryRun, GuardError, IBPaper, PaperSettings, unref
 
@@ -124,12 +124,19 @@ def _closes(symbols: list[str]) -> dict[str, float]:
 
 
 # ---- State ------------------------------------------------------------------------------------------------
+def _cleanup_ref(f: dict) -> tuple[str, str] | None:
+    """A by-hand order labelled "cleanup-<trade id>" (no "|SYMBOL"), as the 2026-11-16 CTVA cover was: it belongs to
+    that trade, in the fill's own symbol. The sync rewrites fills from the account, so the label is read, not edited."""
+    ref = f.get("order_ref") or ""
+    return (ref[len("cleanup-"):], f["symbol"]) if ref.startswith("cleanup-") and f.get("symbol") else None
+
+
 def _fills_by_ref() -> dict[tuple[str, str], list[dict]]:
     out: dict[tuple[str, str], list[dict]] = {}
     seen = set()  # the gateway can hand back an earlier day's execution; count each once, on its first day
     for day in _all("fills"):
         for f in day["fills"]:
-            key = unref(f["order_ref"])
+            key = unref(f["order_ref"]) or _cleanup_ref(f)
             if key and f["exec_id"] not in seen:
                 seen.add(f["exec_id"])
                 out.setdefault(key, []).append({**f, "session": day["session"]})
@@ -155,7 +162,7 @@ def recorded() -> list[dict]:
             seen.add(t["id"])
             out.append(t)
     fills = _fills_by_ref()
-    for doc in _all("early"):
+    for doc in [*_all("early"), *_all("entries")]:   # entries: the three-pass book's order job (entries.py)
         for t in doc.get("trades", []):
             if t["id"] in seen:
                 continue
@@ -170,7 +177,7 @@ def trades() -> list[dict]:
     """Every paper trade with its fills, exit and state, oldest first."""
     fills = _fills_by_ref()
     exits = {e["trade_id"]: {**e, "session": d["session"]}
-             for d in [*_all("plans"), *_all("checks"), *_all("midday"), *_all("exits")] for e in d.get("exits", [])}
+             for d in [*_all("plans"), *_all("checks"), *_all("midday"), *_all("entries"), *_all("exits")] for e in d.get("exits", [])}
     synced = {d["session"] for d in _all("fills")}
     longer = {e["trade_id"]: e["sessions"] for d in _all("exits") for e in d.get("extended", [])}
     out = []
@@ -207,12 +214,24 @@ def open_trades() -> list[dict]:
     return [t for t in trades() if t["state"] == "open"]
 
 
+def _first(t: dict) -> date:
+    """The first session a trade's time limit counts: its entry session, or the one after for a trade the morning
+    or midday pass entered partway through a session (entries.first_session)."""
+    return date.fromisoformat(t.get("first_session") or t["entry_date"])
+
+
+def capital() -> float:
+    """The swing book's capital, which is also the most it may hold, long plus short."""
+    from .. import portfolio
+    return portfolio.capital("swing")
+
+
 def _session(t: dict, today: date) -> int:
-    """Which session of the trade `today` is, counting the entry session as 1; 0 before it starts (an early
-    entry filled the evening before its session)."""
-    if date.fromisoformat(t["entry_date"]) > today:
+    """Which session of the trade `today` is, counting its first session as 1; 0 before that (an early entry
+    filled the evening before its session, or a trade entered partway through today)."""
+    if _first(t) > today:
         return 0
-    days = journal.sessions_from(date.fromisoformat(t["entry_date"]), 30)
+    days = journal.sessions_from(_first(t), 30)
     return days.index(today) + 1 if today in days else len(days) + 1
 
 
@@ -302,7 +321,7 @@ async def open_session(today: date, broker=None, dry: bool = False) -> dict:
                                     "shares": leg["shares"] - got[leg["symbol"]], "kind": "MOO"}
                                    for leg in t["legs"] if leg["shares"] > got[leg["symbol"]]]
                 if cancelled:
-                    plan["warnings"].append(f"{cancelled} early order{'' if cancelled == 1 else 's'} still working at 9:15 AM ET "
+                    plan["warnings"].append(f"{cancelled} early order{'' if cancelled == 1 else 's'} still working at 8:15 AM CT "
                                             "were cancelled; their unfilled shares go in at the open.")
             plan["trades"] += kept
             # Connected, so orders are about to go: the plan is on disk first, and if the job dies while
@@ -354,9 +373,23 @@ def _gaps(positions: dict[str, float]) -> dict[str, tuple[float, float]]:
         for h in t["held"]:
             sign = 1 if h["side"] == "long" else -1
             expected[h["symbol"]] = expected.get(h["symbol"], 0) + sign * (h["shares"] - h["exit_shares"])
-    names = {s for s, v in expected.items() if v} | set(positions)
-    return {s: (positions.get(s, 0), expected.get(s, 0)) for s in sorted(names)
-            if abs(positions.get(s, 0) - expected.get(s, 0)) > 1e-6}
+    def gaps(want: dict[str, float]) -> dict[str, tuple[float, float]]:
+        names = {s for s, v in want.items() if v} | set(positions)
+        return {s: (positions.get(s, 0), want.get(s, 0)) for s in sorted(names) if abs(positions.get(s, 0) - want.get(s, 0)) > 1e-6}
+
+    # Positions the first book still held when the book was restarted (book.json "legacy") sit in the account
+    # until they are closed. They belong to no trade here, so they are expected while they are there.
+    from .. import portfolio
+
+    legacy = ((portfolio.restart() or {}).get("legacy") or {}).get("positions") or {}
+    plain = gaps(expected)
+    if not legacy or not plain:
+        return plain
+    carried = dict(expected)
+    for s, v in legacy.items():
+        carried[s] = carried.get(s, 0) + v
+    with_legacy = gaps(carried)
+    return with_legacy if len(with_legacy) < len(plain) else plain
 
 
 def reconcile(positions: dict[str, float]) -> list[str]:
@@ -385,7 +418,7 @@ async def check_session(today: date, broker=None, dry: bool = False) -> dict:
     async with (broker or _broker(dry=dry)) as b:
         await _pull(b, today)
         status = {(o["trade_id"], o["symbol"], o["action"]): o["status"] for o in await b.orders()}
-        now = datetime.now(NY).strftime("%-I:%M %p")
+        now = datetime.now(CT).strftime("%-I:%M %p")
         orders = []
         for t in trades():
             if t["entry_date"] != today.isoformat() or t["exit"]:
@@ -400,14 +433,14 @@ async def check_session(today: date, broker=None, dry: bool = False) -> dict:
             if any(st in WORKING for st in dead.values()):
                 out["waiting"].append({"trade_id": t["id"], "symbols": sorted(dead)})
                 out["warnings"].append(f"{t['id']} {t['name']}: the order for {what} is still working, perhaps a delayed open, "
-                                       "so nothing was closed. The 3:45 PM ET check handles it.")
+                                       "so nothing was closed. The 2:45 PM CT check handles it.")
             elif not filled:
                 out["unfilled"].append({"trade_id": t["id"], "name": t["name"], "symbols": sorted(dead)})
                 out["warnings"].append(f"{t['id']} {t['name']}: no leg filled at the open ({what}), so the trade wasn't taken.")
             else:
                 out["exits"].append({"trade_id": t["id"], "book": t["book"], "session_number": 1, "intraday": True,
-                                     "reason": f"broken: {', '.join(sorted(dead))} never filled at the open; the rest closed at {now} ET"})
-                out["warnings"].append(f"{t['id']} {t['name']}: {what} never filled at the open, so the filled side was closed at {now} ET.")
+                                     "reason": f"broken: {', '.join(sorted(dead))} never filled at the open; the rest closed at {now} CT"})
+                out["warnings"].append(f"{t['id']} {t['name']}: {what} never filled at the open, so the filled side was closed at {now} CT.")
                 orders += [{"trade_id": t["id"], "symbol": h["symbol"], "action": "SELL" if h["side"] == "long" else "BUY",
                             "shares": h["shares"] - h["exit_shares"], "kind": "MKT"} for h in t["held"] if h["shares"] > h["exit_shares"]]
         if orders:
@@ -478,8 +511,10 @@ async def close_session(today: date, flatten: bool = False, broker=None, dry: bo
         prices = await asyncio.to_thread(quotes, symbols, *CLOSE_QUOTES) if symbols else {}
         for t in held:
             k = _session(t, today)
-            if k == 0 and not flatten:
+            if k == 0 and not flatten and date.fromisoformat(t["entry_date"]) > today:
                 continue   # filled early for a later session; its stop and time limit start there
+            # k is also 0 for a trade the morning or midday pass entered today: its time limit starts tomorrow,
+            # but its stop and a leg that never filled are checked at this close like any other trade's.
             reason = "flatten: every trade closed by hand" if flatten else rules.exit_reason(t, k, t["held"], prices)
             if not reason and t.get("stood_down") and not flatten:   # the entry job would have closed it at the open
                 reason = f"stood down after filling early ({t['stood_down']}); the entry job didn't close it at the open"
@@ -554,7 +589,7 @@ def rows() -> list[dict]:
     out = []
     for t in ts:
         pnl = model = room = day_pnl = None
-        days = journal.sessions_from(date.fromisoformat(t["entry_date"]), t["horizon_days"])
+        days = journal.sessions_from(_first(t), t["horizon_days"])
         missing = sorted({leg["symbol"] for leg in t["legs"]} - {h["symbol"] for h in t["held"]}) if t["held"] else []
         stop_pct = (t.get("stop") or {}).get("spread_pct")
         detail = []
@@ -609,8 +644,9 @@ def _book_fills() -> list[dict]:
     """Every fill on one of the book's orders with its session and time, oldest first. The intraday book's fills
     (trade ids I-... and X-...) can land in the same fills files when a pull runs; they are its own book's."""
     out = []
-    for (trade_id, _), fs in _fills_by_ref().items():
-        if trade_id.startswith(("I-", "X-")):
+    mine = {t["id"] for t in recorded()}   # a pull also brings back fills on orders that aren't this book's:
+    for (trade_id, _), fs in _fills_by_ref().items():   # the first book's, after the restart, and the other way round
+        if trade_id.startswith(("I-", "X-")) or trade_id not in mine:
             continue
         for f in fs:
             d = date.fromisoformat(f["session"])

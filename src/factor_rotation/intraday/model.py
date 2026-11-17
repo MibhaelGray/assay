@@ -26,6 +26,7 @@ log = logging.getLogger(__name__)
 
 MODEL = "claude-haiku-5-5"
 TIMEOUT = 240              # seconds for one researched verdict
+AT_ONCE = 8                # verdicts researched side by side; a busier bar is judged in rounds
 RESEARCH_TOOLS = ["WebSearch", "WebFetch"]
 MAX_TURNS = 20             # searches and page reads before it must answer
 HEADLINES = 8
@@ -162,5 +163,5 @@ def judge_all(signals: list[dict], decide=None, news=None) -> None:
             sig["verdict"] = {"decision": "undecided", "error": repr(e)[:200]}
 
     if signals:
-        with ThreadPoolExecutor(max_workers=len(signals)) as pool:
+        with ThreadPoolExecutor(max_workers=min(len(signals), AT_ONCE)) as pool:
             list(pool.map(one, signals))

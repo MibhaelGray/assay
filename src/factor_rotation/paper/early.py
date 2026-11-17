@@ -34,7 +34,7 @@ import logging
 from datetime import date, datetime, time
 
 from .. import drawdown, journal
-from ..config import NY
+from ..config import CT, NY
 from . import proposals, rules
 from . import book
 
@@ -127,7 +127,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     state = load(session) or {"session": session.isoformat(), "trades": [], "runs": []}
     doc = proposals.load(session)
     if where is None:
-        record["note"] = f"{now:%-I:%M %p} ET is between sessions; nothing was sent"
+        record["note"] = f"{now.astimezone(CT):%-I:%M %p} CT is between sessions; nothing was sent"
         return record
     if book.HALT.exists():
         record["note"] = f"halted: {book.HALT.read_text().strip() or 'journal/paper/HALT exists'}"

@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 from zoneinfo import ZoneInfo
 
 NY = ZoneInfo("America/New_York")
+CT = ZoneInfo("America/Chicago")  # the owner's zone: every time written for a reader is Central (2026-11-15)
 
 
 def _load_dotenv() -> None:

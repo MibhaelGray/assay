@@ -1,5 +1,5 @@
 {
-  "note": "Themed baskets: equal-weight groups of stocks for ideas no single ETF captures. A watchlist, not recorded ideas. Members come from IBKR's theme data (search_investment_topics / get_theme_details) and the dossier; every member is checked with IBKR (search_contracts for a US listing, get_price_snapshot avg_90d_usd_volume of at least about $20M; names in the standard universe skip the volume check). The snapshot is IBKR's change from the prior close at the time shown; after 16:00 it includes after-hours trades. Members added 2026-11-12 come from the widened universe (universe.INDEX_STOCKS: S&P 500 and 400 names trading at least $20M a day on our Yahoo bars), so like other universe names they skip the IBKR volume check and have no snapshot until the next refresh.",
+  "note": "Themed baskets: equal-weight groups of stocks for ideas no single ETF captures. A watchlist, not recorded ideas. Members come from IBKR's theme data (search_investment_topics / get_theme_details) and the dossier; every member is checked with IBKR (search_contracts for a US listing, get_price_snapshot avg_90d_usd_volume of at least about $20M; names in the standard universe skip the volume check). The snapshot is IBKR's change from the prior close at the time shown; after 16:00 it includes after-hours trades. Members added 2026-11-12 come from the widened universe (universe.INDEX_STOCKS: S&P 500 and 400 names trading at least $20M a day on our Yahoo bars), so like other universe names they skip the IBKR volume check and have no snapshot until the next refresh. Since 2026-11-16 every basket must pass the cohesion test (`fr baskets check`, basket_check.py): over the last 120 sessions, each member's daily return after removing its hedge's part correlates at least 0.25 with the rest of the basket's, and the basket averages at least 0.35. Re-run monthly and before adding a basket.",
   "updated": "2026-11-12",
   "snapshot_at": "2026-11-05T16:00:00-05:00",
   "baskets": [
@@ -260,12 +260,6 @@
           "why": "Cigna: commercial insurance plus Evernorth pharmacy benefits; out of Medicare Advantage, so it trades on PBM and employer rules",
           "avg_usd_volume_90d": null,
           "change_pct": null
-        },
-        {
-          "symbol": "CVS",
-          "why": "CVS Health: owns Aetna, a large Medicare Advantage and commercial insurer, beside its PBM and pharmacies",
-          "avg_usd_volume_90d": null,
-          "change_pct": null
         }
       ],
       "hedge_change_pct": -2.5,
@@ -371,12 +365,6 @@
       "source": "IBKR theme Cloud Infrastructure; member checks with IBKR",
       "members": [
         {
-          "symbol": "ANET",
-          "why": "Arista: data-center switching for cloud titans and neoclouds",
-          "change_pct": -10.82,
-          "avg_usd_volume_90d": 1032085620
-        },
-        {
           "symbol": "CIEN",
           "why": "Ciena: optical transport between data centers",
           "change_pct": -15.22,
@@ -401,20 +389,8 @@
           "avg_usd_volume_90d": 1068189382
         },
         {
-          "symbol": "ALAB",
-          "why": "Astera Labs: PCIe and CXL connectivity chips for AI servers",
-          "change_pct": -19.62,
-          "avg_usd_volume_90d": 882298977
-        },
-        {
           "symbol": "MRVL",
           "why": "Marvell: optical DSPs for data-center links and custom AI chips for hyperscalers",
-          "avg_usd_volume_90d": null,
-          "change_pct": null
-        },
-        {
-          "symbol": "APH",
-          "why": "Amphenol: high-speed connectors and cables inside AI racks",
           "avg_usd_volume_90d": null,
           "change_pct": null
         },
@@ -429,6 +405,21 @@
           "why": "Fabrinet: contract maker of the optical transceivers used in AI clusters",
           "avg_usd_volume_90d": null,
           "change_pct": null
+        },
+        {
+          "symbol": "AAOI",
+          "why": "Applied Optoelectronics: optical transceivers for hyperscale data centers",
+          "avg_usd_volume_90d": 1056224620
+        },
+        {
+          "symbol": "POET",
+          "why": "POET Technologies: optical interposer and light-engine chips for AI transceivers",
+          "avg_usd_volume_90d": 70971848
+        },
+        {
+          "symbol": "MTSI",
+          "why": "MACOM: analog and optical chips for high-speed data-center links",
+          "avg_usd_volume_90d": 411713183
         }
       ],
       "caution": "ANET (+5.7%) and COHR (+1.2%) rose while the other four fell 4-9%, likely on their own news in earnings season; check before reading the basket.",
@@ -795,6 +786,52 @@
       "caution": "ILMN (-4.7%) and RVTY (-2.5%) fell while the other five rose, possibly on their own news in earnings season; check before reading the basket."
     },
     {
+      "id": "genomic_diagnostics",
+      "name": "Genomics and diagnostics",
+      "hedge": "XLV",
+      "story": "Labs that read DNA from a blood or tissue sample: prenatal screening, cancer screening, matching cancer patients to drugs and catching a cancer's return early (minimal residual disease, MRD). They trade on test volumes, on Medicare and insurer coverage of each test, and on the race for MRD, where Natera leads and sues rivals over patents. Against XLV, the spread separates the testing story from insurers, drug makers and tools makers.",
+      "watch": "Quarterly test volumes and average selling prices, Medicare (MolDX) coverage decisions and payer wins, MRD study readouts and guideline changes, patent rulings between Natera and its rivals, FDA rules for lab-developed tests.",
+      "source": "Built 2026-11-16 for Natera; cohesion check: members 0.63-0.73 against XLV, 0.53-0.66 against IWO (small-cap growth)",
+      "members": [
+        {
+          "symbol": "NTRA",
+          "why": "Natera: cell-free DNA tests: Panorama prenatal screening, Signatera cancer-recurrence (MRD) monitoring and Prospera transplant tests",
+          "change_pct": -9.59,
+          "avg_usd_volume_90d": 557675222
+        },
+        {
+          "symbol": "GH",
+          "why": "Guardant Health: Guardant360 liquid biopsy and the Shield blood test for colorectal cancer screening",
+          "change_pct": -5.06,
+          "avg_usd_volume_90d": 330206557
+        },
+        {
+          "symbol": "TEM",
+          "why": "Tempus AI: genomic tests for cancer patients plus licensing of its clinical and molecular data",
+          "change_pct": -9.55,
+          "avg_usd_volume_90d": 443085864
+        },
+        {
+          "symbol": "ADPT",
+          "why": "Adaptive Biotechnologies: clonoSEQ, the MRD test for blood cancers, and immune-repertoire sequencing",
+          "change_pct": -4.03,
+          "avg_usd_volume_90d": 59740965
+        },
+        {
+          "symbol": "NEO",
+          "why": "NeoGenomics: cancer diagnostics lab, now pushing its RaDaR MRD test",
+          "change_pct": -3.81,
+          "avg_usd_volume_90d": 36760116
+        },
+        {
+          "symbol": "TWST",
+          "why": "Twist Bioscience: synthetic DNA, largely target-enrichment panels used in sequencing-based tests and research",
+          "change_pct": -5.88,
+          "avg_usd_volume_90d": 308198257
+        }
+      ]
+    },
+    {
       "id": "cybersecurity",
       "name": "Cybersecurity",
       "hedge": "IGV",
@@ -879,18 +916,6 @@
           "why": "Amazon: AWS and custom chips",
           "avg_usd_volume_90d": 5314802579,
           "change_pct": -2.19
-        },
-        {
-          "symbol": "META",
-          "why": "Meta: AI capex without a cloud business to sell it through",
-          "avg_usd_volume_90d": 8630188884,
-          "change_pct": -3.96
-        },
-        {
-          "symbol": "ORCL",
-          "why": "Oracle: debt-funded AI cloud buildout, the group's most levered name",
-          "avg_usd_volume_90d": 2781245499,
-          "change_pct": -6.93
         }
       ],
       "hedge_change_pct": -6.49,
@@ -983,12 +1008,6 @@
           "why": "Symbotic: warehouse robots, over 90% of revenue, with Walmart as its main customer",
           "avg_usd_volume_90d": 37669807,
           "change_pct": -6.58
-        },
-        {
-          "symbol": "ROK",
-          "why": "Rockwell Automation: factory automation and mobile robots",
-          "avg_usd_volume_90d": 172652337,
-          "change_pct": -14.15
         },
         {
           "symbol": "CGNX",
@@ -1141,12 +1160,6 @@
         {
           "symbol": "EXPE",
           "why": "Expedia: online travel bookings, a read on leisure demand",
-          "avg_usd_volume_90d": null,
-          "change_pct": null
-        },
-        {
-          "symbol": "ABNB",
-          "why": "Airbnb: short-term rentals, a read on leisure travel demand",
           "avg_usd_volume_90d": null,
           "change_pct": null
         }
@@ -1468,6 +1481,336 @@
         }
       ],
       "hedge_change_pct": 0.86
+    },
+    {
+      "id": "biotech",
+      "name": "Large-cap biotech",
+      "hedge": "XBI",
+      "story": "Established, revenue-earning biotechs, equal weight. Against XBI (equal-weight biotech), the spread shows whether the large, profitable names are leading or lagging the whole group: rates, drug pricing and big-pharma M&A move them together.",
+      "watch": "FDA decisions and advisory panels, trial readouts, drug-pricing and Medicare negotiation news, the FDA's leadership and staffing, large-pharma M&A, and rates (biotech is long-duration).",
+      "source": "Added 2026-11-16 at the owner's request; members chosen by hand from liquid US biotechs, volume from Yahoo daily bars (90-day average of at least $20M a day).",
+      "caution": "Trimmed 2026-11-16 to the six that move together beyond XBI; smaller biotechs move on their own trial news and were removed.",
+      "members": [
+        {
+          "symbol": "VRTX",
+          "why": "Vertex: cystic fibrosis franchise plus pain (non-opioid) and kidney launches",
+          "avg_usd_volume_90d": 652623038
+        },
+        {
+          "symbol": "REGN",
+          "why": "Regeneron: Eylea eye franchise and Dupixent with Sanofi",
+          "avg_usd_volume_90d": 639360750
+        },
+        {
+          "symbol": "AMGN",
+          "why": "Amgen: large-cap biologics and the MariTide obesity program",
+          "avg_usd_volume_90d": 1135749483
+        },
+        {
+          "symbol": "GILD",
+          "why": "Gilead: HIV franchise, lenacapavir prevention and oncology",
+          "avg_usd_volume_90d": 904833812
+        },
+        {
+          "symbol": "BIIB",
+          "why": "Biogen: Alzheimer's (Leqembi) and neurology turnaround",
+          "avg_usd_volume_90d": 249650387
+        },
+        {
+          "symbol": "BMRN",
+          "why": "BioMarin: rare-disease enzymes and Voxzogo",
+          "avg_usd_volume_90d": 131683766
+        }
+      ]
+    },
+    {
+      "id": "alt_managers",
+      "name": "Alternative asset managers",
+      "hedge": "XLF",
+      "story": "Private equity, private credit and infrastructure managers. Against XLF (financials), the spread shows how the market prices private-credit risk, fundraising and deal activity.",
+      "watch": "Private-credit marks and defaults, fundraising, deal and IPO activity, redemptions from their retail funds, rates.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "BX",
+          "why": "Blackstone: the largest alternative manager, real estate and private credit",
+          "avg_usd_volume_90d": 588535657
+        },
+        {
+          "symbol": "KKR",
+          "why": "KKR: private equity, infrastructure and insurance (Global Atlantic)",
+          "avg_usd_volume_90d": 459786627
+        },
+        {
+          "symbol": "APO",
+          "why": "Apollo: private credit and retirement (Athene)",
+          "avg_usd_volume_90d": 433639346
+        },
+        {
+          "symbol": "ARES",
+          "why": "Ares: private credit leader",
+          "avg_usd_volume_90d": 283953573
+        },
+        {
+          "symbol": "OWL",
+          "why": "Blue Owl: direct lending and data-center financing",
+          "avg_usd_volume_90d": 195201974
+        }
+      ]
+    },
+    {
+      "id": "payroll_hr",
+      "name": "Payroll and HR software",
+      "hedge": "IGV",
+      "story": "Payroll and HR software that earns interest on client cash held between payroll runs. Against IGV (software), the spread shows rate sensitivity and small-business hiring.",
+      "watch": "Rates and Fed expectations (interest on client funds), small-business hiring and the jobs reports, AI-disruption fears for seat-priced software.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "ADP",
+          "why": "ADP: the largest payroll processor",
+          "avg_usd_volume_90d": 618587072
+        },
+        {
+          "symbol": "PAYX",
+          "why": "Paychex: small-business payroll",
+          "avg_usd_volume_90d": 334100020
+        },
+        {
+          "symbol": "PAYC",
+          "why": "Paycom: mid-market payroll and HR software",
+          "avg_usd_volume_90d": 167488712
+        },
+        {
+          "symbol": "PCTY",
+          "why": "Paylocity: mid-market payroll and HR software",
+          "avg_usd_volume_90d": 106929109
+        },
+        {
+          "symbol": "WDAY",
+          "why": "Workday: enterprise HR and finance software",
+          "avg_usd_volume_90d": 612869302
+        }
+      ]
+    },
+    {
+      "id": "nat_gas",
+      "name": "Natural gas producers",
+      "hedge": "XLE",
+      "story": "Appalachian and Haynesville gas producers. Against XLE (energy, mostly oil), the spread separates gas, which LNG exports and data-center power need, from oil.",
+      "watch": "Henry Hub gas prices, weekly storage reports, weather, LNG export volumes, data-center power demand.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "AR",
+          "why": "Antero Resources: Appalachian gas and liquids",
+          "avg_usd_volume_90d": 153668221
+        },
+        {
+          "symbol": "EQT",
+          "why": "EQT: the largest US gas producer",
+          "avg_usd_volume_90d": 400131118
+        },
+        {
+          "symbol": "EXE",
+          "why": "Expand Energy: Haynesville and Appalachia gas",
+          "avg_usd_volume_90d": 290304568
+        },
+        {
+          "symbol": "RRC",
+          "why": "Range Resources: Appalachian gas",
+          "avg_usd_volume_90d": 156882842
+        }
+      ]
+    },
+    {
+      "id": "analog_chips",
+      "name": "Analog and auto chips",
+      "hedge": "SMH",
+      "story": "Analog, power and microcontroller chips for cars and factories. Against SMH (chips, led by AI names), the spread separates the industrial and auto chip cycle from AI.",
+      "watch": "Auto production, industrial orders and inventories, China demand, the analog makers' quarterly guides.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "TXN",
+          "why": "Texas Instruments: the largest analog chip maker",
+          "avg_usd_volume_90d": 1967120667
+        },
+        {
+          "symbol": "ADI",
+          "why": "Analog Devices: analog and mixed-signal chips",
+          "avg_usd_volume_90d": 1478010435
+        },
+        {
+          "symbol": "NXPI",
+          "why": "NXP: auto microcontrollers and chips",
+          "avg_usd_volume_90d": 995499152
+        },
+        {
+          "symbol": "ON",
+          "why": "onsemi: power chips for cars and industry",
+          "avg_usd_volume_90d": 785567640
+        },
+        {
+          "symbol": "MCHP",
+          "why": "Microchip: microcontrollers for industry",
+          "avg_usd_volume_90d": 809233109
+        }
+      ]
+    },
+    {
+      "id": "off_price",
+      "name": "Off-price retail",
+      "hedge": "XRT",
+      "story": "Off-price apparel and home retailers that buy brands' excess stock. Against XRT (retail), the spread shows shoppers trading down.",
+      "watch": "Monthly retail sales, holiday trends, inventory available to buy, tariffs on imported goods, their quarterly comps.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "TJX",
+          "why": "TJX: T.J. Maxx, Marshalls and HomeGoods",
+          "avg_usd_volume_90d": 983857770
+        },
+        {
+          "symbol": "ROST",
+          "why": "Ross Stores: off-price apparel and home",
+          "avg_usd_volume_90d": 525171725
+        },
+        {
+          "symbol": "BURL",
+          "why": "Burlington: off-price apparel",
+          "avg_usd_volume_90d": 350464313
+        }
+      ]
+    },
+    {
+      "id": "restaurants",
+      "name": "Restaurants",
+      "hedge": "XLY",
+      "story": "Fast-casual and quick-service chains. Against XLY (consumer discretionary), the spread reads lower- and middle-income dining-out spending.",
+      "watch": "Same-store sales and traffic, food and labor costs, lower-income consumer data, promotions.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "CMG",
+          "why": "Chipotle: fast casual",
+          "avg_usd_volume_90d": 609197764
+        },
+        {
+          "symbol": "CAVA",
+          "why": "CAVA: fast-growing Mediterranean fast casual",
+          "avg_usd_volume_90d": 207251727
+        },
+        {
+          "symbol": "TXRH",
+          "why": "Texas Roadhouse: casual dining",
+          "avg_usd_volume_90d": 193211640
+        },
+        {
+          "symbol": "SBUX",
+          "why": "Starbucks: coffee, US and China",
+          "avg_usd_volume_90d": 777087826
+        },
+        {
+          "symbol": "WING",
+          "why": "Wingstop: chicken wings, delivery-heavy",
+          "avg_usd_volume_90d": 164684946
+        },
+        {
+          "symbol": "MCD",
+          "why": "McDonald's: the largest quick-service chain",
+          "avg_usd_volume_90d": 1349422110
+        }
+      ]
+    },
+    {
+      "id": "china_internet",
+      "name": "China internet",
+      "hedge": "FXI",
+      "story": "Chinese e-commerce platforms listed in the US. Against FXI (China large caps, banks-heavy), the spread shows the consumer and tech side of China.",
+      "watch": "US-China trade talks and tariffs, China stimulus and retail sales, platform competition and subsidies, delisting risk.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "BABA",
+          "why": "Alibaba: e-commerce and cloud",
+          "avg_usd_volume_90d": 1163073525
+        },
+        {
+          "symbol": "PDD",
+          "why": "PDD: Pinduoduo and Temu",
+          "avg_usd_volume_90d": 510806447
+        },
+        {
+          "symbol": "JD",
+          "why": "JD.com: e-commerce and logistics",
+          "avg_usd_volume_90d": 222192938
+        }
+      ]
+    },
+    {
+      "id": "ai_software",
+      "name": "AI software",
+      "hedge": "IGV",
+      "story": "Data and infrastructure software whose usage grows with AI workloads. Against IGV (software), the spread shows whether AI is seen as helping software that is priced on usage.",
+      "watch": "Consumption trends, AI workload commentary, the quarterly reports, the Anthropic and OpenAI listings and launches.",
+      "source": "Added 2026-11-16; passed the cohesion test (fr baskets check): each member at least 0.25, basket average at least 0.35.",
+      "members": [
+        {
+          "symbol": "NET",
+          "why": "Cloudflare: network and edge compute",
+          "avg_usd_volume_90d": 1071515430
+        },
+        {
+          "symbol": "MDB",
+          "why": "MongoDB: database",
+          "avg_usd_volume_90d": 715450047
+        },
+        {
+          "symbol": "DDOG",
+          "why": "Datadog: monitoring",
+          "avg_usd_volume_90d": 973880796
+        },
+        {
+          "symbol": "SNOW",
+          "why": "Snowflake: data cloud",
+          "avg_usd_volume_90d": 1490780140
+        }
+      ]
+    },
+    {
+      "id": "app_ads",
+      "name": "App and game advertising",
+      "hedge": "IGV",
+      "story": "The ad tech that pays for free mobile apps and games: networks that place install and in-game ads, the engine games are built on, and the exchanges that sell the ad space. They trade on mobile ad budgets, on how well each one targets ads after Apple's and Google's privacy rules, and on AppLovin's push into e-commerce ads, which sets the mood for the group. Against IGV, the spread separates ad spend from the rest of software.",
+      "watch": "AppLovin's quarterly ad revenue and e-commerce progress, Unity's Vector ad network growth, Google's Android privacy changes, app-store rule changes from court cases, short-seller reports, mobile game spending.",
+      "source": "Built 2026-11-16 at the owner's request; cohesion check: members 0.35-0.54 against IGV, 0.40-0.58 against IWO (small-cap growth). Roblox and Reddit fit only together and are platforms rather than ad tech; The Trade Desk doesn't fit (0.04 against XLC); PubMatic and Criteo trade under $20M a day.",
+      "members": [
+        {
+          "symbol": "APP",
+          "why": "AppLovin: the largest mobile-app ad network, its AXON engine placing game and app ads, now selling to e-commerce advertisers too",
+          "change_pct": 1.5,
+          "avg_usd_volume_90d": 1937981805
+        },
+        {
+          "symbol": "U",
+          "why": "Unity: the game engine most mobile games are built on, plus its Vector ad network for in-game ads",
+          "change_pct": -1.76,
+          "avg_usd_volume_90d": 462923824
+        },
+        {
+          "symbol": "APPS",
+          "why": "Digital Turbine: pre-installs apps on Android phones through carriers and phone makers, plus an in-app ad exchange",
+          "change_pct": -7.23,
+          "avg_usd_volume_90d": 35535682
+        },
+        {
+          "symbol": "MGNI",
+          "why": "Magnite: the largest independent sell-side ad platform, selling app, web and connected-TV ad space",
+          "change_pct": -1.71,
+          "avg_usd_volume_90d": 57786031
+        }
+      ]
     }
   ]
 }

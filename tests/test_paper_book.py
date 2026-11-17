@@ -482,7 +482,7 @@ class Review(Research):
     def test_the_review_must_cover_every_open_trade_in_time_and_only_extend_on_the_last_session(self):
         with self.assertRaisesRegex(ValueError, "missing: T1"):
             learn.record_review({"session": DAY.isoformat(), "reviews": []}, datetime(2026, 11, 9, 15, 10, tzinfo=NY))
-        with self.assertRaisesRegex(ValueError, "3:44 PM"):
+        with self.assertRaisesRegex(ValueError, "2:44 PM CT"):
             self.review(DAY, hour=16, action="hold")
         with self.assertRaisesRegex(ValueError, "last session"):
             self.review(DAY, action="extend", sessions=2)
@@ -651,8 +651,10 @@ class SwingFillsOnly(unittest.TestCase):
         f = lambda ref: {"order_ref": ref, "symbol": ref.split("|")[1], "side": "SLD", "shares": 1.0, "price": 1.0,
                          "time": "2026-11-12T03:00:00+00:00", "exec_id": ref, "session": "2026-11-12"}
         by_ref = {("X-1111-2201-LIN", "LIN"): [f("X-1111-2201-LIN|LIN")], ("I-1112-AMD", "AMD"): [f("I-1112-AMD|AMD")],
-                  ("2026-11-12-A02", "MU"): [f("2026-11-12-A02|MU")]}
-        with mock.patch.object(book, "_fills_by_ref", lambda: by_ref):
+                  ("2026-11-12-A02", "MU"): [f("2026-11-12-A02|MU")],
+                  ("2026-11-16-A02", "CTVA"): [f("2026-11-16-A02|CTVA")]}   # another book's trade: the first book's, after a restart
+        with mock.patch.object(book, "_fills_by_ref", lambda: by_ref), \
+                mock.patch.object(book, "recorded", lambda: [{"id": "2026-11-12-A02"}]):
             self.assertEqual([x["symbol"] for x in book._book_fills()], ["MU"])
 
 
@@ -689,7 +691,7 @@ class Midday(Review):
         self.assertEqual((out["orders"], self.broker.sent, self.state("T1")), ([], [], "open"))
 
     def test_the_check_is_refused_outside_its_window_or_without_a_broken_thesis(self):
-        with self.assertRaisesRegex(ValueError, "between 10:00 AM and 2:45 PM"):
+        with self.assertRaisesRegex(ValueError, "between 9:00 AM and 1:45 PM CT"):
             self.midday(hour=15, action="hold")
         with self.assertRaisesRegex(ValueError, "broken or played_out"):
             self.midday(action="exit", thesis="weakened", reason="it is losing")

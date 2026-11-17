@@ -26,6 +26,24 @@ class JudgeAll(unittest.TestCase):
         self.assertEqual(sigs[0]["verdict"]["decision"], "undecided")
         self.assertEqual(sigs[1]["verdict"]["decision"], "pass")
 
+    def test_a_busy_bar_is_judged_in_full_a_few_at_a_time(self):
+        import threading
+        lock, running, most = threading.Lock(), 0, 0
+
+        def decide(s, news):
+            nonlocal running, most
+            with lock:
+                running += 1
+                most = max(most, running)
+            threading.Event().wait(0.01)
+            with lock:
+                running -= 1
+            return {"decision": "pass"}
+        sigs = [sig(f"S{i}") for i in range(model.AT_ONCE * 2 + 3)]
+        model.judge_all(sigs, decide=decide, news=lambda symbol: [])
+        self.assertEqual([s["verdict"]["decision"] for s in sigs], ["pass"] * len(sigs))
+        self.assertLessEqual(most, model.AT_ONCE)
+
     def test_nothing_to_judge(self):
         model.judge_all([], decide=None, news=None)
 

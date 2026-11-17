@@ -63,7 +63,7 @@ HORIZON = {
     "earnings_gap_held": 4, "earnings_gap_faded": 4, "breakout": 5, "breakdown": 5, "reclaim_200": 5,
     "lost_200": 5, "relative_strength": 3, "relative_weakness": 3, "turn": 3, "stretched": 3,
     "basket_breakout": 5, "basket_breakdown": 5, "basket_big_move": 2, "basket_stretched": 3,
-    "factor_turn": 5, "factor_stretched": 3,
+    "factor_turn": 5, "factor_stretched": 3, "live_move": 3,
 }
 STOP_MOVES = 1.5
 STOP_RANGE = (2.0, 8.0)    # percent
@@ -183,16 +183,16 @@ def exposure(trades: list[dict]) -> tuple[float, dict[str, float]]:
     return gross, net
 
 
-def apply_caps(new: list[dict], open_trades: list[dict]) -> tuple[list[dict], list[dict]]:
-    """Keep new trades, in the order given, while every cap holds."""
+def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_GROSS) -> tuple[list[dict], list[dict]]:
+    """Keep new trades, in the order given, while every cap holds. `max_gross` is the book's capital."""
     kept, skipped = [], []
     for t in new:
         trial = [*open_trades, *kept, t]
         gross, net = exposure(trial)
         if len(trial) > MAX_OPEN:
             skipped.append({"name": t["id"], "reason": f"over {MAX_OPEN} open trades"})
-        elif gross > MAX_GROSS:
-            skipped.append({"name": t["id"], "reason": f"gross would be ${gross:,.0f}, over ${MAX_GROSS:,.0f}"})
+        elif gross > max_gross:
+            skipped.append({"name": t["id"], "reason": f"gross would be ${gross:,.0f}, over ${max_gross:,.0f}"})
         elif (big := [s for s, v in net.items() if abs(v) > MAX_SYMBOL and s in {l['symbol'] for l in t['legs']}]):
             skipped.append({"name": t["id"], "reason": f"net exposure to {', '.join(big)} over ${MAX_SYMBOL:,.0f}"})
         else:
@@ -224,11 +224,11 @@ def exit_reason(trade: dict, session: int, held: list[dict], prices: dict[str, f
         px = prices.get(rule["symbol"])
         side = "below" if "below" in rule else "above"
         if px is not None and ((px < rule["below"]) if side == "below" else (px > rule["above"])):
-            return f"stopped: {rule['symbol']} at {px:,.2f} at 3:45 PM ET, {side} {rule[side]:,.2f}"
+            return f"stopped: {rule['symbol']} at {px:,.2f} at 2:45 PM CT, {side} {rule[side]:,.2f}"
     if "spread_pct" in stop:
         pnl = spread_return(held, prices)
         if pnl is not None and pnl / trade["notional"] * 100 <= stop["spread_pct"]:
-            return f"stopped: down {abs(pnl / trade['notional'] * 100):.1f}% at 3:45 PM ET, past the {abs(stop['spread_pct']):g}% stop"
+            return f"stopped: down {abs(pnl / trade['notional'] * 100):.1f}% at 2:45 PM CT, past the {abs(stop['spread_pct']):g}% stop"
     if session >= trade["horizon_days"]:
         return f"time limit: session {session} of {trade['horizon_days']}"
     return None

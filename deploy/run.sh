@@ -50,12 +50,25 @@ case "$1" in
     # Entries outside regular hours (paper/early.py). Not gated on the trading day: Sunday night enters Monday's takes.
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
     exec uv run fr paper early ;;
+  paper-enter)
+    # The three-pass book's order job (paper/entries.py), every minute. Not gated on the trading day: Sunday night
+    # trades Monday's night pass. A run with nothing to do prints nothing.
+    [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
+    exec uv run fr paper enter ;;
   side-facts)
     # Facts recorded beside the night's verdicts, which no research pass reads (paper/side.py). Yahoo only.
     exec uv run fr paper side ;;
   pass-pre-close)
     uv run fr trading-day || exit 0
     exec uv run fr pass "${1#pass-}" --shadow ;;
+  pass-night)
+    # Sunday to Thursday evenings, for the next session. launchd starts it Monday to Friday and on Sunday
+    # (install.py); Friday's run stops here.
+    [ "$(TZ=America/New_York date +%u)" = 5 ] && exit 0
+    exec uv run fr pass night ;;
+  pass-morning|pass-midday)
+    uv run fr trading-day || exit 0
+    exec uv run fr pass "${1#pass-}" ;;
   intraday-tick)
     uv run fr trading-day || exit 0
     exec uv run fr intraday tick ;;
@@ -88,7 +101,7 @@ e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_secon
     uv run fr scan || echo "stock scan failed; run it by hand tonight" >&2
     uv run fr screen || echo "screen failed; run it by hand tonight" >&2
     written=()
-    for d in journal/briefs journal/scans journal/screens journal/paper journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
+    for d in journal/briefs journal/scans journal/screens journal/paper journal/archive journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
     git add -- "${written[@]}"
     git diff --cached --quiet -- "${written[@]}" ||
       git commit --quiet -m "Journal $(TZ=America/New_York date +%F): brief, screen and paper book" -- "${written[@]}"

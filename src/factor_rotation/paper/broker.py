@@ -28,7 +28,8 @@ LIVE_PORTS = {4001, 7496}
 PAPER_ACCOUNT = re.compile(r"^(DU[A-Z]?|DF)\d+$")
 KINDS = {"MOO", "MOC", "MKT", "LMT"}
 ORDER_TYPE = {"MOO": ("MKT", "OPG"), "MOC": ("MOC", "DAY"), "MKT": ("MKT", "DAY"), "LMT": ("LMT", "DAY")}   # kind -> (orderType, tif)
-VENUES = {"extended", "overnight"}  # a limit order's session: pre-market or after-hours, or 8:00 PM-3:50 AM ET
+VENUES = {"extended", "overnight", "regular"}  # a limit order's session: pre-market or after-hours, 8:00 PM-3:50 AM ET, or the
+# regular session (the three-pass book prices every order on the gateway's bid and ask, paper/entries.py)
 WAITING = {"", "PendingSubmit", "ApiPending"}       # an order the gateway hasn't answered for yet
 WORKING = {"PendingSubmit", "ApiPending", "PreSubmitted", "Submitted", "PendingCancel"}
 COMMISSION_WAITS = 40                               # of 0.05 s, so 2 s at most, as long as a report ever took
@@ -158,7 +159,7 @@ class IBPaper:
                           account=self.s.account, orderRef=ref(o["trade_id"], o["symbol"]), outsideRth=False, transmit=True)
             contract = q[0]
             if o["kind"] == "LMT":
-                order.lmtPrice, order.outsideRth = round(float(o["limit"]), 2), True
+                order.lmtPrice, order.outsideRth = round(float(o["limit"]), 2), o["venue"] != "regular"
                 if o["venue"] == "overnight":   # only day limit orders trade overnight, routed to that venue
                     contract = Contract(conId=q[0].conId, exchange="OVERNIGHT")
                 elif o.get("good_till"):        # a pre-market order must not run on into the regular session

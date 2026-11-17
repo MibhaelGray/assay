@@ -311,6 +311,8 @@ def _portfolio() -> list[dict]:
 def _intraday() -> list[dict]:
     """The intraday book's rehearsal; a failure here never costs the rest of the page."""
     try:
+        if _restart():   # shut down with the first book; its record is in journal/archive
+            return []
         from .intraday import live
 
         return live.rows()
@@ -381,14 +383,37 @@ def build(as_of: date | None = None, workers=None) -> list[dict]:
     meta = {"section": "meta", "as_of": brief["as_of"], "built_at": brief["built_at"],
             "bars_through": brief.get("bars_through"), "options_snapshot": snapshot,
             "next_session": journal.next_trading_day(as_of).isoformat(), **book.marks_info()}
+    if started := _restart():   # the restarted book: one swing book, three passes a day (paper/restart.py)
+        meta |= {"design": started.get("design"), "book_started": started.get("started"), "book_capital": started.get("capital")}
     pairs = _live_pairs(brief, as_of)
     meta["factor_live"] = pairs is not brief
     return [meta, *_factors(pairs), *_gamma(as_of, brief), *_flows(brief), *_screen(newest, screen_job), *rows_first, *_hormuz(), *_routine(), *_intraday(), *_portfolio()]
 
 
+def _restart() -> dict | None:
+    from . import portfolio
+
+    return portfolio.restart()
+
+
+def _pass_screen() -> list[dict]:
+    """The restarted book's shortlist: the newest live screen a pass was given, as saved."""
+    found = [json.loads(p.read_text()) for p in sorted((journal.JOURNAL / "screens" / "live").glob("*.json"))[-6:]]
+    if not found:
+        return []
+    s = max(found, key=lambda x: x["built_at"])
+    return [{"section": "screen", "rank": i, "as_of": s["as_of"], "built_at": s["built_at"], "live": False, "name": c["name"],
+             "kind": c["kind"], "setup": c["setup"], "direction": c["direction"], "score": c["score"], "why": c["why"],
+             "chart": c["chart"], "hedge": c.get("hedge"), "basket_id": c.get("basket_id"),
+             "slot": s.get("slot"), "session": s.get("session"), "prices_at": s.get("prices_at")}
+            for i, c in enumerate(s["candidates"], 1)]
+
+
 def _screen(newest: date | None = None, job: Future | None = None) -> list[dict]:
     """The latest screen's shortlist, one row per candidate. When stored bars are newer than the last saved screen
     it is rebuilt from them for display and not saved; the research passes read only the saved one."""
+    if _restart() and (rows := _pass_screen()):
+        return rows
     paths = sorted((journal.JOURNAL / "screens").glob("*.json"))
     s, live = None, False
     if _screen_is_stale(newest):
@@ -425,7 +450,7 @@ def _paper() -> list[dict]:
         rows += [{"section": "paper_pnl", **r} for r in book.pnl_by_session()]
     except Exception as e:
         logging.getLogger(__name__).warning("paper_pnl_failed error=%r", e)
-    if not any(r["section"] == "paper" for r in rows):
+    if not any(r["section"] == "paper" for r in rows) and not _restart():
         return rows
     fills = sorted((book.ROOT / "fills").glob("*.json"))
     last = json.loads(fills[-1].read_text()) if fills else {}

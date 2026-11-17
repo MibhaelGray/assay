@@ -51,7 +51,6 @@ def root() -> Path:
 MOVE_ATR = 1.0
 MIN_SESSION_DOLLARS = 1e6
 MAX_SPREAD_ATR = 0.25      # the bid-ask spread a name may have, as a share of its daily ATR, to signal or trade
-JUDGED_PER_TICK = 4
 MAX_TAKES = 5              # a night
 MAX_OPEN = 3
 LIMIT_SLIP = 0.005
@@ -521,7 +520,7 @@ def tick(now: datetime | None = None, decide=model.decide, news=model.headlines,
                 hits = _signals(ctx, px, seen, held if held is not None else _held_elsewhere(night), sess, now, since,
                                 getattr(m, "books", {}))
             if hits and source != "Yahoo":
-                vol = await m.session_dollars([h["symbol"] for h in hits[:JUDGED_PER_TICK * 2]], sess == "overnight", since)
+                vol = await m.session_dollars([h["symbol"] for h in hits], sess == "overnight", since)
                 for h in hits:
                     v = vol.get(h["symbol"])
                     h["numbers"]["session_dollars"] = round(v) if v is not None else None
@@ -530,9 +529,7 @@ def tick(now: datetime | None = None, decide=model.decide, news=model.headlines,
             open_takes = sum((x.get("paper") or {}).get("state") in ("entering", "open", "exiting", "dry run") for x in doc["signals"])
             to_judge = []
             for h in hits:
-                if len(to_judge) >= JUDGED_PER_TICK:
-                    h["verdict"] = {"decision": "not judged", "why": f"more than {JUDGED_PER_TICK} signals at this tick; the biggest moves went first"}
-                elif takes >= MAX_TAKES or open_takes >= MAX_OPEN:
+                if takes >= MAX_TAKES or open_takes >= MAX_OPEN:
                     h["verdict"] = {"decision": "not judged", "why": f"the book is full ({takes} takes tonight, {open_takes} open)"}
                 else:
                     to_judge.append(h)

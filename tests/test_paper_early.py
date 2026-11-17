@@ -37,7 +37,7 @@ class Guards(Case):
         with self.assertRaises(GuardError):
             check_order({**o, "venue": "overnight"})
         with self.assertRaises(GuardError):
-            check_order({**o, "limit": 10.0, "venue": "regular"})
+            check_order({**o, "limit": 10.0, "venue": "lunch"})
         check_order({**o, "limit": 10.0, "venue": "overnight"})
 
 

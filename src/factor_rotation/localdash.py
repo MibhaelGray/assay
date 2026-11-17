@@ -8,7 +8,7 @@ The one outside dependency is d3 from a CDN, so charts need a network connection
 
 import json
 import logging
-from datetime import date, datetime
+from datetime import date
 from pathlib import Path
 
 from . import journal
@@ -50,7 +50,6 @@ def build(out: Path = DEFAULT_OUT, as_of: date | None = None, workers=None) -> d
     market, market_note = _market_rows(as_of, workers)
     page = (DASHBOARD / "page.html").read_text()
     geo = (DASHBOARD / "hormuz-geo.json").read_text().replace("</", "<\\/") if (DASHBOARD / "hormuz-geo.json").exists() else "null"
-    built = datetime.now(NY).strftime("%b %-d, %Y %-I:%M %p ET")
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -67,7 +66,6 @@ def build(out: Path = DEFAULT_OUT, as_of: date | None = None, workers=None) -> d
 </script>
 </head>
 <body>
-<p class="local-banner">Local copy, built {built} from the journal and stored bars ({market_note}). Rebuild with <code>uv run fr dashboard</code>.</p>
 {page}
 </body>
 </html>

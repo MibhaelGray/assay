@@ -117,6 +117,29 @@ class Paper(unittest.TestCase):
         books = books if books is not None else {s: (p, p) for s, p in px.items()}
         return asyncio.run(extended.trade(doc, sess, px, now, lambda: None, lambda: b, books, missing))
 
+    def test_every_signal_at_a_tick_is_judged_and_has_its_volume_checked(self):
+        names = [f"N{i}" for i in range(10)]
+        ctx = {n: {"hedge": "HHH", "beta": 1.0, "atr_pct": 0.02, "close": 50.0, "hedge_close": 100.0} for n in names}
+        px = {**{n: 51.5 + i * 0.1 for i, n in enumerate(names)}, "HHH": 100.5}     # each a full ATR ahead of the hedge
+
+        class Market:
+            books, missing, asked = {}, {}, []
+
+            async def quotes(self, symbols, overnight):
+                return {s: px[s] for s in symbols if s in px}
+
+            async def session_dollars(self, symbols, overnight, since):
+                self.asked = list(symbols)
+                return {s: 0.0 if s == "N9" else 5e6 for s in symbols}             # N9 hasn't traded since the close
+
+        m, now = Market(), at(11, 17, 0)
+        with mock.patch.object(extended, "context", lambda day: ctx), \
+                mock.patch.object(extended, "load", lambda night: {"night": night.isoformat(), "ticks": [], "signals": []}):
+            out = extended.tick(now, decide=lambda s, news: {"decision": "pass"}, news=lambda symbol: [], market=m, held=set(), dry=True)
+        self.assertEqual(sorted(m.asked), names)
+        self.assertEqual(sorted(x["symbol"] for x in out["new"]), names[:9])
+        self.assertEqual({x["verdict"]["decision"] for x in out["new"]}, {"pass"})
+
     def test_a_take_is_not_sent_without_the_gateways_quote_on_both_legs(self):
         now, b = at(12, 5, 0), Broker()
         doc = {"signals": [self.take(now, "pre-market")]}

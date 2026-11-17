@@ -5,6 +5,10 @@ pass writes a verdict on each one (proposals.py); only the takes are traded, wit
 the outer limits in rules.py. The pass reviews open trades before the close and learns from every result
 (learn.py). The selective book, which traded the recorded ideas as they stood, was retired on 2026-11-09.
 
+After `fr paper restart` (restart.py; journal/paper/book.json exists) the book is one swing book of $1,000,000
+run by three passes a day on live prices (daily.py records each pass, entries.py trades its takes within a
+minute at IBKR's bid or ask). The jobs below, other than close and sync, belong to the first book.
+
 Orders are market-on-open entries and market-on-close exits, so paper results line up with the
 open-to-close scoring. The one exception closes a trade that only half filled:
 - 9:00 PM, 4:05 AM, 9:00 AM ET  `fr paper early`  enters the takes outside regular hours with limit orders,

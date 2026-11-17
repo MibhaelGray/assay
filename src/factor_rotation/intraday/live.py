@@ -28,7 +28,6 @@ from . import bars15, model, orders, replay, signals
 log = logging.getLogger(__name__)
 
 ROOT = journal.JOURNAL / "intraday" / "days"
-JUDGED_PER_TICK = 4        # the strongest signals at one bar go to the model; the rest are recorded unjudged
 MAX_TAKES = 5              # a day
 MAX_OPEN = 3               # takes held at once
 
@@ -148,8 +147,6 @@ def tick(now: datetime | None = None, decide=model.decide, news=model.headlines,
     for sig in ranked:
         if "skipped" in sig:
             sig["verdict"] = {"decision": "not judged", "why": sig["skipped"]}
-        elif len(to_judge) >= JUDGED_PER_TICK:
-            sig["verdict"] = {"decision": "not judged", "why": f"more than {JUDGED_PER_TICK} signals at this bar; the heaviest volume went first"}
         elif len(takes) >= MAX_TAKES or open_takes >= MAX_OPEN:
             sig["verdict"] = {"decision": "not judged", "why": f"the book is full ({len(takes)} takes today, {open_takes} open)"}
         else:

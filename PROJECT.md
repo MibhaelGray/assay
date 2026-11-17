@@ -52,6 +52,32 @@ whose answer matters whichever way it comes out, and something to build and lear
 - **Paper sizes stay large** ($10,000 a side). What matters is percent return, and a bigger book gives more
   trades and a faster answer. Sizing for a $15,000 account is a later step, before real money.
 
+## The restart: three passes a day (agreed 2026-11-15)
+
+Built and tested, not switched on yet. Until the restart is carried out, the book runs as described above.
+When it is, this section replaces the swing and intraday paragraphs.
+
+- **One book.** The intraday book is shut down. Every position is closed, and the record starts again from zero
+  with exactly $1,000,000 in the swing book. The first book's files, and the intraday book's, are kept in
+  `journal/archive/` as a closed "before" period.
+- **Three full passes a day, each the same thing:** 7:30 PM CT (Sunday to Thursday, for the next session),
+  8:45 AM CT and 12:00 PM CT. Code screens the whole universe (about 1,040 names) on the latest prices, whether
+  after-hours, pre-market or the regular session, never the prior close. A research agent studies each
+  shortlisted name. The judge gives every candidate a verdict, a conviction and a rank, and reviews every open
+  trade.
+- **Trades go out as soon as the pass records.** The best 1 to 3 takes per pass, as limit orders priced from
+  IBKR's own bid and ask.
+- **No order without IBKR's quote, in regular hours too.** With no quote, or a spread wider than 2%, the order
+  waits and is tried again every 15 minutes until 2:40 PM CT.
+- **Holds stay 1 to 10 sessions.** A trade entered during the day counts its time limit from the next session.
+  Stops and time limits are checked by code at 2:45 PM CT and leave at the close.
+- **Scoring.** Every verdict is scored from the prices at the moment its pass recorded. The early test uses
+  every pass's ranking, not only the evening's.
+- **The 10% pause** is $100,000 on the $1,000,000.
+
+Why: four kinds of pass and seven order jobs were hard to follow, and a pass judging off the prior day's close
+was acting on old prices.
+
 ## Data
 
 Today: prices, volume, earnings dates, and web research the AI reads itself during each pass (there is no news
@@ -75,3 +101,7 @@ Short interest is the first to add; the rest to be decided then.
 - Whether the research passes should lean toward outright trades now that the S&P is the benchmark: the screen
   gives every candidate a hedge by default, and a hedged book can do well and still trail a rising S&P.
 - Which data sources to test after short interest.
+- Whether a stop or time-limit exit may go out when IBKR gives no quote. As built it may: the close check judges
+  the stop on Yahoo's latest price and sends a market-on-close order, the one exception to the quote rule.
+- Whether the paper account gives quotes for US stocks in regular hours at all. On 2026-11-15 it gave them only
+  for the overnight session. If it doesn't, the restarted book can trade only overnight until that is fixed at IBKR.

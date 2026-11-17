@@ -49,7 +49,8 @@ class Accounts(unittest.TestCase):
     def accounts(self, sync, swing, intraday, pos=(), first=None):
         books = {"swing": swing, "intraday": intraday}
         with mock.patch.object(portfolio, "fills", lambda b: books[b]), mock.patch.object(portfolio, "_last_sync", lambda: sync), \
-                mock.patch.object(portfolio, "_first_sync", lambda: first if first is not None else sync):
+                mock.patch.object(portfolio, "_first_sync", lambda: first if first is not None else sync), \
+                mock.patch.object(portfolio, "restart", lambda: None):   # not the live book.json
             return portfolio.accounts(list(pos))
 
     def test_each_book_is_its_capital_plus_its_own_pnl_and_the_rest_is_unassigned(self):

@@ -29,6 +29,23 @@ BOOKS = ("swing", "intraday")
 CAPITAL = {"swing": 900_000.0, "intraday": 100_000.0}
 
 
+def restart() -> dict | None:
+    """journal/paper/book.json, written when the paper book was started again from zero (`fr paper restart`):
+    {"started", "design", "capital": {book: dollars}}. None for the first book."""
+    path = book.ROOT / "book.json"   # book.ROOT, so a test or a scratch journal that moves the book moves this too
+    return json.loads(path.read_text()) if path.exists() else None
+
+
+def capital(book_: str) -> float:
+    """A book's capital: what the restart gave it, or the first book's share."""
+    return float(((restart() or {}).get("capital") or CAPITAL).get(book_, 0.0))
+
+
+def running() -> tuple[str, ...]:
+    """The books that are running. After the 2026-11 restart only the swing book is."""
+    return tuple((restart() or {}).get("capital") or CAPITAL)
+
+
 def intraday_fills() -> list[dict]:
     """Every fill on the intraday book's orders, regular session and extended hours, oldest first."""
     root = journal.JOURNAL / "intraday"
@@ -109,7 +126,7 @@ def _apply(out: dict[str, dict], f: dict) -> None:
 
 def positions() -> list[dict]:
     """One row per symbol a book still holds."""
-    by_book = {b: _held(fills(b)) for b in BOOKS}
+    by_book = {b: _held(fills(b)) for b in running()}
     symbols = sorted({s for held in by_book.values() for s, p in held.items() if round(p["shares"])})
     px = bars.load(symbols) if symbols else pd.DataFrame()
     last, prev = {}, {}
@@ -197,7 +214,7 @@ def accounts(pos: list[dict] | None = None) -> dict:
     marks = sync.get("marks") or {}
     fallback = {(r["book"], r["symbol"]): r["last"] for r in (pos if pos is not None else positions())}
     books = []
-    for b in BOOKS:
+    for b in running():
         fs = fills(b)
         held = _held(fs)
         use = deployed(fs)
@@ -213,17 +230,17 @@ def accounts(pos: list[dict] | None = None) -> dict:
                 price = fallback.get((b, s), p["cost"])
                 at_close.append(s)
             open_ += q * (price - p["cost"])
-        value = CAPITAL[b] + realized + open_ - commission
-        books.append({"book": b, "capital": CAPITAL[b], "realized": round(realized, 2), "open": round(open_, 2),
-                      "commission": round(commission, 2), "pnl": round(value - CAPITAL[b], 2), "value": round(value, 2),
-                      "return_pct": round((value / CAPITAL[b] - 1) * 100, 3),
-                      "account_pct": round((value - CAPITAL[b]) / base * 100, 3) if base else None,
+        value = capital(b) + realized + open_ - commission
+        books.append({"book": b, "capital": capital(b), "realized": round(realized, 2), "open": round(open_, 2),
+                      "commission": round(commission, 2), "pnl": round(value - capital(b), 2), "value": round(value, 2),
+                      "return_pct": round((value / capital(b) - 1) * 100, 3),
+                      "account_pct": round((value - capital(b)) / base * 100, 3) if base else None,
                       "deployed_now": use["now"], "deployed_peak": use["peak"], "deployed_avg": use["average"],
-                      "deployed_pct": round((value - CAPITAL[b]) / use["average"] * 100, 3) if use["average"] else None,
+                      "deployed_pct": round((value - capital(b)) / use["average"] * 100, 3) if use["average"] else None,
                       "marked_at_close": sorted(at_close), **_pause(b, value)})
     nav = sync.get("net_liquidation")
     pnl = sum(x["pnl"] for x in books)
-    out = {"net_liquidation": nav, "pulled_at": sync.get("pulled_at"), "books": books, "capital": sum(CAPITAL.values()),
+    out = {"net_liquidation": nav, "pulled_at": sync.get("pulled_at"), "books": books, "capital": sum(capital(b) for b in running()),
            "start_value": base, "start_session": first.get("session"), "pnl": round(pnl, 2),
            "account_pct": round(pnl / base * 100, 3) if base else None}
     out["unassigned"] = round(nav - sum(x["value"] for x in books), 2) if nav is not None else None
@@ -245,7 +262,7 @@ def rows() -> list[dict]:
     out = [{"section": "portfolio_position", **r} for r in pos]
     acct = {"section": "portfolio_accounts", **accounts(pos)}
     out.append(acct)   # filled in below with each book's change on the day
-    for which in ("all", *BOOKS):
+    for which in ("all", *running()):
         fs = fills(which)
         history = book.pnl_by_session(fs)
         # The day's change: the book's profit and loss now (IBKR's prices, as in its value) less what it was at the
@@ -266,4 +283,4 @@ def rows() -> list[dict]:
 
 
 def pnl_intraday(which: str) -> dict:
-    return book.pnl_intraday(fills=fills(which if which in BOOKS else "all"))
+    return book.pnl_intraday(fills=fills(which if which in running() else "all"))

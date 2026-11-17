@@ -6,7 +6,9 @@ triggered it and a one-line chart verdict. The pass researches only those. A bre
 how tight the base was and which way the trend ran (TIGHT_BASE and ADJUST below). The screen never decides: it says
 where to look, and every recorded idea carries its setup so results can be compared setup by setup.
 
-Daily bars only for now; the intraday version for the daytime passes comes with the pass schedule.
+Two ways to run it. `build()` is the nightly screen on settled daily bars. `build_live(slot)` is the screen for
+one of the three daily passes (night, morning, midday): the same setups on the latest prices, which may be
+after-hours, pre-market or a session still trading (live.py), plus the names moving sharply right now.
 """
 
 import json
@@ -15,7 +17,7 @@ from datetime import date, datetime
 import numpy as np
 import pandas as pd
 
-from . import bars, earnings, journal
+from . import bars, earnings, journal, live
 from .analytics.technicals import atr, rsi
 from .config import NY
 from .market import _regime, basket_library
@@ -31,8 +33,21 @@ WEIGHTS = {
     "earnings_gap_held": 3.0, "earnings_gap_faded": 2.6, "relative_strength": 2.5, "relative_weakness": 2.5,
     "basket_breakout": 2.2, "basket_breakdown": 2.2, "breakout": 2.1, "breakdown": 2.1, "turn": 2.0,
     "reclaim_200": 2.0, "lost_200": 2.0, "basket_big_move": 1.8, "factor_turn": 1.6,
-    "stretched": 1.0, "basket_stretched": 1.0, "factor_stretched": 1.0,
+    "stretched": 1.0, "basket_stretched": 1.0, "factor_stretched": 1.0, "live_move": 2.4,
 }
+# The live screen. A name is "moving now" when its latest price is LIVE_MOVE_ATR of its daily ATRs from the last
+# regular close. Outside regular hours Yahoo gives no volume, so the move has to come with steady trading: a
+# print in at least LIVE_MIN_BARS five-minute bars (50 minutes' worth; the after-hours session has 48 bars).
+# During the session it needs LIVE_HEAVY times its usual volume, projected to a full day.
+# A name a pass has judged in the last REJUDGE_SESSIONS sessions isn't a candidate again unless it has moved
+# REJUDGE_ATR ATRs since that verdict: three passes a day would otherwise judge one idea three times and count
+# it three times in the take-against-pass test.
+LIVE_MOVE_ATR = 2.0
+LIVE_MIN_BARS = 10
+LIVE_HEAVY = 2.0
+REJUDGE_ATR = 1.5
+REJUDGE_SESSIONS = 2
+SLOTS = ("night", "morning", "midday")
 EARNINGS_SETUPS = {"earnings_gap_held", "earnings_gap_faded"}
 # Two things about the chart behind a breakout or breakdown, recorded on every stock and ETF candidate.
 # Tightness: the average daily range (true range over the prior close) of the 10 sessions before today, over
@@ -133,12 +148,46 @@ def _book_names(sessions: list[date], as_of: date) -> dict[str, str]:
     return out
 
 
-def _shortlist(ranked: list[dict], r60: pd.DataFrame, in_book: dict[str, str]) -> tuple[list[dict], list[dict], list[dict]]:
-    """(candidates, the rest in rank order, signals on names the book holds) from every hit, best first."""
+def _judged(session: date) -> dict[str, dict]:
+    """name -> the latest verdict a pass gave it within the last REJUDGE_SESSIONS sessions up to `session`."""
+    from .paper import proposals
+
+    if not (proposals.root() / "proposals").exists():
+        return {}
+    since = journal.previous_trading_day(session).isoformat() if REJUDGE_SESSIONS > 1 else session.isoformat()
+    out = {}
+    for p in proposals.every():
+        if p.get("reviewed") and since <= p["session"] <= session.isoformat():
+            n = (p.get("signal") or {}).get("numbers") or {}
+            out[p["name"]] = {"session": p["session"], "pass": p.get("pass"), "decision": p["decision"], "setup": p["setup"],
+                              "direction": p["direction"], "price": n.get("price") or n.get("close"), "atr_pct": n.get("atr_pct")}
+    return out
+
+
+def _judged_already(c: dict, was: dict) -> str | None:
+    """Why this candidate isn't judged again, or None if it has changed enough since its last verdict."""
+    said = f"the {was['pass'] or 'last'} pass for {was['session']} judged it ({was['decision']})"
+    now = (c.get("numbers") or {}).get("price")
+    if c["kind"] in ("stock", "etf") and now and was.get("price") and was.get("atr_pct"):
+        moved = (now / was["price"] - 1) / was["atr_pct"]
+        return None if abs(moved) >= REJUDGE_ATR else f"{said} and it has moved {moved:+.1f} ATR since, under {REJUDGE_ATR:g}"
+    if (c["setup"], c["direction"]) != (was["setup"], was["direction"]):
+        return None
+    return f"{said} on the same setup"
+
+
+def _shortlist(ranked: list[dict], r60: pd.DataFrame, in_book: dict[str, str], judged: dict[str, dict] | None = None,
+               again: list[dict] | None = None) -> tuple[list[dict], list[dict], list[dict]]:
+    """(candidates, the rest in rank order, signals on names the book holds) from every hit, best first.
+    `judged` (the live screen) leaves out names a recent pass already gave a verdict; they are added to `again`."""
     held, kept = [], []
     for c in ranked:
         if c["kind"] in ("stock", "etf") and c["name"] in in_book:
             held.append({**{k: c[k] for k in ("name", "kind", "setup", "direction", "score", "why")}, "in_book": in_book[c["name"]]})
+            continue
+        if judged and c["name"] in judged and (why := _judged_already(c, judged[c["name"]])):
+            if again is not None:
+                again.append({**{k: c[k] for k in ("name", "kind", "setup", "direction", "score", "why")}, "judged": why})
             continue
         if c["kind"] == "etf":
             twin = next((k for k in kept if k["kind"] == "etf" and k["setup"] == c["setup"] and k["direction"] == c["direction"]
@@ -240,7 +289,22 @@ def _verdict(f: dict) -> tuple[str, dict]:
     parts.append(f"ATR {f['atr']:,.2f} ({f['atr_pct'] * 100:.1f}%)")
     nums = {k: f[k] for k in ("close", "ret_1d", "ret_5d", "ret_20d", "atr", "atr_pct", "rsi", "dist20_atr", "vol_ratio",
                               "sma50", "sma200", "hi52", "lo52", "usd_volume", "tightness", "trend", "sma50_change_20d")}
+    if x := f.get("live"):
+        nums.update({"price": x["price"], "price_at": x["at"], "live_phase": x["phase"], "live_move": x["move"],
+                     "live_move_atr": x["move_atr"], "live_bars": x["bars"]})
+        if x["phase"] != "regular":
+            parts.insert(0, _live_text(x))
+    if f.get("partial"):
+        nums["session_minutes"] = f["partial"]["minutes"]
+        parts.insert(0, f"today so far, {f['partial']['minutes']} minutes into the session, with volume projected to a full day")
     return "; ".join(parts), journal._records(pd.DataFrame([nums]))[0]
+
+
+def _live_text(x: dict) -> str:
+    """One name's trading outside regular hours, in words."""
+    session = "after-hours" if x["phase"] == "post" else "pre-market"
+    return (f"{session} at {live.clock(x['at'])}: {x['price']:,.2f}, {_pct(x['move'])} from the last regular close "
+            f"({x['move_atr']:+.1f} ATR), a trade in {x['bars']} five-minute bars")
 
 
 def _trend_text(f: dict) -> str:
@@ -317,6 +381,8 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
                 why += f"; {_trend_text(f)}{', against this trade' if against else ''}"
                 if setup == "breakout" and f["trend"] == "down":
                     adjust["breakout_in_downtrend"] = ADJUST["breakout_in_downtrend"]
+        if f.get("partial"):  # the session is still trading: nothing has closed yet
+            why = why.replace("closed", "trading")
         hits.append({"setup": setup, "direction": "long" if direction > 0 else "short", "strength": float(abs(strength)), "why": why,
                      "adjust": adjust})
 
@@ -399,6 +465,14 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
         add("stretched", 1, f["dist20_atr"] / 3, f"stretched down: RSI {f['rsi']:.0f}, {f['dist20_atr']:+.1f} ATR from the 20-day, no turn yet")
     elif f["rsi"] >= 75 or f["dist20_atr"] >= 3:
         add("stretched", -1, f["dist20_atr"] / 3, f"stretched up: RSI {f['rsi']:.0f}, {f['dist20_atr']:+.1f} ATR from the 20-day, no turn yet")
+    # Moving now (the live screen only): outside regular hours on steady trading, or today on heavy volume.
+    if x := f.get("live"):
+        news = f"; {x['reported']}" if x.get("reported") else ""
+        if x["phase"] != "regular" and abs(x["move_atr"]) >= LIVE_MOVE_ATR and x["bars"] >= LIVE_MIN_BARS:
+            add("live_move", 1 if x["move"] > 0 else -1, x["move_atr"], _live_text(x) + news)
+        elif x["phase"] == "regular" and abs(move_atr) >= LIVE_MOVE_ATR and f["vol_ratio"] >= LIVE_HEAVY:
+            add("live_move", 1 if ret1 > 0 else -1, move_atr, f"{_pct(ret1)} today ({move_atr:+.1f} ATR) at {live.clock(x['at'])} on "
+                f"{f['vol_ratio']:.1f}x volume{', projected to a full day' if f.get('partial') else ''}{news}")
     return hits
 
 
@@ -437,15 +511,97 @@ def _spread_hits(name: str, spread: pd.Series, stretched_setup: str, big_setup: 
     return hits, nums
 
 
+def _names() -> list[str]:
+    return sorted({*screen_universe(), *_groups(), *earnings.symbols()} - set(BARS_ONLY))
+
+
 def build() -> dict:
+    """The nightly screen, on settled daily bars."""
+    return _run(bars.load(_names()))
+
+
+def _with_live(frame: pd.DataFrame, snaps: dict[str, dict]) -> tuple[pd.DataFrame, dict[str, dict], dict[str, dict]]:
+    """(the daily bars with today's bar so far added, symbol -> its trading outside regular hours, symbol -> how
+    far into the session its bar is). A day whose stored bar was pulled after the close keeps that bar."""
+    last = frame.groupby("symbol")["date"].max()
+    add, drop, partial = [], [], {}
+    for sym, snap in snaps.items():
+        if sym not in last.index:
+            continue
+        day = pd.Timestamp(snap["date"])
+        bar = live.provisional_bar(snap)
+        if bar is None or day < last[sym] or (day == last[sym] and journal._bars_settled(snap["date"])):
+            continue
+        if day == last[sym]:   # a partial bar stored by a dashboard refresh during the session
+            drop.append((sym, day))
+        add.append({**bar, "symbol": sym})
+        if snap["regular"]["minutes"] < live.SESSION_MINUTES:
+            partial[sym] = {"minutes": snap["regular"]["minutes"], "fraction": snap["regular"]["fraction"]}
+    if drop:
+        gone = pd.MultiIndex.from_tuples(drop)
+        frame = frame[~pd.MultiIndex.from_frame(frame[["symbol", "date"]]).isin(gone)]
+    if add:
+        frame = pd.concat([frame, pd.DataFrame(add)], ignore_index=True)
+    return frame, snaps, partial
+
+
+def _live_of(sym: str, f: dict, snap: dict | None, reports: dict) -> dict | None:
+    """One name's latest price against its last regular close, for the live screen: after-hours once its day's
+    bar is complete, pre-market before a session has a bar, otherwise the session's own move so far."""
+    if not snap or snap["date"] < f["dates"][-1]:
+        return None
+    same_day = snap["date"] == f["dates"][-1]
+    if same_day and snap.get("post"):
+        phase, ext = "post", snap["post"]
+    elif not same_day and snap.get("pre") and not snap.get("regular"):
+        phase, ext = "pre", snap["pre"]
+    elif same_day and snap.get("regular"):
+        phase, ext = "regular", None
+    else:
+        return None
+    price = ext["last"] if ext else snap["regular"]["close"]
+    move = price / f["close"] - 1 if ext else f["ret_1d"]
+    atrp = f["atr_pct"] if ext else f["atr_pct_prev"]
+    out = {"phase": phase, "price": price, "at": snap["at"], "move": move, "move_atr": move / atrp if atrp else 0.0,
+           "bars": ext["bars"] if ext else 0}
+    today = snap["date"].isoformat()
+    said = next((r for r in reports.get(sym, []) if r["date"] == today), None)
+    if said:
+        out["reported"] = f"reported today {said['session'].replace('_', ' ')}" + (
+            f", EPS surprise {said['surprise_pct']:+.0f}%" if said.get("surprise_pct") is not None else "")
+    return out
+
+
+def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None) -> dict:
+    """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull."""
+    from .paper import proposals
+
+    if slot not in SLOTS:
+        raise ValueError(f"slot must be one of: {', '.join(SLOTS)}")
+    now = now or datetime.now(NY)
+    session = proposals.pass_session(slot, now)
+    names = _names()
+    snaps = live.fetch(names) if snaps is None else snaps
+    if "SPY" not in snaps:
+        raise RuntimeError("no live prices from Yahoo (SPY is missing), so there is no live screen")
+    frame, snaps, partial = _with_live(bars.load(names), snaps)
+    payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial})
+    spy = snaps["SPY"]
+    payload.update({"session": session.isoformat(), "slot": slot, "live": True, "phase": spy["phase"], "prices_at": spy["at"],
+                    "session_minutes": (spy.get("regular") or {}).get("minutes") if spy["phase"] == "regular" else None,
+                    "priced": len(snaps)})
+    return payload
+
+
+def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     groups = _groups()
     baskets = basket_library()["baskets"]
-    names = sorted({*screen_universe(), *groups, *earnings.symbols()} - set(BARS_ONLY))
-    frame = bars.load(names)
     as_of_ts = frame.loc[frame["symbol"] == "SPY", "date"].max()
     as_of = as_of_ts.date()
     frame = frame[frame["date"] <= as_of_ts]
     days = _Days(as_of)
+    snaps, partial = (live_["snaps"], live_["partial"]) if live_ else ({}, {})
+    after_close = bool(live_) and snaps["SPY"]["phase"] == "post"
     reports = earnings.load().get("names", {})
     close = frame.pivot_table(index="date", columns="symbol", values="close").sort_index()
     rets = close.pct_change()
@@ -459,6 +615,9 @@ def build() -> dict:
         f = _features(df)
         if f is None:
             continue
+        if live_:
+            f["partial"] = partial.get(sym)
+            f["live"] = _live_of(sym, f, snaps.get(sym), reports)
         feats[sym] = f
         is_etf = sym in ETFS
         if not is_etf and f["usd_volume"] < MIN_DOLLAR_VOLUME:
@@ -477,7 +636,10 @@ def build() -> dict:
                 "baskets": [b["name"] for b in groups.get(sym, [])], "chart": verdict, "numbers": nums,
                 "next_earnings": {k: v for k, v in nxt.items() if k != "reacts"} if nxt else None,
                 "also": [f"{h['setup']} ({h['direction']})" for h in hits[1:]]}
-        if nxt and nxt["sessions_away"] is not None and nxt["sessions_away"] <= 1 and best["setup"] not in EARNINGS_SETUPS:
+        # A report dated today after the close is out by the time the night pass runs: the name is judged on its reaction.
+        out_already = after_close and nxt and nxt["date"] == as_of.isoformat() and nxt["when"] == "after_close"
+        if nxt and nxt["sessions_away"] is not None and nxt["sessions_away"] <= 1 and best["setup"] not in EARNINGS_SETUPS \
+                and not out_already:
             held_back.append({**cand, "held_back": f"reports {nxt['date']} {nxt['when'].replace('_', ' ')}, inside the next session"})
             continue
         found.append(cand)
@@ -528,7 +690,8 @@ def build() -> dict:
     for c in kept:
         counts[c["setup"]] = counts.get(c["setup"], 0) + 1
 
-    top, rest, held = _shortlist(kept, r60, _book_names(days.sessions, as_of))
+    again: list[dict] = []
+    top, rest, held = _shortlist(kept, r60, _book_names(days.sessions, as_of), _judged(live_["session"]) if live_ else None, again)
 
     liquid = {s for s, f in feats.items() if s not in ETFS and f["usd_volume"] >= MIN_DOLLAR_VOLUME}
     upcoming = []
@@ -555,6 +718,7 @@ def build() -> dict:
         "more": [{k: c[k] for k in ("name", "kind", "setup", "direction", "score", "why")} for c in rest[:MORE]],
         "held_back": held_back,
         "in_book": held,
+        "judged_recently": again,
         "earnings_ahead": upcoming[:40],
         "calendar_ahead": events,
         "regime": _regime_notes(as_of),
@@ -588,14 +752,34 @@ def write() -> tuple[str, dict]:
     return str(path), payload
 
 
+def live_path(session: date | str, slot: str):
+    """Where a pass's live screen is kept. Its own folder, so the nightly screens stay one file a night."""
+    return journal.JOURNAL / "screens" / "live" / f"{session}-{slot}.json"
+
+
+def write_live(slot: str, now: datetime | None = None) -> tuple[str, dict]:
+    payload = build_live(slot, now)
+    path = live_path(payload["session"], slot)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
+    return str(path), payload
+
+
 def summary(payload: dict) -> str:
-    lines = [f"Screen for {payload['as_of']} (next session {payload['next_session']}): {payload['screened']} names, "
-             f"{sum(payload['hits_by_setup'].values())} hits"]
+    if payload.get("live"):
+        what = {"post": "after-hours", "pre": "pre-market", "regular": "the session so far"}[payload["phase"]]
+        lines = [f"Live screen for the {payload['slot']} pass, session {payload['session']}: prices at "
+                 f"{live.clock(payload['prices_at'])} ({what}), {payload['screened']} names, {sum(payload['hits_by_setup'].values())} hits"]
+    else:
+        lines = [f"Screen for {payload['as_of']} (next session {payload['next_session']}): {payload['screened']} names, "
+                 f"{sum(payload['hits_by_setup'].values())} hits"]
     for c in payload["candidates"]:
         lines.append(f"{c['score']:.2f}  {c['name']:<28} {c['setup']:<20} {c['direction']:<5}  {c['why']}")
     if payload["held_back"]:
         lines.append("Held back (earnings inside the next session): " + ", ".join(c["name"] for c in payload["held_back"]))
     if payload.get("in_book"):
         lines.append("Left out, already in the book: " + ", ".join(f"{c['name']} ({c['setup']} {c['direction']})" for c in payload["in_book"]))
+    if payload.get("judged_recently"):
+        lines.append("Left out, judged by a recent pass: " + ", ".join(c["name"] for c in payload["judged_recently"]))
     lines += payload["regime"]
     return "\n".join(lines)

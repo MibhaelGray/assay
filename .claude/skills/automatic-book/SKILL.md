@@ -1,6 +1,6 @@
 ---
 name: automatic-book
-description: The automatic paper book's daily research passes. Evening pass (about 7:30 PM ET) judges every candidate on the screen and records take-or-pass proposals for the next open; pre-open pass (about 8:30 AM ET) lets each take stand or stands it down on the overnight session; midday check (about 12:15 PM ET) holds each open trade or closes one whose reason has gone; pre-close review (about 3:00 PM ET) decides hold, exit or extend for each open automatic trade. Use when asked for the automatic book's evening pass, pre-open pass, midday check, pre-close review, proposals, post-mortems or lessons, or when a scheduled task names one of the passes.
+description: The automatic paper book's daily research passes. Evening pass (about 6:30 PM CT) judges every candidate on the screen and records take-or-pass proposals for the next open; pre-open pass (about 7:30 AM CT) lets each take stand or stands it down on the overnight session; midday check (about 11:15 AM CT) holds each open trade or closes one whose reason has gone; pre-close review (about 2:00 PM CT) decides hold, exit or extend for each open automatic trade. Use when asked for the automatic book's evening pass, pre-open pass, midday check, pre-close review, proposals, post-mortems or lessons, or when a scheduled task names one of the passes.
 ---
 
 # The automatic book
@@ -23,11 +23,11 @@ The automatic book trades on the IBKR **paper** account. A program screens every
 - **Never run `fr paper holds`.** It scores every idea at every hold from 1 to 10 sessions, to learn which hold period pays (`paper/holds.py`). Until it has enough nights behind it, it would only pull your time limits toward noise. Set each `horizon_days` on how long the idea's reason needs, as before.
 - **Models (the owner's rule, 2026-11-14).** The pass itself runs on Fable 5.2 (`claude-fable-5-2`) at high effort: it judges and ranks, and one judge has to do it every night for the record to mean anything. Every agent it starts runs on Opus 5.5 at medium effort: spawn each with the Agent tool's `model: "opus"` and `effort: "medium"`, whatever this session is on. You can't change your own model or effort. If you are on anything else, carry on, and say so in the first line of your final message and of the research note, so the owner can set the model in the app.
 - **Discretion, by design (the owner, 2026-11-14).** The test this book runs is what the models find when left to their own judgment, so nobody tells a research agent what to read or tells you how to weigh what it brings back. What is fixed is the setup (the models, the same bare brief every night, the web and not this project's files for the agents) and what gets recorded and scored (a verdict, a conviction and a rank on every idea; a plan, a stop and a `wrong_if` on every take). The owner's own view, offered as a view and not a procedure: narrative is what drives price action.
-- Write times as 9:15 AM ET, never 09:15. In anything the user reads, say what an ETF is the first time: XLY (consumer discretionary ETF).
+- Write times in Central time, the owner's zone, as 8:15 AM CT, never 09:15 and never ET (the owner, 2026-11-15). The regular session is 8:30 AM to 3:00 PM CT. Timestamps inside journal files and on market data are New York time: subtract an hour. In anything the user reads, say what an ETF is the first time: XLY (consumer discretionary ETF).
 
-## 1. Evening pass (about 7:30 PM ET, for the next session's open)
+## 1. Evening pass (about 6:30 PM CT, for the next session's open)
 
-The nightly job writes the screen at 7:00 PM ET. Proposals must be recorded by 9:14 AM ET; the entry job runs at 9:15. Takes recorded before 9:00 PM ET are entered that night with limit orders in IBKR's overnight session, and again at 4:05 AM and 9:00 AM ET for what didn't fill, so a take can be filled before the pre-open pass sees it.
+The nightly job writes the screen at 6:00 PM CT. Proposals must be recorded by 8:14 AM CT; the entry job runs at 8:15 AM CT. Takes recorded before 8:00 PM CT are entered that night with limit orders in IBKR's overnight session, and again at 3:05 AM and 8:00 AM CT for what didn't fill, so a take can be filled before the pre-open pass sees it.
 
 1. `uv run fr paper learn`.
 2. Find the screen: the newest `journal/screens/<as_of>.json`. It must have `bars_settled: true` and `next_session` equal to the session you're proposing for. If tonight's isn't there yet, the nightly job may still be running: look again every few minutes for up to 20 minutes. If it still hasn't appeared, run `uv run fr screen` yourself; if the bars aren't settled, stop and say so.
@@ -89,13 +89,13 @@ The nightly job writes the screen at 7:00 PM ET. Proposals must be recorded by 9
    `candidate` is a name from the screen; the screen's numbers, default legs and default plan are copied in for you. `long` and `short` replace a side. An entry with `name`, `setup` and `direction` instead of `candidate` is your own idea, with its own legs. A pass needs only the verdict, conviction and reason.
 10. Save a short note to `journal/research/<session>-automatic.md`: the tape in two lines, what the market is arguing about in a few lines, each take with its reasoning, each pass in a line, and what you couldn't verify. End your final message with the takes, in plain words.
 
-## 2. Pre-open pass (about 8:30 AM ET, done by 9:10 AM)
+## 2. Pre-open pass (about 7:30 AM CT, done by 8:10 AM)
 
 1. `uv run fr paper learn`, then read `journal/paper/proposals/<today>.json`. If it doesn't exist, the evening pass didn't run: with the time left, judge the screen's top candidates as in the evening pass (steps 6-9, `"pass": "preopen"`, each with a `rank` among the ones you judge), strongest first, and say in your final message that last night's pass was missed.
-2. For each take: the pre-market price against yesterday's close in percent and in ATRs (IBKR connector; ATR is in the proposal's `signal.numbers`), and the overnight news on its mechanism. Check macro releases at 8:30 AM ET.
+2. For each take: the pre-market price against yesterday's close in percent and in ATRs (IBKR connector; ATR is in the proposal's `signal.numbers`), and the overnight news on its mechanism. Check macro releases at 7:30 AM CT.
 3. Each take **stands** unless one of these is true, in which case **stand it down**: its `wrong_if` has happened; a leg has gapped more than about one ATR in the trade's direction, so the move happened before the open; overnight news hits the specific reason for the trade. General nervousness and "futures are down" are not reasons. A take may already be partly or fully filled from the overnight session (`journal/paper/early/<session>.json` and the fills): standing it down then closes those shares at the open, so stand it down only for a reason that would also justify exiting a trade you hold.
 4. Add a verdict for anything new: a candidate left "not reviewed" last night, a name the screen held back because it reported overnight, or your own idea from the overnight session. The same rules as the evening pass apply.
-5. Record before 9:14 AM ET:
+5. Record before 8:14 AM CT:
    ```json
    {"session": "2026-11-10", "pass": "preopen", "summary": "CPI in line; futures +0.3%",
     "checks": [{"id": "2026-11-10-P01", "decision": "stands", "reason": "ABNB +0.4% pre-market, 0.1 ATR; no news on travel demand"},
@@ -104,35 +104,35 @@ The nightly job writes the screen at 7:00 PM ET. Proposals must be recorded by 9
    ```
    A take with no check stands.
 
-## 2b. Midday check (about 12:15 PM ET, recorded by 1:10 PM, never after 2:45 PM)
+## 2b. Midday check (about 11:15 AM CT, recorded by 12:10 PM, never after 1:45 PM)
 
 A short look at the open trades only, so one whose reason has visibly gone doesn't sit until the close. It opens nothing, adds nothing and extends nothing. Keep it to about 20 minutes.
 
 1. `uv run fr paper learn` lists the open trades with each one's `wrong_if`. If there are none, say so and stop.
 2. For each one: the morning's news on the name, its group and its hedge, and how it has traded today against the hedge. Research agents only where a trade has news to run down.
 3. Decide, for **every** open trade:
-   - `hold`: the default, with the thesis `intact` or `weakened`. A trade that is losing, or near its stop, is a hold; the stop is checked at 3:45 PM and the pre-close review comes after you.
-   - `exit`: closed at the market by the next exit job (1:15 PM and 2:15 PM ET). Only when `wrong_if` has happened or the news has removed the reason (`thesis: "broken"`), or the whole expected move has happened (`"played_out"`). Name the event, its time and its source in the reason. If you aren't sure it has happened, hold and say what the pre-close review should check.
+   - `hold`: the default, with the thesis `intact` or `weakened`. A trade that is losing, or near its stop, is a hold; the stop is checked at 2:45 PM and the pre-close review comes after you.
+   - `exit`: closed at the market by the next exit job (12:15 PM and 1:15 PM CT). Only when `wrong_if` has happened or the news has removed the reason (`thesis: "broken"`), or the whole expected move has happened (`"played_out"`). Name the event, its time and its source in the reason. If you aren't sure it has happened, hold and say what the pre-close review should check.
    ```json
    {"session": "2026-11-12", "summary": "one line",
     "reviews": [{"trade_id": "2026-11-10-A01", "action": "hold", "thesis": "intact", "reason": "No news; +0.4 points against QQQ today."},
-                {"trade_id": "2026-11-10-A03", "action": "exit", "thesis": "broken", "reason": "At Baird at 10:30 AM ET the CFO called the Q4 shortfall a one-off shipment slip, quantified at $9M (transcript)."}]}
+                {"trade_id": "2026-11-10-A03", "action": "exit", "thesis": "broken", "reason": "At Baird at 9:30 AM CT the CFO called the Q4 shortfall a one-off shipment slip, quantified at $9M (transcript)."}]}
    ```
-4. `uv run fr paper midday-check <draft>`. It refuses after 2:45 PM ET. Never run `fr paper midday` yourself: that is the job that sends the orders.
+4. `uv run fr paper midday-check <draft>`. It refuses after 1:45 PM CT. Never run `fr paper midday` yourself: that is the job that sends the orders.
 
-## 3. Pre-close review (about 3:00 PM ET, recorded by 3:44 PM)
+## 3. Pre-close review (about 2:00 PM CT, recorded by 2:44 PM)
 
-The 3:45 PM ET exit check enforces every stop and time limit whatever you write. The review can only end a trade sooner, or ask for a winner on its last session to run on.
+The 2:45 PM CT exit check enforces every stop and time limit whatever you write. The review can only end a trade sooner, or ask for a winner on its last session to run on.
 
 1. `uv run fr paper learn` lists the open automatic trades: session, result so far, distance from the stop, and `wrong_if`.
 2. For each one, what has happened to the reason for the trade since entry: news on the name and its group, and how it traded today against its hedge. The latest screen's `in_book` list shows any fresh signal on a name the book holds; one that points against your trade is worth a look, and isn't by itself a reason to exit.
 3. Decide, for **every** open automatic trade:
    - `hold`: the default. A trade that is merely losing is a hold; the stop does that job.
    - `exit`: closes at today's close. Only for a named reason: `wrong_if` has happened (`thesis: "broken"`), the expected move has happened (`"played_out"`), or news has changed the story. Never because the P&L is red or the tape feels heavy.
-   - `extend` by 1-3 sessions: only on the trade's last session, only once, and the exit check grants it only if the trade is in profit at 3:45 PM. Say what is still to come that the original time limit didn't allow for.
+   - `extend` by 1-3 sessions: only on the trade's last session, only once, and the exit check grants it only if the trade is in profit at 2:45 PM. Say what is still to come that the original time limit didn't allow for.
    ```json
    {"session": "2026-11-12", "summary": "one line",
     "reviews": [{"trade_id": "2026-11-10-A01", "action": "hold", "thesis": "intact", "reason": "Booking guided in line; nothing has changed."},
-                {"trade_id": "2026-11-10-A02", "action": "exit", "thesis": "broken", "reason": "The CFO walked back the guide at a conference at 11:00 AM ET."}]}
+                {"trade_id": "2026-11-10-A02", "action": "exit", "thesis": "broken", "reason": "The CFO walked back the guide at a conference at 10:00 AM CT."}]}
    ```
-4. `uv run fr paper review <draft>`. It refuses after 3:44 PM ET, and the day's exits then go by stops and time limits alone.
+4. `uv run fr paper review <draft>`. It refuses after 2:44 PM CT, and the day's exits then go by stops and time limits alone.

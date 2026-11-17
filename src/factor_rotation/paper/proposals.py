@@ -60,6 +60,35 @@ def next_entry_session(now: datetime) -> date:
     return journal.next_trading_day(today)
 
 
+# ---- The three daily passes (since the 2026-11-15 redesign) -------------------------------------------------
+# Each pass screens the latest prices, judges, and its takes are traded as soon as it has recorded (entries.py).
+# When each may record, New York time. A pass belongs to the session its trades enter for: the night pass to
+# the next session (or today's, once it is past midnight), the two day passes to today's.
+NEW_PASSES = ("night", "morning", "midday")
+NIGHT_FROM, NIGHT_UNTIL = time(16, 0), time(3, 50)     # the close to the end of IBKR's overnight session
+MORNING_WINDOW = (time(9, 30), time(12, 30))
+MIDDAY_WINDOW = (time(12, 30), time(15, 30))           # recorded in time for entries before the 3:40 PM cutoff
+
+
+def pass_session(kind: str, now: datetime) -> date:
+    """The session a pass run at `now` belongs to. Raises if that pass can't run now."""
+    today, t = now.date(), now.time()
+    open_day = journal.is_trading_day(today)
+    if kind == "night":
+        if t < NIGHT_UNTIL:
+            return today if open_day else journal.next_trading_day(today)
+        if t >= NIGHT_FROM or not open_day:
+            return journal.next_trading_day(today)
+        raise ValueError("the night pass runs between the 3:00 PM CT close and 2:50 AM CT, not during the session")
+    window = {"morning": MORNING_WINDOW, "midday": MIDDAY_WINDOW}.get(kind)
+    if window is None:
+        raise ValueError(f"pass must be one of: {', '.join(NEW_PASSES)}")
+    if not open_day or not window[0] <= t <= window[1]:
+        ct = lambda x: f"{(x.hour - 1) % 12 or 12}:{x.minute:02d} {'PM' if x.hour - 1 >= 12 else 'AM'}"  # noqa: E731
+        raise ValueError(f"the {kind} pass runs on a trading day between {ct(window[0])} and {ct(window[1])} CT")
+    return today
+
+
 def _text(v) -> bool:
     return isinstance(v, str) and bool(v.strip())
 
@@ -141,8 +170,9 @@ def _signal(c: dict) -> dict:
 
 def _from_screen(c: dict, rank: int, screen: dict) -> dict:
     sides = rules._sides(c)
+    source = f"live screen {screen['session']} {screen['slot']} #{rank}" if screen.get("live") else f"screen {screen['as_of']} #{rank}"
     return {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "direction": c["direction"],
-            "source": f"screen {screen['as_of']} #{rank}", "signal": _signal(c),
+            "source": source, "signal": _signal(c),
             "long": sides[0] if sides else [], "short": sides[1] if sides else [], "plan": rules.default_plan(c) if sides else None}
 
 
@@ -239,7 +269,7 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
     if kind not in PASSES:
         raise ValueError(f"pass must be one of: {', '.join(PASSES)}")
     if session != (expected := next_entry_session(now)):
-        raise ValueError(f"proposals are for the next entries, {expected}, not {session}: they must be in by 9:14 AM ET, "
+        raise ValueError(f"proposals are for the next entries, {expected}, not {session}: they must be in by 8:14 AM CT, "
                          "before the 9:15 AM entry job")
     if (root() / "plans" / f"{session}.json").exists():
         raise ValueError(f"the entries for {session} have already gone out")
@@ -305,6 +335,11 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
 
 
 def reviews(session: date) -> dict[str, dict]:
-    """The pre-close review's decisions for a session, by trade id (learn.record_review writes them)."""
+    """The latest decision on each trade for a session, by trade id: the pre-close review's
+    (learn.record_review), then each of the three daily passes' in the order they recorded (daily.record)."""
     path = root() / "reviews" / f"{session}.json"
-    return {r["trade_id"]: r for r in json.loads(path.read_text())["reviews"]} if path.exists() else {}
+    out = {r["trade_id"]: r for r in json.loads(path.read_text())["reviews"]} if path.exists() else {}
+    path = root() / "pass_reviews" / f"{session}.json"
+    for p in json.loads(path.read_text())["passes"] if path.exists() else []:
+        out.update({r["trade_id"]: {**r, "pass": p["pass"]} for r in p["reviews"]})
+    return out

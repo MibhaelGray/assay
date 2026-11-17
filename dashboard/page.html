@@ -216,6 +216,20 @@
   .fr-seg { display: inline-flex; border: 1px solid var(--fr-line); border-radius: 6px; padding: 2px; }
   .fr-seg button { background: none; border: 0; border-radius: 4px; padding: .15rem .55rem; cursor: pointer; color: var(--fr-muted); font-size: var(--cds-font-size-caption); }
   .fr-seg button[aria-pressed=true] { background: var(--color-fg); color: var(--color-bg); }
+  .fr-bkctl { display: flex; flex-wrap: wrap; gap: .5rem; margin: .25rem 0 .35rem; }
+  .fr-heatlegend { display: flex; align-items: center; gap: 3px; margin: 0 0 .5rem; font-size: 11px; color: var(--fr-muted); font-variant-numeric: tabular-nums; flex-wrap: wrap; }
+  .fr-heatlegend i { font-style: normal; min-width: 2.6rem; text-align: center; padding: .15rem .3rem; border-radius: 4px; color: var(--color-fg); background: var(--hc); }
+  .fr-heatlegend span { margin-right: .4rem; }
+  .fr-tree { position: relative; width: 100%; }
+  .fr-treebk { position: absolute; border: 1px solid var(--fr-line); border-radius: 6px; background: var(--color-panel); overflow: hidden; }
+  .fr-tree .fr-treehead { position: absolute; left: 0; right: 0; top: 0; height: 18px; display: flex; justify-content: space-between; gap: .3rem; align-items: center; padding: 0 .35rem; border: 0; background: transparent; color: var(--fr-muted); font: inherit; font-size: 11px; line-height: 18px; cursor: pointer; text-align: left; white-space: nowrap; }
+  .fr-tree .fr-treehead:hover { color: var(--color-fg); }
+  .fr-tree .fr-treehead b { font-weight: var(--cds-font-weight-medium); overflow: hidden; text-overflow: ellipsis; }
+  .fr-tree .fr-treehead span { font-variant-numeric: tabular-nums; flex: none; }
+  .fr-treecell { position: absolute; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; border: 0; border-radius: 3px; padding: 0; background: var(--hc, var(--fr-line)); color: var(--color-fg); font-family: inherit; line-height: 1.1; font-variant-numeric: tabular-nums; text-align: center; }
+  .fr-treecell b { font-weight: var(--cds-font-weight-medium); }
+  button.fr-treecell { cursor: pointer; }
+  button.fr-treecell:hover, button.fr-treecell:focus-visible { outline: 2px solid var(--color-fg); outline-offset: -2px; }
   .fr-chbody { display: grid; grid-template-columns: minmax(0, 1fr) 15rem; gap: var(--cds-gap-lg); align-items: start; }
   .fr-chwrap { position: relative; min-width: 0; display: grid; gap: var(--cds-gap-sm); }
   .fr-chplot { height: 44rem; min-width: 0; }
@@ -499,7 +513,21 @@
   <section class="fr-view" id="baskets" data-view="baskets" hidden>
     <div class="fr-viewhead"><h2>Themed baskets</h2><p>Snapshot <span data-draw="bk-time" data-source="mkt_basket">—</span>. Equal-weight stocks against the ETF nearest their exposure.</p></div>
     <div class="fr-panel">
-      <div class="fr-phead"><h3>Every basket</h3><p>Click a column to sort, and a basket for its story and members. Spreads are basket minus hedge; z is the spread's distance from its 50-day average.</p></div>
+      <div class="fr-phead"><h3>Every basket</h3>
+        <div class="fr-bkctl">
+          <div class="fr-seg" role="group" aria-label="Layout">
+            <button type="button" data-bk-view="table" aria-pressed="true">Table</button>
+            <button type="button" data-bk-view="heat" aria-pressed="false">Heat map</button>
+          </div>
+          <div class="fr-seg" role="group" aria-label="Period" data-bk-periods hidden>
+            <button type="button" data-bk-period="today" aria-pressed="true">Today</button>
+            <button type="button" data-bk-period="5d" aria-pressed="false">5-day</button>
+            <button type="button" data-bk-period="20d" aria-pressed="false">20-day</button>
+          </div>
+        </div>
+        <p data-bk-help="table">Click a column to sort, and a basket for its story and members. Spreads are basket minus hedge; z is the spread's distance from its 50-day average.</p>
+        <p data-bk-help="heat" hidden>Every basket and member on one map. Each block is a basket, with its spread against its hedge in the corner; each tile is a member, sized by how much trades in it each day and coloured by its own move. Click a basket's name for its story and members.</p>
+      </div>
       <div class="fr-tablewrap" data-draw="basket-table" data-source="mkt_basket mkt_basket_member"></div>
     </div>
     <details class="fr-method"><summary>How the baskets are built</summary>
@@ -533,13 +561,17 @@
     <div class="fr-band fr-paperband" aria-label="Research record" data-draw="paper-band" data-source="mkt_paper mkt_paper_proposals mkt_paper_rank mkt_paper_account"></div>
     <div class="fr-panel">
       <div class="fr-phead"><h3>Research verdicts</h3><span class="fr-sub" data-draw="paper-verdict-sum" data-source="mkt_paper_proposals">—</span>
-        <p>Every candidate the research pass judged for the swing book, newest first, each night in the pass’s own ranking. "Plan result" scores each one's own plan on daily bars, from the first open to its stop or time limit, before costs, whether or not it was taken. If the takes don't beat the passes, the research isn't adding anything.</p></div>
+        <p data-design-old>Every candidate the research pass judged for the swing book, newest first, each night in the pass’s own ranking. "Plan result" scores each one's own plan on daily bars, from the first open to its stop or time limit, before costs, whether or not it was taken. If the takes don't beat the passes, the research isn't adding anything.</p>
+        <p data-design-new hidden>Every candidate a pass judged for the swing book, newest first, each pass in its own ranking. "Plan result" scores each one's own plan from the prices when its pass recorded to its stop or time limit, before costs, whether or not it was taken. If the takes don't beat the passes, the research isn't adding anything.</p></div>
       <div class="fr-tablewrap" data-draw="paper-verdicts" data-source="mkt_paper_proposals"></div>
     </div>
     <details class="fr-method"><summary>How the swing book works</summary>
-      <p>The swing book trades on an IBKR paper account, never a live one. It starts from the nightly screen: a research pass judges every candidate on it and writes a verdict, take or pass, with a conviction from 1 to 5 and its reasoning. Only the takes are traded, up to 5 a session, strongest conviction first, at $10,000 a side. Each take carries the plan the pass wrote for it: a time limit of up to 10 sessions and a stop between 1% and 8%. A name already in an open automatic trade isn't taken again.</p>
-      <p>The research pass runs four times a day. In the evening it writes the verdicts for the next open. Before the open it lets each take stand or stands it down on what happened overnight. At midday it checks the open trades and can close one at the market when its reason has gone. Before the close it reviews every open automatic trade and can close one early for a stated reason, or ask for a winner on its last session to run up to 3 sessions longer, once. It can never widen a stop or hold a loser past its time limit. Every verdict, taken or passed, is scored against its own plan on daily bars, so the passes are the control for the takes.</p>
-      <p>Entries go into the opening auction as market-on-open orders sent at 9:15 AM ET. At 9:40 AM ET the fills are checked: a trade with one side filled and the other not has its filled side closed at the market. At 3:45 PM ET every open trade is checked against its stop and time limit on current prices, and the ones leaving are sent as market-on-close orders. A pair whose other leg never filled leaves at that day's close. Caps: 60 open trades, $900,000 gross and $30,000 net in any one symbol.</p>
+      <p data-design-new hidden>The swing book trades on an IBKR paper account, never a live one. It was started again from zero with $1,000,000, and it is the only book. Three times a day a full research pass runs: at 7:30 PM CT (Sunday to Thursday, for the next session), 8:45 AM CT and 12:00 PM CT. Each pass starts from a screen of about 1,040 stocks and funds on the latest prices, whether after-hours, pre-market or the regular session. Research agents study each shortlisted name, and the pass writes a verdict on every one: take or pass, a conviction from 1 to 5, a rank and its reasoning.</p>
+      <p data-design-new hidden>The best takes, up to 3 a pass, are traded as soon as the pass records, usually within a minute. Every order is a limit order priced from IBKR’s own bid and ask. With no quote, or a spread wider than 2%, the order is not sent, and the order job tries again every 15 minutes until 2:40 PM CT. Each take carries its own plan: a time limit of up to 10 sessions and a stop between 1% and 8%. Every pass also reviews each open trade and can close one early for a stated reason, or ask for a winner on its last session to run up to 3 sessions longer, once. It can never widen a stop or hold a loser past its time limit.</p>
+      <p data-design-new hidden>At 2:45 PM CT every open trade is checked against its stop and time limit, and the ones leaving are sent as market-on-close orders. Every verdict, taken or passed, is scored from the prices at the moment its pass recorded, so the passes are the control for the takes. The book pauses if it falls $100,000 below its high. The first book’s record, and the intraday book’s, are kept in the journal’s archive.</p>
+      <p data-design-old>The swing book trades on an IBKR paper account, never a live one. It starts from the nightly screen: a research pass judges every candidate on it and writes a verdict, take or pass, with a conviction from 1 to 5 and its reasoning. Only the takes are traded, up to 5 a session, strongest conviction first, at $10,000 a side. Each take carries the plan the pass wrote for it: a time limit of up to 10 sessions and a stop between 1% and 8%. A name already in an open automatic trade isn't taken again.</p>
+      <p data-design-old>The research pass runs four times a day. In the evening it writes the verdicts for the next open. Before the open it lets each take stand or stands it down on what happened overnight. At midday it checks the open trades and can close one at the market when its reason has gone. Before the close it reviews every open automatic trade and can close one early for a stated reason, or ask for a winner on its last session to run up to 3 sessions longer, once. It can never widen a stop or hold a loser past its time limit. Every verdict, taken or passed, is scored against its own plan on daily bars, so the passes are the control for the takes.</p>
+      <p data-design-old>Entries go into the opening auction as market-on-open orders sent at 8:15 AM CT. At 8:40 AM CT the fills are checked: a trade with one side filled and the other not has its filled side closed at the market. At 2:45 PM CT every open trade is checked against its stop and time limit on current prices, and the ones leaving are sent as market-on-close orders. A pair whose other leg never filled leaves at that day's close. Caps: 60 open trades, $900,000 gross and $30,000 net in any one symbol.</p>
     </details>
   </section>
 
@@ -559,8 +591,8 @@
       <div class="fr-tablewrap" data-draw="in-score" data-source="mkt_intraday"></div>
     </div>
     <details class="fr-method"><summary>How the intraday book works</summary>
-      <p>A second book, separate from the swing book, that trades the same ideas on a 15-minute clock. Haiku’s takes are traded on the paper account, $10,000 a side, with market orders; its passes are only followed. A minute after each 15-minute bar closes, from 10:00 AM to 3:45 PM ET, it checks the liquid names for four setups, each measured against the name’s hedge fund: a gap that holds, a gap that fades, a break of the first 30 minutes’ range on heavy volume, and a stretched run that turns back.</p>
-      <p>Names that reported earnings since the last close and names the swing book holds are skipped. The four heaviest-volume signals at each bar go to Claude Haiku with the name’s recent Yahoo headlines for a take or a pass, up to five takes a day and three open at once.</p>
+      <p>A second book, separate from the swing book, that trades the same ideas on a 15-minute clock. Haiku’s takes are traded on the paper account, $10,000 a side, with market orders; its passes are only followed. A minute after each 15-minute bar closes, from 10:00 AM to 2:45 PM CT, it checks the liquid names for four setups, each measured against the name’s hedge fund: a gap that holds, a gap that fades, a break of the first 30 minutes’ range on heavy volume, and a stretched run that turns back.</p>
+      <p>Names that reported earnings since the last close and names the swing book holds are skipped. Every other signal goes to Claude Haiku with the name’s recent Yahoo headlines for a take or a pass, up to five takes a day and three open at once; once the book is full, later signals are not judged.</p>
       <p>Every trade is a pair in equal dollars. It opens at the next bar’s open, stops at a loss of half the name’s daily ATR, takes a gain of one ATR, and is out by the 3:45 PM bar. A stop is seen at a bar’s close and filled at the next open, so losses can run past it. Costs are assumed at 8 bp a trade.</p>
     </details>
   </section>
@@ -638,7 +670,8 @@
   const tone = (v) => (v == null || v === 0 || Number.isNaN(v)) ? '' : (v > 0 ? 'fr-pos' : 'fr-neg');
   const day = (s, f) => s ? d3.utcFormat(f || '%b %-d')(new Date(`${s}T00:00:00Z`)) : '—';
   const human = (s) => { const t = String(s || '').replace(/_/g, ' '); return t.charAt(0).toUpperCase() + t.slice(1); };
-  const etTime = (t, withDay) => t ? `${new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', ...(withDay ? { weekday: 'short', month: 'short', day: 'numeric' } : {}), hour: 'numeric', minute: '2-digit' }).format(new Date(t))} ET` : '—';
+  const etTime = (t, withDay) => t ? `${new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', ...(withDay ? { weekday: 'short', month: 'short', day: 'numeric' } : {}), hour: 'numeric', minute: '2-digit' }).format(new Date(t))} CT` : '—';
+  const nyToCt = (c) => { const m = /^(\d{1,2}):(\d{2}) (AM|PM)$/.exec(c || ''); if (!m) return c; const h = (Number(m[1]) % 12 + (m[3] === 'PM' ? 12 : 0) + 23) % 24; return `${h % 12 || 12}:${m[2]} ${h >= 12 ? 'PM' : 'AM'}`; };
   const fmtUsd = (v) => { if (v == null) return '—'; const a = Math.abs(v); const s = a >= 1e9 ? `$${d3.format('.1f')(a / 1e9)}B` : a >= 1e6 ? `$${d3.format('.0f')(a / 1e6)}M` : `$${d3.format(',.0f')(a)}`; return `${v < 0 ? '−' : ''}${s}`; };
   const failed = () => h('div', 'fr-failed', 'Failed to load');
   const fmtPnl = (v) => v == null ? '—' : `${v > 0 ? '+' : v < 0 ? '−' : ''}$${d3.format(',.0f')(Math.abs(v))}`;
@@ -773,7 +806,7 @@
   const VIEWS = ['today', 'portfolio', 'market', 'baskets', 'earnings', 'paper', 'intraday', 'hormuz', 'chart'];
   // Links from before the idea books were retired open the swing book.
   const ALIAS = { top: 'today', next: 'today', last: 'paper', ledger: 'paper', ideas: 'paper', record: 'paper', factors: 'market' };
-  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 } };
+  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 }, basketView: 'table', basketPeriod: 'today' };
   const setView = (v, { link = true, scroll = true } = {}) => {
     if (!VIEWS.includes(v)) v = 'today';
     ui.view = v;
@@ -813,6 +846,7 @@
   // How fresh each source is, in the bar.
   dash.draw('fresh', (el) => {
     const meta = (okData('mkt_meta') || [])[0];
+    applyDesign();
     el.textContent = !meta ? '—' : meta.marks_intraday && meta.marks_at ? `Prices as of ${etTime(meta.marks_at)}` : `Market data through ${day(meta.bars_through || meta.as_of, '%a %b %-d')} close`;
   });
   // ---- Today --------------------------------------------------------------------------------------
@@ -953,8 +987,9 @@
     const rows = okData('mkt_screen') || [];
     if (!rows.length) { el.textContent = ''; return; }
     const meta = (okData('mkt_meta') || [])[0] || {};
+    if (rows[0].slot) { el.textContent = `${PASS_NAME[rows[0].slot] || 'Pass'} screen for ${day(rows[0].session, '%a %b %-d')}${rows[0].prices_at ? ` · prices as of ${whenEt(rows[0].prices_at)}` : ''} · ${rows.length} candidates`; return; }
     const from = rows[0].live && meta.marks_intraday && meta.marks_at ? `Live from ${etTime(meta.marks_at)} prices, on a part-finished day` : `Built from the ${day(rows[0].as_of, '%a %b %-d')} close`;
-    el.textContent = `${from}${rows[0].live ? ' · not saved; the research pass reads the 7:00 PM ET screen' : ''} · ${rows.length} candidates`;
+    el.textContent = `${from}${rows[0].live ? ' · not saved; the research pass reads the 6:00 PM CT screen' : ''} · ${rows.length} candidates`;
   });
   let screenAll = false;
   const drawScreen = (el) => {
@@ -993,7 +1028,22 @@
   dash.draw('screen-list', drawScreen);
 
   // ---- Paper ----------------------------------------------------------------------------------------
-  const JOBS = [[555, 'Entries', '9:15 AM ET', 'Market-on-open orders go out'], [580, 'Fill check', '9:40 AM ET', 'Half-filled trades are closed'], [945, 'Exit check', '3:45 PM ET', 'Stops and time limits on open trades']];
+  const JOBS = [[555, 'Entries', '8:15 AM CT', 'Market-on-open orders go out'], [580, 'Fill check', '8:40 AM CT', 'Half-filled trades are closed'], [945, 'Exit check', '2:45 PM CT', 'Stops and time limits on open trades']];
+  // The restarted book (journal/paper/book.json): one swing book, three full passes a day, trades placed as each pass records.
+  const threePass = () => ((okData('mkt_meta') || [])[0] || {}).design === 'three-pass';
+  const PASS_NAME = { night: 'Night pass', morning: 'Morning pass', midday: 'Midday pass' };
+  const PASS_TIMES = 'Passes start at 7:30 PM (Sunday to Thursday), 8:45 AM and 12:00 PM CT';
+  const JOBS3 = [[585, 'Morning pass', '8:45 AM CT', 'A full pass on pre-market prices; its trades go out when it finishes'], [780, 'Midday pass', '12:00 PM CT', 'A full pass on the morning’s trading; its trades go out when it finishes'], [945, 'Exit check', '2:45 PM CT', 'Stops and time limits on open trades']];
+  const NIGHT_JOB = [1230, 'Night pass', '7:30 PM CT', 'A full pass on after-hours prices for the next session; its trades go out when it finishes'];
+  let designOn = false;
+  const applyDesign = () => {
+    if (designOn || !threePass()) return;
+    designOn = true;
+    document.querySelectorAll('[data-view-to="intraday"], [data-design-old]').forEach((e) => { e.hidden = true; });
+    document.querySelectorAll('[data-design-new]').forEach((e) => { e.hidden = false; });
+    const seg = document.querySelector('[data-pf-book]'); if (seg) seg.parentElement.hidden = true;
+    try { pfUi.book = 'swing'; if (ui.view === 'intraday') setView('today'); pfRedraw(); } catch (e) { /* the portfolio view isn't set up yet; it reads pfUi.book when it draws */ }
+  };
   const paperAcct = () => (okData('mkt_paper_account') || [])[0] || null;
   const nyNow = () => {
     const p = Object.fromEntries(new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date()).map((x) => [x.type, x.value]));
@@ -1001,12 +1051,20 @@
   };
   const whenEt = (iso) => {
     const t = new Date(iso);
-    const time = new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }).format(t);
-    const date = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' }).format(t);
-    return date === nyNow().date ? `${time} ET` : `${day(date, '%a %b %-d')}, ${time} ET`;
+    const time = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit' }).format(t);
+    const ct = (x) => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Chicago' }).format(x);
+    const date = ct(t);
+    return date === ct(new Date()) ? `${time} CT` : `${day(date, '%a %b %-d')}, ${time} CT`;
   };
   const paperNext = (a) => {
     const now = nyNow();
+    if (threePass()) {   // the night pass runs the evening before each session
+      for (const s of (a && a.sessions_ahead) || []) {
+        const eve = new Date(Date.parse(`${s}T00:00:00Z`) - 864e5).toISOString().slice(0, 10);
+        for (const [d, j] of [[eve, NIGHT_JOB], ...JOBS3.map((x) => [s, x])]) if (d > now.date || (d === now.date && now.mins < j[0])) return { name: j[1], time: j[2], what: j[3], day: d === now.date ? 'Today' : day(d, '%a %b %-d') };
+      }
+      return null;
+    }
     for (const s of (a && a.sessions_ahead) || []) {
       for (const j of JOBS) if (s > now.date || (s === now.date && now.mins < j[0])) return { name: j[1], time: j[2], what: j[3], day: s === now.date ? 'Today' : day(s, '%a %b %-d') };
     }
@@ -1023,9 +1081,9 @@
     const notes = [];
     if (a && a.halted) notes.push(`Paper trading is halted: ${a.halted}. No new trades open, and exits still go out.`);
     ((a && a.paused) || []).forEach((p) => notes.push(`Paused: ${p}. Exits still go out.`));
-    if (rows.some((r) => r.state === 'planned')) notes.push(`${rows.filter((r) => r.state === 'planned').length} trades have orders in, but their fills aren't loaded yet. Results appear after the next refresh or the 3:45 PM ET check.`);
-    rows.filter((r) => r.state === 'open' && r.stop_room_pct != null && r.stop_room_pct <= 0).forEach((r) => notes.push(`${pairTitle(r)} is past its stop. Stops only count at the 3:45 PM ET check: if it's still past then, it closes at today's close.`));
-    rows.filter((r) => isLive(r) && isBroken(r)).forEach((r) => notes.push(`${pairTitle(r)}: ${r.missing.join(', ')} never filled, so the other side closes at the 9:40 AM ET fill check, or the 3:45 PM ET check if that has passed.`));
+    if (rows.some((r) => r.state === 'planned')) notes.push(`${rows.filter((r) => r.state === 'planned').length} trades have orders in, but their fills aren't loaded yet. Results appear after the next refresh or the 2:45 PM CT check.`);
+    rows.filter((r) => r.state === 'open' && r.stop_room_pct != null && r.stop_room_pct <= 0).forEach((r) => notes.push(`${pairTitle(r)} is past its stop. Stops only count at the 2:45 PM CT check: if it's still past then, it closes at today's close.`));
+    rows.filter((r) => isLive(r) && isBroken(r)).forEach((r) => notes.push(`${pairTitle(r)}: ${r.missing.join(', ')} never filled, ${threePass() ? 'so the order job keeps trying until 2:40 PM CT. If it still hasn’t filled at the 2:45 PM CT check, the other side closes at today’s close.' : 'so the other side closes at the 8:40 AM CT fill check, or the 2:45 PM CT check if that has passed.'}`));
     ((a && a.alerts) || []).forEach((t) => notes.push(t));
     if (a && (a.mismatches || []).length) notes.push(`The account and the books disagree on ${a.mismatches.length} position${a.mismatches.length === 1 ? '' : 's'}: ${a.mismatches.join('; ')}.`);
     el.replaceChildren(...notes.map((t) => h('p', 'fr-note is-warn', t)));
@@ -1050,7 +1108,7 @@
     // Whether each night's ranking predicted the results: every ranked candidate counts, not only the takes.
     const rk = (okData('mkt_paper_rank') || [])[0];
     const third = (k) => rk.thirds[k].n ? fmtBp(rk.thirds[k].mean) : '—';
-    const ranking = !rk || !rk.ranked ? stat('Ranking', '—', '', 'Starts with the next evening pass', 'Every candidate is ranked, and the ranking is scored')
+    const ranking = !rk || !rk.ranked ? stat('Ranking', '—', '', threePass() ? 'Starts with the next pass' : 'Starts with the next evening pass', 'Every candidate is ranked, and the ranking is scored')
       : !rk.nights ? stat('Ranking', '—', '', `${rk.ranked} verdicts ranked`, 'No ranked night has finished yet')
       : stat('Ranking', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation over ${rk.nights} night${rk.nights === 1 ? '' : 's'}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}${rk.nights < rk.nights_needed ? ` · needs about ${rk.nights_needed}` : ''}`,
         `Top third ${third('top')} · bottom third ${third('bottom')}`);
@@ -1140,13 +1198,13 @@
     if (!points.length) return [];
     const base = [...rows].reverse().find((r) => r.date < use[0]) || { pnl: 0 };
     const open = { t: new Date(new Date(points[0].t).getTime() - 15 * 60000).toISOString(), session: use[0], pnl: base.pnl, spy: base.spy };
-    const timeOf = (x) => new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }).format(new Date(x));
+    const timeOf = (x) => new Intl.DateTimeFormat('en-US', { timeZone: 'America/Chicago', hour: 'numeric', minute: '2-digit' }).format(new Date(x));
     let seen = '';
     return [open, ...points].map((q) => {
       const first = q.session !== seen; seen = q.session;
       const label = timeOf(q.t);
       const tick = frame === '1D' ? (/:00|:30/.test(label) ? label.replace(':00', '') : null) : first ? day(q.session, '%a %-d') : null;
-      return { v: q.pnl - base.pnl, total: q.pnl, when: `${day(q.session, '%a, %b %-d')}, ${label} ET`, tick, day: null, spy: q.spy, ts: Date.parse(q.t) };
+      return { v: q.pnl - base.pnl, total: q.pnl, when: `${day(q.session, '%a, %b %-d')}, ${label} CT`, tick, day: null, spy: q.spy, ts: Date.parse(q.t) };
     });
   };
   // One book's running total over time, for its own line beside the combined one.
@@ -1168,6 +1226,7 @@
     return false;
   };
   const pfSync = () => {
+    applyDesign();
     const press = (sel, key, want) => document.querySelectorAll(sel).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[key] === want)));
     press('[data-pf-book]', 'pfBook', pfUi.book); press('[data-pf-frame]', 'pfFrame', pfUi.frame);
     press('[data-pf-filter]', 'pfFilter', pfUi.filter); press('[data-pf-view]', 'pfView', pfUi.view); press('[data-pf-range]', 'pfRange', pfUi.range);
@@ -1254,7 +1313,7 @@
     const today = a.day_session === nyNow().date ? 'Today' : a.day_session ? day(a.day_session, '%a %b %-d') : 'Today';
     const pos = pfRows('mkt_portfolio_pos');
     const longs = d3.sum(pos.filter((r) => r.side === 'long'), (r) => r.value); const shorts = -d3.sum(pos.filter((r) => r.side === 'short'), (r) => r.value);
-    const books = a.books.map((b) => {
+    const books = (threePass() ? [] : a.books).map((b) => {
       const c = cell('button', `${PF_BOOK[b.book]} book`, pfUsd(b.value), '', `${fmtPnl(b.pnl)} · ${pfPct(b.return_pct)}`, b.paused ? chip('Paused', 'is-bad') : null);
       c.type = 'button'; c.setAttribute('aria-pressed', String(pfUi.book === b.book));
       c.title = pfUi.book === b.book ? 'Show both books' : `Show only the ${b.book} book`;
@@ -1293,12 +1352,13 @@
       ['Pauses below', (b) => b.paused ? 'Paused now' : b.pause_at == null ? '—' : `${pfUsd(b.pause_at)} (high ${pfUsd(b.peak)})`, '—'],
     ];
     const table = h('table', 'fr-table'); const head = h('tr');
-    [['', null], ['Swing', 'num'], ['Intraday', 'num'], ['Both books', 'num']].forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
+    const single = threePass();
+    (single ? [['', null], ['Swing book', 'num']] : [['', null], ['Swing', 'num'], ['Intraday', 'num'], ['Both books', 'num']]).forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
     const thead = h('thead'); thead.append(head); const tbody = h('tbody');
     lines.forEach(([label, each, both, val, bothVal]) => {
       const tr = h('tr'); tr.append(h('td', null, label));
-      ['swing', 'intraday'].forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
-      tr.append(h('td', `num ${val ? tone(bothVal) : ''}`, both));
+      (single ? ['swing'] : ['swing', 'intraday']).forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
+      if (!single) tr.append(h('td', `num ${val ? tone(bothVal) : ''}`, both));
       tbody.append(tr);
     });
     table.append(thead, tbody);
@@ -1576,14 +1636,14 @@
   const drawVerdicts = (el) => {
     const d = ready(el, 'mkt_paper_proposals', true);
     if (!d) return;
-    if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', 'No research verdicts yet. The evening pass records them for the next open, and the swing book takes nothing without them.')); return; }
+    if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', threePass() ? `No research verdicts yet. ${PASS_TIMES}, and the swing book takes nothing without them.` : 'No research verdicts yet. The evening pass records them for the next open, and the swing book takes nothing without them.')); return; }
     paperTable(el, [['For'], ['Candidate'], ['Verdict'], ['Rank', 'num fr-hide-narrow'], ['Conviction', 'num fr-hide-narrow'], ['Plan result', 'num']], d.data, (tr, r, open) => {
       const tg = h('button', 'fr-toggle', r.name); tg.type = 'button'; tg.setAttribute('aria-expanded', String(open)); tg.append(h('small', null, `${human(r.setup)} · ${r.legs || human(r.direction)}`));
       const name = h('td'); name.append(tg);
       const v = VERDICT[r.verdict] || [human(r.verdict), 'is-fg'];
       const vTd = h('td'); vTd.append(chip(v[0], v[1]));
       const live = r.plan_bps == null && r.plan_so_far_bps != null;
-      tr.append(h('td', 'fr-num', day(r.session, '%a %b %-d')), name, vTd, h('td', 'num fr-hide-narrow', r.rank ? `${r.rank} of ${r.ranked}` : '—'), h('td', 'num fr-hide-narrow', r.conviction == null ? '—' : `${r.conviction} of 5`),
+      tr.append(twoLine('fr-num', day(r.session, '%a %b %-d'), PASS_NAME[r.pass] || null), name, vTd, h('td', 'num fr-hide-narrow', r.rank ? `${r.rank} of ${r.ranked}` : '—'), h('td', 'num fr-hide-narrow', r.conviction == null ? '—' : `${r.conviction} of 5`),
         twoLine(`num fr-amt ${tone(r.plan_bps ?? r.plan_so_far_bps)}`, fmtBp(r.plan_bps ?? r.plan_so_far_bps), live ? 'so far' : r.paper_bps != null ? `paper ${fmtBp(r.paper_bps)}` : null));
     }, (r, n) => {
       const dt = verdictDetail(r, n);
@@ -1622,15 +1682,27 @@
     if (!d) return;
     const now = nyNow();
     const out = [];
-    // Verdicts for a session whose 9:15 AM ET entries haven't gone out yet.
-    const ahead = (okData('mkt_paper_proposals') || []).filter((r) => !r.trade_id && (r.session > now.date || (r.session === now.date && now.mins < JOBS[0][0])));
+    applyDesign();
+    const three = threePass();
+    const every = okData('mkt_paper_proposals') || [];
+    // The restarted book shows its latest pass, whose takes trade as soon as it records.
+    const last = three ? every.reduce((m, r) => (PASS_NAME[r.pass] && r.recorded_at && (!m || r.recorded_at > m.recorded_at) ? r : m), null) : null;
+    // The first book: verdicts for a session whose 8:15 AM CT entries haven't gone out yet.
+    const ahead = three ? every.filter((r) => last && r.session === last.session && r.pass === last.pass)
+      : every.filter((r) => !r.trade_id && (r.session > now.date || (r.session === now.date && now.mins < JOBS[0][0])));
     const session = ahead.reduce((m, r) => (!m || r.session < m ? r.session : m), '');
     const judged = ahead.filter((r) => r.session === session);
     const takes = judged.filter((r) => r.verdict === 'take').sort((a, b) => (b.conviction || 0) - (a.conviction || 0));
     const head = h('div', 'fr-subhead');
-    if (!judged.length) {
+    if (three && !judged.length) {
+      head.append(h('b', null, 'Latest pass'), h('span', 'fr-sub', 'Nothing recorded yet'));
+      out.push(head, h('p', 'fr-empty', `No pass has recorded yet. ${PASS_TIMES}, and the book takes nothing without them.`));
+    } else if (three) {
+      head.append(h('b', null, `${PASS_NAME[last.pass]} · for ${day(session, '%A, %B %-d')}`), h('span', 'fr-sub', `${takes.length} taken of ${judged.length} judged · recorded ${whenEt(last.recorded_at)}`));
+      out.push(head, ...(takes.length ? takes.map(takeCard) : [h('p', 'fr-empty', 'The pass judged the shortlist and took none of it.')]));
+    } else if (!judged.length) {
       head.append(h('b', null, 'Next open'), h('span', 'fr-sub', 'Nothing recorded yet'));
-      out.push(head, h('p', 'fr-empty', 'No research verdicts are recorded for the next open. The evening pass adds them after 7:30 PM ET, and the book takes nothing without them.'));
+      out.push(head, h('p', 'fr-empty', 'No research verdicts are recorded for the next open. The evening pass adds them after 6:30 PM CT, and the book takes nothing without them.'));
     } else {
       head.append(h('b', null, `Next open · ${day(session, '%A, %B %-d')}`), h('span', 'fr-sub', `${takes.length} taken of ${judged.length} judged`));
       out.push(head, ...(takes.length ? takes.map(takeCard) : [h('p', 'fr-empty', 'The research pass judged the shortlist and took none of it.')]));
@@ -1822,6 +1894,7 @@ dash.draw('movers', (el) => {
     if (!d) return;
     if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', 'No baskets in journal/reference/baskets.json yet.')); return; }
     const members = okData('mkt_basket_member') || [];
+    if (ui.basketView === 'heat') { drawBasketHeat(el, d.data, members); return; }
     const { key, dir } = ui.basketSort;
     const rows = [...d.data].sort((a, b) => {
       const x = a[key]; const y = b[key];
@@ -1868,6 +1941,109 @@ dash.draw('movers', (el) => {
     table.append(thead, tbody);
     el.replaceChildren(table);
   };
+  // Heat map: every basket and its members on one screen. Colour strength runs to full at HEAT_CAP for the period.
+  const HEAT = { today: { label: 'today', basket: (b) => b.spread_today_pct, member: (m) => m.change_pct, cap: 4 },
+                 '5d': { label: '5-day', basket: (b) => b.ret_5d == null ? null : b.ret_5d * 100, member: (m) => m.ret_5d == null ? null : m.ret_5d * 100, cap: 10 },
+                 '20d': { label: '20-day', basket: (b) => b.ret_20d == null ? null : b.ret_20d * 100, member: (m) => m.ret_20d == null ? null : m.ret_20d * 100, cap: 20 } };
+  const heatColour = (v, cap) => {
+    if (v == null || Number.isNaN(v)) return 'var(--fr-line)';
+    const pct = Math.round(Math.min(1, Math.abs(v) / cap) * 62 + (Math.abs(v) < 0.05 ? 0 : 10));
+    return `color-mix(in srgb, var(${v >= 0 ? '--color-ok' : '--color-bad'}) ${pct}%, var(--color-panel))`;
+  };
+  // Squarified treemap: lays items (each {v}) into the box x,y,w,h with tiles as close to square as it can.
+  const squarify = (items, x, y, w, h) => {
+    const out = [];
+    const total = items.reduce((t, q) => t + q.v, 0);
+    if (!total || w <= 0 || h <= 0) return out;
+    let rest = [...items].sort((a, b) => b.v - a.v).map((q) => ({ q, a: (q.v * w * h) / total }));
+    while (rest.length) {
+      const side = Math.min(w, h);
+      const worst = (r) => { const s = r.reduce((t, z) => t + z.a, 0); const mx = Math.max(...r.map((z) => z.a)); const mn = Math.min(...r.map((z) => z.a)); return Math.max((side * side * mx) / (s * s), (s * s) / (side * side * mn)); };
+      const row = [rest[0]]; let i = 1;
+      while (i < rest.length && worst([...row, rest[i]]) <= worst(row)) { row.push(rest[i]); i += 1; }
+      rest = rest.slice(i);
+      const s = row.reduce((t, z) => t + z.a, 0);
+      if (w >= h) { const cw = s / h; let cy = y; row.forEach((z) => { const zh = z.a / cw; out.push({ ...z.q, x, y: cy, w: cw, h: zh }); cy += zh; }); x += cw; w -= cw; }
+      else { const rh = s / w; let cx = x; row.forEach((z) => { const zw = z.a / rh; out.push({ ...z.q, x: cx, y, w: zw, h: rh }); cx += zw; }); y += rh; h -= rh; }
+    }
+    return out;
+  };
+  // Heat map: one treemap of every basket. A block is a basket, a tile a member sized by the square root of its
+  // 90-day dollar volume (so the biggest names don't swallow the map) and coloured by its move over the period.
+  let heatEl = null;
+  const drawBasketHeat = (el, rows, members) => {
+    heatEl = el;
+    const P = HEAT[ui.basketPeriod];
+    const vols = members.map((m) => m.avg_usd_volume_90d).filter((v) => v > 0).sort((a, b) => a - b);
+    const midVol = vols.length ? vols[Math.floor(vols.length / 2)] : 1;
+    const size = (m) => Math.sqrt(m.avg_usd_volume_90d > 0 ? m.avg_usd_volume_90d : midVol);
+    const W = Math.max(280, el.clientWidth || 800);
+    const H = Math.max(480, Math.round(W >= 700 ? W * 0.62 : W * 1.6));
+    const legend = h('div', 'fr-heatlegend');
+    legend.append(h('span', null, `${P.label}, members' own moves:`));
+    [-1, -0.5, -0.25, 0, 0.25, 0.5, 1].forEach((f) => {
+      const v = f * P.cap; const chip = h('i', null, f === 0 ? '0%' : `${v > 0 ? '+' : '−'}${Math.abs(v)}%`);
+      chip.style.setProperty('--hc', heatColour(v, P.cap)); legend.append(chip);
+    });
+    const tree = h('div', 'fr-tree');
+    tree.style.height = `${H}px`;
+    const blocks = rows.map((b) => {
+      const ms = members.filter((m) => m.basket === b.id);
+      return { b, ms, v: ms.reduce((t, m) => t + size(m), 0) };
+    }).filter((z) => z.v > 0);
+    const GAP = 3; const HEAD = 18;
+    squarify(blocks, 0, 0, W, H).forEach(({ b, ms, x, y, w, h: bh }) => {
+      const box = h('div', 'fr-treebk');
+      Object.assign(box.style, { left: `${x + GAP / 2}px`, top: `${y + GAP / 2}px`, width: `${w - GAP}px`, height: `${bh - GAP}px` });
+      const head = h('button', 'fr-treehead');
+      head.type = 'button';
+      head.title = `${b.name}: ${b.n_members} names, spread vs ${b.hedge}. Click for its story and members.`;
+      const bv = P.basket(b);
+      head.append(h('b', null, b.name), h('span', tone(bv), ui.basketPeriod === 'today' ? (w < 170 ? (bv == null ? '—' : signed(bv, '.1f')) : pts(bv)) : pc(bv)));
+      head.addEventListener('click', () => { ui.basketView = 'table'; syncBasketControls(); drawBaskets(el); goBasket(b.id); });
+      box.append(head);
+      const iw = w - GAP - 4; const ih = bh - GAP - HEAD - 4;
+      squarify(ms.map((m) => ({ m, v: size(m) })), 0, 0, iw, ih).forEach(({ m, x: mx, y: my, w: mw, h: mh }) => {
+        const v = P.member(m);
+        const c = h(isLocal ? 'button' : 'div', 'fr-treecell');
+        if (isLocal) { c.type = 'button'; c.dataset.chart = m.symbol; }
+        Object.assign(c.style, { left: `${2 + mx + 1}px`, top: `${HEAD + 2 + my + 1}px`, width: `${Math.max(0, mw - 2)}px`, height: `${Math.max(0, mh - 2)}px` });
+        c.style.setProperty('--hc', heatColour(v, P.cap));
+        c.title = `${m.symbol} ${pc(v)}${m.why ? ` — ${m.why}` : ''}`;
+        const fs = Math.max(9, Math.min(24, mw / (m.symbol.length * 0.68 + 0.8), mh / 2.4));
+        if (mw >= 22 && mh >= 12) {
+          const sym = h('b', null, m.symbol); sym.style.fontSize = `${fs}px`; c.append(sym);
+          if (mh >= fs * 2.3 && mw >= 30) { const p = h('span', null, pc(v)); p.style.fontSize = `${Math.max(9, fs * 0.62)}px`; c.append(p); }
+        }
+        box.append(c);
+      });
+      tree.append(box);
+    });
+    el.replaceChildren(legend, tree);
+  };
+  let heatResize = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(heatResize);
+    heatResize = setTimeout(() => { if (ui.basketView === 'heat' && heatEl && heatEl.isConnected && heatEl.clientWidth) drawBaskets(heatEl); }, 150);
+  });
+  const syncBasketControls = () => {
+    document.querySelectorAll('[data-bk-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bkView === ui.basketView)));
+    document.querySelectorAll('[data-bk-period]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bkPeriod === ui.basketPeriod)));
+    document.querySelectorAll('[data-bk-periods]').forEach((g) => { g.hidden = ui.basketView !== 'heat'; });
+    document.querySelectorAll('[data-bk-help]').forEach((p) => { p.hidden = p.dataset.bkHelp !== ui.basketView; });
+  };
+  document.addEventListener('click', (ev) => {
+    const v = ev.target.closest('[data-bk-view]'); const per = ev.target.closest('[data-bk-period]');
+    if (!v && !per) return;
+    if (v) ui.basketView = v.dataset.bkView;
+    if (per) ui.basketPeriod = per.dataset.bkPeriod;
+    try { localStorage.setItem('fr-bk', JSON.stringify({ view: ui.basketView, period: ui.basketPeriod })); } catch (e) { /* storage off */ }
+    syncBasketControls();
+    const el = document.querySelector('[data-draw="basket-table"]');
+    if (el) drawBaskets(el);
+  });
+  try { const saved = JSON.parse(localStorage.getItem('fr-bk') || 'null'); if (saved) { ui.basketView = saved.view === 'heat' ? 'heat' : 'table'; ui.basketPeriod = HEAT[saved.period] ? saved.period : 'today'; } } catch (e) { /* storage off */ }
+  syncBasketControls();
   dash.draw('basket-table', drawBaskets);
 
   // ---- Earnings -----------------------------------------------------------------------------------
@@ -2058,7 +2234,7 @@ dash.draw('movers', (el) => {
     const d = ready(el, 'mkt_intraday', true);
     if (!d) return;
     const rows = inSignals();
-    if (!rows.length) { el.replaceChildren(h('p', 'fr-empty', 'No signals yet. The first check of a session runs at 10:01 AM ET, and most signals come before noon.')); return; }
+    if (!rows.length) { el.replaceChildren(h('p', 'fr-empty', 'No signals yet. The first check of a session runs at 9:01 AM CT, and most signals come before noon.')); return; }
     const table = h('table', 'fr-table');
     table.append(h('thead'), h('tbody'));
     const head = h('tr');
@@ -2089,7 +2265,7 @@ dash.draw('movers', (el) => {
       if (r.coming) box.append(block('What’s coming', r.coming, true));
       if ((r.sources || []).length) box.append(block(r.researched ? `Sources · ${r.researched} s of research` : 'Sources', r.sources.join(' · '), true));
       box.append(block('At the signal', `${r.symbol} ${signed(n.name_day_pct, '.2f')}% on the day, ${r.hedge} ${signed(n.hedge_day_pct, '.2f')}% · opened ${signed(n.gap_atr, '.2f')} ATR from its hedge · ${d3.format('.1f')(n.rvol)}× usual volume · 15-minute RSI ${d3.format('.0f')(n.rsi)}`, true));
-      if (r.plan) box.append(block('Plan', `Stop ${d3.format('.2f')(r.plan.stop_pct)}% · target +${d3.format('.2f')(r.plan.target_pct)}%${r.plan.max_bars ? ` · ${r.plan.max_bars} bars at most` : ''} · flat by ${r.plan.flat_by} ET`));
+      if (r.plan) box.append(block('Plan', `Stop ${d3.format('.2f')(r.plan.stop_pct)}% · target +${d3.format('.2f')(r.plan.target_pct)}%${r.plan.max_bars ? ` · ${r.plan.max_bars} bars at most` : ''} · flat by ${nyToCt(r.plan.flat_by)} CT`));
       if (r.entry) box.append(block('Fills', `In at ${r.entry.at}: ${r.symbol} ${d3.format(',.2f')(r.entry.name)}, ${r.hedge} ${d3.format(',.2f')(r.entry.hedge)}${r.exit ? ` · out at ${r.exit.at} after ${r.exit.bars} bar${r.exit.bars === 1 ? '' : 's'}, ${fmtBp(r.exit.after_costs_bp)} after costs` : ''}`));
       const pp = r.paper;
       if (pp) {
@@ -2431,10 +2607,10 @@ dash.draw('movers', (el) => {
   const BAR_LINES = [['bar20', '20-bar', 0], ['bar50', '50-bar', 1], ['bar200', '200-bar', 4]];
   const lineColor = (i) => dash.colors[i];
   const chartBars = () => chartState.data.bars.filter((b) => chartState.ext || b.regular);
-  const utc = (t) => new Date(t * 1000);
+  const utc = (t) => new Date((t - 3600) * 1000);  // bar times are New York clock times stamped as UTC; shown an hour earlier, in Central
   const chMonth = (d) => d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
   const chClock = (d) => d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'UTC' });
-  const chWhen = (t) => { const d = utc(t); return `${d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' })}, ${chMonth(d)}, ${chClock(d)} ET`; };
+  const chWhen = (t) => { const d = utc(t); return `${d.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' })}, ${chMonth(d)}, ${chClock(d)} CT`; };
   const chPrice = (v) => v == null ? '—' : d3.format(',.2f')(v);
   const chPct = (v, places = 1) => v == null ? '—' : `${v > 0 ? '+' : ''}${d3.format(`.${places}f`)(v * 100)}%`;
   const chNum = (v, f = '.2f') => v == null ? '—' : d3.format(f)(v);
@@ -2580,7 +2756,7 @@ dash.draw('movers', (el) => {
       chartTitle.textContent = symbol;
       await drawChart();
       drawChartStats();
-      chartStatus.textContent = `Pulled from Yahoo at ${new Date(body.pulled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' })} ET. Open it again for newer bars.`;
+      chartStatus.textContent = `Pulled from Yahoo at ${new Date(body.pulled_at).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Chicago' })} CT. Open it again for newer bars.`;
     } catch (e) {
       if (request === chartState.request) chartStatus.textContent = /fetch/i.test(e.message) ? 'The local server isn’t running. Start it with uv run fr serve.' : e.message;
     }
