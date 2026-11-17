@@ -1,0 +1,172 @@
+{
+ "session": "2026-11-16",
+ "trades": [
+  {
+   "id": "2026-11-16-A01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P01",
+   "proposal_id": "2026-11-16-P01",
+   "conviction": 3,
+   "name": "AVEX",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "why": "The EPS miss was a one-time $37.9M BlackSea tax charge; revenue, guide (+$120M at midpoint) and core non-Ukraine growth disproved the revenue-cliff bear case, and Friday gave back two-thirds of the pop on light volume with no news.",
+   "wrong_if": "Madison Dearborn or another large holder announces a block sale or secondary offering, or AEVEX closes back below 12.13 (the pre-report close) on above-average volume, or a report confirms Navy or Army cuts to its programs beyond the GARC hulls already disclosed.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 6,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "AVEX",
+     "side": "long",
+     "shares": 799,
+     "ref_price": 12.51
+    },
+    {
+     "symbol": "XAR",
+     "side": "short",
+     "shares": 43,
+     "ref_price": 230.69
+    }
+   ],
+   "hedge": "XAR"
+  },
+  {
+   "id": "2026-11-16-A02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P02",
+   "proposal_id": "2026-11-16-P02",
+   "conviction": 3,
+   "name": "CTVA",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "why": "A brand-new standalone management team broke an eight-week-old guide on a Brazil distributor glut that it says is still worsening, with no buyback possible until 2027 and Friday's bounce stalling below the reaction-day midpoint.",
+   "wrong_if": "A director or the CEO buys shares (Form 4) inside the window, or the company announces an accelerated cost program or Brazil exit with numbers, or CTVA closes above 9.91 (the 11-12 midpoint) twice.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 7,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "CTVA",
+     "side": "short",
+     "shares": 1060,
+     "ref_price": 9.43
+    }
+   ],
+   "hedge": null
+  },
+  {
+   "id": "2026-11-16-A03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P03",
+   "proposal_id": "2026-11-16-P03",
+   "conviction": 3,
+   "name": "CSCO",
+   "setup": "earnings_gap_faded",
+   "direction": "short",
+   "why": "A beat and raise was sold for reasons that last: gross margin down 2.5 points on AI mix and memory costs, product orders slowing from 35% to 21%, and the hyperscaler order figure no longer disclosed; analysts cut targets the next day.",
+   "wrong_if": "Cisco or a sell-side note discloses hyperscaler AI orders re-accelerating, or two or more brokers upgrade or raise targets on margin stabilising, or CSCO closes back above 101.60 (the failed resistance).",
+   "entry_date": "2026-11-16",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "XLK",
+     "side": "long",
+     "shares": 58,
+     "ref_price": 170.28
+    },
+    {
+     "symbol": "CSCO",
+     "side": "short",
+     "shares": 104,
+     "ref_price": 95.64
+    }
+   ],
+   "hedge": "XLK"
+  }
+ ],
+ "runs": [
+  {
+   "at": "2026-11-15T21:00:06-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "new": [
+    "2026-11-16-A01",
+    "2026-11-16-A02",
+    "2026-11-16-A03"
+   ],
+   "stood_down": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-16-A02",
+     "symbol": "CTVA",
+     "action": "SELL",
+     "shares": 1060,
+     "kind": "LMT",
+     "limit": 9.33,
+     "venue": "overnight",
+     "ref_price": 9.38,
+     "priced_on": "gateway bid/ask",
+     "bid": 9.38,
+     "ask": 9.42,
+     "spread_pct": 0.426,
+     "order_id": 142,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 142: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-16-A03",
+     "symbol": "XLK",
+     "action": "BUY",
+     "shares": 58,
+     "kind": "LMT",
+     "limit": 169.64,
+     "venue": "overnight",
+     "ref_price": 168.8,
+     "priced_on": "gateway bid/ask",
+     "bid": 168.44,
+     "ask": 168.8,
+     "spread_pct": 0.213,
+     "order_id": 144,
+     "status": "Filled",
+     "note": "Warning 2109, reqId 144: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-16-A03",
+     "symbol": "CSCO",
+     "action": "SELL",
+     "shares": 104,
+     "kind": "LMT",
+     "limit": 94.32,
+     "venue": "overnight",
+     "ref_price": 94.79,
+     "priced_on": "gateway bid/ask",
+     "bid": 94.79,
+     "ask": 95.9,
+     "spread_pct": 1.164,
+     "order_id": 146,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 146: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-A01: spread wider than 2% (AVEX 7.1%, XAR 14.2%), so the whole trade waits for the next run or the open.",
+    "2026-11-16-A02: SELL 1060 CTVA went in with a message from the gateway: Warning 2109, reqId 142: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-16-A03: BUY 58 XLK went in with a message from the gateway: Warning 2109, reqId 144: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-16-A03: SELL 104 CSCO went in with a message from the gateway: Warning 2109, reqId 146: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  }
+ ]
+}

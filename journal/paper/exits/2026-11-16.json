@@ -1,0 +1,28 @@
+{
+ "session": "2026-11-16",
+ "built_at": "2026-11-16T15:45:08.236219-05:00",
+ "dry_run": false,
+ "prices": {
+  "CTVA": 8.944999694824219
+ },
+ "exits": [
+  {
+   "trade_id": "2026-11-16-S01",
+   "book": "swing",
+   "session_number": 1,
+   "reason": "closed by hand: the owner asked to clear the account on 2026-11-16 (3:30 PM CT, after-hours)"
+  }
+ ],
+ "extended": [],
+ "retried": [],
+ "stops_not_checked": [],
+ "reviewed": [
+  "2026-11-16-S01",
+  "2026-11-16-S02",
+  "2026-11-16-S03",
+  "2026-11-16-S04",
+  "2026-11-16-S05"
+ ],
+ "orders": [],
+ "warnings": []
+}

@@ -1,0 +1,65 @@
+{
+ "session": "2026-11-16",
+ "passes": [
+  {
+   "pass": "morning",
+   "at": "2026-11-16T09:55:40.329072-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-16-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No insider purchase on EDGAR (latest Form 4s are 11-3 director grants), no Brazil announcement and no upgrade found; trading 9.23, slightly in the trade's favour."
+    },
+    {
+     "trade_id": "2026-11-16-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No funded award and no change to the share-sale programme since the 11-13 filing; Roth cut its target to $20. Down 3% with its hedge this morning, about 0.2 ATR since the verdict, so the move hasn't happened without the book."
+    },
+    {
+     "trade_id": "2026-11-16-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No confirmation, no named bidder and no filing since the rumour; 110.0, back at the level where the run stalled twice, 0.3 ATR against the verdict price."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-16T13:08:34.483463-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-16-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No company news; Mizuho and KeyBanc cut targets this morning, and CTVA is at a new low since the spin-off, -5.3% against FMC flat; none of the wrong_if events (insider buy, quantified Brazil exit, upgrade to Buy) has happened."
+    },
+    {
+     "trade_id": "2026-11-16-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. No contract award or end to the at-the-market share sales; LUNR is down with space stocks after Sunday's Vulcan failure, only -0.8 ATR since the verdict, under the stand-down line."
+    },
+    {
+     "trade_id": "2026-11-16-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. No bidder named or confirmed; CLX is lagging its household-products peers on the staples rotation, +0.4 ATR since the verdict."
+    },
+    {
+     "trade_id": "2026-11-16-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. TSN holds about +7.4% at $63.15 against SPY -1.6% after fading from $65.34; no post-report downgrades or target cuts yet and no USDA reversal on Mexican cattle (Nogales reopening on Nov 30 is now conditional, worth watching). The fade is -1.0 ATR against the verdict, not a reason to stand down."
+    },
+    {
+     "trade_id": "2026-11-16-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. Today's 8-K (7:00 AM CT) shows 2.09M new shares sold, mostly to buy back STRC, and only 485 BTC bought: exactly the thesis. No buyback of common stock and no reversal of the MSCI exit; -0.3 ATR since the verdict."
+    }
+   ]
+  }
+ ]
+}

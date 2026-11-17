@@ -1,0 +1,45 @@
+{
+ "started": "2026-11-15T22:57:35-05:00",
+ "design": "three-pass",
+ "capital": {
+  "swing": 1000000.0
+ },
+ "archive": "journal/archive/first-book-2026-11-15",
+ "legacy": {
+  "positions": {
+   "ADBE": -5.0,
+   "ASAN": -123.0,
+   "CRM": -5.0,
+   "CSCO": -104.0,
+   "CTVA": -1060.0,
+   "HUBS": -6.0,
+   "HUM": 22.0,
+   "IGV": 99.0,
+   "MNDY": -15.0,
+   "MU": -2.0,
+   "NOVT": -80.0,
+   "NOW": -12.0,
+   "SIMO": -11.0,
+   "SMH": 20.0,
+   "SNDK": -2.0,
+   "STX": -3.0,
+   "TEAM": -8.0,
+   "WDAY": -6.0,
+   "WDC": -6.0,
+   "XLK": 117.0,
+   "XRT": 110.0,
+   "YETI": -263.0
+  },
+  "as_of": "2026-11-15T22:57:31.203385-05:00",
+  "trades": [
+   "2026-11-10-A02",
+   "2026-11-10-A03",
+   "2026-11-12-A01",
+   "2026-11-12-A02",
+   "2026-11-13-A01",
+   "2026-11-16-A02",
+   "2026-11-16-A03"
+  ],
+  "close": "FR_JOURNAL_DIR=journal/archive/first-book-2026-11-15 uv run fr paper close --flatten --execute, at a close"
+ }
+}

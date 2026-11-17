@@ -1,0 +1,1290 @@
+{
+ "session": "2026-11-16",
+ "note": "Side facts: no research pass reads this file (paper/side.py).",
+ "symbols": {
+  "APP": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0383,
+    "short_days_to_cover": 2.51,
+    "short_change": -0.05023,
+    "target_gap": 0.10799,
+    "rating_mean": 1.59375,
+    "est_change_30d": 0.03927,
+    "est_change_7d": 0.00064,
+    "est_net_up_30d": 12.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 5.0,
+    "insider_net_pct_6m": 0.033,
+    "insider_buys_6m": 19.0,
+    "insider_sales_6m": 11.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 30,
+    "eps_trend": {
+     "0q": {
+      "current": 4.74086,
+      "7daysAgo": 4.73966,
+      "30daysAgo": 4.4549,
+      "90daysAgo": 4.59073
+     },
+     "+1q": {
+      "current": 4.7367,
+      "7daysAgo": 4.73115,
+      "30daysAgo": 4.67876,
+      "90daysAgo": 4.75376
+     },
+     "0y": {
+      "current": 16.26196,
+      "7daysAgo": 16.25163,
+      "30daysAgo": 15.64747,
+      "90daysAgo": 15.74128
+     },
+     "+1y": {
+      "current": 20.72438,
+      "7daysAgo": 20.47088,
+      "30daysAgo": 19.91344,
+      "90daysAgo": 20.46078
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-06",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 347.0,
+      "was": 325.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Scotiabank",
+      "action": "main",
+      "to": "Sector Outperform",
+      "target": 450.0,
+      "was": 515.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Macquarie",
+      "action": "main",
+      "to": "Outperform",
+      "target": 470.0,
+      "was": 460.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Outperform",
+      "target": 520.0,
+      "was": 500.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Goldman Sachs",
+      "action": "main",
+      "to": "Neutral",
+      "target": 445.0,
+      "was": 400.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Oppenheimer",
+      "action": "reit",
+      "to": "Outperform",
+      "target": 520.0,
+      "was": 490.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Piper Sandler",
+      "action": "reit",
+      "to": "Neutral",
+      "target": 355.0,
+      "was": 325.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 540.0,
+      "was": 510.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Wedbush",
+      "action": "main",
+      "to": "Outperform",
+      "target": 600.0,
+      "was": 560.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Needham",
+      "action": "reit",
+      "to": "Buy",
+      "target": 475.0,
+      "was": 475.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "BTIG",
+      "action": "main",
+      "to": "Buy",
+      "target": 450.0,
+      "was": 396.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 414.0,
+      "was": 790.0
+     }
+    ]
+   }
+  },
+  "AVEX": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0684,
+    "short_days_to_cover": 1.15,
+    "short_change": -0.16223,
+    "target_gap": 1.03393,
+    "rating_mean": 1.5,
+    "est_change_30d": 0.16404,
+    "est_change_7d": -0.00385,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_net_pct_6m": -0.119,
+    "insider_buys_6m": 11.0,
+    "insider_sales_6m": 1.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 9,
+    "eps_trend": {
+     "0q": {
+      "current": 0.142,
+      "7daysAgo": 0.14,
+      "30daysAgo": 0.13333,
+      "90daysAgo": 0.06414
+     },
+     "+1q": {
+      "current": 0.14833,
+      "7daysAgo": 0.14286,
+      "30daysAgo": 0.155,
+      "90daysAgo": 0.10667
+     },
+     "0y": {
+      "current": 0.518,
+      "7daysAgo": 0.52,
+      "30daysAgo": 0.445,
+      "90daysAgo": 0.38439
+     },
+     "+1y": {
+      "current": 0.67423,
+      "7daysAgo": 0.69077,
+      "30daysAgo": 0.71135,
+      "90daysAgo": 0.55831
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-12",
+      "firm": "Needham",
+      "action": "main",
+      "to": "Buy",
+      "target": 30.0,
+      "was": 45.0
+     },
+     {
+      "date": "2026-11-12",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Neutral",
+      "target": 15.0,
+      "was": 13.0
+     },
+     {
+      "date": "2026-10-22",
+      "firm": "Oppenheimer",
+      "action": "init",
+      "to": "Outperform",
+      "target": 21.0,
+      "was": 0.0
+     },
+     {
+      "date": "2026-10-22",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Outperform",
+      "target": 22.0,
+      "was": 26.0
+     },
+     {
+      "date": "2026-10-22",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Neutral",
+      "target": 13.0,
+      "was": 20.0
+     }
+    ]
+   }
+  },
+  "BROS": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.4114,
+    "short_days_to_cover": 3.94,
+    "short_change": -0.18575,
+    "target_gap": 0.5331,
+    "rating_mean": 1.2963,
+    "est_change_30d": -0.05991,
+    "est_change_7d": -0.00714,
+    "est_net_up_30d": -9.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": -16.0,
+    "insider_net_pct_6m": -0.659,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 16.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 26,
+    "eps_trend": {
+     "0q": {
+      "current": 0.18306,
+      "7daysAgo": 0.18342,
+      "30daysAgo": 0.24887,
+      "90daysAgo": 0.24502
+     },
+     "+1q": {
+      "current": 0.20917,
+      "7daysAgo": 0.23167,
+      "30daysAgo": 0.24941,
+      "90daysAgo": 0.24729
+     },
+     "0y": {
+      "current": 0.92258,
+      "7daysAgo": 0.92921,
+      "30daysAgo": 0.98137,
+      "90daysAgo": 0.97708
+     },
+     "+1y": {
+      "current": 1.19449,
+      "7daysAgo": 1.20283,
+      "30daysAgo": 1.3347,
+      "90daysAgo": 1.31398
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-06",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 64.0,
+      "was": 69.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Telsey Advisory Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 56.0,
+      "was": 74.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Sector Perform",
+      "target": 38.0,
+      "was": 46.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Oppenheimer",
+      "action": "main",
+      "to": "Outperform",
+      "target": 54.0,
+      "was": 66.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "BNP Paribas",
+      "action": "main",
+      "to": "Outperform",
+      "target": 54.0,
+      "was": 77.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Keybanc",
+      "action": "main",
+      "to": "Overweight",
+      "target": 52.0,
+      "was": 59.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Overweight",
+      "target": 50.0,
+      "was": 55.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Stephens & Co.",
+      "action": "main",
+      "to": "Overweight",
+      "target": 47.0,
+      "was": 65.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "TD Cowen",
+      "action": "main",
+      "to": "Buy",
+      "target": 50.0,
+      "was": 55.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "Mizuho",
+      "action": "main",
+      "to": "Outperform",
+      "target": 65.0,
+      "was": 80.0
+     },
+     {
+      "date": "2026-10-26",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 75.0,
+      "was": 85.0
+     },
+     {
+      "date": "2026-10-23",
+      "firm": "Keybanc",
+      "action": "main",
+      "to": "Overweight",
+      "target": 59.0,
+      "was": 79.0
+     }
+    ]
+   }
+  },
+  "CLX": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.1029,
+    "short_days_to_cover": 4.25,
+    "short_change": -0.06575,
+    "target_gap": -0.11383,
+    "rating_mean": 3.16667,
+    "est_change_30d": -0.00328,
+    "est_change_7d": 0.00033,
+    "est_net_up_30d": -7.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 3.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 16,
+    "eps_trend": {
+     "0q": {
+      "current": 0.98432,
+      "7daysAgo": 1.33549,
+      "30daysAgo": 1.34144,
+      "90daysAgo": 1.36944
+     },
+     "+1q": {
+      "current": 1.4939,
+      "7daysAgo": 1.56474,
+      "30daysAgo": 1.58016,
+      "90daysAgo": 1.5895
+     },
+     "0y": {
+      "current": 5.72783,
+      "7daysAgo": 5.72596,
+      "30daysAgo": 5.74668,
+      "90daysAgo": 5.82216
+     },
+     "+1y": {
+      "current": 6.1684,
+      "7daysAgo": 6.1885,
+      "30daysAgo": 6.20947,
+      "90daysAgo": 6.36318
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 94.0,
+      "was": 87.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Underweight",
+      "target": 86.0,
+      "was": 83.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 96.0,
+      "was": 91.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 90.0,
+      "was": 85.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Evercore ISI Group",
+      "action": "up",
+      "to": "In-Line",
+      "target": 99.0,
+      "was": 99.0
+     },
+     {
+      "date": "2026-10-19",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Underweight",
+      "target": 83.0,
+      "was": 95.0
+     }
+    ]
+   }
+  },
+  "CSCO": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0155,
+    "short_days_to_cover": 3.87,
+    "short_change": 0.19463,
+    "target_gap": 0.35883,
+    "rating_mean": 1.85714,
+    "est_change_30d": 0.06948,
+    "est_change_7d": 0.06948,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": -1.0,
+    "insider_net_pct_6m": -0.009,
+    "insider_buys_6m": 5.0,
+    "insider_sales_6m": 18.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 24,
+    "eps_trend": {
+     "0q": {
+      "current": 1.34606,
+      "7daysAgo": 1.23062,
+      "30daysAgo": 1.23062,
+      "90daysAgo": 1.23198
+     },
+     "+1q": {
+      "current": 1.34036,
+      "7daysAgo": 1.25307,
+      "30daysAgo": 1.25307,
+      "90daysAgo": 1.25231
+     },
+     "0y": {
+      "current": 5.50353,
+      "7daysAgo": 5.14597,
+      "30daysAgo": 5.14597,
+      "90daysAgo": 5.12631
+     },
+     "+1y": {
+      "current": 6.00651,
+      "7daysAgo": 5.62203,
+      "30daysAgo": 5.62203,
+      "90daysAgo": 5.58251
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-05",
+      "firm": "Morgan Stanley",
+      "action": "down",
+      "to": "Equal-Weight",
+      "target": 120.0,
+      "was": 135.0
+     }
+    ]
+   }
+  },
+  "CTVA": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0869,
+    "short_days_to_cover": 1.46,
+    "short_change": 1.35705,
+    "target_gap": 0.55178,
+    "rating_mean": 1.6875,
+    "est_change_30d": -0.16536,
+    "est_change_7d": -0.13828,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 15,
+    "eps_trend": {
+     "0q": {
+      "current": 0.09571,
+      "7daysAgo": 0.09571,
+      "30daysAgo": 0.0,
+      "90daysAgo": 0.0
+     },
+     "+1q": {
+      "current": 0.34667,
+      "7daysAgo": 0.36667,
+      "30daysAgo": 0.375,
+      "90daysAgo": 0.0
+     },
+     "0y": {
+      "current": 0.92543,
+      "7daysAgo": 1.07393,
+      "30daysAgo": 1.10878,
+      "90daysAgo": 0.0
+     },
+     "+1y": {
+      "current": 0.91505,
+      "7daysAgo": 1.12395,
+      "30daysAgo": 1.13195,
+      "90daysAgo": 0.0
+     }
+    },
+    "rating_actions": []
+   }
+  },
+  "FISV": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "target_gap": -0.01164,
+    "rating_mean": 2.83784,
+    "est_change_30d": 0.00465,
+    "est_change_7d": 0.00047,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 11.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "analysts": 26,
+    "eps_trend": {
+     "0q": {
+      "current": 1.89966,
+      "7daysAgo": 1.89886,
+      "30daysAgo": 1.90097,
+      "90daysAgo": 1.91734
+     },
+     "+1q": {
+      "current": 1.7395,
+      "7daysAgo": 1.73824,
+      "30daysAgo": 1.71218,
+      "90daysAgo": 1.72509
+     },
+     "0y": {
+      "current": 7.27533,
+      "7daysAgo": 7.27188,
+      "30daysAgo": 7.24169,
+      "90daysAgo": 7.32624
+     },
+     "+1y": {
+      "current": 7.98015,
+      "7daysAgo": 7.97277,
+      "30daysAgo": 7.98629,
+      "90daysAgo": 8.1798
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-11",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 67.0,
+      "was": 62.0
+     },
+     {
+      "date": "2026-11-11",
+      "firm": "Bernstein",
+      "action": "main",
+      "to": "Market Perform",
+      "target": 70.0,
+      "was": 60.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "Truist Securities",
+      "action": "main",
+      "to": "Hold",
+      "target": 65.0,
+      "was": 51.0
+     },
+     {
+      "date": "2026-11-09",
+      "firm": "Cantor Fitzgerald",
+      "action": "main",
+      "to": "Neutral",
+      "target": 65.0,
+      "was": 48.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 68.0,
+      "was": 60.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 62.0,
+      "was": 53.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 65.0,
+      "was": 60.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "TD Cowen",
+      "action": "main",
+      "to": "Hold",
+      "target": 59.0,
+      "was": 49.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Argus Research",
+      "action": "up",
+      "to": "Buy",
+      "target": 72.0,
+      "was": 0.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 59.0,
+      "was": 50.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Outperform",
+      "target": 70.0,
+      "was": 65.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "B. Riley Securities",
+      "action": "reit",
+      "to": "Neutral",
+      "target": 60.0,
+      "was": 51.0
+     }
+    ]
+   }
+  },
+  "HALO": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.1569,
+    "short_days_to_cover": 6.19,
+    "short_change": -0.10759,
+    "target_gap": 0.19566,
+    "rating_mean": 2.0,
+    "est_change_30d": 0.03619,
+    "est_change_7d": 0.00566,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": -2.0,
+    "target_net_30d": 6.0,
+    "insider_net_pct_6m": -0.005,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 10.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 9,
+    "eps_trend": {
+     "0q": {
+      "current": 2.63395,
+      "7daysAgo": 2.64074,
+      "30daysAgo": 2.60125,
+      "90daysAgo": 2.60125
+     },
+     "+1q": {
+      "current": 2.33,
+      "7daysAgo": 2.33,
+      "30daysAgo": 2.34,
+      "90daysAgo": 2.34
+     },
+     "0y": {
+      "current": 8.88732,
+      "7daysAgo": 8.83734,
+      "30daysAgo": 8.57694,
+      "90daysAgo": 8.57694
+     },
+     "+1y": {
+      "current": 10.59196,
+      "7daysAgo": 10.6786,
+      "30daysAgo": 10.39306,
+      "90daysAgo": 10.39306
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-11",
+      "firm": "Morgan Stanley",
+      "action": "down",
+      "to": "Equal-Weight",
+      "target": 109.0,
+      "was": 105.0
+     },
+     {
+      "date": "2026-11-07",
+      "firm": "Leerink Partners",
+      "action": "down",
+      "to": "Market Perform",
+      "target": 117.0,
+      "was": 110.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Citizens",
+      "action": "main",
+      "to": "Market Outperform",
+      "target": 149.0,
+      "was": 93.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 125.0,
+      "was": 123.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 110.0,
+      "was": 95.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 79.0,
+      "was": 78.0
+     }
+    ]
+   }
+  },
+  "IFF": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0847,
+    "short_days_to_cover": 7.37,
+    "short_change": -0.04926,
+    "target_gap": 0.21039,
+    "rating_mean": 1.9,
+    "est_change_30d": -0.03636,
+    "est_change_7d": 0.0001,
+    "est_net_up_30d": 1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 3.0,
+    "insider_net_pct_6m": 0.17,
+    "insider_buys_6m": 1.0,
+    "insider_sales_6m": 3.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 17,
+    "eps_trend": {
+     "0q": {
+      "current": 0.6302,
+      "7daysAgo": 0.62993,
+      "30daysAgo": 0.67384,
+      "90daysAgo": 0.67057
+     },
+     "+1q": {
+      "current": 0.92508,
+      "7daysAgo": 0.936,
+      "30daysAgo": 1.0485,
+      "90daysAgo": 1.0218
+     },
+     "0y": {
+      "current": 3.16313,
+      "7daysAgo": 3.16282,
+      "30daysAgo": 3.28249,
+      "90daysAgo": 3.24266
+     },
+     "+1y": {
+      "current": 3.86572,
+      "7daysAgo": 3.86587,
+      "30daysAgo": 3.96497,
+      "90daysAgo": 3.95572
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-06",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Overweight",
+      "target": 103.0,
+      "was": 105.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 95.0,
+      "was": 91.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 95.0,
+      "was": 92.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 105.0,
+      "was": 100.0
+     },
+     {
+      "date": "2026-10-22",
+      "firm": "Oppenheimer",
+      "action": "main",
+      "to": "Outperform",
+      "target": 108.0,
+      "was": 95.0
+     }
+    ]
+   }
+  },
+  "LUNR": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.2442,
+    "short_days_to_cover": 4.84,
+    "short_change": -0.00699,
+    "target_gap": 0.97692,
+    "rating_mean": 1.33333,
+    "est_change_30d": 0.35256,
+    "est_change_7d": 0.35256,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_net_pct_6m": -0.499,
+    "insider_buys_6m": 17.0,
+    "insider_sales_6m": 14.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": -0.06333,
+      "7daysAgo": -0.065,
+      "30daysAgo": -0.065,
+      "90daysAgo": -0.07
+     },
+     "+1q": {
+      "current": -0.06667,
+      "7daysAgo": -0.09,
+      "30daysAgo": -0.09,
+      "90daysAgo": -0.09
+     },
+     "0y": {
+      "current": -0.33667,
+      "7daysAgo": -0.52,
+      "30daysAgo": -0.52,
+      "90daysAgo": -0.52
+     },
+     "+1y": {
+      "current": -0.17667,
+      "7daysAgo": -0.155,
+      "30daysAgo": -0.155,
+      "90daysAgo": -0.16
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "B. Riley Securities",
+      "action": "main",
+      "to": "Buy",
+      "target": 34.0,
+      "was": 43.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Keybanc",
+      "action": "main",
+      "to": "Overweight",
+      "target": 30.0,
+      "was": 38.0
+     }
+    ]
+   }
+  },
+  "NBIS": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.198,
+    "short_days_to_cover": 2.35,
+    "short_change": 0.13964,
+    "target_gap": 1.02365,
+    "rating_mean": 1.81818,
+    "est_change_30d": 0.86099,
+    "est_change_7d": 0.86099,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_net_pct_6m": -0.056,
+    "insider_buys_6m": 15.0,
+    "insider_sales_6m": 24.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 20,
+    "eps_trend": {
+     "0q": {
+      "current": -1.434,
+      "7daysAgo": -1.7775,
+      "30daysAgo": -1.7775,
+      "90daysAgo": -2.40667
+     },
+     "+1q": {
+      "current": -1.56333,
+      "7daysAgo": -1.7975,
+      "30daysAgo": -1.7975,
+      "90daysAgo": -1.99333
+     },
+     "0y": {
+      "current": -0.29375,
+      "7daysAgo": -2.11316,
+      "30daysAgo": -2.11316,
+      "90daysAgo": -2.35667
+     },
+     "+1y": {
+      "current": -5.43434,
+      "7daysAgo": -6.15734,
+      "30daysAgo": -6.15734,
+      "90daysAgo": -4.65857
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 265.0,
+      "was": 324.0
+     },
+     {
+      "date": "2026-10-21",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Neutral",
+      "target": 185.0,
+      "was": 237.0
+     }
+    ]
+   }
+  },
+  "NWE": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.0439,
+    "short_days_to_cover": 3.36,
+    "short_change": 0.03794,
+    "target_gap": -0.06708,
+    "rating_mean": 1.875,
+    "est_change_30d": -2e-05,
+    "est_change_7d": -0.00119,
+    "est_net_up_30d": -3.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 1.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 7,
+    "eps_trend": {
+     "0q": {
+      "current": 1.22973,
+      "7daysAgo": 1.20545,
+      "30daysAgo": 1.195,
+      "90daysAgo": 1.1908
+     },
+     "+1q": {
+      "current": 1.26633,
+      "7daysAgo": 1.26633,
+      "30daysAgo": 1.28975,
+      "90daysAgo": 1.294
+     },
+     "0y": {
+      "current": 3.73067,
+      "7daysAgo": 3.73511,
+      "30daysAgo": 3.73075,
+      "90daysAgo": 3.74875
+     },
+     "+1y": {
+      "current": 3.96448,
+      "7daysAgo": 3.96823,
+      "30daysAgo": 3.95948,
+      "90daysAgo": 3.96486
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-26",
+      "firm": "Wells Fargo",
+      "action": "up",
+      "to": "Overweight",
+      "target": 90.0,
+      "was": 70.0
+     }
+    ]
+   }
+  },
+  "TE": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.3465,
+    "short_days_to_cover": 4.53,
+    "short_change": 0.02531,
+    "target_gap": 2.63583,
+    "rating_mean": 1.77778,
+    "est_change_30d": -0.10236,
+    "est_change_7d": -0.03618,
+    "est_net_up_30d": -2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_net_pct_6m": -0.24,
+    "insider_buys_6m": 7.0,
+    "insider_sales_6m": 1.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 9,
+    "eps_trend": {
+     "0q": {
+      "current": -0.04823,
+      "7daysAgo": -0.07614,
+      "30daysAgo": -0.06864,
+      "90daysAgo": -0.0625
+     },
+     "+1q": {
+      "current": -0.03217,
+      "7daysAgo": -0.06348,
+      "30daysAgo": -0.04098,
+      "90daysAgo": -0.0625
+     },
+     "0y": {
+      "current": -0.40268,
+      "7daysAgo": -0.38862,
+      "30daysAgo": -0.36529,
+      "90daysAgo": -0.34
+     },
+     "+1y": {
+      "current": 0.11276,
+      "7daysAgo": 0.05705,
+      "30daysAgo": 0.11955,
+      "90daysAgo": 0.095
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-12",
+      "firm": "BTIG",
+      "action": "main",
+      "to": "Buy",
+      "target": 7.0,
+      "was": 9.0
+     },
+     {
+      "date": "2026-10-23",
+      "firm": "Needham",
+      "action": "main",
+      "to": "Buy",
+      "target": 6.0,
+      "was": 7.0
+     }
+    ]
+   }
+  },
+  "VNT": {
+   "at": "2026-11-15T21:30:06-05:00",
+   "facts": {
+    "short_pct_float": 0.1203,
+    "short_days_to_cover": 9.94,
+    "short_change": 0.04613,
+    "target_gap": 0.06996,
+    "rating_mean": 2.09091,
+    "est_change_30d": 0.03663,
+    "est_change_7d": 0.02878,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 4.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-10-29",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": 1.02405,
+      "7daysAgo": 0.96941,
+      "30daysAgo": 0.96941,
+      "90daysAgo": 0.97384
+     },
+     "+1q": {
+      "current": 0.87732,
+      "7daysAgo": 0.87072,
+      "30daysAgo": 0.87072,
+      "90daysAgo": 0.86612
+     },
+     "0y": {
+      "current": 3.6213,
+      "7daysAgo": 3.52,
+      "30daysAgo": 3.49335,
+      "90daysAgo": 3.49769
+     },
+     "+1y": {
+      "current": 3.91218,
+      "7daysAgo": 3.78132,
+      "30daysAgo": 3.78132,
+      "90daysAgo": 3.79805
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 52.0,
+      "was": 41.0
+     },
+     {
+      "date": "2026-11-09",
+      "firm": "Baird",
+      "action": "main",
+      "to": "Neutral",
+      "target": 46.0,
+      "was": 39.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 47.0,
+      "was": 44.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Keybanc",
+      "action": "main",
+      "to": "Overweight",
+      "target": 43.0,
+      "was": 40.0
+     }
+    ]
+   }
+  }
+ },
+ "runs": [
+  {
+   "at": "2026-11-15T21:30:06-05:00",
+   "pulled": [
+    "APP",
+    "AVEX",
+    "BROS",
+    "CLX",
+    "CSCO",
+    "CTVA",
+    "FISV",
+    "HALO",
+    "IFF",
+    "LUNR",
+    "NBIS",
+    "NWE",
+    "TE",
+    "VNT"
+   ],
+   "failed": []
+  }
+ ]
+}

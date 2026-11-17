@@ -1,0 +1,1562 @@
+{
+ "session": "2026-11-16",
+ "handled": [
+  "night",
+  "morning",
+  "midday"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-16-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P01",
+   "proposal_id": "2026-11-16-P01",
+   "conviction": 3,
+   "name": "CTVA",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "why": "Management cut a guide it gave eight weeks earlier, cannot buy back stock this quarter, and has nothing to say until February, while a holder base that owned it for the seed business is still leaving.",
+   "wrong_if": "A director or executive buys shares in the open market (Form 4), or the company announces a quantified Brazil restructuring or exit, or an analyst upgrades it to Buy inside the window.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 6,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "CTVA",
+     "side": "short",
+     "shares": 1067,
+     "ref_price": 9.37
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-16"
+  },
+  {
+   "id": "2026-11-16-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P02",
+   "proposal_id": "2026-11-16-P02",
+   "conviction": 3,
+   "name": "LUNR",
+   "setup": "earnings_gap_faded",
+   "direction": "short",
+   "why": "The record quarter was sold all day once holders saw one-time items made the beat, guidance trimmed and 2027 revenue pointing flat to down, and the company still has $160M of new shares to sell into any strength.",
+   "wrong_if": "A funded contract award is announced inside the window (a CLPS task order, the SR-1 booking, or the national-security transfer-vehicle phase), or the company suspends its at-the-market share sales.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "XSD",
+     "side": "long",
+     "shares": 22,
+     "ref_price": 436.41
+    },
+    {
+     "symbol": "LUNR",
+     "side": "short",
+     "shares": 790,
+     "ref_price": 12.65
+    }
+   ],
+   "hedge": "XSD",
+   "pass": "night",
+   "first_session": "2026-11-16"
+  },
+  {
+   "id": "2026-11-16-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P03",
+   "proposal_id": "2026-11-16-P03",
+   "conviction": 3,
+   "name": "CLX",
+   "setup": "stretched",
+   "direction": "short",
+   "why": "The last ten points rest on an unconfirmed takeover rumour from a deal blog; the quarter itself supports the high 90s, and the run is stalling at 109.8 on falling volume.",
+   "wrong_if": "Clorox or a named bidder confirms talks, or Bloomberg, Reuters or the Wall Street Journal reports an approach with a named party.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 7,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "SPLV",
+     "side": "long",
+     "shares": 125,
+     "ref_price": 79.7071
+    },
+    {
+     "symbol": "CLX",
+     "side": "short",
+     "shares": 91,
+     "ref_price": 109.0
+    }
+   ],
+   "hedge": "SPLV",
+   "pass": "night",
+   "first_session": "2026-11-16"
+  },
+  {
+   "id": "2026-11-16-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P20",
+   "proposal_id": "2026-11-16-P20",
+   "conviction": 3,
+   "name": "TSN",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "Guidance says the beef loss shrinks from $654M to about $100M under a new chief executive, the stock repriced 10% on triple volume, and staples are where money is going this month.",
+   "wrong_if": "The analyst notes after the report come back as downgrades or target cuts citing the chicken or sales guide, with no target raised above $68 by Wednesday's close; or the company or USDA news reverses the cattle-supply improvement (Mexican imports halted again).",
+   "entry_date": "2026-11-16",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "TSN",
+     "side": "long",
+     "shares": 154,
+     "ref_price": 64.635
+    },
+    {
+     "symbol": "XLP",
+     "side": "short",
+     "shares": 107,
+     "ref_price": 92.83
+    }
+   ],
+   "hedge": "XLP",
+   "pass": "morning",
+   "first_session": "2026-11-17"
+  },
+  {
+   "id": "2026-11-16-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P21",
+   "proposal_id": "2026-11-16-P21",
+   "conviction": 3,
+   "name": "MSTR",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "It still trades above the value of its bitcoin while it sells about 2 million new shares a week to prop up its preferred stock, buys almost no bitcoin, and leaves MSCI's indexes on November 30.",
+   "wrong_if": "The weekly filing on 11-23 shows no common shares sold or shows common-stock buybacks; or MSCI reverses or another index provider adds it; or the stock's premium to its bitcoin widens on a day bitcoin is flat or down.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 6,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "IBIT",
+     "side": "long",
+     "shares": 270,
+     "ref_price": 36.9301
+    },
+    {
+     "symbol": "MSTR",
+     "side": "short",
+     "shares": 95,
+     "ref_price": 105.1901
+    }
+   ],
+   "hedge": "IBIT",
+   "pass": "morning",
+   "first_session": "2026-11-17"
+  },
+  {
+   "id": "2026-11-16-S06",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P37",
+   "proposal_id": "2026-11-16-P37",
+   "conviction": 3,
+   "name": "BILL",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "William Blair's upgrade lands on a story that has already flipped to cost cuts plus a $1B buyback (about 20% of the company over 24 months, $300M done last quarter), and the stock is at a 52-week high while the market falls 1.6%.",
+   "wrong_if": "At the Nov 17 TD Cowen conference or in any filing management lowers the FY27 outlook, says the buyback pace slows, or says card volume growth falls below 10%; or a broker downgrades BILL on fundamentals inside the window.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "BILL",
+     "side": "long",
+     "shares": 174,
+     "ref_price": 57.31
+    },
+    {
+     "symbol": "KBE",
+     "side": "short",
+     "shares": 151,
+     "ref_price": 65.895
+    }
+   ],
+   "hedge": "KBE",
+   "pass": "midday",
+   "first_session": "2026-11-17"
+  },
+  {
+   "id": "2026-11-16-S07",
+   "book": "dynamic",
+   "source": "proposal 2026-11-16-P38",
+   "proposal_id": "2026-11-16-P38",
+   "conviction": 3,
+   "name": "GXO",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "Today's Investor Day set modest, believable 2030 and 2027 targets on top of a record $3.1B pipeline and $850M of signed new revenue, and the stock is +4.4% against a -1.6% market and pressing the top of its two-week range with targets at $65-75.",
+   "wrong_if": "Analyst notes on the Investor Day come back with target cuts or call the 2027 outlook below consensus, or the company's materials show no buyback figure and brokers cite capital allocation as the disappointment.",
+   "entry_date": "2026-11-16",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "GXO",
+     "side": "long",
+     "shares": 175,
+     "ref_price": 56.9
+    },
+    {
+     "symbol": "IYT",
+     "side": "short",
+     "shares": 119,
+     "ref_price": 83.92
+    }
+   ],
+   "hedge": "IYT",
+   "pass": "midday",
+   "first_session": "2026-11-17"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-15T23:08:48-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "APP": 405.21,
+    "AVEX": 12.32,
+    "BROS": 35.65,
+    "CLX": 109.0,
+    "CSCO": 94.5,
+    "CTVA": 9.37,
+    "HALO": 99.48,
+    "IFF": 81.16,
+    "ITB": 93.55,
+    "KRE": 71.01,
+    "LUNR": 12.65,
+    "MDY": 672.7,
+    "NBIS": 112.8,
+    "NVDA": 161.01,
+    "NWE": 84.91,
+    "NXST": 207.94,
+    "SMH": 481.53,
+    "SPLV": 79.7071,
+    "SPY": 749.6,
+    "TE": 1.8,
+    "TXNM": 58.87,
+    "URA": 31.74,
+    "VNT": 43.64,
+    "WEC": 117.6,
+    "XAR": 230.69,
+    "XLC": 108.69,
+    "XLF": 58.41,
+    "XLK": 168.9251,
+    "XLU": 43.92,
+    "XLV": 188.3,
+    "XRT": 89.61,
+    "XSD": 436.41,
+    "YETI": 39.42
+   }
+  },
+  "morning": {
+   "at": "2026-11-16T09:55:51-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "A": 172.92,
+    "AVTR": 15.4,
+    "BIO": 364.1,
+    "BMNR": 16.7615,
+    "BRK B": 593.17,
+    "BRKR": 60.17,
+    "CGNX": 49.07,
+    "CIBR": 93.81,
+    "COIN": 122.37,
+    "CRL": 333.165,
+    "CSIQ": 9.43,
+    "DHR": 232.03,
+    "DT": 44.105,
+    "FCN": 205.52,
+    "FFIV": 303.44,
+    "FISV": 64.52,
+    "FSLR": 166.15,
+    "HSAI": 13.66,
+    "IBIT": 36.9301,
+    "IGV": 99.92,
+    "IHI": 58.075,
+    "ILMN": 201.06,
+    "IYT": 84.45,
+    "KIE": 66.07,
+    "MSTR": 105.1901,
+    "MTD": 1730.545,
+    "NOVT": 115.235,
+    "NXT": 94.59,
+    "OUST": 31.9,
+    "ROK": 391.66,
+    "RVTY": 149.7,
+    "SHLS": 8.364,
+    "SLV": 42.635,
+    "SPY": 747.8,
+    "SYM": 34.72,
+    "TE": 1.58,
+    "TEAM": 147.7508,
+    "TECH": 72.83,
+    "TMO": 696.23,
+    "TSN": 64.635,
+    "TXG": 55.4875,
+    "WAT": 455.12,
+    "XLI": 168.12,
+    "XLP": 92.83,
+    "XLU": 44.335,
+    "XLV": 189.8998,
+    "ZBRA": 318.63
+   }
+  },
+  "midday": {
+   "at": "2026-11-16T13:09:31-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "BILL": 57.31,
+    "BLSH": 20.38,
+    "CCJ": 66.44,
+    "CL": 101.55,
+    "COLM": 75.18,
+    "COPX": 66.07,
+    "COST": 1111.86,
+    "DIA": 517.76,
+    "EG": 433.06,
+    "EIX": 61.9,
+    "ERO": 27.475,
+    "FCX": 56.045,
+    "GAP": 19.965,
+    "GXO": 56.9,
+    "HBM": 19.7901,
+    "IBIT": 36.6901,
+    "ITB": 93.83,
+    "IYT": 83.92,
+    "KBE": 65.895,
+    "KIE": 66.05,
+    "KO": 99.29,
+    "LLY": 1444.9351,
+    "LOPE": 117.715,
+    "MOH": 228.6,
+    "NEU": 699.795,
+    "PG": 173.055,
+    "SCCO": 156.58,
+    "SPLV": 78.53,
+    "SPY": 742.21,
+    "TECK": 57.285,
+    "TGB": 6.385,
+    "TJX": 131.545,
+    "URA": 30.4299,
+    "XLB": 51.725,
+    "XLP": 92.79,
+    "XLU": 44.0995,
+    "XLV": 188.93,
+    "XRT": 89.71
+   }
+  }
+ },
+ "exits": [],
+ "runs": [
+  {
+   "at": "2026-11-15T23:08:48-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-16-S01",
+    "2026-11-16-S02",
+    "2026-11-16-S03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-16-S01",
+     "symbol": "CTVA",
+     "action": "SELL",
+     "shares": 1067,
+     "kind": "LMT",
+     "limit": 9.33,
+     "venue": "overnight",
+     "ref_price": 9.38,
+     "priced_on": "gateway bid/ask",
+     "bid": 9.38,
+     "ask": 9.42,
+     "spread_pct": 0.426,
+     "order_id": 151,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 151: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: spread wider than 2% (XSD 8.8%), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: spread wider than 2% (SPLV 13.3%, CLX 8.9%), so the whole trade waits for the next try.",
+    "2026-11-16-S01: SELL 1067 CTVA went in with a message from the gateway: Warning 2109, reqId 151: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-15T23:38:55-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-16-S01",
+     "symbol": "CTVA",
+     "action": "SELL",
+     "shares": 523,
+     "kind": "LMT",
+     "limit": 9.34,
+     "venue": "overnight",
+     "ref_price": 9.39,
+     "priced_on": "gateway bid/ask",
+     "bid": 9.39,
+     "ask": 9.42,
+     "spread_pct": 0.319,
+     "order_id": 156,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 156: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: spread wider than 2% (XSD 12.8%), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: spread wider than 2% (SPLV 13.3%, CLX 9.2%), so the whole trade waits for the next try.",
+    "2026-11-16-S01: SELL 523 CTVA went in with a message from the gateway: Warning 2109, reqId 156: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-15T23:59:58-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 2,
+   "orders": [
+    {
+     "trade_id": "2026-11-16-S01",
+     "symbol": "CTVA",
+     "action": "SELL",
+     "shares": 523,
+     "kind": "LMT",
+     "limit": 9.34,
+     "venue": "overnight",
+     "ref_price": 9.39,
+     "priced_on": "gateway bid/ask",
+     "bid": 9.39,
+     "ask": 9.42,
+     "spread_pct": 0.319,
+     "order_id": 162,
+     "status": "PreSubmitted",
+     "note": "Warning 2109, reqId 162: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: spread wider than 2% (XSD 12.8%), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: spread wider than 2% (SPLV 13.3%, CLX 7.0%), so the whole trade waits for the next try.",
+    "2026-11-16-S01: SELL 523 CTVA went in with a message from the gateway: Warning 2109, reqId 162: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T00:15:29-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: spread wider than 2% (XSD 12.8%), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: spread wider than 2% (SPLV 13.3%, CLX 7.4%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-16T00:43:45-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T01:01:51-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T01:45:56-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T02:52:12-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T04:38:19-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T05:23:31-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T06:10:32-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T06:25:50-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T06:44:31-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T07:00:22-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T07:16:44-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T07:34:22-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T08:16:24-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T08:42:40-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T09:43:30-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T09:55:51-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-16-S04",
+    "2026-11-16-S05"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T10:11:19-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T10:27:03-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T10:42:28-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T10:57:49-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T11:13:10-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T11:28:31-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T11:43:53-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T11:59:15-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T12:14:41-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T12:30:06-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T12:45:50-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T13:01:12-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T13:09:31-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-16-S06",
+    "2026-11-16-S07"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "GXO": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IYT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "KBE": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T13:24:58-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "GXO": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IYT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "KBE": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T13:40:18-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "GXO": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IYT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "KBE": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T13:55:58-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "GXO": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IYT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "KBE": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T14:11:23-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "GXO": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IYT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "KBE": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T14:26:48-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "GXO": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IYT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "KBE": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T14:42:10-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "GXO": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IYT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "KBE": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T14:57:32-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "GXO": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IYT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "KBE": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T15:12:54-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the account has no market data subscription for it over the API (IBKR error 10089), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "CLX": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "GXO": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IBIT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "IYT": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "KBE": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "LUNR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "MSTR": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "SPLV": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "TSN": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XLP": "the account has no market data subscription for it over the API (IBKR error 10089)",
+    "XSD": "the account has no market data subscription for it over the API (IBKR error 10089)"
+   }
+  },
+  {
+   "at": "2026-11-16T15:28:14-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-16-S02 LUNR: no quote for XSD or LUNR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S03 CLX: no quote for SPLV or CLX from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S04 TSN: no quote for TSN or XLP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S05 MSTR: no quote for IBIT or MSTR from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S06 BILL: no quote for BILL or KBE from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-16-S07 GXO: no quote for GXO or IYT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "CLX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "GXO": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IBIT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IYT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "KBE": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "LUNR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "MSTR": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SPLV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TSN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XSD": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  }
+ ],
+ "last_attempt": "2026-11-16T15:28:14-05:00"
+}

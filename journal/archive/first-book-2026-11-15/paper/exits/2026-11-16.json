@@ -1,0 +1,310 @@
+{
+ "session": "2026-11-16",
+ "built_at": "2026-11-16T15:40:10.491919-05:00",
+ "dry_run": false,
+ "prices": {
+  "ADBE": 245.8300018310547,
+  "ASAN": 9.854999542236328,
+  "CRM": 215.05499267578125,
+  "CSCO": 94.1449966430664,
+  "CTVA": 8.944999694824219,
+  "HUBS": 231.6999969482422,
+  "HUM": 460.94500732421875,
+  "IGV": 98.91500091552734,
+  "MNDY": 79.73470306396484,
+  "MU": 718.7999877929688,
+  "NOVT": 115.41500091552734,
+  "NOW": 99.58499908447266,
+  "SIMO": 157.55999755859375,
+  "SMH": 461.5199890136719,
+  "SNDK": 810.969970703125,
+  "STX": 498.95001220703125,
+  "TEAM": 149.80250549316406,
+  "WDAY": 194.72500610351562,
+  "WDC": 280.7900085449219,
+  "XLK": 164.3300018310547,
+  "XRT": 89.41500091552734,
+  "YETI": 38.46500015258789
+ },
+ "exits": [
+  {
+   "trade_id": "2026-11-10-A02",
+   "book": "dynamic",
+   "session_number": 5,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-10-A03",
+   "book": "dynamic",
+   "session_number": 5,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-12-A01",
+   "book": "dynamic",
+   "session_number": 3,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "book": "dynamic",
+   "session_number": 3,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-13-A01",
+   "book": "dynamic",
+   "session_number": 2,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-16-A02",
+   "book": "dynamic",
+   "session_number": 1,
+   "reason": "flatten: every trade closed by hand"
+  },
+  {
+   "trade_id": "2026-11-16-A03",
+   "book": "dynamic",
+   "session_number": 1,
+   "reason": "flatten: every trade closed by hand"
+  }
+ ],
+ "extended": [],
+ "retried": [],
+ "stops_not_checked": [],
+ "reviewed": [],
+ "orders": [
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "IGV",
+   "action": "SELL",
+   "shares": 99,
+   "kind": "MOC",
+   "order_id": 5,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "CRM",
+   "action": "BUY",
+   "shares": 5,
+   "kind": "MOC",
+   "order_id": 7,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "NOW",
+   "action": "BUY",
+   "shares": 12,
+   "kind": "MOC",
+   "order_id": 9,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "WDAY",
+   "action": "BUY",
+   "shares": 6,
+   "kind": "MOC",
+   "order_id": 11,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "ADBE",
+   "action": "BUY",
+   "shares": 5,
+   "kind": "MOC",
+   "order_id": 13,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "TEAM",
+   "action": "BUY",
+   "shares": 8,
+   "kind": "MOC",
+   "order_id": 15,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "HUBS",
+   "action": "BUY",
+   "shares": 6,
+   "kind": "MOC",
+   "order_id": 17,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "MNDY",
+   "action": "BUY",
+   "shares": 15,
+   "kind": "MOC",
+   "order_id": 19,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A02",
+   "symbol": "ASAN",
+   "action": "BUY",
+   "shares": 123,
+   "kind": "MOC",
+   "order_id": 21,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A03",
+   "symbol": "XLK",
+   "action": "SELL",
+   "shares": 59,
+   "kind": "MOC",
+   "order_id": 23,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-10-A03",
+   "symbol": "NOVT",
+   "action": "BUY",
+   "shares": 80,
+   "kind": "MOC",
+   "order_id": 25,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A01",
+   "symbol": "HUM",
+   "action": "SELL",
+   "shares": 22,
+   "kind": "MOC",
+   "order_id": 27,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "SMH",
+   "action": "SELL",
+   "shares": 20,
+   "kind": "MOC",
+   "order_id": 29,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "MU",
+   "action": "BUY",
+   "shares": 2,
+   "kind": "MOC",
+   "order_id": 31,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "SNDK",
+   "action": "BUY",
+   "shares": 2,
+   "kind": "MOC",
+   "order_id": 33,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "WDC",
+   "action": "BUY",
+   "shares": 6,
+   "kind": "MOC",
+   "order_id": 35,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "STX",
+   "action": "BUY",
+   "shares": 3,
+   "kind": "MOC",
+   "order_id": 37,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-12-A02",
+   "symbol": "SIMO",
+   "action": "BUY",
+   "shares": 11,
+   "kind": "MOC",
+   "order_id": 39,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-13-A01",
+   "symbol": "XRT",
+   "action": "SELL",
+   "shares": 110,
+   "kind": "MOC",
+   "order_id": 41,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-13-A01",
+   "symbol": "YETI",
+   "action": "BUY",
+   "shares": 263,
+   "kind": "MOC",
+   "order_id": 43,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-16-A02",
+   "symbol": "CTVA",
+   "action": "BUY",
+   "shares": 1060,
+   "kind": "MOC",
+   "order_id": 45,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-16-A03",
+   "symbol": "XLK",
+   "action": "SELL",
+   "shares": 58,
+   "kind": "MOC",
+   "order_id": 47,
+   "status": "PendingSubmit",
+   "note": ""
+  },
+  {
+   "trade_id": "2026-11-16-A03",
+   "symbol": "CSCO",
+   "action": "BUY",
+   "shares": 104,
+   "kind": "MOC",
+   "order_id": 49,
+   "status": "PendingSubmit",
+   "note": ""
+  }
+ ],
+ "warnings": []
+}
