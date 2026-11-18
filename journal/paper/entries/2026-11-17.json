@@ -1,0 +1,2364 @@
+{
+ "session": "2026-11-17",
+ "handled": [
+  "night",
+  "late",
+  "late2",
+  "morning",
+  "midday"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-17-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P01",
+   "proposal_id": "2026-11-17-P01",
+   "conviction": 3,
+   "name": "RCAT",
+   "setup": "live_move",
+   "direction": "short",
+   "why": "The reason to own it is gone (the $150-180M revenue target withdrawn after an $11.8M quarter, 0.6% gross margin) and a share sale is close to forced by a cash bid for Steyr that takes nearly all its cash; target cuts and tax-loss selling come before any good news that has a date.",
+   "wrong_if": "Red Cat announces a funded Ukraine order or shipment, a US contract award of $25M or more, or that it is dropping or cutting back the Steyr bid, inside the window.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "ARKK",
+     "side": "long",
+     "shares": 139,
+     "ref_price": 71.69
+    },
+    {
+     "symbol": "RCAT",
+     "side": "short",
+     "shares": 3838,
+     "ref_price": 2.6054
+    }
+   ],
+   "hedge": "ARKK",
+   "pass": "night",
+   "first_session": "2026-11-17",
+   "lead": "RCAT"
+  },
+  {
+   "id": "2026-11-17-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P02",
+   "proposal_id": "2026-11-17-P02",
+   "conviction": 3,
+   "name": "ACM",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "The report after the close shows the two problem construction projects on schedule and budget, record design margins and backlog and a 2027 profit guide at or a little above consensus, on a stock at about 12 times earnings that fell for a year on exactly that problem; up 6.8% after-hours on steady trading and holding.",
+   "wrong_if": "On the 11-17 call or in a filing inside the window management discloses a further charge, cost overrun or schedule slip on either legacy Construction Management project, lowers the FY2027 guide, or withdraws the long-term margin or EPS targets; or two or more covering brokers downgrade after the call.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "ACM",
+     "side": "long",
+     "shares": 129,
+     "ref_price": 77.45
+    },
+    {
+     "symbol": "RSP",
+     "side": "short",
+     "shares": 45,
+     "ref_price": 219.1
+    }
+   ],
+   "hedge": "RSP",
+   "pass": "night",
+   "first_session": "2026-11-17",
+   "lead": "ACM"
+  },
+  {
+   "id": "2026-11-17-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P03",
+   "proposal_id": "2026-11-17-P03",
+   "conviction": 3,
+   "name": "Payroll and HR software",
+   "setup": "basket_breakout",
+   "direction": "long",
+   "why": "The four payroll processors earn interest on client cash and are paid per paycheck, so a Fed about to hike with hiring holding raises their earnings while it cuts the multiple of the rest of software; three of the four just beat and raised. Workday is left out: it holds no client cash, is the AI-exposed one, and reports on 11-24.",
+   "wrong_if": "The pricing of a 12-9 hike falls below about 60% (CME FedWatch) on data or Fed speech inside the window, or the FOMC minutes on 11-18 read as leaning against a hike; or one of ADP, PAYX, PAYC, PCTY warns on client employment or float income.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 10000,
+   "legs": [
+    {
+     "symbol": "ADP",
+     "side": "long",
+     "shares": 7,
+     "ref_price": 313.43
+    },
+    {
+     "symbol": "PAYX",
+     "side": "long",
+     "shares": 21,
+     "ref_price": 117.77
+    },
+    {
+     "symbol": "PAYC",
+     "side": "long",
+     "shares": 9,
+     "ref_price": 254.75
+    },
+    {
+     "symbol": "PCTY",
+     "side": "long",
+     "shares": 13,
+     "ref_price": 184.46
+    },
+    {
+     "symbol": "IGV",
+     "side": "short",
+     "shares": 100,
+     "ref_price": 99.3
+    }
+   ],
+   "hedge": "IGV",
+   "pass": "night",
+   "first_session": "2026-11-17",
+   "lead": "PCTY"
+  },
+  {
+   "id": "2026-11-17-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P21",
+   "proposal_id": "2026-11-17-P21",
+   "conviction": 3,
+   "name": "HUBS",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "The co-founder came back as CEO on 11-12 and on 11-13 bought $5M of stock at 217, paying about $450K in short-swing penalties to do it; the stock then rose open to close on 1.6x volume on a day the market fell 1.9%, and his promised post on the plan is still to come.",
+   "wrong_if": "HubSpot lowers or withdraws its Q4 or full-year guidance, announces another senior departure beyond Rangan and Bueker or a dilutive deal, or Halligan's plan is published and two or more covering brokers downgrade on it, inside the window.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "HUBS",
+     "side": "long",
+     "shares": 93,
+     "ref_price": 228.5
+    },
+    {
+     "symbol": "IGV",
+     "side": "short",
+     "shares": 215,
+     "ref_price": 99.3
+    }
+   ],
+   "hedge": "IGV",
+   "pass": "late",
+   "first_session": "2026-11-17",
+   "lead": "HUBS"
+  },
+  {
+   "id": "2026-11-17-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P22",
+   "proposal_id": "2026-11-17-P22",
+   "conviction": 3,
+   "name": "Coatings and specialty chemicals",
+   "setup": "basket_breakout",
+   "direction": "long",
+   "why": "Since the Iran war the paint makers trade inversely to oil, their price increases are in and oil has fallen about a quarter in a month and again tonight; the fund on the other side is weighed down by miners with metals falling and the dollar at a 19-month high.",
+   "wrong_if": "The Hormuz reopening talks collapse or shipping through the strait is hit again so that crude jumps 8% or more in a session, or Sherwin-Williams, PPG or Ecolab cuts guidance (including Ecolab lowering targets at its 11-17 investor day), inside the window.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -4.0
+   },
+   "notional": 37500,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -4.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "SHW",
+     "side": "long",
+     "shares": 35,
+     "ref_price": 350.54
+    },
+    {
+     "symbol": "ECL",
+     "side": "long",
+     "shares": 40,
+     "ref_price": 308.41
+    },
+    {
+     "symbol": "PPG",
+     "side": "long",
+     "shares": 102,
+     "ref_price": 121.97
+    },
+    {
+     "symbol": "XLB",
+     "side": "short",
+     "shares": 728,
+     "ref_price": 51.49
+    }
+   ],
+   "hedge": "XLB",
+   "pass": "late",
+   "first_session": "2026-11-17",
+   "lead": "XLB"
+  },
+  {
+   "id": "2026-11-17-S06",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P60",
+   "proposal_id": "2026-11-17-P60",
+   "conviction": 3,
+   "name": "AGNC",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "A leveraged holder of mortgage bonds trading at about 1.1 times a book value that is a month old and shrinking, while its peer Annaly trades at about book; mortgage bonds fell 1.5 points last week with no buyers, the Fed is about to hike again, and it lost its 52-week closing low this morning.",
+   "wrong_if": "AGNC publishes a book value at or above its mid-October mark (about $7.25) or announces a buyback; or mortgage bonds are reported outperforming Treasuries over a week (Mortgage News Daily or the like); or the pricing of a 12-9 hike falls below about 75% on data, the 11-18 minutes or Fed speech, inside the window.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TLT",
+     "side": "long",
+     "shares": 378,
+     "ref_price": 79.29
+    },
+    {
+     "symbol": "AGNC",
+     "side": "short",
+     "shares": 3745,
+     "ref_price": 8.0094
+    }
+   ],
+   "hedge": "TLT",
+   "pass": "morning",
+   "first_session": "2026-11-18",
+   "lead": "AGNC"
+  },
+  {
+   "id": "2026-11-17-S07",
+   "book": "dynamic",
+   "source": "proposal 2026-11-17-P73",
+   "proposal_id": "2026-11-17-P73",
+   "conviction": 3,
+   "name": "BILL",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "The FT reports TPG is nearing a take-private that could be agreed in the coming days, at a company three activists have pushed to sell for a year; the stock is up only 9% on it, which prices a lot of doubt, and the close before the report rested on a strong quarter rather than on the rumor.",
+   "wrong_if": "BILL, TPG or a major outlet (FT, Bloomberg, Reuters, WSJ) says the talks have ended or stalled; or a deal is announced at or below about $62 a share; or the 11-20 close passes with no agreement and no fresh report that talks continue.",
+   "entry_date": "2026-11-17",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "BILL",
+     "side": "long",
+     "shares": 295,
+     "ref_price": 63.225
+    }
+   ],
+   "hedge": null,
+   "pass": "midday",
+   "first_session": "2026-11-18",
+   "lead": "BILL"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-16T20:41:03-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ACM": 77.45,
+    "ADP": 313.43,
+    "ADPT": 27.87,
+    "AMGN": 464.15,
+    "ARKK": 71.69,
+    "ARMK": 55.52,
+    "BBWI": 19.36,
+    "BDX": 216.47,
+    "BIIB": 251.65,
+    "BMRN": 57.99,
+    "CHD": 114.74,
+    "CI": 300.16,
+    "CNC": 74.77,
+    "ED": 120.45,
+    "ELV": 446.28,
+    "GH": 147.54,
+    "GHC": 1291.3,
+    "GILD": 167.58,
+    "HRL": 23.19,
+    "HUM": 457.99,
+    "IBB": 208.6,
+    "IDCC": 276.4,
+    "IGV": 99.3,
+    "IHI": 57.55,
+    "ITB": 93.34,
+    "IYT": 84.2,
+    "MDY": 662.97,
+    "MOH": 232.95,
+    "NEO": 15.41,
+    "NTRA": 294.69,
+    "OSCR": 31.44,
+    "PAYC": 254.75,
+    "PAYX": 117.77,
+    "PCG": 13.6664,
+    "PCTY": 184.46,
+    "RCAT": 2.6054,
+    "REGN": 946.0,
+    "RSP": 219.1,
+    "SPY": 740.18,
+    "STWD": 11.74,
+    "TEM": 66.9768,
+    "TSCO": 37.8873,
+    "TWST": 103.5,
+    "UNH": 407.785,
+    "VRTX": 537.79,
+    "XAR": 222.52,
+    "XBI": 146.01,
+    "XLP": 92.73,
+    "XLU": 44.09,
+    "XLV": 188.2,
+    "XRT": 89.59
+   }
+  },
+  "late": {
+   "at": "2026-11-16T23:23:29-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ACGL": 110.89,
+    "AIG": 82.75,
+    "AIZ": 323.8,
+    "ALL": 270.43,
+    "APTV": 37.8,
+    "ARWR": 44.21,
+    "AXON": 307.05,
+    "AXP": 318.23,
+    "BAC": 50.033,
+    "BRK B": 591.066,
+    "C": 121.55,
+    "CAH": 283.85,
+    "CB": 382.0,
+    "CHD": 114.74,
+    "CHRW": 134.67,
+    "CHTR": 138.95,
+    "CIBR": 93.0,
+    "CINF": 191.33,
+    "CL": 100.99,
+    "CLX": 110.05,
+    "CMCSA": 25.6,
+    "CMI": 433.25,
+    "COF": 193.13,
+    "CVI": 39.12,
+    "DDOG": 172.5,
+    "ECL": 308.41,
+    "EG": 433.24,
+    "EW": 107.11,
+    "EXPD": 195.34,
+    "F": 11.5701,
+    "FDX": 327.2112,
+    "GM": 83.5,
+    "HIG": 137.82,
+    "HUBS": 228.5,
+    "IGV": 99.3,
+    "IHI": 57.55,
+    "JPM": 337.8,
+    "KIE": 66.06,
+    "KMB": 111.3,
+    "L": 111.84,
+    "NOW": 99.178,
+    "PG": 172.9,
+    "PGR": 237.33,
+    "PNC": 229.61,
+    "PPG": 121.97,
+    "ROL": 39.11,
+    "RSG": 255.56,
+    "RSP": 219.1,
+    "SHW": 350.54,
+    "SPY": 740.18,
+    "SYF": 71.5147,
+    "T": 22.35,
+    "TFC": 49.4645,
+    "TMUS": 169.58,
+    "TRV": 403.06,
+    "UPS": 111.5124,
+    "USB": 60.43,
+    "UUP": 29.6,
+    "VLTO": 120.31,
+    "VZ": 46.33,
+    "WFC": 84.65,
+    "WM": 244.33,
+    "WRB": 79.0513,
+    "XBI": 146.01,
+    "XLB": 51.49,
+    "XLC": 106.82,
+    "XLF": 58.11,
+    "XLI": 165.66,
+    "XLP": 92.73,
+    "XLY": 118.15,
+    "XOP": 179.63
+   }
+  },
+  "late2": {
+   "at": "2026-11-17T01:38:53-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "BABA": 90.92,
+    "CBOE": 377.0,
+    "CHTR": 138.95,
+    "CORT": 69.22,
+    "CRCL": 57.45,
+    "EXPO": 88.18,
+    "FIS": 28.42,
+    "FXI": 33.2,
+    "GEF": 69.39,
+    "HIMS": 18.54,
+    "HWC": 64.69,
+    "IBIT": 36.52,
+    "IHI": 57.55,
+    "ITB": 93.34,
+    "KBE": 66.4664,
+    "KIE": 66.06,
+    "MCK": 1105.04,
+    "MGNI": 28.5,
+    "MIDD": 136.09,
+    "MSI": 534.24,
+    "OGS": 83.9935,
+    "OPCH": 31.71,
+    "PAVE": 51.98,
+    "QQQ": 662.3339,
+    "SPY": 740.18,
+    "STE": 261.91,
+    "XBI": 146.01,
+    "XLU": 44.09
+   }
+  },
+  "morning": {
+   "at": "2026-11-17T10:15:37-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ABBV": 292.135,
+    "AGNC": 8.0094,
+    "AMGN": 459.17,
+    "BIIB": 250.88,
+    "BMRN": 57.4,
+    "CHD": 114.035,
+    "CL": 100.8,
+    "CLX": 110.2,
+    "CSIQ": 8.3399,
+    "ECL": 311.4075,
+    "FSLR": 157.46,
+    "FXI": 33.025,
+    "GILD": 169.7,
+    "INCY": 119.285,
+    "IONQ": 25.16,
+    "JD": 25.775,
+    "KMB": 110.45,
+    "NXT": 84.96,
+    "PG": 173.1101,
+    "PLNT": 61.325,
+    "PPG": 122.775,
+    "QBTS": 8.2502,
+    "QQQ": 659.405,
+    "REGN": 956.58,
+    "RGTI": 8.585,
+    "SHLS": 7.47,
+    "SHW": 353.41,
+    "SMCI": 24.4,
+    "SPY": 737.24,
+    "TE": 1.305,
+    "TLT": 79.29,
+    "URA": 30.08,
+    "USAR": 6.808,
+    "VLTO": 119.76,
+    "VRTX": 531.59,
+    "XBI": 144.53,
+    "XLB": 51.775,
+    "XLF": 57.74,
+    "XLK": 163.4,
+    "XLP": 92.515,
+    "XLU": 43.93
+   }
+  },
+  "midday": {
+   "at": "2026-11-17T13:13:51-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "AA": 37.37,
+    "AAOI": 43.945,
+    "ADP": 309.41,
+    "ADPT": 28.275,
+    "ARKK": 70.55,
+    "AVAV": 106.075,
+    "AVEX": 13.67,
+    "BILL": 63.225,
+    "CHRW": 137.28,
+    "CIBR": 91.36,
+    "CMC": 59.105,
+    "COF": 187.66,
+    "CRM": 195.63,
+    "CSIQ": 7.865,
+    "DIA": 508.18,
+    "EXPD": 191.565,
+    "FDX": 320.5,
+    "FRT": 113.37,
+    "FSLR": 153.17,
+    "GH": 143.03,
+    "HGV": 45.55,
+    "HOOD": 68.08,
+    "IBIT": 35.975,
+    "IGV": 95.635,
+    "IJR": 137.725,
+    "ITB": 92.795,
+    "IWM": 269.9001,
+    "JPM": 330.0,
+    "KIM": 25.66,
+    "KTOS": 31.29,
+    "MNDY": 75.55,
+    "MSFT": 502.0,
+    "NEO": 15.07,
+    "NTNX": 56.53,
+    "NTRA": 280.99,
+    "NXT": 82.155,
+    "O": 58.325,
+    "ONDS": 4.38,
+    "PAVE": 51.844,
+    "PAYC": 251.47,
+    "PAYX": 115.23,
+    "PCTY": 179.8937,
+    "QQQ": 653.66,
+    "QUBT": 5.02,
+    "RCAT": 2.36,
+    "REG": 76.14,
+    "SHLS": 7.405,
+    "SMH": 454.445,
+    "SNDK": 786.02,
+    "SPG": 231.825,
+    "SPY": 731.225,
+    "TAN": 38.535,
+    "TE": 1.27,
+    "TEM": 63.09,
+    "TWST": 107.64,
+    "UMAC": 10.14,
+    "UPS": 110.725,
+    "URA": 30.055,
+    "UUUU": 5.875,
+    "WDAY": 185.7,
+    "XBI": 145.165,
+    "XLF": 57.2743,
+    "XLI": 164.78,
+    "XLK": 161.64,
+    "XLRE": 43.902,
+    "XLU": 43.765,
+    "XLV": 186.03,
+    "XME": 89.4,
+    "ZS": 185.5825
+   }
+  }
+ },
+ "exits": [],
+ "runs": [
+  {
+   "at": "2026-11-16T20:41:03-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-17-S01",
+    "2026-11-17-S02",
+    "2026-11-17-S03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "ARKK",
+     "action": "BUY",
+     "shares": 139,
+     "kind": "LMT",
+     "limit": 72.37,
+     "venue": "overnight",
+     "ref_price": 72.01,
+     "priced_on": "gateway bid/ask",
+     "bid": 70.8,
+     "ask": 72.01,
+     "spread_pct": 1.695,
+     "order_id": 66,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 3838,
+     "kind": "LMT",
+     "limit": 2.65,
+     "venue": "overnight",
+     "ref_price": 2.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.66,
+     "ask": 2.69,
+     "spread_pct": 1.121,
+     "order_id": 68,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 68: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.2%, RSP 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 13.9%, PAYX 14.0%, PAYC 30.8%, PCTY 32.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: BUY 139 ARKK went in with a message from the gateway: Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-17-S01: SELL 3838 RCAT went in with a message from the gateway: Warning 2109, reqId 68: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T20:57:02-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 3738,
+     "kind": "LMT",
+     "limit": 2.64,
+     "venue": "overnight",
+     "ref_price": 2.65,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.65,
+     "ask": 2.69,
+     "spread_pct": 1.498,
+     "order_id": 73,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 73: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%, RSP 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 13.9%, PAYX 13.9%, PAYC 30.8%, PCTY 32.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 3738 RCAT went in with a message from the gateway: Warning 2109, reqId 73: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T21:12:57-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 3238,
+     "kind": "LMT",
+     "limit": 2.64,
+     "venue": "overnight",
+     "ref_price": 2.65,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.65,
+     "ask": 2.7,
+     "spread_pct": 1.869,
+     "order_id": 78,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 78: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%, RSP 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 32.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 3238 RCAT went in with a message from the gateway: Warning 2109, reqId 78: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T21:28:51-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S01 RCAT: spread wider than 2% (RCAT 2.6%), so that leg waits for the next try.",
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%, RSP 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%, IGV 2.1%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-16T21:44:07-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 1103,
+     "kind": "LMT",
+     "limit": 2.68,
+     "venue": "overnight",
+     "ref_price": 2.69,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.69,
+     "ask": 2.71,
+     "spread_pct": 0.741,
+     "order_id": 83,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 83: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%, RSP 2.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 1103 RCAT went in with a message from the gateway: Warning 2109, reqId 83: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T22:00:02-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 903,
+     "kind": "LMT",
+     "limit": 2.65,
+     "venue": "overnight",
+     "ref_price": 2.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.66,
+     "ask": 2.71,
+     "spread_pct": 1.862,
+     "order_id": 88,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 88: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%, RSP 2.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 903 RCAT went in with a message from the gateway: Warning 2109, reqId 88: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T22:15:57-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 403,
+     "kind": "LMT",
+     "limit": 2.69,
+     "venue": "overnight",
+     "ref_price": 2.7,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.7,
+     "ask": 2.72,
+     "spread_pct": 0.738,
+     "order_id": 93,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 93: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.8%, RSP 2.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 403 RCAT went in with a message from the gateway: Warning 2109, reqId 93: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T22:31:52-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 1,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "symbol": "RCAT",
+     "action": "SELL",
+     "shares": 403,
+     "kind": "LMT",
+     "limit": 2.66,
+     "venue": "overnight",
+     "ref_price": 2.67,
+     "priced_on": "gateway bid/ask",
+     "bid": 2.67,
+     "ask": 2.71,
+     "spread_pct": 1.487,
+     "order_id": 98,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 98: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.9%, RSP 2.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S01: SELL 403 RCAT went in with a message from the gateway: Warning 2109, reqId 98: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ]
+  },
+  {
+   "at": "2026-11-16T22:37:38-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.9%, RSP 2.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 13.8%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-16T22:52:53-05:00"
+  },
+  {
+   "at": "2026-11-16T23:08:08-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: no quote for ACM or RSP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ACM": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "RSP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T23:23:29-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "late"
+   ],
+   "new": [
+    "2026-11-17-S04",
+    "2026-11-17-S05"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: no quote for ACM or RSP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: no quote for HUBS or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: no quote for SHW or ECL or PPG or XLB from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ACM": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ECL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "HUBS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PPG": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "RSP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SHW": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLB": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T23:26:44-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: no quote for ACM or RSP from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: no quote for HUBS or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: no quote for SHW or ECL or PPG or XLB from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ACM": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ECL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "HUBS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PPG": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "RSP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SHW": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLB": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-16T23:28:56-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 32.1%, ECL 17.3%, PPG 31.5%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-16T23:44:15-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 1.5% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 1.5% (ADP 3.0%, PAYX 14.1%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 1.5% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 1.5% (SHW 32.1%, ECL 17.3%, PPG 31.5%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-16T23:59:32-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 32.1%, ECL 17.3%, PPG 31.5%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T00:14:48-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 30.8%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 17.3%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T00:30:25-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 30.8%, PCTY 21.8%, IGV 2.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%, IGV 2.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 17.3%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-17T00:45:42-05:00"
+  },
+  {
+   "at": "2026-11-17T01:00:59-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 14.5%, PCTY 13.7%, IGV 3.9%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%, IGV 3.9%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 17.3%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T01:16:02-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.21,
+     "venue": "overnight",
+     "ref_price": 76.83,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.55,
+     "ask": 76.83,
+     "spread_pct": 0.365,
+     "order_id": 66,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 14.1%, PAYC 14.5%, PCTY 13.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 17.3%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S02: BUY 129 ACM went in with a message from the gateway: Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T01:31:44-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 14.5%, PCTY 13.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 15.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 11.2%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T01:38:53-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "late2"
+   ],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 14.5%, PCTY 13.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 15.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 11.2%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T01:54:14-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 14.5%, PCTY 13.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 15.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 11.2%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T02:09:32-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 28.6%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 15.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 8.2%, PPG 16.1%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T02:24:50-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 28.6%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 16.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 8.3%, PPG 16.8%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T02:40:08-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.2%, PAYC 28.6%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.9%, ECL 8.3%, PPG 16.8%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T02:55:23-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.5%, PAYC 28.6%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 14.2%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 3.0%, ECL 8.3%, PPG 15.4%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T03:10:40-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.5%, PAYC 16.7%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 12.5%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 3.0%, ECL 8.3%, PPG 15.4%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T03:25:56-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 2.0%, PAYX 8.5%, PAYC 16.7%, PCTY 21.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 6.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 3.0%, ECL 8.3%, PPG 15.4%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T03:41:11-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 5.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.0%, PAYX 8.5%, PAYC 16.7%, PCTY 21.8%, IGV 3.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 6.0%, IGV 3.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 3.0%, ECL 8.3%, PPG 15.4%, XLB 4.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T04:00:30-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S02 ACM: spread wider than 2% (ACM 3.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 9.0%, PAYC 24.9%, PCTY 5.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 3.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 2.5%, ECL 6.2%, PPG 2.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T04:15:46-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 71,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.6%, PAYX 10.1%, PAYC 22.1%, PCTY 5.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 3.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 7.3%, ECL 4.6%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T04:31:10-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 76,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 6.6%, PAYC 22.1%, PCTY 5.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.7%, ECL 4.5%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T04:46:35-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 81,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 6.8%, PAYC 11.9%, PCTY 5.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.5%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.8%, ECL 4.6%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T05:02:00-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 86,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 8.3%, PAYC 11.5%, PCTY 5.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.8%, ECL 3.1%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T05:17:26-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 91,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 8.3%, PCTY 44.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.8%, ECL 3.0%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T05:32:51-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 96,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 6.5%, PCTY 44.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.8%, ECL 3.0%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T05:48:17-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 101,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "symbol": "HUBS",
+     "action": "BUY",
+     "shares": 93,
+     "kind": "LMT",
+     "limit": 232.57,
+     "venue": "extended",
+     "ref_price": 231.41,
+     "priced_on": "gateway bid/ask",
+     "bid": 227.25,
+     "ask": 231.41,
+     "spread_pct": 1.814,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 103,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 6.5%, PCTY 44.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.2%, ECL 3.0%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-17T06:03:42-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 108,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "symbol": "HUBS",
+     "action": "BUY",
+     "shares": 93,
+     "kind": "LMT",
+     "limit": 232.57,
+     "venue": "extended",
+     "ref_price": 231.41,
+     "priced_on": "gateway bid/ask",
+     "bid": 227.25,
+     "ask": 231.41,
+     "spread_pct": 1.814,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 110,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 4.7%, PCTY 44.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.7%, ECL 2.9%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-17T06:19:06-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 115,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "symbol": "HUBS",
+     "action": "BUY",
+     "shares": 93,
+     "kind": "LMT",
+     "limit": 232.57,
+     "venue": "extended",
+     "ref_price": 231.41,
+     "priced_on": "gateway bid/ask",
+     "bid": 227.25,
+     "ask": 231.41,
+     "spread_pct": 1.814,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 117,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 5.0%, PAYC 22.1%, PCTY 44.3%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.1%, ECL 4.7%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-17T06:34:31-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 122,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 4.3%, PAYX 5.0%, PAYC 22.1%, PCTY 44.3%, IGV 2.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.3%, IGV 2.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.1%, ECL 4.9%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T06:49:56-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 77.99,
+     "venue": "extended",
+     "ref_price": 77.6,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.6,
+     "spread_pct": 0.841,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 127,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.9%, PAYX 11.4%, PAYC 22.1%, PCTY 44.3%, IGV 3.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 2.3%, IGV 3.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 6.8%, ECL 4.9%, PPG 7.2%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-17T07:05:20-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "ACM",
+     "action": "BUY",
+     "shares": 129,
+     "kind": "LMT",
+     "limit": 78.14,
+     "venue": "extended",
+     "ref_price": 77.75,
+     "priced_on": "gateway bid/ask",
+     "bid": 76.95,
+     "ask": 77.75,
+     "spread_pct": 1.034,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 132,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "symbol": "RSP",
+     "action": "SELL",
+     "shares": 45,
+     "kind": "LMT",
+     "limit": 217.26,
+     "venue": "extended",
+     "ref_price": 218.35,
+     "priced_on": "gateway bid/ask",
+     "bid": 218.35,
+     "ask": 219.5,
+     "spread_pct": 0.525,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 135,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.9%, PAYX 3.0%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 5.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 5.1%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-17T07:20:55-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 3.9%, PAYX 2.6%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.6%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 5.1%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T07:36:15-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 2.6%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 7.2%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T07:51:35-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 3.0%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 7.2%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T08:06:51-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (ADP 2.6%, PAYX 3.9%, PAYC 15.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 7.2%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T08:22:06-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 3.9%, PAYC 15.0%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 4.1%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 5.0%, ECL 2.6%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T08:37:21-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 3.9%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S04 HUBS: spread wider than 2% (HUBS 3.9%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 4.1%, PPG 3.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T08:52:39-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S04",
+     "symbol": "HUBS",
+     "action": "BUY",
+     "shares": 93,
+     "kind": "LMT",
+     "limit": 230.83,
+     "venue": "extended",
+     "ref_price": 229.68,
+     "priced_on": "gateway bid/ask",
+     "bid": 225.45,
+     "ask": 229.68,
+     "spread_pct": 1.859,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 140,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "symbol": "IGV",
+     "action": "SELL",
+     "shares": 215,
+     "kind": "LMT",
+     "limit": 98.01,
+     "venue": "extended",
+     "ref_price": 98.5,
+     "priced_on": "gateway bid/ask",
+     "bid": 98.5,
+     "ask": 98.86,
+     "spread_pct": 0.365,
+     "good_till": "20261117 09:25:00 US/Eastern",
+     "order_id": 143,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 3.9%, PAYC 15.0%, PCTY 18.8%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (SHW 3.0%, PPG 3.5%), so the whole trade waits for the next try."
+   ],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-17T09:08:10-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: spread wider than 2% (PAYX 3.4%, PAYC 5.2%, PCTY 4.7%), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: spread wider than 2% (PPG 3.1%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T10:15:37-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-17-S06"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: no quote for SHW or ECL or PPG or XLB from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S06 AGNC: no quote for TLT or AGNC from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "AGNC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ECL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PPG": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SHW": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TLT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLB": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-17T10:22:55-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: no quote for SHW or ECL or PPG or XLB from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S06 AGNC: no quote for TLT or AGNC from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "AGNC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ECL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PPG": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SHW": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TLT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLB": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-17T10:27:52-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S05 Coatings and specialty chemicals: no quote for SHW or ECL or PPG or XLB from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S06 AGNC: no quote for TLT or AGNC from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "AGNC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "ECL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PPG": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "SHW": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "TLT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XLB": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-17T10:43:21-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PCTY",
+     "action": "BUY",
+     "shares": 13,
+     "kind": "LMT",
+     "limit": 181.02,
+     "venue": "regular",
+     "ref_price": 180.12,
+     "priced_on": "gateway bid/ask",
+     "bid": 179.39,
+     "ask": 180.12,
+     "spread_pct": 0.406,
+     "order_id": 66,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "symbol": "XLB",
+     "action": "SELL",
+     "shares": 728,
+     "kind": "LMT",
+     "limit": 51.38,
+     "venue": "regular",
+     "ref_price": 51.64,
+     "priced_on": "gateway bid/ask",
+     "bid": 51.64,
+     "ask": 51.65,
+     "spread_pct": 0.019,
+     "order_id": 68,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "symbol": "AGNC",
+     "action": "SELL",
+     "shares": 3745,
+     "kind": "LMT",
+     "limit": 7.93,
+     "venue": "regular",
+     "ref_price": 7.97,
+     "priced_on": "gateway bid/ask",
+     "bid": 7.97,
+     "ask": 7.98,
+     "spread_pct": 0.125,
+     "order_id": 70,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "ADP",
+     "action": "BUY",
+     "shares": 7,
+     "kind": "LMT",
+     "limit": 310.94,
+     "venue": "regular",
+     "ref_price": 309.39,
+     "priced_on": "gateway bid/ask",
+     "bid": 309.05,
+     "ask": 309.39,
+     "spread_pct": 0.11,
+     "order_id": 73,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PAYX",
+     "action": "BUY",
+     "shares": 21,
+     "kind": "LMT",
+     "limit": 116.72,
+     "venue": "regular",
+     "ref_price": 116.14,
+     "priced_on": "gateway bid/ask",
+     "bid": 115.94,
+     "ask": 116.14,
+     "spread_pct": 0.172,
+     "order_id": 75,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PAYC",
+     "action": "BUY",
+     "shares": 9,
+     "kind": "LMT",
+     "limit": 249.85,
+     "venue": "regular",
+     "ref_price": 248.61,
+     "priced_on": "gateway bid/ask",
+     "bid": 247.6,
+     "ask": 248.61,
+     "spread_pct": 0.407,
+     "order_id": 77,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "IGV",
+     "action": "SELL",
+     "shares": 100,
+     "kind": "LMT",
+     "limit": 94.61,
+     "venue": "regular",
+     "ref_price": 95.09,
+     "priced_on": "gateway bid/ask",
+     "bid": 95.09,
+     "ask": 95.12,
+     "spread_pct": 0.032,
+     "order_id": 79,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "symbol": "SHW",
+     "action": "BUY",
+     "shares": 35,
+     "kind": "LMT",
+     "limit": 353.77,
+     "venue": "regular",
+     "ref_price": 352.01,
+     "priced_on": "gateway bid/ask",
+     "bid": 351.45,
+     "ask": 352.01,
+     "spread_pct": 0.159,
+     "order_id": 81,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "symbol": "ECL",
+     "action": "BUY",
+     "shares": 40,
+     "kind": "LMT",
+     "limit": 311.67,
+     "venue": "regular",
+     "ref_price": 310.12,
+     "priced_on": "gateway bid/ask",
+     "bid": 309.61,
+     "ask": 310.12,
+     "spread_pct": 0.165,
+     "order_id": 83,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "symbol": "PPG",
+     "action": "BUY",
+     "shares": 102,
+     "kind": "LMT",
+     "limit": 122.7,
+     "venue": "regular",
+     "ref_price": 122.09,
+     "priced_on": "gateway bid/ask",
+     "bid": 121.87,
+     "ask": 122.09,
+     "spread_pct": 0.18,
+     "order_id": 85,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "symbol": "TLT",
+     "action": "BUY",
+     "shares": 378,
+     "kind": "LMT",
+     "limit": 80.06,
+     "venue": "regular",
+     "ref_price": 79.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 79.65,
+     "ask": 79.66,
+     "spread_pct": 0.013,
+     "order_id": 87,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-17T13:13:51-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-17-S07"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S07",
+     "symbol": "BILL",
+     "action": "BUY",
+     "shares": 295,
+     "kind": "LMT",
+     "limit": 63.6,
+     "venue": "regular",
+     "ref_price": 63.28,
+     "priced_on": "gateway bid/ask",
+     "bid": 63.17,
+     "ask": 63.28,
+     "spread_pct": 0.174,
+     "order_id": 66,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  }
+ ],
+ "last_attempt": "2026-11-17T13:13:51-05:00"
+}

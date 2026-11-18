@@ -1,0 +1,143 @@
+{
+ "session": "2026-11-17",
+ "passes": [
+  {
+   "pass": "late",
+   "at": "2026-11-16T23:23:24.147801-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Entered tonight; no order, award or change to the Steyr bid has been announced since the report, and broker target cuts are due Tuesday morning."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Not filled because overnight spreads in ACM and RSP are wider than 2%; the price has not moved since the verdict (77.45 at 7:00 PM CT) and the call is at 7:00 AM CT, so keep trying."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Not filled because overnight spreads in the four payroll names are far wider than 2%; hike pricing is unchanged (about 91% for 12-9) and none of the four has moved since the close, so keep trying."
+    }
+   ]
+  },
+  {
+   "pass": "late2",
+   "at": "2026-11-17T01:37:58.177146-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Session 1 of 4, -21 bp. A search at about 12:40 AM CT found no Ukraine order, US award or change to the Steyr bid since the report; nothing has changed."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled. The gateway's quote at 12:16 AM CT was 76.55 bid, 76.83 ask against 77.45 at the verdict, so it has not run away from the book; the call is at 7:00 AM CT and nothing new is out."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled on overnight spreads of 3% to 14% in the four names. A December hike is still about 90% priced, no processor has warned, and the prices are Monday's closes."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled on a 14% overnight spread in HUBS. Guidance was reaffirmed in the 11-12 filing, and no new departure, deal or downgrade turned up in a search at about 12:40 AM CT."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled on wide overnight spreads. WTI is 85.09, down 0.7%, with no jump on Hormuz, and none of the three has cut guidance; Ecolab's investor day and Home Depot's report come Tuesday."
+    }
+   ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-17T09:55:49.953134-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "RCAT is -30% at 2.46 on about 15x volume; Needham cut its target to $5 and HC Wainwright to $10. No funded Ukraine order, no US award of $25M or more (the first US boat order is two vessels) and the Steyr bid stands with its funding still unexplained."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "On the 7:00 AM CT call both legacy projects were described as on schedule and budget, the FY2027 guide stands and the long-term margin and EPS targets were restated; Baird raised its target to $86 from $65 and no downgrade was found. ACM +12.7% at 81.7."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "HUBS is -6.3% at 217.3 against IGV -2.3%, giving back Monday's gain to Halligan's purchase price, and neither write-up found news for it. Guidance stands, his plan is not out, and there is no new departure or downgrade, so nothing in the wrong_if has happened; the open-to-close buying I leaned on did not carry into a second day."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. A 12-9 hike is priced at 91-97%, retail sales came in firm, the minutes are tomorrow and none of the four has warned; the four are down about as much as IGV this morning, so the spread has not run away from the book."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still waiting to enter. WTI is +1.6% at 87.1, far from an 8% jump, with no collapse in the Hormuz talks reported and no guidance cut; Ecolab's investor day is today and nothing from it was found yet. The three are up 0.6-1.1% against XLB +1.1%, so the spread has not moved away."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-17T13:13:01.188151-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "RCAT is -33% at 2.37 on its worst day in five years; Needham cut its target to $5 and HC Wainwright to $10 and the full-year revenue target is withdrawn. No funded Ukraine order, no US award of $25M or more and no change to the Steyr bid was found by either write-up."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "ACM is +13.5% at 82.3 against RSP -1.0%. The release and call summaries have both legacy projects on the timelines and budgets given before, a first FY2027 guide in line, the 20%+ margin exit for fiscal 2028 restated, target raises from Baird ($86) and BofA ($92.50) and no downgrade found."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A 12-9 hike is priced at about 91-95%, Musalem called for more hikes today, the minutes are tomorrow and none of ADP, Paychex, Paycom or Paylocity has warned; the four are -1.3% to -2.6% against IGV -3.3%. The screen now flags the spread as stretched, which is a risk and not a wrong_if."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "HUBS is -4.4% at 221.7 against IGV -3.3%, closer than this morning but still behind on a day seat-priced software is sold hardest. Guidance was reaffirmed on 11-12, Halligan's plan is not out, and no new departure, deal or downgrade was found, so nothing in the wrong_if has happened."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "WTI is +0.8% at 86.4 after -3% Monday, nowhere near an 8% jump, though tankers are still being hit in the strait; no guidance cut at Sherwin-Williams, PPG or Ecolab was found and nothing from Ecolab's investor day is out yet. The three are -0.3% to -0.9% against XLB -0.2%; Home Depot's weak-housing comments and builder sentiment at 25 are a drag on paint demand worth watching."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AGNC is -2.4% at 7.92 with TLT +0.4%. No book value update or buyback from AGNC since the 10-20 call, no report of mortgage bonds outperforming Treasuries, and a 12-9 hike is still priced at about 91-95% ahead of tomorrow's minutes."
+    }
+   ]
+  }
+ ]
+}

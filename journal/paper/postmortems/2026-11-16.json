@@ -1,0 +1,15 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-16-S01",
+   "proposal_id": "2026-11-16-P01",
+   "name": "CTVA",
+   "setup": "earnings_gap_held",
+   "bps": 307.8,
+   "tag": "right_reason",
+   "what_happened": "Short from about 9.37 after-hours on 2026-11-15, closed at 8.94 on 2026-11-16 (+308 bp) when the owner cleared the account by hand, one session into a six-session plan. On the one day it was open the story ran as written: no company news, no insider buy, no Brazil announcement, no upgrade; Mizuho and KeyBanc cut targets in the morning and the stock made a new low since the spin-off, closing at 9.04, down 4.1%, while FMC was flat, on a day SPY fell 1.9%. The exit was not the plan's, so the plan result (to the stop or the sixth close) is still to come and is the fairer score.",
+   "lesson": "One session is not a test of a six-session thesis; nothing to change yet. What it adds to the gap lesson: a gap that held where a guide given weeks earlier was cut and the natural buyer (the buyback) is blocked kept falling without any new news.",
+   "at": "2026-11-16T20:32:11.091299-05:00"
+  }
+ ]
+}

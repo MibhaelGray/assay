@@ -1,0 +1,755 @@
+{
+ "session": "2026-11-17",
+ "pulled_at": "2026-11-17T16:45:01.870333-05:00",
+ "fills": [
+  {
+   "order_ref": "2026-11-16-S01|CTVA",
+   "symbol": "CTVA",
+   "side": "SLD",
+   "shares": 523.0,
+   "price": 9.38,
+   "commission": 2.717627,
+   "time": "2026-11-16T05:03:07+00:00",
+   "exec_id": "0000e511.6afa3c66.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|SMH",
+   "symbol": "SMH",
+   "side": "SLD",
+   "shares": 20.0,
+   "price": 461.25,
+   "commission": 1.190095,
+   "time": "2026-11-16T20:59:30+00:00",
+   "exec_id": "00025b49.6afec8a3.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|ADBE",
+   "symbol": "ADBE",
+   "side": "BOT",
+   "shares": 5.0,
+   "price": 246.01,
+   "commission": 1.000015,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "0000e0d5.6afb926c.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A03|XLK",
+   "symbol": "XLK",
+   "side": "SLD",
+   "shares": 59.0,
+   "price": 164.56,
+   "commission": 1.200183,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b47.6afacbdd.01.01"
+  },
+  {
+   "order_ref": "2026-11-16-A03|XLK",
+   "symbol": "XLK",
+   "side": "SLD",
+   "shares": 58.0,
+   "price": 164.56,
+   "commission": 1.19679,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b47.6afacbde.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|STX",
+   "symbol": "STX",
+   "side": "BOT",
+   "shares": 3.0,
+   "price": 498.61,
+   "commission": 1.000009,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b49.6afecac2.01.01"
+  },
+  {
+   "order_ref": "2026-11-16-A03|CSCO",
+   "symbol": "CSCO",
+   "side": "BOT",
+   "shares": 104.0,
+   "price": 94.5,
+   "commission": 1.000312,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b44.6afc46dc.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A03|NOVT",
+   "symbol": "NOVT",
+   "side": "BOT",
+   "shares": 80.0,
+   "price": 114.42,
+   "commission": 1.00024,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b45.6afc435a.01.01"
+  },
+  {
+   "order_ref": "2026-11-16-A02|CTVA",
+   "symbol": "CTVA",
+   "side": "BOT",
+   "shares": 1060.0,
+   "price": 9.02,
+   "commission": 5.30318,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b44.6afc480f.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|MU",
+   "symbol": "MU",
+   "side": "BOT",
+   "shares": 2.0,
+   "price": 717.56,
+   "commission": 1.000006,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b45.6afc4460.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|IGV",
+   "symbol": "IGV",
+   "side": "SLD",
+   "shares": 99.0,
+   "price": 99.0,
+   "commission": 1.202198,
+   "time": "2026-11-16T20:59:31+00:00",
+   "exec_id": "00025b45.6afc448e.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|SIMO",
+   "symbol": "SIMO",
+   "side": "BOT",
+   "shares": 11.0,
+   "price": 157.24,
+   "commission": 1.000033,
+   "time": "2026-11-16T20:59:32+00:00",
+   "exec_id": "00025b49.6afecd4a.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|NOW",
+   "symbol": "NOW",
+   "side": "BOT",
+   "shares": 12.0,
+   "price": 99.28,
+   "commission": 1.000036,
+   "time": "2026-11-16T20:59:32+00:00",
+   "exec_id": "00025b45.6afc4540.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|MNDY",
+   "symbol": "MNDY",
+   "side": "BOT",
+   "shares": 15.0,
+   "price": 80.1,
+   "commission": 1.000045,
+   "time": "2026-11-16T20:59:33+00:00",
+   "exec_id": "00025b45.6afc47a0.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|CRM",
+   "symbol": "CRM",
+   "side": "BOT",
+   "shares": 5.0,
+   "price": 215.09,
+   "commission": 1.000015,
+   "time": "2026-11-16T20:59:33+00:00",
+   "exec_id": "00025b44.6afc4b5e.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|SNDK",
+   "symbol": "SNDK",
+   "side": "BOT",
+   "shares": 2.0,
+   "price": 808.01,
+   "commission": 1.000006,
+   "time": "2026-11-16T20:59:33+00:00",
+   "exec_id": "00025b49.6afecf19.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A02|WDC",
+   "symbol": "WDC",
+   "side": "BOT",
+   "shares": 6.0,
+   "price": 280.78,
+   "commission": 1.000018,
+   "time": "2026-11-16T20:59:33+00:00",
+   "exec_id": "00025b47.6afacc9c.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|ASAN",
+   "symbol": "ASAN",
+   "side": "BOT",
+   "shares": 123.0,
+   "price": 9.89,
+   "commission": 1.000369,
+   "time": "2026-11-16T20:59:41+00:00",
+   "exec_id": "0000e0d5.6afb9524.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|WDAY",
+   "symbol": "WDAY",
+   "side": "BOT",
+   "shares": 6.0,
+   "price": 193.99,
+   "commission": 1.000018,
+   "time": "2026-11-16T20:59:41+00:00",
+   "exec_id": "00025b47.6afacbf1.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|TEAM",
+   "symbol": "TEAM",
+   "side": "BOT",
+   "shares": 8.0,
+   "price": 149.94,
+   "commission": 1.000024,
+   "time": "2026-11-16T20:59:41+00:00",
+   "exec_id": "00025b46.6afb21bd.01.01"
+  },
+  {
+   "order_ref": "2026-11-12-A01|HUM",
+   "symbol": "HUM",
+   "side": "SLD",
+   "shares": 22.0,
+   "price": 461.76,
+   "commission": 1.209336,
+   "time": "2026-11-16T20:59:41+00:00",
+   "exec_id": "00025b45.6afc43dd.01.01"
+  },
+  {
+   "order_ref": "2026-11-10-A02|HUBS",
+   "symbol": "HUBS",
+   "side": "BOT",
+   "shares": 6.0,
+   "price": 232.38,
+   "commission": 1.000018,
+   "time": "2026-11-16T20:59:42+00:00",
+   "exec_id": "00025b45.6afc465d.01.01"
+  },
+  {
+   "order_ref": "2026-11-13-A01|XRT",
+   "symbol": "XRT",
+   "side": "SLD",
+   "shares": 110.0,
+   "price": 89.54,
+   "commission": 1.203228,
+   "time": "2026-11-16T21:00:02+00:00",
+   "exec_id": "00025b47.6afacc3b.01.01"
+  },
+  {
+   "order_ref": "2026-11-13-A01|YETI",
+   "symbol": "YETI",
+   "side": "BOT",
+   "shares": 263.0,
+   "price": 38.63,
+   "commission": 1.315789,
+   "time": "2026-11-16T21:00:03+00:00",
+   "exec_id": "00025b47.6afacc40.01.01"
+  },
+  {
+   "order_ref": "cleanup-2026-11-16-S01",
+   "symbol": "CTVA",
+   "side": "BOT",
+   "shares": 141.0,
+   "price": 9.09,
+   "commission": 1.000423,
+   "time": "2026-11-16T21:30:26+00:00",
+   "exec_id": "00025b44.6afc51f7.01.01"
+  },
+  {
+   "order_ref": "cleanup-2026-11-16-S01",
+   "symbol": "CTVA",
+   "side": "BOT",
+   "shares": 150.0,
+   "price": 9.08,
+   "commission": 0.45545,
+   "time": "2026-11-16T21:37:13+00:00",
+   "exec_id": "00025b44.6afc5221.01.01"
+  },
+  {
+   "order_ref": "cleanup-2026-11-16-S01",
+   "symbol": "CTVA",
+   "side": "BOT",
+   "shares": 700.0,
+   "price": 9.08,
+   "commission": 3.5021,
+   "time": "2026-11-16T21:47:48+00:00",
+   "exec_id": "00025b44.6afc52d2.01.01"
+  },
+  {
+   "order_ref": "cleanup-2026-11-16-S01",
+   "symbol": "CTVA",
+   "side": "BOT",
+   "shares": 76.0,
+   "price": 9.08,
+   "commission": 0.380228,
+   "time": "2026-11-16T21:47:48+00:00",
+   "exec_id": "00025b44.6afc52d3.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|ARKK",
+   "symbol": "ARKK",
+   "side": "BOT",
+   "shares": 100.0,
+   "price": 72.09,
+   "commission": 1.0003,
+   "time": "2026-11-17T01:41:37+00:00",
+   "exec_id": "0000e511.6afb9a15.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|ARKK",
+   "symbol": "ARKK",
+   "side": "BOT",
+   "shares": 39.0,
+   "price": 72.1,
+   "commission": 0.000117,
+   "time": "2026-11-17T01:42:00+00:00",
+   "exec_id": "0000e511.6afb9a17.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 2.65,
+   "commission": 1.005759,
+   "time": "2026-11-17T01:54:29+00:00",
+   "exec_id": "0000e511.6afb9a3d.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.65,
+   "commission": 1.011518,
+   "time": "2026-11-17T02:03:23+00:00",
+   "exec_id": "0000e511.6afb9a88.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 300.0,
+   "price": 2.65,
+   "commission": 1.517277,
+   "time": "2026-11-17T02:08:07+00:00",
+   "exec_id": "0000e511.6afb9a9e.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 2.65,
+   "commission": 1.005759,
+   "time": "2026-11-17T02:14:31+00:00",
+   "exec_id": "0000e511.6afb9abd.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 2.64,
+   "commission": 0.005738,
+   "time": "2026-11-17T02:14:31+00:00",
+   "exec_id": "0000e511.6afb9abe.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.64,
+   "commission": 1.011477,
+   "time": "2026-11-17T02:14:31+00:00",
+   "exec_id": "0000e511.6afb9abf.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 250.0,
+   "price": 2.65,
+   "commission": 1.264398,
+   "time": "2026-11-17T02:14:32+00:00",
+   "exec_id": "0000e511.6afb9ac0.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.65,
+   "commission": 1.011518,
+   "time": "2026-11-17T02:14:32+00:00",
+   "exec_id": "0000e511.6afb9ac1.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 250.0,
+   "price": 2.65,
+   "commission": 1.264398,
+   "time": "2026-11-17T02:14:32+00:00",
+   "exec_id": "0000e511.6afb9ac2.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.65,
+   "commission": 1.011518,
+   "time": "2026-11-17T02:14:32+00:00",
+   "exec_id": "0000e511.6afb9ac3.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 250.0,
+   "price": 2.65,
+   "commission": 1.264398,
+   "time": "2026-11-17T02:14:33+00:00",
+   "exec_id": "0000e511.6afb9ac4.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.65,
+   "commission": 1.011518,
+   "time": "2026-11-17T02:14:33+00:00",
+   "exec_id": "0000e511.6afb9ac5.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 185.0,
+   "price": 2.65,
+   "commission": 0.935654,
+   "time": "2026-11-17T02:18:22+00:00",
+   "exec_id": "0000e511.6afb9ad9.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 200.0,
+   "price": 2.65,
+   "commission": 1.011518,
+   "time": "2026-11-17T02:22:04+00:00",
+   "exec_id": "0000e511.6afb9aec.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 2.69,
+   "commission": 1.005841,
+   "time": "2026-11-17T02:44:13+00:00",
+   "exec_id": "0000e511.6afb9b84.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 2.68,
+   "commission": 0.005821,
+   "time": "2026-11-17T02:46:42+00:00",
+   "exec_id": "0000e511.6afb9b9c.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 500.0,
+   "price": 2.66,
+   "commission": 2.528898,
+   "time": "2026-11-17T03:00:07+00:00",
+   "exec_id": "0000e511.6afb9be3.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S01|RCAT",
+   "symbol": "RCAT",
+   "side": "SLD",
+   "shares": 403.0,
+   "price": 2.66,
+   "commission": 2.038292,
+   "time": "2026-11-17T03:37:03+00:00",
+   "exec_id": "0000e511.6afb9d1d.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S02|ACM",
+   "symbol": "ACM",
+   "side": "BOT",
+   "shares": 129.0,
+   "price": 77.75,
+   "commission": 1.000387,
+   "time": "2026-11-17T12:05:25+00:00",
+   "exec_id": "0000e0d5.6afbe98d.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S02|RSP",
+   "symbol": "RSP",
+   "side": "SLD",
+   "shares": 45.0,
+   "price": 218.35,
+   "commission": 1.202545,
+   "time": "2026-11-17T12:06:03+00:00",
+   "exec_id": "00025b49.6afef8ba.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S04|HUBS",
+   "symbol": "HUBS",
+   "side": "BOT",
+   "shares": 93.0,
+   "price": 229.68,
+   "commission": 1.000279,
+   "time": "2026-11-17T13:52:43+00:00",
+   "exec_id": "00025b45.6afc5d37.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S04|IGV",
+   "symbol": "IGV",
+   "side": "SLD",
+   "shares": 215.0,
+   "price": 98.5,
+   "commission": 1.511902,
+   "time": "2026-11-17T13:53:20+00:00",
+   "exec_id": "00025b45.6afc5d39.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|AGNC",
+   "symbol": "AGNC",
+   "side": "SLD",
+   "shares": 45.0,
+   "price": 7.97,
+   "commission": 1.007523,
+   "time": "2026-11-17T15:43:27+00:00",
+   "exec_id": "0000e0d5.6afc5668.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|AGNC",
+   "symbol": "AGNC",
+   "side": "SLD",
+   "shares": 400.0,
+   "price": 7.97,
+   "commission": 1.291873,
+   "time": "2026-11-17T15:43:27+00:00",
+   "exec_id": "0000e0d5.6afc5669.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|AGNC",
+   "symbol": "AGNC",
+   "side": "SLD",
+   "shares": 1900.0,
+   "price": 7.97,
+   "commission": 9.817646,
+   "time": "2026-11-17T15:43:27+00:00",
+   "exec_id": "0000e0d5.6afc566a.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|AGNC",
+   "symbol": "AGNC",
+   "side": "SLD",
+   "shares": 600.0,
+   "price": 7.97,
+   "commission": 3.100309,
+   "time": "2026-11-17T15:43:27+00:00",
+   "exec_id": "0000e0d5.6afc566b.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|AGNC",
+   "symbol": "AGNC",
+   "side": "SLD",
+   "shares": 800.0,
+   "price": 7.97,
+   "commission": 4.133746,
+   "time": "2026-11-17T15:43:27+00:00",
+   "exec_id": "0000e0d5.6afc566c.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|XLB",
+   "symbol": "XLB",
+   "side": "SLD",
+   "shares": 278.0,
+   "price": 51.65,
+   "commission": 1.686623,
+   "time": "2026-11-17T15:43:28+00:00",
+   "exec_id": "00025b47.6afbfc83.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S03|PCTY",
+   "symbol": "PCTY",
+   "side": "BOT",
+   "shares": 13.0,
+   "price": 180.12,
+   "commission": 1.000039,
+   "time": "2026-11-17T15:43:28+00:00",
+   "exec_id": "00025b49.6affd1de.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|XLB",
+   "symbol": "XLB",
+   "side": "SLD",
+   "shares": 450.0,
+   "price": 51.65,
+   "commission": 2.730146,
+   "time": "2026-11-17T15:43:28+00:00",
+   "exec_id": "00025b47.6afbfc84.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S03|ADP",
+   "symbol": "ADP",
+   "side": "BOT",
+   "shares": 7.0,
+   "price": 309.6,
+   "commission": 1.000021,
+   "time": "2026-11-17T15:44:05+00:00",
+   "exec_id": "0000e0d5.6afc56da.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S03|IGV",
+   "symbol": "IGV",
+   "side": "SLD",
+   "shares": 100.0,
+   "price": 95.05,
+   "commission": 1.196103,
+   "time": "2026-11-17T15:44:05+00:00",
+   "exec_id": "00025b45.6afd07b3.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|ECL",
+   "symbol": "ECL",
+   "side": "BOT",
+   "shares": 40.0,
+   "price": 309.77,
+   "commission": 1.00012,
+   "time": "2026-11-17T15:44:06+00:00",
+   "exec_id": "00025b44.6afd50f9.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|SHW",
+   "symbol": "SHW",
+   "side": "BOT",
+   "shares": 35.0,
+   "price": 351.92,
+   "commission": 1.000105,
+   "time": "2026-11-17T15:44:06+00:00",
+   "exec_id": "00025b49.6affd3a8.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S03|PAYC",
+   "symbol": "PAYC",
+   "side": "BOT",
+   "shares": 9.0,
+   "price": 248.57,
+   "commission": 1.000027,
+   "time": "2026-11-17T15:44:06+00:00",
+   "exec_id": "00025b49.6affd3a9.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S06|TLT",
+   "symbol": "TLT",
+   "side": "BOT",
+   "shares": 378.0,
+   "price": 79.63,
+   "commission": 1.891134,
+   "time": "2026-11-17T15:44:06+00:00",
+   "exec_id": "00025b46.6afc1ce3.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S03|PAYX",
+   "symbol": "PAYX",
+   "side": "BOT",
+   "shares": 21.0,
+   "price": 116.19,
+   "commission": 1.000063,
+   "time": "2026-11-17T15:44:07+00:00",
+   "exec_id": "00025b49.6affd3b0.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|PPG",
+   "symbol": "PPG",
+   "side": "BOT",
+   "shares": 2.0,
+   "price": 122.05,
+   "commission": 1.000006,
+   "time": "2026-11-17T15:44:07+00:00",
+   "exec_id": "00025b49.6affd3b1.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S05|PPG",
+   "symbol": "PPG",
+   "side": "BOT",
+   "shares": 100.0,
+   "price": 122.05,
+   "commission": 0.0003,
+   "time": "2026-11-17T15:44:07+00:00",
+   "exec_id": "00025b49.6affd3b2.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S07|BILL",
+   "symbol": "BILL",
+   "side": "BOT",
+   "shares": 100.0,
+   "price": 63.28,
+   "commission": 1.0003,
+   "time": "2026-11-17T18:13:57+00:00",
+   "exec_id": "0000e0d5.6afc903c.01.01"
+  },
+  {
+   "order_ref": "2026-11-17-S07|BILL",
+   "symbol": "BILL",
+   "side": "BOT",
+   "shares": 195.0,
+   "price": 63.28,
+   "commission": 0.475585,
+   "time": "2026-11-17T18:13:57+00:00",
+   "exec_id": "0000e0d5.6afc903d.01.01"
+  }
+ ],
+ "positions": {
+  "AGNC": -3745.0,
+  "XLB": -728.0,
+  "TLT": 378.0,
+  "ACM": 129.0,
+  "PAYX": 21.0,
+  "ADP": 7.0,
+  "HUBS": 93.0,
+  "PCTY": 13.0,
+  "RSP": -45.0,
+  "BILL": 295.0,
+  "PAYC": 9.0,
+  "RCAT": -3838.0,
+  "IGV": -315.0,
+  "ARKK": 139.0,
+  "PPG": 102.0,
+  "SHW": 35.0,
+  "ECL": 40.0
+ },
+ "net_liquidation": 1029663.67,
+ "marks": {
+  "ACM": 80.62000275,
+  "ADP": 305.0,
+  "AGNC": 7.88999985,
+  "ARKK": 71.406456,
+  "BILL": 65.0400009,
+  "ECL": 302.6348572,
+  "HUBS": 216.6100006,
+  "IGV": 96.11494445,
+  "PAYC": 247.82800295,
+  "PAYX": 113.5,
+  "PCTY": 177.47525025,
+  "PPG": 120.79689025,
+  "RCAT": 2.4000001,
+  "RSP": 216.12550355,
+  "SHW": 343.64001465,
+  "TLT": 79.58999635,
+  "XLB": 50.82221605
+ }
+}
