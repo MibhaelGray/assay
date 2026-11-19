@@ -1,0 +1,1313 @@
+{
+ "session": "2026-11-18",
+ "handled": [
+  "night",
+  "morning",
+  "midday"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-18-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P01",
+   "proposal_id": "2026-11-18-P01",
+   "conviction": 3,
+   "name": "NKE",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "The investor day told holders fiscal 2028 earnings fall again and growth waits for fiscal 2029; the stock reversed from +6% to -6% on heavy volume and kept falling after hours, and the estimate and target cuts that follow have not been written yet.",
+   "wrong_if": "Two or more covering brokers upgrade Nike or raise their fiscal 2028 EPS estimates after the investor day, or Nike says fiscal 2028 adjusted EPS will be flat or up, or announces a share buyback, inside the window.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XRT",
+     "side": "long",
+     "shares": 282,
+     "ref_price": 88.4
+    },
+    {
+     "symbol": "NKE",
+     "side": "short",
+     "shares": 709,
+     "ref_price": 35.22
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "night",
+   "first_session": "2026-11-18",
+   "lead": "XRT"
+  },
+  {
+   "id": "2026-11-18-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P02",
+   "proposal_id": "2026-11-18-P02",
+   "conviction": 3,
+   "name": "Nvidia after the print",
+   "setup": "catalyst",
+   "direction": "long",
+   "why": "The first report since Huang resigned beat by about $7B and guided $5B above consensus with about $227B of buyback authorized, on a stock at about 11 times forward earnings after a 28% fall in twenty sessions; the dated legal events fall after the plan ends.",
+   "wrong_if": "The SEC, the DOJ or Commerce announces a formal action, charges or a subpoena naming Nvidia, Nvidia says its 10-Q will be late, the board's probe reports that secrets or export controls were compromised, or two or more brokers downgrade on the print, inside the window.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "NVDA",
+     "side": "long",
+     "shares": 131,
+     "ref_price": 162.94
+    },
+    {
+     "symbol": "SMH",
+     "side": "short",
+     "shares": 44,
+     "ref_price": 478.4692
+    }
+   ],
+   "hedge": "SMH",
+   "pass": "night",
+   "first_session": "2026-11-18",
+   "lead": "SMH"
+  },
+  {
+   "id": "2026-11-18-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P32",
+   "proposal_id": "2026-11-18-P32",
+   "conviction": 3,
+   "name": "TGT",
+   "setup": "breakout",
+   "direction": "long",
+   "why": "Comparable sales +5.6% against about 3.8% on traffic +5%, a guide raised even without the tariff refunds and November running faster, and the stock went from flat before the open to +5% once the call was heard, with broker targets sitting at the price and still to be raised.",
+   "wrong_if": "Walmart on 11-19 lowers its holiday-quarter or full-year guide or says general-merchandise demand weakened in November; or two or more covering brokers downgrade Target after the print; or Target says November sales have fallen below its guide, inside the window.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TGT",
+     "side": "long",
+     "shares": 178,
+     "ref_price": 167.815
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 335,
+     "ref_price": 89.445
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "morning",
+   "first_session": "2026-11-19",
+   "lead": "XRT"
+  },
+  {
+   "id": "2026-11-18-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P33",
+   "proposal_id": "2026-11-18-P33",
+   "conviction": 3,
+   "name": "GDX",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "Gold and silver broke to one-year lows on a Fed that is hiking (Waller this morning: a half point is probably needed), the dollar is at a 19-month high, miners' costs are up 25% so the margin shrinks faster than the metal, and GDX has just lost the October low that the metals had already lost.",
+   "wrong_if": "CME FedWatch pricing of a 12-9 hike falls below about 80% on the minutes, data or Fed speech; or the chair or a governor says a pause is likely or the hiking is nearly done; or the 10-year yield falls back under 4.9% (where it stood before the CPI jump), inside the window.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "GDX",
+     "side": "short",
+     "shares": 249,
+     "ref_price": 74.89
+    }
+   ],
+   "hedge": null,
+   "pass": "morning",
+   "first_session": "2026-11-19",
+   "lead": "GDX"
+  },
+  {
+   "id": "2026-11-18-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P34",
+   "proposal_id": "2026-11-18-P34",
+   "conviction": 3,
+   "name": "TJX",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "why": "Comps +4% against a 2-3% plan and Marmaxx turning up from +1% to +2% answer the one fear that had two brokers downgrading it at the lows last week, the gap has widened since the open on its biggest volume in over a year, and the holders who sold into those downgrades have to come back.",
+   "wrong_if": "Ross on 11-19 reports Q3 comps below its 6-7% guide or guides its holiday quarter down citing weak off-price demand or warm weather; or TJX says November sales have slowed; or two or more covering brokers downgrade TJX after the print, inside the window.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 3,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TJX",
+     "side": "long",
+     "shares": 211,
+     "ref_price": 141.695
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 335,
+     "ref_price": 89.445
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "morning",
+   "first_session": "2026-11-19",
+   "lead": "XRT"
+  },
+  {
+   "id": "2026-11-18-S06",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P50",
+   "proposal_id": "2026-11-18-P50",
+   "conviction": 3,
+   "name": "DIS",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "Day two of the fiscal Q4 beat is a re-rating, not a fade: seven brokers lifted targets to $135-141 on the FY2027 double-digit EPS guide, a 33% dividend raise and a roughly $9B buyback, and the stock is back at its 52-week high on a flat tape.",
+   "wrong_if": "Two or more brokers downgrade on valuation after the print, or Disney trims the FY2027 double-digit EPS guide, the $2.00 dividend or the roughly $9B buyback in a filing or at an investor event, or the trades (Deadline, Variety) report weak early tracking or presales for Avengers: Doomsday.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "DIS",
+     "side": "long",
+     "shares": 244,
+     "ref_price": 122.7
+    },
+    {
+     "symbol": "XLC",
+     "side": "short",
+     "shares": 283,
+     "ref_price": 105.95
+    }
+   ],
+   "hedge": "XLC",
+   "pass": "midday",
+   "first_session": "2026-11-19",
+   "lead": "XLC"
+  },
+  {
+   "id": "2026-11-18-S07",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P51",
+   "proposal_id": "2026-11-18-P51",
+   "conviction": 3,
+   "name": "Refiners",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "why": "Refining margins have roughly halved from the war peak (3-2-1 crack about $80 in late September to about $42) and the stocks are still pricing the record quarter; with crude builds, 95.7% utilization and broker target cuts, refiners keep losing to XLE (energy sector ETF).",
+   "wrong_if": "The 3-2-1 crack spread climbs back above about $50, or the 11-25 EIA report shows gasoline and distillate draws, or an Iran/Hormuz escalation shuts product exports and refiners outrun XLE on it, or two or more brokers upgrade the group on valuation.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLE",
+     "side": "long",
+     "shares": 407,
+     "ref_price": 61.3263
+    },
+    {
+     "symbol": "MPC",
+     "side": "short",
+     "shares": 8,
+     "ref_price": 371.4757
+    },
+    {
+     "symbol": "VLO",
+     "side": "short",
+     "shares": 9,
+     "ref_price": 341.045
+    },
+    {
+     "symbol": "PSX",
+     "side": "short",
+     "shares": 12,
+     "ref_price": 243.54
+    },
+    {
+     "symbol": "PBF",
+     "side": "short",
+     "shares": 50,
+     "ref_price": 61.85
+    },
+    {
+     "symbol": "DINO",
+     "side": "short",
+     "shares": 34,
+     "ref_price": 90.13
+    },
+    {
+     "symbol": "DK",
+     "side": "short",
+     "shares": 51,
+     "ref_price": 60.44
+    },
+    {
+     "symbol": "CVI",
+     "side": "short",
+     "shares": 92,
+     "ref_price": 33.88
+    },
+    {
+     "symbol": "PARR",
+     "side": "short",
+     "shares": 48,
+     "ref_price": 64.57
+    }
+   ],
+   "hedge": "XLE",
+   "pass": "midday",
+   "first_session": "2026-11-19",
+   "lead": "PARR"
+  },
+  {
+   "id": "2026-11-18-S08",
+   "book": "dynamic",
+   "source": "proposal 2026-11-18-P52",
+   "proposal_id": "2026-11-18-P52",
+   "conviction": 3,
+   "name": "SQM",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "SQM missed Q3 on 11-17 and its own release says Q4 realized lithium prices could be substantially lower; it is down 5.7% at new lows while lithium peers are down about 1%, and the broker estimate cuts have not been published yet.",
+   "wrong_if": "Brokers answer the print by holding or raising 2026-27 estimates and two or more upgrade on valuation, or SQM, Albemarle or another major producer says Q4 contract prices are running above Q3, or Chinese lithium carbonate futures rise more than about 10% from the 11-18 level.",
+   "entry_date": "2026-11-18",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "SPY",
+     "side": "long",
+     "shares": 25,
+     "ref_price": 730.3575
+    },
+    {
+     "symbol": "SQM",
+     "side": "short",
+     "shares": 385,
+     "ref_price": 48.52
+    }
+   ],
+   "hedge": "SPY",
+   "pass": "midday",
+   "first_session": "2026-11-19",
+   "lead": "SQM"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-17T20:41:39-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ACGL": 109.22,
+    "AES": 14.9915,
+    "ALL": 270.43,
+    "AMT": 184.0,
+    "APP": 402.4196,
+    "BRK B": 584.09,
+    "CB": 375.0,
+    "CCI": 84.1803,
+    "CFR": 150.26,
+    "CGNX": 49.01,
+    "CIBR": 92.99,
+    "CINF": 188.92,
+    "COIN": 117.9264,
+    "COLM": 75.03,
+    "COPX": 66.1521,
+    "COST": 1109.0,
+    "CSCO": 95.8224,
+    "DIA": 508.58,
+    "DLB": 56.6,
+    "DT": 43.3767,
+    "EG": 426.7163,
+    "FCN": 205.53,
+    "FFIV": 305.15,
+    "GAP": 19.42,
+    "HALO": 95.97,
+    "HIG": 136.22,
+    "HSAI": 12.99,
+    "IBIT": 36.6262,
+    "IFF": 79.43,
+    "IGV": 97.0,
+    "ITB": 92.23,
+    "KIE": 64.9,
+    "KRE": 70.88,
+    "LOPE": 115.23,
+    "MKC": 44.96,
+    "MSTR": 100.39,
+    "NEU": 697.76,
+    "NKE": 35.22,
+    "NOVT": 115.33,
+    "NVDA": 162.94,
+    "NXST": 204.95,
+    "OUST": 31.8325,
+    "PGR": 234.67,
+    "SBAC": 173.93,
+    "SMH": 478.4692,
+    "SPY": 737.5,
+    "TAN": 38.98,
+    "TE": 1.35,
+    "TEAM": 142.98,
+    "TRV": 395.982,
+    "TSN": 64.78,
+    "VNT": 43.15,
+    "WRB": 77.57,
+    "XLC": 105.8,
+    "XLF": 57.18,
+    "XLI": 165.24,
+    "XLK": 166.88,
+    "XLP": 90.9,
+    "XLRE": 43.5,
+    "XLV": 184.5,
+    "XRT": 88.4,
+    "ZBRA": 315.0
+   }
+  },
+  "morning": {
+   "at": "2026-11-18T09:56:00-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "AMCR": 43.565,
+    "AVY": 185.29,
+    "BALL": 64.58,
+    "CCJ": 64.3,
+    "COPX": 60.99,
+    "CSIQ": 8.124,
+    "DIA": 502.89,
+    "EFA": 100.63,
+    "ERO": 24.04,
+    "FCX": 50.98,
+    "FSLR": 154.7816,
+    "GDX": 74.89,
+    "GWRE": 142.65,
+    "HBM": 17.795,
+    "IGV": 95.765,
+    "IP": 32.74,
+    "IREN": 15.42,
+    "IYT": 83.115,
+    "KMI": 31.65,
+    "NBIS": 104.69,
+    "NXT": 79.795,
+    "OKE": 88.5101,
+    "PKG": 245.87,
+    "SCCO": 143.545,
+    "SHLS": 7.165,
+    "SMH": 458.505,
+    "SPY": 730.62,
+    "SW": 41.4,
+    "TE": 1.336,
+    "TECK": 52.32,
+    "TGB": 5.6,
+    "TGT": 167.815,
+    "TJX": 141.695,
+    "TRGP": 290.92,
+    "URA": 30.0,
+    "USO": 138.54,
+    "WMB": 67.59,
+    "XLB": 50.35,
+    "XLE": 62.33,
+    "XLU": 43.495,
+    "XRT": 89.445
+   }
+  },
+  "midday": {
+   "at": "2026-11-18T14:08:15-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ABT": 104.4224,
+    "ADBE": 227.245,
+    "AEM": 159.595,
+    "AMP": 503.365,
+    "APTV": 38.67,
+    "ASAN": 9.265,
+    "AU": 77.93,
+    "AVAV": 101.43,
+    "AVEX": 13.065,
+    "B": 34.17,
+    "BAX": 26.175,
+    "BDX": 216.04,
+    "BHP": 70.195,
+    "BSX": 43.67,
+    "CAH": 278.66,
+    "CI": 285.6325,
+    "CM": 108.35,
+    "CNC": 67.63,
+    "CNQ": 45.355,
+    "COPX": 60.97,
+    "COR": 348.27,
+    "CRH": 92.3175,
+    "CRM": 188.915,
+    "CRWD": 238.7,
+    "CVI": 33.88,
+    "DBX": 35.18,
+    "DIA": 501.71,
+    "DINO": 90.13,
+    "DIS": 122.7,
+    "DK": 60.44,
+    "DOCU": 77.13,
+    "DXCM": 82.025,
+    "ECL": 301.15,
+    "ELV": 403.265,
+    "EW": 104.71,
+    "F": 11.295,
+    "FE": 47.74,
+    "FTNT": 132.53,
+    "GDX": 74.31,
+    "GEHC": 83.355,
+    "GLD": 341.62,
+    "GM": 83.205,
+    "HDB": 26.16,
+    "HUBS": 206.725,
+    "HUM": 392.37,
+    "IBN": 34.905,
+    "IDXX": 700.38,
+    "IGV": 97.09,
+    "ISRG": 425.11,
+    "ITB": 92.77,
+    "KGC": 18.8711,
+    "KIE": 64.83,
+    "KTOS": 30.25,
+    "MCK": 1079.135,
+    "MLM": 517.02,
+    "MNDY": 74.0,
+    "MOH": 210.36,
+    "MPC": 371.4757,
+    "NEM": 103.75,
+    "NICE": 90.14,
+    "NOW": 90.16,
+    "OKTA": 193.415,
+    "ONDS": 4.395,
+    "OSCR": 28.185,
+    "PARR": 64.57,
+    "PBF": 61.85,
+    "PBR": 16.74,
+    "PODD": 140.955,
+    "PPG": 122.745,
+    "PSX": 243.54,
+    "QLYS": 195.84,
+    "RBRK": 109.16,
+    "RCAT": 2.1699,
+    "RIO": 75.88,
+    "RJF": 162.295,
+    "RLI": 71.535,
+    "RMD": 244.845,
+    "RY": 190.485,
+    "S": 23.285,
+    "SAP": 212.81,
+    "SBSW": 7.735,
+    "SCHW": 92.16,
+    "SHEL": 94.355,
+    "SHW": 345.595,
+    "SPY": 730.3575,
+    "SQM": 48.52,
+    "STE": 259.07,
+    "SU": 64.805,
+    "SYK": 318.1,
+    "TD": 116.585,
+    "TEAM": 135.485,
+    "TTE": 86.83,
+    "UMAC": 9.57,
+    "UNH": 351.685,
+    "VALE": 10.055,
+    "VLO": 341.045,
+    "VMC": 278.4325,
+    "XLB": 50.42,
+    "XLC": 105.95,
+    "XLE": 61.3263,
+    "XLF": 56.485,
+    "XLI": 164.6,
+    "XLRE": 43.595,
+    "XLU": 43.615,
+    "XLV": 181.58,
+    "XLY": 119.41,
+    "ZBH": 103.28,
+    "ZS": 200.65
+   }
+  }
+ },
+ "exits": [],
+ "runs": [
+  {
+   "at": "2026-11-17T20:41:39-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-18-S01",
+    "2026-11-18-S02"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S02",
+     "symbol": "SMH",
+     "action": "SELL",
+     "shares": 44,
+     "kind": "LMT",
+     "limit": 464.67,
+     "venue": "overnight",
+     "ref_price": 467.0,
+     "priced_on": "gateway bid/ask",
+     "bid": 467.0,
+     "ask": 468.82,
+     "spread_pct": 0.389,
+     "order_id": 71,
+     "status": "Filled",
+     "note": "Warning 2109, reqId 71: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "symbol": "NVDA",
+     "action": "BUY",
+     "shares": 131,
+     "kind": "LMT",
+     "limit": 160.19,
+     "venue": "overnight",
+     "ref_price": 159.39,
+     "priced_on": "gateway bid/ask",
+     "bid": 159.33,
+     "ask": 159.39,
+     "spread_pct": 0.038,
+     "order_id": 74,
+     "status": "Filled",
+     "note": "Warning 2109, reqId 74: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 23.6%), so the whole trade waits for the next try.",
+    "2026-11-18-S02: SELL 44 SMH went in with a message from the gateway: Warning 2109, reqId 71: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-18-S02: BUY 131 NVDA went in with a message from the gateway: Warning 2109, reqId 74: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-17T20:57:10-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 23.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T21:12:23-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 23.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T21:27:37-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 23.5%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T21:42:50-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 19.8%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T21:58:03-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 19.7%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-17T22:43:43-05:00"
+  },
+  {
+   "at": "2026-11-17T22:58:56-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.6%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-17T23:14:09-05:00"
+  },
+  {
+   "at": "2026-11-17T23:29:23-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 13.1%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-17T23:44:36-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.6%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-17T23:59:49-05:00"
+  },
+  {
+   "at": "2026-11-18T00:15:10-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.7%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-18T01:00:53-05:00"
+  },
+  {
+   "at": "2026-11-18T01:16:06-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.6%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T01:31:20-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.7%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T01:46:33-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.6%), so the whole trade waits for the next try."
+   ],
+   "repeated_until": "2026-11-18T02:47:26-05:00"
+  },
+  {
+   "at": "2026-11-18T03:02:40-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.7%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T03:17:53-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 21.4%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T03:33:06-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 18.7%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T03:48:19-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "warnings": [
+    "2026-11-18-S01 NKE: spread wider than 2% (XRT 7.2%), so the whole trade waits for the next try."
+   ]
+  },
+  {
+   "at": "2026-11-18T04:03:33-05:00",
+   "venue": "extended",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S01",
+     "symbol": "XRT",
+     "action": "BUY",
+     "shares": 282,
+     "kind": "LMT",
+     "limit": 90.29,
+     "venue": "extended",
+     "ref_price": 89.84,
+     "priced_on": "gateway bid/ask",
+     "bid": 88.3,
+     "ask": 89.84,
+     "spread_pct": 1.729,
+     "good_till": "20261118 09:25:00 US/Eastern",
+     "order_id": 79,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "symbol": "NKE",
+     "action": "SELL",
+     "shares": 709,
+     "kind": "LMT",
+     "limit": 35.12,
+     "venue": "extended",
+     "ref_price": 35.3,
+     "priced_on": "gateway bid/ask",
+     "bid": 35.3,
+     "ask": 35.33,
+     "spread_pct": 0.085,
+     "good_till": "20261118 09:25:00 US/Eastern",
+     "order_id": 82,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-18T09:56:00-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-18-S03",
+    "2026-11-18-S04",
+    "2026-11-18-S05"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S03",
+     "symbol": "XRT",
+     "action": "SELL",
+     "shares": 335,
+     "kind": "LMT",
+     "limit": 89.01,
+     "venue": "regular",
+     "ref_price": 89.46,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.46,
+     "ask": 89.5,
+     "spread_pct": 0.045,
+     "order_id": 87,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "symbol": "GDX",
+     "action": "SELL",
+     "shares": 249,
+     "kind": "LMT",
+     "limit": 74.55,
+     "venue": "regular",
+     "ref_price": 74.92,
+     "priced_on": "gateway bid/ask",
+     "bid": 74.92,
+     "ask": 74.93,
+     "spread_pct": 0.013,
+     "order_id": 89,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "symbol": "XRT",
+     "action": "SELL",
+     "shares": 335,
+     "kind": "LMT",
+     "limit": 89.01,
+     "venue": "regular",
+     "ref_price": 89.46,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.46,
+     "ask": 89.5,
+     "spread_pct": 0.045,
+     "order_id": 91,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "symbol": "TGT",
+     "action": "BUY",
+     "shares": 178,
+     "kind": "LMT",
+     "limit": 168.84,
+     "venue": "regular",
+     "ref_price": 168.0,
+     "priced_on": "gateway bid/ask",
+     "bid": 167.78,
+     "ask": 168.0,
+     "spread_pct": 0.131,
+     "order_id": 94,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "symbol": "TJX",
+     "action": "BUY",
+     "shares": 211,
+     "kind": "LMT",
+     "limit": 142.52,
+     "venue": "regular",
+     "ref_price": 141.81,
+     "priced_on": "gateway bid/ask",
+     "bid": 141.72,
+     "ask": 141.81,
+     "spread_pct": 0.063,
+     "order_id": 96,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-18T14:08:15-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-18-S06",
+    "2026-11-18-S07",
+    "2026-11-18-S08"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S06",
+     "symbol": "XLC",
+     "action": "SELL",
+     "shares": 283,
+     "kind": "LMT",
+     "limit": 105.44,
+     "venue": "regular",
+     "ref_price": 105.97,
+     "priced_on": "gateway bid/ask",
+     "bid": 105.97,
+     "ask": 105.98,
+     "spread_pct": 0.009,
+     "order_id": 101,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PARR",
+     "action": "SELL",
+     "shares": 48,
+     "kind": "LMT",
+     "limit": 64.14,
+     "venue": "regular",
+     "ref_price": 64.46,
+     "priced_on": "gateway bid/ask",
+     "bid": 64.46,
+     "ask": 64.6,
+     "spread_pct": 0.217,
+     "order_id": 103,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "symbol": "SQM",
+     "action": "SELL",
+     "shares": 385,
+     "kind": "LMT",
+     "limit": 48.23,
+     "venue": "regular",
+     "ref_price": 48.47,
+     "priced_on": "gateway bid/ask",
+     "bid": 48.47,
+     "ask": 48.59,
+     "spread_pct": 0.247,
+     "order_id": 105,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "symbol": "DIS",
+     "action": "BUY",
+     "shares": 244,
+     "kind": "LMT",
+     "limit": 123.34,
+     "venue": "regular",
+     "ref_price": 122.73,
+     "priced_on": "gateway bid/ask",
+     "bid": 122.7,
+     "ask": 122.73,
+     "spread_pct": 0.024,
+     "order_id": 108,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "XLE",
+     "action": "BUY",
+     "shares": 407,
+     "kind": "LMT",
+     "limit": 61.64,
+     "venue": "regular",
+     "ref_price": 61.33,
+     "priced_on": "gateway bid/ask",
+     "bid": 61.32,
+     "ask": 61.33,
+     "spread_pct": 0.016,
+     "order_id": 110,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "MPC",
+     "action": "SELL",
+     "shares": 8,
+     "kind": "LMT",
+     "limit": 369.43,
+     "venue": "regular",
+     "ref_price": 371.29,
+     "priced_on": "gateway bid/ask",
+     "bid": 371.29,
+     "ask": 371.52,
+     "spread_pct": 0.062,
+     "order_id": 112,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "VLO",
+     "action": "SELL",
+     "shares": 9,
+     "kind": "LMT",
+     "limit": 339.19,
+     "venue": "regular",
+     "ref_price": 340.89,
+     "priced_on": "gateway bid/ask",
+     "bid": 340.89,
+     "ask": 341.14,
+     "spread_pct": 0.073,
+     "order_id": 114,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PSX",
+     "action": "SELL",
+     "shares": 12,
+     "kind": "LMT",
+     "limit": 242.13,
+     "venue": "regular",
+     "ref_price": 243.35,
+     "priced_on": "gateway bid/ask",
+     "bid": 243.35,
+     "ask": 243.73,
+     "spread_pct": 0.156,
+     "order_id": 116,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PBF",
+     "action": "SELL",
+     "shares": 50,
+     "kind": "LMT",
+     "limit": 61.3,
+     "venue": "regular",
+     "ref_price": 61.61,
+     "priced_on": "gateway bid/ask",
+     "bid": 61.61,
+     "ask": 61.86,
+     "spread_pct": 0.405,
+     "order_id": 118,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "DINO",
+     "action": "SELL",
+     "shares": 34,
+     "kind": "LMT",
+     "limit": 89.63,
+     "venue": "regular",
+     "ref_price": 90.08,
+     "priced_on": "gateway bid/ask",
+     "bid": 90.08,
+     "ask": 90.18,
+     "spread_pct": 0.111,
+     "order_id": 120,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "DK",
+     "action": "SELL",
+     "shares": 51,
+     "kind": "LMT",
+     "limit": 59.98,
+     "venue": "regular",
+     "ref_price": 60.28,
+     "priced_on": "gateway bid/ask",
+     "bid": 60.28,
+     "ask": 60.46,
+     "spread_pct": 0.298,
+     "order_id": 122,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "CVI",
+     "action": "SELL",
+     "shares": 92,
+     "kind": "LMT",
+     "limit": 33.68,
+     "venue": "regular",
+     "ref_price": 33.85,
+     "priced_on": "gateway bid/ask",
+     "bid": 33.85,
+     "ask": 33.91,
+     "spread_pct": 0.177,
+     "order_id": 124,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "symbol": "SPY",
+     "action": "BUY",
+     "shares": 25,
+     "kind": "LMT",
+     "limit": 734.14,
+     "venue": "regular",
+     "ref_price": 730.49,
+     "priced_on": "gateway bid/ask",
+     "bid": 730.47,
+     "ask": 730.49,
+     "spread_pct": 0.003,
+     "order_id": 126,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0,
+   "repeated_until": "2026-11-18T14:10:40-05:00"
+  }
+ ],
+ "last_attempt": "2026-11-18T14:10:40-05:00"
+}

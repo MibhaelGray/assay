@@ -1,0 +1,191 @@
+{
+ "session": "2026-11-18",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-17T20:41:07.187885-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Red Cat closed -32% at 2.41 after withdrawing its revenue target; brokers cut targets (Needham to $5, Piper to $6), a law firm opened an inquiry, and no Ukraine order, US award or change to the Steyr bid was found."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AECOM closed +11% at 80.53; the 2027 guide is above consensus, coverage of the call shows no new charge or slip on the two construction projects and no downgrade."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A December hike is about 97% priced after Williams ruled out a half point; none of the four has warned, and Paychex repeated its outlook at a conference today. The minutes are Wednesday 1:00 PM CT."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "HubSpot fell 6.8% against the software fund's 3.3% on no news of its own; guidance stands, Halligan's plan is not out, and no departure, deal or downgrade was found, but it is 4% from its stop."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Crude settled up under 1% and is lower tonight though the Iran talks are stalled and a tanker was hit; no guidance cut from the three was found. What Ecolab said at its investor day could not be found tonight."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AGNC made its lowest close since 2023 at 7.89 with the Treasury fund up; no book value update or buyback, the last stated book is $7.13, and the hike is fully priced."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "BILL closed +12.6% at 64.88 and held after hours; the FT report stands with no denial, no second outlet and no price, and BNP put a takeout at $76-91."
+    }
+   ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-18T09:55:31.093406-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No funded Ukraine order, no US award and no change to the Steyr bid since the 11-16 guidance withdrawal; Piper cut its target to $6 and the stock is down another 5% to a new low today."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 11-17 call kept both legacy projects on schedule and the cash use on forecast, reaffirmed the fiscal 2028 margin target and gave a first fiscal 2027 guide; Baird, KeyBanc and BofA raised targets and no downgrade was found."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A December hike is priced at about 96% (FedWatch via FXStreet, 11-18) and Waller asked for a half point this morning; no warning from ADP, Paychex, Paycom or Paylocity. The minutes at 1:00 PM CT today are the test the midday pass should read."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "None of the named events has happened (guidance was reaffirmed on 11-12, no further departure, no deal, no published plan), but HubSpot fell 6.8% on Tuesday and is down 2.9% today against a software fund down 0.4%: it is trading as the high-beta end of the AI-eats-software selling into the Anthropic listing, which is not what the trade was about."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ecolab raised its long-term targets at the 11-17 investor day (secondary summaries), no cut from Sherwin-Williams or PPG, crude is falling rather than spiking, and the miners' slide in XLB is helping the spread."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No book-value update or buyback from AGNC; the last report on mortgage bonds (Mortgage News Daily, week to 11-13) had them lagging Treasuries, and hike pricing is about 96%."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The FT's 11-17 report that TPG could finalise a deal 'within days' stands; no report of talks stalling, no announced price, and BNP put a takeover at $76-91. The 11-20 close is the date in the wrong_if."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No upgrade and no fiscal 2028 estimate raised since the investor day (Needham cut its fiscal 2028 EPS to $1.22; JPMorgan lifted a target but stayed Underweight); Nike guided fiscal 2028 EPS to decline and no new buyback authorisation was found. The retail fund is up today on Target and TJX, which helps the long leg."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No formal SEC, DOJ or Commerce action naming Nvidia, no finding from the board's probe, and one downgrade on the day (Summit Insights), not two. The 10-Q is to be filed 'in the coming weeks' (a footnote in Tuesday's CFO commentary): late against Nvidia's habit of filing on results day, not against the 12-4 deadline, so the wrong_if has not happened, but the pre-market gain was sold inside 20 minutes and the stock is level with the chip fund."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-18T14:07:36.864843-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Red Cat is down another 9.7% on the withdrawn guidance; no funded Ukraine order, no US award and no change to the Steyr bid has been announced."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AECOM is up 3.3% against RSP up 0.3%; no new charge on legacy projects, no guide cut and no downgrades found."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Payroll names are slightly down while IGV (software ETF) is up 1.5% on cybersecurity, so the pair is losing to the hedge, not to its own story. The Fed minutes came out at 1:00 PM CT: I found no coverage of their content by 1:07 PM CT, but stocks slipped and bonds and gold did not rally, which is not how minutes leaning against a hike would trade; a December hike was about 96% priced going in and no member has warned."
+    },
+    {
+     "trade_id": "2026-11-17-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "HubSpot is down 4.8% in the seat-software selloff and through its stop, which the 2:45 PM CT close will act on; no guidance cut, departure or deal has been reported, so there is no named reason to exit ahead of it."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SHW and PPG are up, XLB is down 0.5% and crude is down 3.8%, the direction the trade wants; no member has cut guidance."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TLT up 0.8% against AGNC down 1.1% after the Fed minutes; no book value update or buyback from AGNC and hike pricing was about 96% going into the minutes."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The FT (11-17) has TPG nearing a take-private within days; no agreement and no report of stalled talks as of 12:35 PM CT, and the 11-20 test in the wrong_if has not come due."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nike is up 2.3% with XRT (retail ETF) up 2.9% on Target and TJX; no upgrades, estimate raises or buyback found since the investor day."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Nvidia beat but did not file its 10-Q with results, a break from its last two quarters, and says it will file in the coming weeks, which is inside the deadline (secondary reports only; no late-filing notice found). That is short of the wrong_if but close to it; no agency action or downgrades found."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Target is up 7.0% on its beat and raise; Walmart reports 11-19 before the open, which is the test in the wrong_if."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "GDX (gold miners ETF) is down 6.6% with gold through $3,800 and no bounce on the Fed minutes; the 10-year is 5.06% and a December hike was about 96% priced going in."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TJX is up 10.5% on its report; Ross reports 11-19, the test in the wrong_if, and no downgrades found."
+    }
+   ]
+  }
+ ]
+}
