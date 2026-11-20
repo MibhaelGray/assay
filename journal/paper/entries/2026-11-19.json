@@ -1,0 +1,1178 @@
+{
+ "session": "2026-11-19",
+ "handled": [
+  "night",
+  "morning"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-19-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P01",
+   "proposal_id": "2026-11-19-P01",
+   "conviction": 3,
+   "name": "LIVN",
+   "setup": "breakout",
+   "direction": "long",
+   "why": "A new 52-week closing high on 1.7x volume two weeks after the third guidance raise of the year, with a dated reason still ahead (epilepsy reimbursement up about 50% from Jan 1) and nothing dated against it inside the window.",
+   "wrong_if": "LivaNova cuts or qualifies the guidance it raised on Nov 4, announces a share or convertible sale, takes a new charge or adverse ruling on the SNIA liability, or two or more brokers downgrade it, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "LIVN",
+     "side": "long",
+     "shares": 317,
+     "ref_price": 94.54
+    },
+    {
+     "symbol": "IHI",
+     "side": "short",
+     "shares": 527,
+     "ref_price": 56.89
+    }
+   ],
+   "hedge": "IHI",
+   "pass": "night",
+   "first_session": "2026-11-19",
+   "lead": "LIVN",
+   "stood_down": "passed: spread wider than 2% (LIVN 34.0%, IHI 19.6%) when it was due to enter",
+   "passed_on_spread": "2026-11-18T20:46:25-05:00"
+  },
+  {
+   "id": "2026-11-19-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P02",
+   "proposal_id": "2026-11-19-P02",
+   "conviction": 3,
+   "name": "GLBE",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "why": "A beat with the Q4 guide above consensus was marked down 9% at the open on margin optics and bought back all day on 5.3x volume to close down 4.5% near the high, with a $446M buyback behind it and the holiday shopping week ahead.",
+   "wrong_if": "Global-e trims the Q4 guide it gave on 11-18, a large merchant or Shopify is reported to be cutting back the relationship, two or more brokers downgrade it on the margin, or the first Black Friday counts (11-27/28) show online sales down on last year.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 7,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "GLBE",
+     "side": "long",
+     "shares": 657,
+     "ref_price": 38.03
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 274,
+     "ref_price": 90.97
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "night",
+   "first_session": "2026-11-19",
+   "lead": "GLBE",
+   "stood_down": "passed: spread wider than 2% (GLBE 33.9%, XRT 30.4%) when it was due to enter",
+   "passed_on_spread": "2026-11-18T20:46:25-05:00"
+  },
+  {
+   "id": "2026-11-19-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P03",
+   "proposal_id": "2026-11-19-P03",
+   "conviction": 3,
+   "name": "HGV",
+   "setup": "breakout",
+   "direction": "long",
+   "why": "A 20-day-high breakout on 1.9x volume with no news, in a stock where a $200M accelerated buyback, a CEO purchase and an activist are buying against short interest near a fifth of the shares.",
+   "wrong_if": "The company or Deutsche Bank ends or cuts the accelerated buyback, the CEO or CAS sells, a broker downgrades it, or Marriott Vacations or Travel + Leisure report a fresh drop in tours or a rise in loan defaults, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "HGV",
+     "side": "long",
+     "shares": 645,
+     "ref_price": 46.45
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-19",
+   "lead": "HGV",
+   "stood_down": "passed: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason when it was due to enter",
+   "passed_on_spread": "2026-11-18T23:20:33-05:00"
+  },
+  {
+   "id": "2026-11-19-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P41",
+   "proposal_id": "2026-11-19-P41",
+   "conviction": 3,
+   "name": "NTES",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "why": "Revenue missed by about 8% with the first year-over-year fall in games in two years, the CEO himself blamed short dramas for taking gaming time and gave no guide, nothing new ships until January 15, and the selling has deepened since the open with Hong Kong and the brokers still to reprice it.",
+   "wrong_if": "NetEase announces a step-up in buybacks or a special dividend; or two or more covering brokers upgrade it after the print; or NetEase pulls Ananta's launch forward or announces another major release before year-end; or the Hong Kong line closes its first session on the print down less than half the ADR's drop, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "FXI",
+     "side": "long",
+     "shares": 931,
+     "ref_price": 32.19
+    },
+    {
+     "symbol": "NTES",
+     "side": "short",
+     "shares": 278,
+     "ref_price": 107.88
+    }
+   ],
+   "hedge": "FXI",
+   "pass": "morning",
+   "first_session": "2026-11-20",
+   "lead": "NTES"
+  },
+  {
+   "id": "2026-11-19-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P42",
+   "proposal_id": "2026-11-19-P42",
+   "conviction": 3,
+   "name": "TU",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "TELUS is in play with a formal review open, a C$19.45 proposal on the table about 24% above the price, a second suitor reported to have hired advisers and a meeting with Quebecor on 11-23, so the next headlines inside the window are more likely to add bidders or price than to end the contest.",
+   "wrong_if": "Quebecor withdraws its proposal or says it will not improve it; or TELUS's board or special committee rejects the proposal and ends the review in favour of standing alone; or BCE publicly denies it is considering a transaction with TELUS; or the Industry minister or the Competition Bureau says a TELUS combination would be blocked, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TU",
+     "side": "long",
+     "shares": 1782,
+     "ref_price": 10.49
+    }
+   ],
+   "hedge": null,
+   "pass": "morning",
+   "first_session": "2026-11-20",
+   "lead": "TU"
+  },
+  {
+   "id": "2026-11-19-S06",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P43",
+   "proposal_id": "2026-11-19-P43",
+   "conviction": 3,
+   "name": "CLX",
+   "setup": "turn",
+   "direction": "short",
+   "why": "An 11-day, 25% run built on an easy-comparison beat, a CEO change and one unconfirmed blog rumor has left Clorox above every broker target while its own guide points to the low end and a flat-to-down next quarter, and it has now turned with staples being sold for tech.",
+   "wrong_if": "Clorox, or a major outlet (Bloomberg, Reuters, WSJ, FT) citing sources, confirms an approach or talks; or two or more covering brokers upgrade Clorox or lift targets above $110; or Clorox raises its fiscal 2027 EPS or organic sales guide, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLP",
+     "side": "long",
+     "shares": 335,
+     "ref_price": 89.505
+    },
+    {
+     "symbol": "CLX",
+     "side": "short",
+     "shares": 285,
+     "ref_price": 104.9
+    }
+   ],
+   "hedge": "XLP",
+   "pass": "morning",
+   "first_session": "2026-11-20",
+   "lead": "CLX"
+  },
+  {
+   "id": "2026-11-19-S07",
+   "book": "dynamic",
+   "source": "proposal 2026-11-19-P44",
+   "proposal_id": "2026-11-19-P44",
+   "conviction": 3,
+   "name": "WMG",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "why": "The 'EPS miss' headline compares GAAP with an adjusted estimate; on the adjusted number Warner beat ($0.55 against about $0.43) with revenue 5% over consensus and a fiscal 2027 outlook of double-digit profit growth, the opening dip was bought on 4x volume, and a bullish analyst base has its notes still to publish with the stock at its 20-day high.",
+   "wrong_if": "Two or more covering brokers downgrade Warner or cut targets below $33 after the print; or Warner or Spotify says their renewal talks have broken down or Warner's catalog is pulled from a major service; or Warner lowers the fiscal 2027 outlook it gave on the call, inside the window.",
+   "entry_date": "2026-11-19",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "WMG",
+     "side": "long",
+     "shares": 909,
+     "ref_price": 32.97
+    }
+   ],
+   "hedge": null,
+   "pass": "morning",
+   "first_session": "2026-11-20",
+   "lead": "WMG"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-18T20:46:25-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ABBV": 285.5,
+    "ALGN": 163.96,
+    "AMGN": 445.72,
+    "ANET": 196.9,
+    "ARMK": 57.61,
+    "ARWR": 43.11,
+    "AXON": 302.1,
+    "AXP": 316.55,
+    "BAC": 49.07,
+    "BIDU": 69.6139,
+    "BIIB": 244.01,
+    "BILI": 11.467,
+    "BMRN": 61.43,
+    "BVN": 22.1,
+    "C": 117.82,
+    "CAH": 278.32,
+    "CMI": 430.0,
+    "COF": 184.3,
+    "COO": 60.75,
+    "COR": 348.31,
+    "CRCL": 54.1081,
+    "CRM": 191.0,
+    "CSCO": 97.8449,
+    "DDOG": 171.7085,
+    "DGX": 259.56,
+    "DIA": 503.97,
+    "EC": 14.1,
+    "FFIV": 322.3,
+    "FIS": 26.87,
+    "FRT": 112.33,
+    "FXI": 32.5637,
+    "GDS": 15.5101,
+    "GDX": 75.28,
+    "GILD": 169.0,
+    "GLBE": 38.03,
+    "HGV": 46.45,
+    "HIMS": 17.2,
+    "HSIC": 85.69,
+    "HWC": 62.05,
+    "IBB": 206.4985,
+    "IBIT": 35.71,
+    "IGV": 99.35,
+    "IHI": 56.89,
+    "INCY": 117.0,
+    "IQV": 257.7111,
+    "JD": 25.12,
+    "JPM": 325.735,
+    "KBE": 64.42,
+    "KIM": 25.66,
+    "LH": 370.78,
+    "LIVN": 94.54,
+    "MCK": 1084.43,
+    "MUFG": 20.11,
+    "NTRA": 289.5,
+    "NXE": 7.29,
+    "O": 58.2,
+    "OTEX": 22.97,
+    "PATH": 11.7988,
+    "PNC": 221.14,
+    "QQQ": 668.65,
+    "REG": 75.18,
+    "REGN": 945.53,
+    "RSP": 216.5,
+    "SLF": 71.32,
+    "SLV": 41.3361,
+    "SOLV": 86.48,
+    "SPG": 231.38,
+    "SPY": 735.57,
+    "STLA": 3.5492,
+    "SYF": 70.16,
+    "TAN": 38.0028,
+    "TFC": 47.74,
+    "URA": 29.62,
+    "USAR": 6.72,
+    "USB": 58.28,
+    "UUP": 29.73,
+    "VEEV": 278.0,
+    "VIST": 51.99,
+    "VRTX": 538.96,
+    "WFC": 81.2,
+    "XAR": 218.95,
+    "XBI": 145.46,
+    "XLE": 61.27,
+    "XLF": 56.52,
+    "XLI": 164.66,
+    "XLK": 166.24,
+    "XLRE": 43.5801,
+    "XLV": 181.066,
+    "XOP": 171.42,
+    "XRT": 90.97,
+    "YPF": 35.78
+   }
+  },
+  "morning": {
+   "at": "2026-11-19T10:02:12-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ATO": 169.14,
+    "BABA": 88.046,
+    "BBWI": 18.5,
+    "BCE": 20.795,
+    "BNS": 87.69,
+    "BNTX": 82.41,
+    "BZ": 13.185,
+    "CI": 277.72,
+    "CLX": 104.9,
+    "CNC": 65.39,
+    "CNP": 39.12,
+    "COPX": 61.57,
+    "CORT": 66.43,
+    "CTVA": 8.31,
+    "CVI": 34.585,
+    "DIA": 501.35,
+    "DINO": 90.375,
+    "DK": 61.13,
+    "ECL": 297.701,
+    "ELV": 393.0,
+    "FCX": 52.02,
+    "FMS": 20.52,
+    "FXI": 32.19,
+    "GEF": 66.73,
+    "HUM": 380.62,
+    "IBB": 204.84,
+    "IHI": 56.61,
+    "ITB": 91.56,
+    "ITUB": 6.78,
+    "IYT": 82.01,
+    "JD": 25.53,
+    "KBR": 32.485,
+    "KIE": 63.995,
+    "KTOS": 31.175,
+    "LEGN": 15.945,
+    "MOH": 202.01,
+    "MPC": 371.235,
+    "NFG": 74.13,
+    "NJR": 54.84,
+    "NLY": 16.755,
+    "NTES": 107.88,
+    "OGS": 80.935,
+    "OSCR": 27.095,
+    "PARR": 65.17,
+    "PAVE": 51.94,
+    "PBF": 62.16,
+    "PDD": 86.77,
+    "PPG": 120.31,
+    "PSX": 244.905,
+    "RIOT": 18.78,
+    "SCCO": 147.735,
+    "SHW": 341.45,
+    "SMH": 475.9,
+    "SPY": 735.98,
+    "SR": 84.88,
+    "SWX": 90.045,
+    "TGB": 5.725,
+    "TU": 10.49,
+    "UGI": 34.8,
+    "UNH": 341.6051,
+    "VLO": 342.545,
+    "WMG": 32.97,
+    "WSM": 240.71,
+    "XAR": 220.37,
+    "XBI": 145.11,
+    "XLB": 50.035,
+    "XLE": 61.32,
+    "XLP": 89.505,
+    "XLU": 43.0699,
+    "XLV": 178.77,
+    "XRT": 89.54
+   }
+  }
+ },
+ "exits": [
+  {
+   "trade_id": "2026-11-17-S03",
+   "book": "dynamic",
+   "session_number": 3,
+   "intraday": true,
+   "at": "9:00 AM CT",
+   "pass": null,
+   "reason": "stopped: down 7.5% at 9:00 AM CT, past the 5% stop"
+  }
+ ],
+ "runs": [
+  {
+   "at": "2026-11-18T20:46:25-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-19-S01",
+    "2026-11-19-S02",
+    "2026-11-19-S03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [
+    "2026-11-19-S01",
+    "2026-11-19-S02"
+   ],
+   "warnings": [
+    "2026-11-19-S01 LIVN: spread wider than 2% (LIVN 34.0%, IHI 19.6%), so the trade is passed on.",
+    "2026-11-19-S02 GLBE: spread wider than 2% (GLBE 33.9%, XRT 30.4%), so the trade is passed on.",
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "takes": {
+    "night": 3
+   },
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T21:01:51-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T21:21:13-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T21:37:22-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T22:01:25-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-18T22:17:34-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T22:33:43-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T22:49:19-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-18T23:05:09-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "HGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-18T23:20:33-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [
+    "2026-11-19-S03"
+   ],
+   "warnings": [
+    "2026-11-19-S03 HGV: no quote for HGV from the gateway because the gateway sent no bid or ask within 8 seconds and gave no reason, so the trade is passed on."
+   ],
+   "no_quote": {
+    "HGV": "the gateway sent no bid or ask within 8 seconds and gave no reason"
+   }
+  },
+  {
+   "at": "2026-11-19T09:44:56-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:47:17-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:49:33-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:51:45-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:53:56-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:56:07-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T09:58:17-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-17-S03 Payroll and HR software: its stop exit wasn't sent (no quote for ADP or PAYX or PAYC or PCTY or IGV from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ADP": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "IGV": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYC": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PAYX": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "PCTY": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-19T10:00:28-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-17-S03",
+     "book": "dynamic",
+     "session_number": 3,
+     "intraday": true,
+     "at": "9:00 AM CT",
+     "pass": null,
+     "reason": "stopped: down 7.5% at 9:00 AM CT, past the 5% stop"
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "ADP",
+     "action": "SELL",
+     "shares": 7,
+     "kind": "LMT",
+     "limit": 301.04,
+     "venue": "regular",
+     "ref_price": 302.55,
+     "priced_on": "gateway bid/ask",
+     "bid": 302.55,
+     "ask": 303.05,
+     "spread_pct": 0.165,
+     "order_id": 66,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PAYX",
+     "action": "SELL",
+     "shares": 21,
+     "kind": "LMT",
+     "limit": 110.82,
+     "venue": "regular",
+     "ref_price": 111.38,
+     "priced_on": "gateway bid/ask",
+     "bid": 111.38,
+     "ask": 111.58,
+     "spread_pct": 0.179,
+     "order_id": 68,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PAYC",
+     "action": "SELL",
+     "shares": 9,
+     "kind": "LMT",
+     "limit": 238.8,
+     "venue": "regular",
+     "ref_price": 240.0,
+     "priced_on": "gateway bid/ask",
+     "bid": 240.0,
+     "ask": 242.18,
+     "spread_pct": 0.904,
+     "order_id": 70,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "PCTY",
+     "action": "SELL",
+     "shares": 13,
+     "kind": "LMT",
+     "limit": 171.59,
+     "venue": "regular",
+     "ref_price": 172.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 172.45,
+     "ask": 173.47,
+     "spread_pct": 0.59,
+     "order_id": 72,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "symbol": "IGV",
+     "action": "BUY",
+     "shares": 100,
+     "kind": "LMT",
+     "limit": 100.34,
+     "venue": "regular",
+     "ref_price": 99.84,
+     "priced_on": "gateway bid/ask",
+     "bid": 99.81,
+     "ask": 99.84,
+     "spread_pct": 0.03,
+     "order_id": 74,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-19T10:02:12-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-19-S04",
+    "2026-11-19-S05",
+    "2026-11-19-S06",
+    "2026-11-19-S07"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-19-S04",
+     "symbol": "NTES",
+     "action": "SELL",
+     "shares": 278,
+     "kind": "LMT",
+     "limit": 107.12,
+     "venue": "regular",
+     "ref_price": 107.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 107.66,
+     "ask": 108.06,
+     "spread_pct": 0.371,
+     "order_id": 79,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "symbol": "TU",
+     "action": "BUY",
+     "shares": 1782,
+     "kind": "LMT",
+     "limit": 10.55,
+     "venue": "regular",
+     "ref_price": 10.5,
+     "priced_on": "gateway bid/ask",
+     "bid": 10.49,
+     "ask": 10.5,
+     "spread_pct": 0.095,
+     "order_id": 81,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "symbol": "CLX",
+     "action": "SELL",
+     "shares": 285,
+     "kind": "LMT",
+     "limit": 104.28,
+     "venue": "regular",
+     "ref_price": 104.8,
+     "priced_on": "gateway bid/ask",
+     "bid": 104.8,
+     "ask": 105.01,
+     "spread_pct": 0.2,
+     "order_id": 83,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "symbol": "WMG",
+     "action": "BUY",
+     "shares": 909,
+     "kind": "LMT",
+     "limit": 33.22,
+     "venue": "regular",
+     "ref_price": 33.05,
+     "priced_on": "gateway bid/ask",
+     "bid": 32.89,
+     "ask": 33.05,
+     "spread_pct": 0.485,
+     "order_id": 85,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "symbol": "FXI",
+     "action": "BUY",
+     "shares": 931,
+     "kind": "LMT",
+     "limit": 32.35,
+     "venue": "regular",
+     "ref_price": 32.19,
+     "priced_on": "gateway bid/ask",
+     "bid": 32.18,
+     "ask": 32.19,
+     "spread_pct": 0.031,
+     "order_id": 88,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "symbol": "XLP",
+     "action": "BUY",
+     "shares": 235,
+     "kind": "LMT",
+     "limit": 89.96,
+     "venue": "regular",
+     "ref_price": 89.51,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.5,
+     "ask": 89.51,
+     "spread_pct": 0.011,
+     "order_id": 90,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "takes": {
+    "morning": 4
+   },
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-19T10:04:36-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-19-S06",
+     "symbol": "XLP",
+     "action": "BUY",
+     "shares": 100,
+     "kind": "LMT",
+     "limit": 89.95,
+     "venue": "regular",
+     "ref_price": 89.5,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.49,
+     "ask": 89.5,
+     "spread_pct": 0.011,
+     "order_id": 95,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-19T12:11:06-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-18-S08, so its stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-19T13:17:04-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-17-S06, so its stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-19T14:24:51-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-17-S05, so its stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-19T15:10:12-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-19-S06, so its stop wasn't checked this time; the next check tries again."
+   ]
+  }
+ ],
+ "last_attempt": "2026-11-19T10:04:36-05:00",
+ "last_stop_check": "2026-11-19T15:39:09-05:00"
+}

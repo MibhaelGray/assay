@@ -1,0 +1,179 @@
+{
+ "session": "2026-11-19",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-18T20:46:08.812138-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "RCAT closed at 2.25 after the quarter; the Ukraine interest is still unfunded letters of request, no US award of $25M or more has been announced and the Steyr offer still stands (acceptance to 12-18), so the share sale the trade is waiting for is still ahead and nothing in the wrong_if has happened. Two sessions left."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "ACM: KeyBanc lifted its target to $97; no charges, no downgrades, no change to the guide since entry."
+    },
+    {
+     "trade_id": "2026-11-17-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Payroll and HR software: the December hike is about 95% priced and the minutes were hawkish, which is the float-income reason for the trade; ADP raised and Paychex sounded confident. It is losing and close to its stop, which is the stop's job, not a reason to exit."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Coatings and specialty chemicals: crude fell again (WTI near $82.50), no member cut guidance and Ecolab targets were raised on 11-18; what was said at its investor day I could not verify."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AGNC: the 10-year is at 5.07% with hikes priced; no book-value update or buyback from the company. I could not check mortgage spreads directly."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "BILL: the FT said on 11-17 that a TPG deal is likely within days; no agreement and no price yet, and the 11-20 close in the wrong_if has not arrived."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "NKE: the 11-17 investor day guided FY28 EPS modestly down; no upgrades and no buyback since. The loss so far is XRT rising on TJX and Target."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Nvidia beat and raised but closed at 150.96 (-2.9%) and lagged the chip fund; the worry is the CEO's exit and a WSJ report (11-17) of an SEC civil inquiry, which is unconfirmed and not an announced action. No downgrades found and the numbers the trade rested on came in, so the wrong_if has not happened."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TGT beat, raised and said November is running in line or better; Walmart on 11-19 is the next read."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "GDX: gold fell about 3.5% to a 14-month low and the miners fund 6% to 74.82 on 11-18; the hike is about 95% priced and the 10-year is 5.07%, the trade's reason."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TJX: comps up 4% and a Q4 comp guide of 2-3%; nothing against the story. Ross after the close on 11-19 is the next read."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "DIS: guidance reiterated, broker targets raised, Avengers: Doomsday presales strong; flat against its hedge."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Refiners: the EIA showed gasoline stocks up 5.2M barrels and distillate up 1.6M on 11-18, the margin pressure the short is for; the last crack reading I found (about $42.50) is from 11-17."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM: the company itself warns of substantially lower Q4 lithium prices after the Q3 miss; no broker moves found and I could not verify China lithium futures."
+    }
+   ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-19T10:01:52.491097-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "RCAT: no funded Ukraine order, no US award of $25M or more and no change to the Steyr offer found since entry; H.C. Wainwright cut its target to $10 on 11-19 and the CEO disposed of 150,000 shares on 11-16. One session left after today."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "ACM: no new charge, the FY2027 guide was initiated above estimates and the long-term targets reiterated; no downgrades found. It is stretched (RSI 87) and down 2% today, which is price, not news."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Coatings and specialty chemicals: WTI is $83.66 (+1.6%), nowhere near an 8% jump, despite Iran's claim that three tankers hit mines; no guidance cut from SHW, PPG or ECL, and Ecolab's 11-17 targets were reported in line with consensus (secondary sources only)."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AGNC: no book-value update or buyback found; the December hike is about 95% priced with Waller floating 50 bp, and the 10-year is 5.09%. No report on mortgage bonds against Treasuries for the week could be found."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "BILL: the last report is the FT's on 11-17 that a TPG deal could be agreed within days; no agreement, no price and no report that talks ended. The wrong_if's 11-20 close is tomorrow, so the next two passes have to test it."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "NKE: since the investor day brokers have cut fiscal 2028 EPS (Needham $1.22, Stifel $1.14, BMO $1.10) and none upgraded; the CFO said fiscal 2028 EPS declines modestly; no buyback. Nike is down 3% today against XRT's 0.75%."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Nvidia: no announced SEC, DOJ or Commerce action naming it (the SEC inquiry is still a press report), no late 10-Q, no probe findings, no downgrades and JPMorgan raised its target to $230; but it is lagging the chip fund again today (+3.0% against +3.6%) and sits near its stop."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TGT: Walmart this morning raised its full-year sales, operating income and EPS guide and said nothing of weaker general-merchandise demand in the release (I could not get the call); no Target downgrades found. Target is up 0.7% against XRT down 0.75%."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "GDX: the December hike is about 95% priced, no governor has spoken of a pause (Musalem: several more hikes) and the 10-year is 5.09%, above the 4.9% line; gold is at its lowest since September 2025."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "TJX: on the 11-18 call Herrman said warm weather 'held back a little demand' entering Q4 and would not say whether quarter-to-date comps are positive (Motley Fool transcript); the weather line was already in the release the trade was taken on, and he guided to acceleration and 'further improvement at Marmaxx', so I read it as weakened, not the wrong_if. No downgrades (BTIG and Guggenheim reiterated Buy). Ross reports after today's close and is the real test."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "DIS: no downgrades, targets raised (Guggenheim, Needham, BofA $135, Rosenblatt $141), the FY2027 double-digit EPS guide reiterated, and Avengers: Doomsday tracking reported strong."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Refiners: the 3-2-1 crack is about $42 on 11-18, a new low and well under $50; the 11-18 EIA report showed gasoline +5.2M and distillate +1.6M barrels; no broker upgrades on valuation found, and Mizuho cut its Marathon target."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM: no upgrades or raised estimates found after the print and no producer has said Q4 contract prices are above Q3; I could not find Guangzhou lithium carbonate futures for 11-18 or today, so that leg of the wrong_if is unverified."
+    }
+   ]
+  }
+ ]
+}

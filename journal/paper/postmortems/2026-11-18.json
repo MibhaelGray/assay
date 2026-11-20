@@ -1,0 +1,15 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-17-S04",
+   "proposal_id": "2026-11-17-P21",
+   "name": "HUBS",
+   "setup": "relative_strength",
+   "bps": -913.3,
+   "tag": "thesis_broke",
+   "what_happened": "The take was that a returning founder buying $5M of stock gave buyers a reason that would outlast the software tape. It did not last two sessions. On 11-17 software was sold on AI-eats-seats fear ahead of Anthropic's listing (Salesforce -9.4%, IGV about -4.4%) and HUBS fell 6.8% to 216.30, more than its hedge. On 11-18 IGV bounced 1.25% while HUBS fell another 5.2% to 205.12; one source (a TIKR piece carried by Yahoo) says Morgan Stanley, BTIG, Cantor and KeyBanc downgraded it that day, which I could not confirm elsewhere. The stock closed below Halligan's own 217 purchase price and the 7% stop was hit at the 2:45 PM CT check, down 8.4%. No guidance cut, departure or dilutive deal was found; if the four downgrades are real, the wrong_if (two or more downgrades) happened in spirit, though I found no published plan they were answering.",
+   "lesson": "A founder-return pop with an insider buy is a sentiment story, and it loses to the sector's live fear when the name sits in the middle of that fear: HUBS is the seat-based small-business software the market was selling. A sector hedge with beta near 1 does not cover a name that falls harder than its sector on exactly that story. One trade; not yet a standing lesson.",
+   "at": "2026-11-18T20:37:16.298209-05:00"
+  }
+ ]
+}
