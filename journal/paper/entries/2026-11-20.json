@@ -1,0 +1,1207 @@
+{
+ "session": "2026-11-20",
+ "handled": [
+  "night",
+  "morning",
+  "midday"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-20-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P01",
+   "proposal_id": "2026-11-20-P01",
+   "conviction": 3,
+   "name": "VVV",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "Same-store sales of 9.4%, a fiscal 2027 guide for 8% profit growth and a buyback raised to $500M (about a tenth of the company) took it up 10% on three times normal volume on a day 446 S&P names fell, and it gave back only 0.7% after hours.",
+   "wrong_if": "Two or more covering brokers downgrade Valvoline after the print, or Valvoline says its 10-K will be late or discloses a new material weakness, or it lowers the fiscal 2027 guide or says same-store sales have slowed this quarter, inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -5.0
+   },
+   "notional": 30000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "VVV",
+     "side": "long",
+     "shares": 820,
+     "ref_price": 36.58
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 341,
+     "ref_price": 87.74
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "night",
+   "first_session": "2026-11-20",
+   "lead": "VVV",
+   "stood_down": "passed: spread wider than 2% (VVV 14.0%, XRT 25.4%) when it was due to enter",
+   "passed_on_spread": "2026-11-19T22:05:38-05:00"
+  },
+  {
+   "id": "2026-11-20-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P02",
+   "proposal_id": "2026-11-20-P02",
+   "conviction": 3,
+   "name": "WSM",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "why": "A one-cent beat with the year's guide only repeated cost it 15% on 4.4 times volume and a close near the low; hitting that guide now needs a strong holiday quarter that management itself described as later, more promotional and with housing worse, so the estimate and target cuts are still to come.",
+   "wrong_if": "Two or more covering brokers upgrade Williams-Sonoma after the print, or the company raises its fiscal 2026 guide, announces an accelerated buyback, or says holiday demand is running ahead of plan, inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XRT",
+     "side": "long",
+     "shares": 284,
+     "ref_price": 87.74
+    },
+    {
+     "symbol": "WSM",
+     "side": "short",
+     "shares": 113,
+     "ref_price": 220.0
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "night",
+   "first_session": "2026-11-20",
+   "lead": "WSM",
+   "stood_down": "passed: spread wider than 2% (XRT 25.4%, WSM 7.7%) when it was due to enter",
+   "passed_on_spread": "2026-11-19T22:05:38-05:00"
+  },
+  {
+   "id": "2026-11-20-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P03",
+   "proposal_id": "2026-11-20-P03",
+   "conviction": 3,
+   "name": "INTU",
+   "setup": "live_move",
+   "direction": "short",
+   "why": "Intuit cut Credit Karma's growth to 3-7% from 11-13% and said consumers are starting in AI tools instead, and guided Q2 revenue about 3% under consensus: the first large software company to put a number on the AI fear, in the week that fear is the story, with the estimate cuts still to come.",
+   "wrong_if": "Two or more covering brokers upgrade Intuit on valuation after the print, or Intuit announces an accelerated share repurchase or a larger buyback, or management restores the Credit Karma outlook at an investor event, inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "INTU",
+     "side": "short",
+     "shares": 89,
+     "ref_price": 279.74
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-20",
+   "lead": "INTU"
+  },
+  {
+   "id": "2026-11-20-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P41",
+   "proposal_id": "2026-11-20-P41",
+   "conviction": 3,
+   "name": "ACN",
+   "setup": "turn",
+   "direction": "long",
+   "why": "Accenture lost about 12% in three sessions on no company news, sits on its 50-day, and is turning today with Cognizant and IBM on a day chips are sold again: the same chips-down, services-up rotation that lifted the group in October.",
+   "wrong_if": "A frontier AI lab (Anthropic, OpenAI or Google) launches a product aimed at consulting or IT-services work and the group sells off on it; or two or more covering brokers downgrade Accenture; or Accenture trims its FY27 guide; or on a session when SMH rises 3% or more, ACN, CTSH and IBM all close lower (the rotation reversing), inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -5.5
+   },
+   "notional": 27200,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -5.5,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "ACN",
+     "side": "long",
+     "shares": 120,
+     "ref_price": 225.925
+    }
+   ],
+   "hedge": null,
+   "pass": "morning",
+   "first_session": "2026-11-23",
+   "lead": "ACN"
+  },
+  {
+   "id": "2026-11-20-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P81",
+   "proposal_id": "2026-11-20-P81",
+   "conviction": 3,
+   "name": "TAK",
+   "setup": "relative_strength",
+   "direction": "long",
+   "why": "A new 52-week high on 1.6x volume on a day Tokyo fell 5% and New York 2%, in a stock re-rating on three launches with the US narcolepsy launch cleared eight days ago and a new CEO's targets due 12-11.",
+   "wrong_if": "Takeda or a regulator (FDA, PMDA) announces a safety action, label restriction, supply problem or launch delay on Orzeyful or Mimrylo; or Takeda lowers its FY2026 guidance or moves or cancels the 12-11 Capital Markets Day; or two or more covering brokers downgrade it, inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -4.0
+   },
+   "notional": 37500,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -4.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TAK",
+     "side": "long",
+     "shares": 1713,
+     "ref_price": 21.885
+    },
+    {
+     "symbol": "XLV",
+     "side": "short",
+     "shares": 209,
+     "ref_price": 178.6
+    }
+   ],
+   "hedge": "XLV",
+   "pass": "midday",
+   "first_session": "2026-11-23",
+   "lead": "TAK"
+  },
+  {
+   "id": "2026-11-20-S06",
+   "book": "dynamic",
+   "source": "proposal 2026-11-20-P82",
+   "proposal_id": "2026-11-20-P82",
+   "conviction": 3,
+   "name": "MTZ",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "MasTec fell 12% to a 52-week low on announcing a $1.25B debt-funded acquisition two weeks after it shelved deal talks to favour a buyback, on top of an October guidance cut: a credibility break with a named cause, not just the tape.",
+   "wrong_if": "Two or more covering brokers upgrade MasTec or raise their price targets citing the Murphy deal; or MasTec announces a larger or accelerated buyback, or directors or officers report open-market purchases (Form 4); or MasTec changes the financing so the deal adds less debt, inside the window.",
+   "entry_date": "2026-11-20",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "PAVE",
+     "side": "long",
+     "shares": 377,
+     "ref_price": 49.57
+    },
+    {
+     "symbol": "MTZ",
+     "side": "short",
+     "shares": 128,
+     "ref_price": 145.805
+    }
+   ],
+   "hedge": "PAVE",
+   "pass": "midday",
+   "first_session": "2026-11-23",
+   "lead": "PAVE"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-19T22:05:38-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ABT": 104.01,
+    "ACGL": 108.16,
+    "AIG": 79.5,
+    "AIZ": 316.03,
+    "ALL": 266.77,
+    "BAX": 25.22,
+    "BDX": 214.09,
+    "BHP": 68.8247,
+    "BRK B": 571.89,
+    "BSX": 42.77,
+    "CAH": 271.02,
+    "CB": 371.76,
+    "CHRW": 137.0,
+    "CI": 271.647,
+    "CINF": 188.04,
+    "CNQ": 44.7,
+    "COPX": 58.9,
+    "COR": 338.67,
+    "CRWD": 240.5,
+    "CSIQ": 8.0,
+    "DIA": 490.7,
+    "DLB": 54.77,
+    "DXCM": 80.19,
+    "EFA": 98.53,
+    "EG": 421.96,
+    "ERO": 24.17,
+    "EW": 103.88,
+    "EXPD": 192.5,
+    "FCX": 48.7,
+    "FDX": 315.0,
+    "FSLR": 153.99,
+    "FTNT": 130.22,
+    "GAP": 19.469,
+    "GEHC": 81.22,
+    "GLBE": 35.1,
+    "GLD": 329.48,
+    "GME": 27.0822,
+    "HBM": 17.21,
+    "HIG": 135.58,
+    "IBB": 203.0,
+    "IBIT": 35.08,
+    "IBN": 34.2334,
+    "IDXX": 689.65,
+    "IGV": 94.77,
+    "INTU": 279.74,
+    "ISRG": 405.53,
+    "IWF": 108.04,
+    "IYT": 80.72,
+    "JETS": 28.1,
+    "KBE": 63.25,
+    "KIE": 64.16,
+    "L": 110.0,
+    "LNTH": 101.95,
+    "LOPE": 111.22,
+    "MCK": 1062.16,
+    "MFC": 42.21,
+    "MSTR": 85.75,
+    "NOW": 87.05,
+    "NSC": 316.82,
+    "NXT": 76.0,
+    "OIH": 345.69,
+    "OKTA": 203.5,
+    "PANW": 358.55,
+    "PBR": 16.3074,
+    "PGR": 232.0,
+    "PM": 186.43,
+    "PODD": 137.23,
+    "QLYS": 188.68,
+    "QNT": 28.48,
+    "RBRK": 113.65,
+    "RMD": 236.37,
+    "S": 23.8,
+    "SAP": 203.23,
+    "SBLK": 25.53,
+    "SCCO": 140.5,
+    "SHLS": 7.19,
+    "SPY": 714.99,
+    "STE": 254.76,
+    "SYK": 313.08,
+    "TE": 1.26,
+    "TEAM": 132.0,
+    "TECK": 51.29,
+    "TGB": 5.61,
+    "TRV": 390.6,
+    "UNH": 328.7838,
+    "UPS": 108.5,
+    "URA": 28.6,
+    "VEEV": 260.315,
+    "VVV": 36.58,
+    "WRB": 77.77,
+    "WSM": 220.0,
+    "WWD": 335.72,
+    "XAR": 215.19,
+    "XLB": 49.39,
+    "XLE": 60.91,
+    "XLF": 55.5,
+    "XLI": 161.81,
+    "XLP": 90.06,
+    "XLU": 43.01,
+    "XLV": 177.42,
+    "XRT": 87.74,
+    "YMM": 9.06,
+    "ZBH": 101.47,
+    "ZS": 206.98
+   }
+  },
+  "morning": {
+   "at": "2026-11-20T10:00:54-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ACN": 225.925,
+    "AIG": 80.835,
+    "AIZ": 319.9301,
+    "AJG": 282.31,
+    "AON": 337.495,
+    "APLD": 13.04,
+    "ASX": 28.82,
+    "BIDU": 65.365,
+    "BRO": 73.965,
+    "BVN": 19.73,
+    "CGNX": 46.99,
+    "CM": 105.785,
+    "COPX": 59.225,
+    "CRH": 92.57,
+    "CSIQ": 7.835,
+    "CTSH": 59.61,
+    "CX": 9.48,
+    "DIA": 495.01,
+    "DVA": 160.175,
+    "ERIE": 274.72,
+    "FSLR": 152.75,
+    "GAP": 21.89,
+    "GDX": 71.63,
+    "GLOB": 40.37,
+    "GS": 823.225,
+    "GWRE": 136.51,
+    "HALO": 92.77,
+    "HDB": 27.535,
+    "HSAI": 12.67,
+    "IBKR": 75.1675,
+    "IBM": 232.19,
+    "IBN": 35.905,
+    "IGV": 95.685,
+    "IHI": 56.43,
+    "ITB": 93.15,
+    "IYT": 81.89,
+    "KIE": 65.16,
+    "L": 111.075,
+    "MELI": 1383.7,
+    "MLM": 520.79,
+    "MRSH": 209.1525,
+    "MS": 172.725,
+    "MU": 656.44,
+    "MUFG": 19.36,
+    "NOVT": 112.98,
+    "NXT": 74.005,
+    "OUST": 27.35,
+    "PEGA": 28.51,
+    "PINS": 17.62,
+    "RIO": 74.87,
+    "ROST": 214.0,
+    "RSP": 213.32,
+    "RY": 187.21,
+    "SHLS": 7.15,
+    "SLV": 38.4,
+    "SMH": 436.48,
+    "SOXX": 134.59,
+    "SPY": 717.61,
+    "TD": 114.92,
+    "TE": 1.235,
+    "TSM": 342.9402,
+    "UMC": 12.8313,
+    "VALE": 9.885,
+    "VMC": 280.86,
+    "VOD": 14.185,
+    "WTW": 336.92,
+    "XLB": 49.86,
+    "XLC": 103.825,
+    "XLE": 61.32,
+    "XLF": 55.935,
+    "XLI": 162.02,
+    "XLRE": 43.27,
+    "XLU": 43.335,
+    "XLV": 179.66,
+    "XPEV": 8.7471,
+    "XRT": 88.63,
+    "YPF": 33.15,
+    "ZBRA": 315.245
+   }
+  },
+  "midday": {
+   "at": "2026-11-20T13:09:53-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ACN": 224.76,
+    "ADBE": 224.725,
+    "ADC": 71.82,
+    "ADP": 305.475,
+    "AEP": 127.19,
+    "ALB": 81.275,
+    "ALLE": 185.665,
+    "ALM": 6.5,
+    "AOS": 63.94,
+    "APO": 112.44,
+    "ARES": 123.35,
+    "ASAN": 9.0558,
+    "AVAV": 88.865,
+    "AVEX": 11.51,
+    "AZO": 3305.865,
+    "BKR": 44.99,
+    "BWXT": 111.39,
+    "BX": 112.815,
+    "CARR": 51.01,
+    "CBOE": 360.63,
+    "CCJ": 59.05,
+    "CHTR": 131.955,
+    "CLS": 204.1924,
+    "CMCSA": 25.215,
+    "CME": 311.215,
+    "CMS": 71.04,
+    "COST": 1113.73,
+    "CRM": 184.935,
+    "CSX": 49.915,
+    "CTAS": 224.13,
+    "CTSH": 58.91,
+    "DBX": 34.48,
+    "DIA": 487.0,
+    "DLR": 166.805,
+    "DOCU": 76.6501,
+    "DUK": 130.94,
+    "EEM": 54.38,
+    "EQIX": 988.245,
+    "ERO": 22.075,
+    "EVRG": 86.88,
+    "EXC": 46.375,
+    "FCX": 45.7741,
+    "FDS": 316.74,
+    "FE": 47.775,
+    "FRT": 111.295,
+    "GIS": 36.135,
+    "GLW": 95.05,
+    "GPC": 121.83,
+    "HAL": 30.84,
+    "HBM": 16.21,
+    "HSBC": 80.75,
+    "HUBS": 202.94,
+    "IBM": 229.35,
+    "ICE": 172.42,
+    "IGV": 93.23,
+    "INFY": 12.195,
+    "IRM": 104.59,
+    "IT": 177.97,
+    "KHC": 25.71,
+    "KIE": 64.94,
+    "KIM": 25.6112,
+    "KKR": 89.515,
+    "KTOS": 27.46,
+    "LEU": 83.11,
+    "LII": 342.08,
+    "LNT": 72.5,
+    "MAS": 83.03,
+    "MCHP": 55.82,
+    "MCO": 473.48,
+    "MDLZ": 66.96,
+    "MKC": 48.57,
+    "MNDY": 73.63,
+    "MP": 34.03,
+    "MSCI": 623.87,
+    "MT": 56.02,
+    "MTZ": 145.805,
+    "NDAQ": 104.24,
+    "NNE": 9.17,
+    "NOK": 6.8799,
+    "NOW": 90.63,
+    "NSC": 317.495,
+    "NXPI": 242.07,
+    "O": 58.35,
+    "OKLO": 20.42,
+    "ON": 60.95,
+    "ONDS": 3.835,
+    "ORLY": 93.72,
+    "OWL": 8.835,
+    "PAVE": 49.57,
+    "PAYC": 244.58,
+    "PAYX": 113.61,
+    "PCTY": 174.505,
+    "PNW": 102.58,
+    "PPL": 35.175,
+    "PYPL": 54.15,
+    "RCAT": 1.81,
+    "REG": 74.3225,
+    "ROL": 38.46,
+    "RSG": 249.35,
+    "SCCO": 134.42,
+    "SLB": 46.51,
+    "SMH": 410.29,
+    "SMR": 3.39,
+    "SO": 94.275,
+    "SOXX": 125.895,
+    "SPG": 226.92,
+    "SPGI": 446.19,
+    "SPY": 700.325,
+    "STM": 39.55,
+    "T": 22.65,
+    "TAK": 21.885,
+    "TEAM": 138.2,
+    "TECK": 48.96,
+    "TGB": 5.365,
+    "TLT": 81.345,
+    "TMUS": 167.13,
+    "TXN": 268.6,
+    "UAMY": 2.235,
+    "UEC": 5.47,
+    "UMAC": 8.79,
+    "UNP": 290.7195,
+    "USAR": 6.395,
+    "UUUU": 5.035,
+    "VLTO": 117.515,
+    "VMRK": 63.93,
+    "VZ": 46.855,
+    "WEC": 118.01,
+    "WM": 242.355,
+    "WMT": 129.585,
+    "XLB": 48.905,
+    "XLC": 101.41,
+    "XLE": 61.17,
+    "XLF": 55.215,
+    "XLI": 158.07,
+    "XLK": 152.11,
+    "XLP": 91.3906,
+    "XLRE": 43.04,
+    "XLU": 43.315,
+    "XLV": 178.6,
+    "XLY": 113.95,
+    "XME": 81.29,
+    "XSD": 375.42
+   }
+  }
+ },
+ "exits": [
+  {
+   "trade_id": "2026-11-20-S03",
+   "book": "dynamic",
+   "session_number": 1,
+   "intraday": true,
+   "at": "8:57 AM CT",
+   "pass": null,
+   "reason": "stopped: down 6.4% at 8:57 AM CT, past the 6% stop"
+  },
+  {
+   "trade_id": "2026-11-17-S07",
+   "book": "dynamic",
+   "session_number": 3,
+   "intraday": true,
+   "at": "10:36 AM CT",
+   "pass": "morning",
+   "reason": "review: BILL announced a definitive deal on 11-19 after the close: TPG and Corpay take it private at $63.25 a share in cash (BILL 8-K and press release). The stock trades about $61.70, a merger spread to a first-half 2027 close, so the move the trade was for has happened."
+  }
+ ],
+ "runs": [
+  {
+   "at": "2026-11-19T22:05:38-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-20-S01",
+    "2026-11-20-S02",
+    "2026-11-20-S03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "symbol": "INTU",
+     "action": "SELL",
+     "shares": 89,
+     "kind": "LMT",
+     "limit": 278.05,
+     "venue": "overnight",
+     "ref_price": 279.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 279.45,
+     "ask": 282.0,
+     "spread_pct": 0.908,
+     "order_id": 66,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [
+    "2026-11-20-S01",
+    "2026-11-20-S02"
+   ],
+   "warnings": [
+    "2026-11-20-S01 VVV: spread wider than 2% (VVV 14.0%, XRT 25.4%), so the trade is passed on.",
+    "2026-11-20-S02 WSM: spread wider than 2% (XRT 25.4%, WSM 7.7%), so the trade is passed on.",
+    "2026-11-20-S03: SELL 89 INTU went in with a message from the gateway: Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "takes": {
+    "night": 3
+   },
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-19T22:07:56-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "symbol": "INTU",
+     "action": "SELL",
+     "shares": 58,
+     "kind": "LMT",
+     "limit": 278.05,
+     "venue": "overnight",
+     "ref_price": 279.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 279.45,
+     "ask": 282.0,
+     "spread_pct": 0.908,
+     "order_id": 71,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 71: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S03: SELL 58 INTU went in with a message from the gateway: Warning 2109, reqId 71: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-19T22:10:08-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "symbol": "INTU",
+     "action": "SELL",
+     "shares": 58,
+     "kind": "LMT",
+     "limit": 278.05,
+     "venue": "overnight",
+     "ref_price": 279.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 279.45,
+     "ask": 282.0,
+     "spread_pct": 0.908,
+     "order_id": 76,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 76: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S03: SELL 58 INTU went in with a message from the gateway: Warning 2109, reqId 76: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-19T22:12:20-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "symbol": "INTU",
+     "action": "SELL",
+     "shares": 58,
+     "kind": "LMT",
+     "limit": 278.05,
+     "venue": "overnight",
+     "ref_price": 279.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 279.45,
+     "ask": 282.0,
+     "spread_pct": 0.908,
+     "order_id": 81,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 81: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S03: SELL 58 INTU went in with a message from the gateway: Warning 2109, reqId 81: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-20T09:45:44-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-17-S01, 2026-11-17-S02, 2026-11-17-S05, 2026-11-17-S06, 2026-11-17-S07, 2026-11-18-S01, 2026-11-18-S02, 2026-11-18-S03, 2026-11-18-S04, 2026-11-18-S05, 2026-11-18-S06, 2026-11-18-S07, 2026-11-18-S08, 2026-11-19-S04, 2026-11-19-S05, 2026-11-19-S06, 2026-11-19-S07, 2026-11-20-S03, so their stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-20T09:50:43-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S03 INTU: its stop exit wasn't sent (no quote for INTU from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "INTU": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T09:54:59-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S03 INTU: its stop exit wasn't sent (no quote for INTU from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the next stop check tries again, and the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "INTU": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T09:57:10-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "book": "dynamic",
+     "session_number": 1,
+     "intraday": true,
+     "at": "8:57 AM CT",
+     "pass": null,
+     "reason": "stopped: down 6.4% at 8:57 AM CT, past the 6% stop"
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S03",
+     "symbol": "INTU",
+     "action": "BUY",
+     "shares": 89,
+     "kind": "LMT",
+     "limit": 299.18,
+     "venue": "regular",
+     "ref_price": 297.69,
+     "priced_on": "gateway bid/ask",
+     "bid": 296.96,
+     "ask": 297.69,
+     "spread_pct": 0.246,
+     "order_id": 66,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-20T10:00:54-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-20-S04"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "takes": {
+    "morning": 1
+   },
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T10:16:31-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T10:32:24-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T10:37:42-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-17-S01, so its stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-20T10:44:02-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-17-S06, so its stop wasn't checked this time; the next check tries again."
+   ]
+  },
+  {
+   "at": "2026-11-20T10:48:18-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T11:03:54-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T11:05:04-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T11:20:39-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-20-S04 ACN: no quote for ACN from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-17-S07 BILL: the exit a pass asked for wasn't sent (no quote for BILL from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "no_quote": {
+    "ACN": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "BILL": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-20T11:36:14-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-17-S07",
+     "book": "dynamic",
+     "session_number": 3,
+     "intraday": true,
+     "at": "10:36 AM CT",
+     "pass": "morning",
+     "reason": "review: BILL announced a definitive deal on 11-19 after the close: TPG and Corpay take it private at $63.25 a share in cash (BILL 8-K and press release). The stock trades about $61.70, a merger spread to a first-half 2027 close, so the move the trade was for has happened."
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S04",
+     "symbol": "ACN",
+     "action": "BUY",
+     "shares": 120,
+     "kind": "LMT",
+     "limit": 228.21,
+     "venue": "regular",
+     "ref_price": 227.07,
+     "priced_on": "gateway bid/ask",
+     "bid": 226.88,
+     "ask": 227.07,
+     "spread_pct": 0.084,
+     "order_id": 66,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "symbol": "BILL",
+     "action": "SELL",
+     "shares": 295,
+     "kind": "LMT",
+     "limit": 61.21,
+     "venue": "regular",
+     "ref_price": 61.52,
+     "priced_on": "gateway bid/ask",
+     "bid": 61.52,
+     "ask": 61.53,
+     "spread_pct": 0.016,
+     "order_id": 68,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-20T13:09:53-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-20-S05",
+    "2026-11-20-S06"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-20-S05",
+     "symbol": "TAK",
+     "action": "BUY",
+     "shares": 1713,
+     "kind": "LMT",
+     "limit": 22.0,
+     "venue": "regular",
+     "ref_price": 21.89,
+     "priced_on": "gateway bid/ask",
+     "bid": 21.88,
+     "ask": 21.89,
+     "spread_pct": 0.046,
+     "order_id": 73,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "symbol": "PAVE",
+     "action": "BUY",
+     "shares": 377,
+     "kind": "LMT",
+     "limit": 49.81,
+     "venue": "regular",
+     "ref_price": 49.56,
+     "priced_on": "gateway bid/ask",
+     "bid": 49.55,
+     "ask": 49.56,
+     "spread_pct": 0.02,
+     "order_id": 75,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "symbol": "XLV",
+     "action": "SELL",
+     "shares": 209,
+     "kind": "LMT",
+     "limit": 177.69,
+     "venue": "regular",
+     "ref_price": 178.58,
+     "priced_on": "gateway bid/ask",
+     "bid": 178.58,
+     "ask": 178.59,
+     "spread_pct": 0.006,
+     "order_id": 78,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "symbol": "MTZ",
+     "action": "SELL",
+     "shares": 128,
+     "kind": "LMT",
+     "limit": 144.91,
+     "venue": "regular",
+     "ref_price": 145.64,
+     "priced_on": "gateway bid/ask",
+     "bid": 145.64,
+     "ask": 145.98,
+     "spread_pct": 0.233,
+     "order_id": 80,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "The midday pass has no price at the verdict for ES, so ideas with those legs can't be scored."
+   ],
+   "takes": {
+    "midday": 2
+   },
+   "cancelled_unfilled": 0
+  }
+ ],
+ "last_attempt": "2026-11-20T13:12:25-05:00",
+ "last_stop_check": "2026-11-20T15:38:29-05:00"
+}

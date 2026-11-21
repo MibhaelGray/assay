@@ -1,0 +1,15 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-17-S03",
+   "proposal_id": "2026-11-17-P03",
+   "name": "Payroll and HR software",
+   "setup": "basket_breakout",
+   "bps": -812.4,
+   "tag": "thesis_broke",
+   "what_happened": "The four payroll processors against IGV lost 7.5% in under three sessions and stopped out at 9:00 AM CT on 11-19, with IGV up about 3% at the open on Palo Alto's beat-and-raise and the pre-market relief after Nvidia's print while the processors slipped. The wrong_if never happened: a 12-9 hike stayed priced above 90% and the 11-18 minutes read hawkish. So the rate driver the take rested on was intact and was not what moved the spread; the software side's own reports were, which is the risk the case against named and the take waved off. IGV gave the whole pop back by the close (96.10, -0.9%), so the stop caught the morning's extreme.",
+   "lesson": "A spread that is already 2 sd stretched and was made mostly by the hedge leg falling is a bet on the hedge leg: before taking one, list what reports or prints on the hedge side inside the window (here Nvidia and Palo Alto, both in or driving IGV), and if the answer is something that can gap it, pass or take the long side against a quieter fund. One trade; with HUBS it is two losses against IGV in one week, not yet a standing lesson.",
+   "at": "2026-11-19T21:26:42.115159-05:00"
+  }
+ ]
+}

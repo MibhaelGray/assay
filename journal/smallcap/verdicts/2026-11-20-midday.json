@@ -1,0 +1,45 @@
+{
+ "session": "2026-11-20",
+ "pass": "midday",
+ "prices_from": "2026-11-20",
+ "recorded": "2026-11-20T14:29:20-05:00",
+ "market": "A hard risk-off session led by the unwinding AI trade: QQQ (the Nasdaq-100 ETF) is down 4.6%, SPY (the S&P 500 ETF) down 2.8%, and IWM (the small-cap ETF) down 2.2% at 1:29 PM CT, with the VIX near 33. The stories are a seventh straight fall in Nvidia, a weak first day for the Anthropic IPO, a 6% drop in Taiwan's market, and talk of a December Fed rate hike after hawkish minutes; the 10-year yield slipped to 4.94% as money moved to bonds and defensive sectors. Small caps are holding up better than large-cap tech because they own little of the AI trade, but levered and thin names are being sold hard. Stock-specific moves in small caps are mostly biotech FDA delays and retail earnings.",
+ "shadow": true,
+ "verdicts": [
+  {
+   "name": "FNKO",
+   "verdict": "pass",
+   "direction": "long",
+   "conviction": 2,
+   "rank": 1,
+   "thesis": "Funko is down about 13.5% with no news, filing or press release behind it, on a day when the whole market is being sold and thin, indebted names are hit hardest. That looks more like a holder getting out in a bad tape than new information, so a partial rebound against IWM is the slightly better bet over the next few sessions. It is not a take because the cause is unknown, the credit lines are fully drawn with a refinancing needed, and heavy unexplained selling in a company in that position can be someone knowing about a financing.",
+   "dilution": "Cash $41.6M at Sept 30 against about $196M of debt; the $124.3M revolver is fully drawn and the $72.9M term loan pays down $4.1M a quarter, all at SOFR plus 4.5% and due Dec 31, 2027, so it turns current after Dec 31, 2026 unless refinanced. Leverage and fixed-charge covenants begin with the Dec 31, 2026 quarter; the company was in compliance at Sept 30 with no going-concern language. The 10-Q mentions an S-3 shelf and a Sales Agreement (a possible at-the-market share program) without details the research could confirm; no convertibles, warrants or open share sale were found, but the last part of the 10-Q was not read.",
+   "company": "Funko Inc. Class A Common Stock",
+   "setup": "news_move",
+   "why": "No earnings report, but a large move on heavy volume. -13.1% so far today (-10.9% against IWM, the small-cap ETF, which did -2.2%), 1.6 typical daily ranges, on 2.2 times usual volume (projected to a full day); opened -1.8% from the last close; last 5.85",
+   "numbers": {
+    "close": 5.85,
+    "ret_pct": -13.08,
+    "vs_iwm_pct": -10.92,
+    "atr_pct": 7.01,
+    "volume_ratio": 2.21,
+    "above_50d": false,
+    "above_200d": true,
+    "market_value": 387190789,
+    "dollar_volume": 5755573,
+    "analysts": 2,
+    "sector": "Consumer Discretionary",
+    "industry": "Recreational Games/Products/Toys"
+   },
+   "entry": {
+    "at": "2026-11-20T14:29:20-05:00",
+    "price": 5.82,
+    "hedge_price": 258.21,
+    "source": "yahoo",
+    "hedge_source": "yahoo",
+    "spread_pct": null,
+    "why_no_book": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  }
+ ]
+}

@@ -1,0 +1,329 @@
+{
+ "session": "2026-11-20",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-19T21:28:36.064800-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Red Cat fell another 13.8% to 1.94; a search turned up no order, award or change to the Steyr bid, and nothing dated today explaining the fall. It reaches its time limit on Friday's close."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A search found no further charge, guide change or downgrades since the call, though it returned little dated this week; AECOM fell 2.5% against RSP's 1.8% today."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Hormuz shipments are reported back near pre-war levels and crude is flat tonight (WTI 82.90); no guide cut from Sherwin-Williams, PPG or Ecolab found."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A 12-9 hike is still priced above 90% after hawkish minutes and the 10-year is 5.05%; no book-value update or buyback from AGNC."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The FT reports TPG is nearing a take-private deal that could be agreed in days; no report that talks ended. Friday's close is the date in its wrong_if."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nike fell 5.4% today against XRT's 2.8%; no upgrades, estimate raises or buyback found since the investor day."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Nvidia fell 3.3% against SMH's 2.6% and the print is not being paid for while the CEO and export questions stay open; none of the wrong_if events (a formal action, a late 10-Q, a probe finding, two downgrades) was found, and Morgan Stanley kept Overweight."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year sales and EPS guide on 11-19 and said general merchandise helped drive comps; Target rose 0.9% on a day XRT fell 2.8%."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Gold fell 3.9% to about 3,540, a 14-month low, with a hike priced above 90% and the 10-year at 5.05%, above the 4.9% line."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Ross reported 11-19 after the close: Q3 comps +8%, above its guide, but it guided holiday comps to +4-5% and Q4 EPS under the Street on fuel costs and fell about 7% after hours. That is not the wrong_if (it cited costs, not weak off-price demand or weather), but TJX will be marked with it on Friday and the read-through for off-price is no longer clean."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrades, guide change or weak Avengers tracking found; Disney fell less than XLC today."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Refiners fell about 1.5% against XLE's 0.7% today and no Hormuz closure or upgrades turned up; I could not get today's crack spread, so that part of the wrong_if is unchecked. The EIA report on 11-25 is the next test."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No upgrades or producer comment on Q4 contract prices turned up and SQM fell with the market; I could not get today's Chinese lithium carbonate price, so that part of the wrong_if is unchecked."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "NetEase's ADR closed down 11.4% with no buyback step-up, upgrade or launch news found; I could not confirm how the Hong Kong line closed on the print."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TELUS confirmed Quebecor's amended proposal, kept its review open and invited Quebecor to a 11-23 meeting of the CEOs and CFOs; no withdrawal, rejection or regulator statement."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The Clorox deal chatter is still unconfirmed by the company or a major outlet; Clorox fell 3.2% against XLP's 1.5%."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrades, Spotify breakdown or outlook cut found; Warner fell 0.6% on a day the market fell 2%."
+    }
+   ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-20T09:59:54.344563-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; no funded Ukraine order, no US award of $25M or more and no change to the Steyr bid since Red Cat withdrew its 2026 revenue target on 11-16. It closes at the time limit today."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "AECOM set its FY27 EPS guide at $6.15-6.35, above consensus, and repeated the FY28 margin target; no new project charge and no downgrades found."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ecolab raised its targets at the 11-17 investor day and four brokers lifted price targets; no guidance cut at Sherwin-Williams or PPG, and crude is flat to lower (WTI 81.6) despite two tankers hitting mines on 11-19."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No new book value or buyback from AGNC (it has been selling stock at the market), and a 12-09 hike is priced at 93-99%; no data found on mortgage spreads."
+    },
+    {
+     "trade_id": "2026-11-17-S07",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "BILL announced a definitive deal on 11-19 after the close: TPG and Corpay take it private at $63.25 a share in cash (BILL 8-K and press release). The stock trades about $61.70, a merger spread to a first-half 2027 close, so the move the trade was for has happened."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nike said fiscal 2028 EPS will be down modestly, announced no buyback, and brokers mostly reiterated (Barclays cut its target); no upgrades found."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "None of the wrong-if events has happened (no SEC, DOJ or Commerce action, no late 10-Q, ratings largely held with targets trimmed), but Nvidia is falling harder than SMH again today with the chief executive seat still open and the interim chief reviewing commitments; the stop is close and code checks it."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year guide on 11-19 and Target said November was running above October; no downgrades found."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A 12-09 hike is priced at 95% or more and gold is having its worst week since March; the 10-year is 4.98%, down 13 bp on the week and within 10 bp of the 4.9% line that would prove this wrong. Governor Cook speaks at 11:15 AM CT today."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ross reported Q3 comps up 8%, above its guide, and held its Q4 comp guide of 4-5%, saying the quarter started in line; no TJX downgrades after the print."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ten brokers raised Disney targets after the print, the guide, dividend and buyback were repeated, and Avengers presales are reported strong."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 3-2-1 crack is about $41.50 (11-19), under the $50 line; no upgrades of the group and no export shutdown, though Trump is weighing strikes on Iran and says he is not rushing."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM said on its call that Q4 realized lithium prices will be substantially lower; no broker upgrades found. Chinese lithium futures were not checked."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No buyback step-up, upgrade or launch change found, and the Hong Kong line fell hard on 11-20 (Yahoo shows 154.00, -17.6% against its listed prior close), more than the ADR's drop, not less than half of it."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Quebecor's proposal stands, the TELUS special committee is reviewing it and other options, and the TELUS chair has invited Quebecor's chief executive to meet on 11-23; no denial from BCE and no block from Ottawa."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No company or major-outlet confirmation of an approach, no upgrades (consensus is Reduce, target about $94) and no guide raise; the only source for the rumor is still one aggregator item."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No post-print downgrades or target cuts under $33 found, no Spotify news, and the fiscal 2027 outlook from the call stands."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-20T13:09:17.789712-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session: no funded Ukraine order, US award or change to the Steyr bid since Red Cat pulled its 2026 revenue target on 11-16; let the time limit close it at 2:45 PM CT. No extension: nothing dated is still to come."
+    },
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No new charge, guide cut or downgrade found since the 11-17 call; AECOM is down 1.3% today against RSP's 0.8%, which is the tape."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Crude is flat near $82.5, nowhere near an 8% jump, and no guidance cut from Sherwin-Williams, PPG or Ecolab; Sherwin is up on a day XLB is down 1.1%."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "A December hike is priced at about 97% (CME FedWatch via FXStreet), no book value or buyback from AGNC; TLT is up 1.3% today against AGNC flat."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No upgrade since the investor day: JPMorgan stayed Underweight and Bank of America Underperform with a $24 target; Nike is at a new closing low today."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "California's attorney general issued Nvidia an investigative subpoena on 11-19 over chips reaching China and whether investors were misled (CNBC, The Hill), and House committees will interview Huang on 12-01. That is a state action, not the SEC, Justice or Commerce action the wrong_if names, so it stops short of broken; Nvidia is down 7.3% today against SMH's 8.3%, and the stop is 4% away."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year guide on 11-19 rather than lowering it and said nothing of November weakness; no Target downgrades found."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Gold is down about 3.7% today and a December hike is about 97% priced; the one thing to watch is the 10-year, at 4.94% on today's flight to bonds against the 4.9% line in the wrong_if."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ross reported on 11-19 with comparable sales up 8%, above its 6-7% guide, and EPS of $1.91 above its range (Ross 8-K), so off-price demand is confirmed; TJX is up 0.5% today against XRT down 0.3%."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade, guide change or weak Avengers tracking found; Disney is down 1.3% today, the same as XLC."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Crude is flat, no product-export shock and no upgrades of the group found; I could not get today's crack spread, and the next test is the EIA report on 11-25."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No broker upgrades or producer comment on higher Q4 contract prices found; Albemarle's own guide is for lower lithium prices in Q4. SQM is down 2.0% today against SPY's 2.2%."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No buyback step-up, upgrade or launch change found; NetEase is down another 4.8% today against FXI's 1.3%."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "TELUS's special committee is still reviewing Quebecor's proposal and the two companies' CFOs meet on 11-23 (TELUS chair's letter); no withdrawal, rejection or regulatory block. TELUS is up 3% at a 20-day high today."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No approach confirmed by Clorox or by Bloomberg, Reuters, the WSJ or the FT; the only reports are a takeover blog (11-11) and an undated Benzinga item citing the NY Post. Clorox is up 1.4% today against XLP's 1.7%."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrades, Spotify news or outlook change found after the print; down 0.8% on a day SPY is down 2.2%. It is losing, which is the stop's business."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Entered this morning; no lab product launch, downgrade or guide change, and the rotation it rests on is running today with Accenture up 3.2% and Cognizant 4.9% while SMH is down 8.3%."
+    }
+   ]
+  }
+ ]
+}

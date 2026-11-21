@@ -1,0 +1,2220 @@
+{
+ "session": "2026-11-20",
+ "passes": [
+  {
+   "at": "2026-11-19T21:28:36-05:00",
+   "measured": true,
+   "session_id": "5284b6dd-c679-4260-93c4-a2953b0c379d",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Research EFA",
+     "names": [
+      "EFA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Multi-line insurers",
+     "names": [
+      "Multi-line insurers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 0,
+     "other_tools": 0
+    },
+    {
+     "what": "Research GLBE",
+     "names": [
+      "GLBE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MSTR",
+     "names": [
+      "MSTR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research UNH",
+     "names": [
+      "UNH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 2,
+     "reads": 2,
+     "other_tools": 0
+    },
+    {
+     "what": "Research LOPE",
+     "names": [
+      "LOPE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 2,
+     "other_tools": 0
+    },
+    {
+     "what": "Research PM",
+     "names": [
+      "PM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PBR",
+     "names": [
+      "PBR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VEEV",
+     "names": [
+      "VEEV"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 4,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Cybersecurity",
+     "names": [
+      "Cybersecurity"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 2,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Medical devices",
+     "names": [
+      "Medical devices"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research NOW",
+     "names": [
+      "NOW"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 0
+    },
+    {
+     "what": "Research MFC",
+     "names": [
+      "MFC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 1,
+     "other_tools": 0
+    },
+    {
+     "what": "Research Parcel and freight",
+     "names": [
+      "Parcel and freight forwarding"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 0,
+     "other_tools": 0
+    },
+    {
+     "what": "Research CNQ",
+     "names": [
+      "CNQ"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 0,
+     "other_tools": 0
+    },
+    {
+     "what": "Research WSM",
+     "names": [
+      "WSM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GAP",
+     "names": [
+      "GAP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BHP",
+     "names": [
+      "BHP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Discount stores",
+     "names": [
+      "Discount stores"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research KBE",
+     "names": [
+      "KBE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SAP",
+     "names": [
+      "SAP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GLD",
+     "names": [
+      "GLD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Utility-scale solar",
+     "names": [
+      "Utility-scale solar"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DLB",
+     "names": [
+      "DLB"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Copper miners",
+     "names": [
+      "Copper miners"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TEAM",
+     "names": [
+      "TEAM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 1,
+     "other_tools": 0
+    },
+    {
+     "what": "Research YMM",
+     "names": [
+      "YMM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research QNT",
+     "names": [
+      "QNT"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IWF",
+     "names": [
+      "IWF"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Drug distributors",
+     "names": [
+      "Drug distributors"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 2,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research NSC",
+     "names": [
+      "NSC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 0,
+     "other_tools": 0
+    },
+    {
+     "what": "Research CI",
+     "names": [
+      "CI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research P&C insurers",
+     "names": [
+      "Property and casualty insurers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research LNTH",
+     "names": [
+      "LNTH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SBLK",
+     "names": [
+      "SBLK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 4,
+     "reads": 3,
+     "other_tools": 1
+    },
+    {
+     "what": "Research INTU",
+     "names": [
+      "INTU"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 3,
+     "other_tools": 1
+    },
+    {
+     "what": "Research WWD",
+     "names": [
+      "WWD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VVV",
+     "names": [
+      "VVV"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 4,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GME",
+     "names": [
+      "GME"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Market stories research",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 3,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IBN",
+     "names": [
+      "IBN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 0,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "EFA": {
+     "searches": 4.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Multi-line insurers": {
+     "searches": 5.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GLBE": {
+     "searches": 4.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MSTR": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "UNH": {
+     "searches": 2.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "LOPE": {
+     "searches": 4.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PM": {
+     "searches": 4.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PBR": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VEEV": {
+     "searches": 4.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Cybersecurity": {
+     "searches": 2.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Medical devices": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "NOW": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MFC": {
+     "searches": 3.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Parcel and freight forwarding": {
+     "searches": 5.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CNQ": {
+     "searches": 4.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "WSM": {
+     "searches": 3.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GAP": {
+     "searches": 3.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BHP": {
+     "searches": 4.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Discount stores": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "KBE": {
+     "searches": 3.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SAP": {
+     "searches": 3.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GLD": {
+     "searches": 3.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Utility-scale solar": {
+     "searches": 3.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "DLB": {
+     "searches": 3.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Copper miners": {
+     "searches": 3.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TEAM": {
+     "searches": 3.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "YMM": {
+     "searches": 5.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "QNT": {
+     "searches": 5.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IWF": {
+     "searches": 4.0,
+     "reads": 1.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Drug distributors": {
+     "searches": 2.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "NSC": {
+     "searches": 4.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CI": {
+     "searches": 4.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Property and casualty insurers": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "LNTH": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SBLK": {
+     "searches": 4.0,
+     "reads": 3.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "INTU": {
+     "searches": 3.0,
+     "reads": 3.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "WWD": {
+     "searches": 5.0,
+     "reads": 2.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VVV": {
+     "searches": 3.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GME": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IBN": {
+     "searches": 3.0,
+     "reads": 0.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {
+    "EFA": "0 pages read, the floor is 5; 4 searches, the floor is 8",
+    "Multi-line insurers": "0 pages read, the floor is 5; 5 searches, the floor is 8",
+    "GLBE": "2 pages read, the floor is 5; 4 searches, the floor is 8",
+    "MSTR": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "UNH": "2 pages read, the floor is 5; 2 searches, the floor is 8",
+    "LOPE": "2 pages read, the floor is 5; 4 searches, the floor is 8",
+    "PM": "0 pages read, the floor is 5; 4 searches, the floor is 8",
+    "PBR": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "VEEV": "4 pages read, the floor is 5; 4 searches, the floor is 8",
+    "Cybersecurity": "2 pages read, the floor is 5; 2 searches, the floor is 8",
+    "Medical devices": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "NOW": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "MFC": "1 pages read, the floor is 5; 3 searches, the floor is 8",
+    "Parcel and freight forwarding": "0 pages read, the floor is 5; 5 searches, the floor is 8",
+    "CNQ": "0 pages read, the floor is 5; 4 searches, the floor is 8",
+    "WSM": "3 searches, the floor is 8",
+    "GAP": "1 pages read, the floor is 5; 3 searches, the floor is 8",
+    "BHP": "1 pages read, the floor is 5; 4 searches, the floor is 8",
+    "Discount stores": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "KBE": "2 pages read, the floor is 5; 3 searches, the floor is 8",
+    "SAP": "1 pages read, the floor is 5; 3 searches, the floor is 8",
+    "GLD": "3 searches, the floor is 8",
+    "Utility-scale solar": "2 pages read, the floor is 5; 3 searches, the floor is 8",
+    "DLB": "2 pages read, the floor is 5; 3 searches, the floor is 8",
+    "Copper miners": "2 pages read, the floor is 5; 3 searches, the floor is 8",
+    "TEAM": "1 pages read, the floor is 5; 3 searches, the floor is 8",
+    "YMM": "2 pages read, the floor is 5; 5 searches, the floor is 8",
+    "QNT": "1 pages read, the floor is 5; 5 searches, the floor is 8",
+    "IWF": "1 pages read, the floor is 5; 4 searches, the floor is 8",
+    "Drug distributors": "0 pages read, the floor is 5; 2 searches, the floor is 8",
+    "NSC": "0 pages read, the floor is 5; 4 searches, the floor is 8",
+    "CI": "2 pages read, the floor is 5; 4 searches, the floor is 8",
+    "Property and casualty insurers": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "LNTH": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "SBLK": "3 pages read, the floor is 5; 4 searches, the floor is 8",
+    "INTU": "3 pages read, the floor is 5; 3 searches, the floor is 8",
+    "WWD": "2 pages read, the floor is 5; 5 searches, the floor is 8",
+    "VVV": "4 pages read, the floor is 5; 3 searches, the floor is 8",
+    "GME": "0 pages read, the floor is 5; 3 searches, the floor is 8",
+    "IBN": "0 pages read, the floor is 5; 3 searches, the floor is 8"
+   },
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5
+   }
+  },
+  {
+   "at": "2026-11-20T09:59:54-05:00",
+   "measured": true,
+   "session_id": "ee19afdb-bcbb-4930-88e7-f70d8e752bad",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Research GLOB",
+     "names": [
+      "GLOB"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ACN",
+     "names": [
+      "ACN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CX",
+     "names": [
+      "CX"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SLV",
+     "names": [
+      "SLV"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PINS",
+     "names": [
+      "PINS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check A",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 19,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VALE",
+     "names": [
+      "VALE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research insurance brokers basket",
+     "names": [
+      "Insurance brokers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research utility-scale solar basket",
+     "names": [
+      "Utility-scale solar"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 11,
+     "reads": 4,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IBN",
+     "names": [
+      "IBN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research XPEV",
+     "names": [
+      "XPEV"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CTSH",
+     "names": [
+      "CTSH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CM",
+     "names": [
+      "CM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research construction materials basket",
+     "names": [
+      "Construction materials"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research APLD",
+     "names": [
+      "APLD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research investment banks basket",
+     "names": [
+      "Investment banks and brokers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Market stories research",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 3,
+     "other_tools": 1
+    },
+    {
+     "what": "Research UMC",
+     "names": [
+      "UMC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research YPF",
+     "names": [
+      "YPF"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MUFG",
+     "names": [
+      "MUFG"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PEGA",
+     "names": [
+      "PEGA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DIA",
+     "names": [
+      "DIA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research RIO",
+     "names": [
+      "RIO"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VOD",
+     "names": [
+      "VOD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GWRE",
+     "names": [
+      "GWRE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 11,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ROST",
+     "names": [
+      "ROST"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GAP",
+     "names": [
+      "GAP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 12,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MELI",
+     "names": [
+      "MELI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research robotics basket",
+     "names": [
+      "Robotics and automation"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IYT/SPY pair",
+     "names": [
+      "IYT/SPY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research RY",
+     "names": [
+      "RY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check B",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 20,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TD",
+     "names": [
+      "TD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MU",
+     "names": [
+      "MU"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BIDU",
+     "names": [
+      "BIDU"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check C",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 12,
+     "reads": 4,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DVA",
+     "names": [
+      "DVA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ASX",
+     "names": [
+      "ASX"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TSM",
+     "names": [
+      "TSM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BVN",
+     "names": [
+      "BVN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research multi-line insurers basket",
+     "names": [
+      "Multi-line insurers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research HDB",
+     "names": [
+      "HDB"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research HALO",
+     "names": [
+      "HALO"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IBM",
+     "names": [
+      "IBM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "GLOB": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ACN": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CX": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SLV": {
+     "searches": 6.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PINS": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VALE": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Insurance brokers": {
+     "searches": 9.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Utility-scale solar": {
+     "searches": 11.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IBN": {
+     "searches": 7.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "XPEV": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CTSH": {
+     "searches": 5.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CM": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Construction materials": {
+     "searches": 10.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "APLD": {
+     "searches": 6.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Investment banks and brokers": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "UMC": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "YPF": {
+     "searches": 9.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MUFG": {
+     "searches": 8.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PEGA": {
+     "searches": 6.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "DIA": {
+     "searches": 9.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "RIO": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VOD": {
+     "searches": 7.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GWRE": {
+     "searches": 7.0,
+     "reads": 11.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ROST": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GAP": {
+     "searches": 8.0,
+     "reads": 12.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MELI": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Robotics and automation": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IYT/SPY": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "RY": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TD": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MU": {
+     "searches": 9.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BIDU": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "DVA": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ASX": {
+     "searches": 6.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TSM": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BVN": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Multi-line insurers": {
+     "searches": 9.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "HDB": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "HALO": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IBM": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {
+    "SLV": "6 searches, the floor is 8",
+    "Utility-scale solar": "4 pages read, the floor is 5",
+    "IBN": "7 searches, the floor is 8",
+    "CTSH": "5 searches, the floor is 8",
+    "APLD": "6 searches, the floor is 8",
+    "PEGA": "6 searches, the floor is 8",
+    "VOD": "7 searches, the floor is 8",
+    "GWRE": "7 searches, the floor is 8",
+    "ASX": "6 searches, the floor is 8"
+   },
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5
+   }
+  },
+  {
+   "at": "2026-11-20T13:09:18-05:00",
+   "measured": true,
+   "session_id": "d856facb-7bfe-46ac-b7a4-a3a2dcf7accc",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Research PYPL",
+     "names": [
+      "PYPL"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Railroads",
+     "names": [
+      "Railroads"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Alternative asset managers",
+     "names": [
+      "Alternative asset managers"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MTZ",
+     "names": [
+      "MTZ"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SMH",
+     "names": [
+      "SMH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 15,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CLS",
+     "names": [
+      "CLS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Data center REITs",
+     "names": [
+      "Data center REITs"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Copper miners",
+     "names": [
+      "Copper miners"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research XLP",
+     "names": [
+      "XLP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ADC",
+     "names": [
+      "ADC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research WMT",
+     "names": [
+      "WMT"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 12,
+     "other_tools": 3
+    },
+    {
+     "what": "Research Waste and environmental services",
+     "names": [
+      "Waste and environmental services"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Packaged food",
+     "names": [
+      "Packaged food"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Building products",
+     "names": [
+      "Building products"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Electric utilities",
+     "names": [
+      "Electric utilities"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research NOK",
+     "names": [
+      "NOK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Retail REITs",
+     "names": [
+      "Retail REITs"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Payroll and HR software",
+     "names": [
+      "Payroll and HR software"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Seat-based software",
+     "names": [
+      "Seat-based software"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Drones and defense tech",
+     "names": [
+      "Drones and defense tech"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research EEM",
+     "names": [
+      "EEM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Oil services",
+     "names": [
+      "Oil services"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research INFY",
+     "names": [
+      "INFY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GLW",
+     "names": [
+      "GLW"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CTAS",
+     "names": [
+      "CTAS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CMS",
+     "names": [
+      "CMS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research STM",
+     "names": [
+      "STM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VMRK",
+     "names": [
+      "VMRK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Exchanges and financial data",
+     "names": [
+      "Exchanges and financial data"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MT",
+     "names": [
+      "MT"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TLT",
+     "names": [
+      "TLT"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research COST",
+     "names": [
+      "COST"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 11,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Auto parts retail",
+     "names": [
+      "Auto parts retail"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research HSBC",
+     "names": [
+      "HSBC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Market stories research",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 2,
+     "reads": 3,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Nuclear fuel and new reactors",
+     "names": [
+      "Nuclear fuel and new reactors"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Rare earths and critical minerals",
+     "names": [
+      "Rare earths and critical minerals"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TAK",
+     "names": [
+      "TAK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Analog and auto chips",
+     "names": [
+      "Analog and auto chips"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Telecom and cable",
+     "names": [
+      "Telecom and cable"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IT services",
+     "names": [
+      "IT services"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 6,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "PYPL": {
+     "searches": 6.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Railroads": {
+     "searches": 9.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Alternative asset managers": {
+     "searches": 10.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MTZ": {
+     "searches": 10.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SMH": {
+     "searches": 5.0,
+     "reads": 15.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CLS": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Data center REITs": {
+     "searches": 10.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Copper miners": {
+     "searches": 7.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "XLP": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ADC": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "WMT": {
+     "searches": 6.0,
+     "reads": 12.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Waste and environmental services": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Packaged food": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Building products": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Electric utilities": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "NOK": {
+     "searches": 7.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Retail REITs": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Payroll and HR software": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Seat-based software": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Drones and defense tech": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "EEM": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Oil services": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "INFY": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "GLW": {
+     "searches": 7.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CTAS": {
+     "searches": 6.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CMS": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "STM": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VMRK": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Exchanges and financial data": {
+     "searches": 8.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MT": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TLT": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "COST": {
+     "searches": 8.0,
+     "reads": 11.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Auto parts retail": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "HSBC": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Nuclear fuel and new reactors": {
+     "searches": 9.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Rare earths and critical minerals": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TAK": {
+     "searches": 7.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Analog and auto chips": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Telecom and cable": {
+     "searches": 10.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IT services": {
+     "searches": 7.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {
+    "PYPL": "6 searches, the floor is 8",
+    "SMH": "5 searches, the floor is 8",
+    "Copper miners": "7 searches, the floor is 8",
+    "WMT": "6 searches, the floor is 8",
+    "NOK": "7 searches, the floor is 8",
+    "GLW": "7 searches, the floor is 8",
+    "CTAS": "6 searches, the floor is 8",
+    "TAK": "7 searches, the floor is 8",
+    "IT services": "7 searches, the floor is 8"
+   },
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5
+   }
+  }
+ ]
+}
