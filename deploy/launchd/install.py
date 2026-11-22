@@ -33,7 +33,7 @@ LABEL = "com.factor-rotation.{}"
 SCHEDULE = {
     "bars": ["16:30"],
     "nightly": ["19:00"],
-    "paper-close": ["15:45"],
+    "paper-close": ["15:45", "12:45"],   # the second is for half days (run.sh lets the one before the close run)
     "paper-sync": ["16:20"],
     "side-facts": ["22:15", "23:45", "11:15", "14:15"],
     "keep-awake": ["16:40"],

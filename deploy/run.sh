@@ -42,7 +42,13 @@ case "$1" in
   paper-close|paper-sync)
     # Nothing to do until the paper account is set up in .env (docs/operations.md).
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
-    uv run fr trading-day || exit 0
+    if [ "$1" = paper-close ]; then
+      # Started at 3:45 PM and 12:45 PM ET; only the run in the 30 minutes before today's close goes on, so a
+      # half day (1:00 PM ET close) exits at 12:45 PM ET and a full day at 3:45 PM ET.
+      uv run fr trading-day --closing || exit 0
+    else
+      uv run fr trading-day || exit 0
+    fi
     exec uv run fr paper "${1#paper-}" ;;
   paper-enter)
     # The three-pass book's order job (paper/entries.py), every minute. Not gated on the trading day: Sunday night
@@ -63,9 +69,13 @@ case "$1" in
     # (install.py); Friday's run stops here.
     [ "$(TZ=America/New_York date +%u)" = 5 ] && exit 0
     exec uv run fr pass night ;;
-  pass-morning|pass-midday)
+  pass-morning)
     uv run fr trading-day || exit 0
-    exec uv run fr pass "${1#pass-}" ;;
+    exec uv run fr pass morning ;;
+  pass-midday)
+    # Not on a half day: the market closes at 1:00 PM ET, when this pass would start.
+    uv run fr trading-day --full || exit 0
+    exec uv run fr pass midday ;;
   keep-awake)
     # Hold off idle sleep until 9:40 AM New York time, so the order job and the night pass run all night.
     # A closed lid still sleeps the Mac, and so does a flat battery.

@@ -81,7 +81,9 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
 - **Holds stay 1 to 10 sessions.** A trade entered during the day counts its time limit from the next session.
   Stops are checked by code every two minutes from 8:30 AM to 2:40 PM CT, and a trade past its stop exits at once
   at the bid or ask (since 2026-11-18). Time limits, and a stop exit that couldn't get a quote, leave at the
-  2:45 PM CT close.
+  2:45 PM CT close. On a half day (12:00 PM CT close, such as the day after Thanksgiving) everything moves three
+  hours earlier: entries and stop checks stop at 11:40 AM CT, the close job runs at 11:45 AM CT, and there is no
+  midday pass (since 2026-11-22).
 - **The system watches itself.** A watchdog (`fr watch`, every five minutes) messages the owner's phone when a
   pass, a job or the paper gateway breaks, and each pass says when it starts, records or fails. Alerts never
   carry account numbers, positions or dollars.

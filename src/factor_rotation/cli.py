@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import sys
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from . import bars, drawdown, journal
@@ -14,6 +14,19 @@ from .universe import bar_universe
 
 def _today() -> date:
     return datetime.now(NY).date()
+
+
+def _trading_day(full: bool = False, closing: bool = False, now: datetime | None = None) -> bool:
+    """`fr trading-day`: a trading day, and with `full` not a half day, and with `closing` now within the 30 minutes
+    before today's close. The close job is started at 3:45 PM ET and at 12:45 PM ET; this lets the one that fits run."""
+    now = now or datetime.now(NY)
+    today = now.date()
+    if not journal.is_trading_day(today) or (full and journal.is_half_day(today)):
+        return False
+    if closing:
+        close = datetime.combine(today, journal.close_time(today), NY)
+        return close - timedelta(minutes=30) <= now < close
+    return True
 
 
 def main(argv: list[str] | None = None) -> None:
@@ -33,7 +46,10 @@ def main(argv: list[str] | None = None) -> None:
     c = sub.add_parser("brief", help="build the nightly brief from stored data")
     c.add_argument("--as-of", default=None)
 
-    sub.add_parser("trading-day", help="exit 0 if today is an NYSE trading day, else 1")
+    c = sub.add_parser("trading-day", help="exit 0 if today is an NYSE trading day, else 1")
+    c.add_argument("--full", action="store_true", help="and not a half day (the midday pass)")
+    c.add_argument("--closing", action="store_true",
+                   help="and now is in the close job's window, the 30 minutes before today's close (4:00 PM or 1:00 PM ET)")
     c = sub.add_parser("market", help="write tonight's market rows for the dashboard from the brief")
     c.add_argument("--as-of", default=None)
     c.add_argument("--out", type=Path, default=Path("market.json"))
@@ -104,7 +120,7 @@ def main(argv: list[str] | None = None) -> None:
         else:
             watch.test() if a.test else watch.run()
     elif a.cmd == "trading-day":
-        sys.exit(0 if journal.is_trading_day(_today()) else 1)
+        sys.exit(0 if _trading_day(a.full, a.closing) else 1)
     elif a.cmd == "serve":
         from . import serve
         serve.run(a.port)

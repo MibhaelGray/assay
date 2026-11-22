@@ -283,7 +283,7 @@ def reconcile(positions: dict[str, float]) -> list[str]:
 
 
 async def close_session(today: date, flatten: bool = False, broker=None, dry: bool = False) -> dict:
-    """Check each open trade at 3:45 PM ET and send market-on-close exits for those leaving today."""
+    """Check each open trade at 3:45 PM ET (12:45 PM ET on a half day) and send market-on-close exits for those leaving today."""
     path = ROOT / "exits" / f"{today}.json"
     if path.exists():
         raise FileExistsError(f"{path} exists; today's exits already went out")
@@ -539,7 +539,7 @@ def marks_info() -> dict:
     if pulled is None:
         return {"marks_at": None, "marks_intraday": False}
     p = pulled.astimezone(NY)
-    return {"marks_at": p.isoformat(), "marks_intraday": journal.is_trading_day(p.date()) and time(9, 30) <= p.time() < time(16, 0)}
+    return {"marks_at": p.isoformat(), "marks_intraday": journal.is_trading_day(p.date()) and time(9, 30) <= p.time() < journal.close_time(p.date())}
 
 
 def symbols_held() -> set[str]:

@@ -21,7 +21,7 @@ from .analytics import flows
 from .analytics.technicals import factor_pair_technicals, regime, symbol_technicals
 from .config import NY
 from .bars import bars_path, load
-from .calendars import NYSE
+from .calendars import NYSE, close_time, is_half_day  # noqa: F401  (re-exported)
 from .universe import CONSTITUENTS, ETFS, INDEXES, bar_universe, idea_universe
 
 JOURNAL = Path(os.environ.get("FR_JOURNAL_DIR", "journal"))

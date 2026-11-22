@@ -34,7 +34,7 @@ PASS_LOGS = Path("data/pass-logs")
 LABEL = "com.factor-rotation."
 # The scheduled passes, New York time: (pass, start, which days). Night runs Sunday to Thursday; the other two on
 # trading days. Kept beside deploy/launchd/install.py, which starts them.
-PASSES = (("night", time(20, 30), "sun-thu"), ("morning", time(9, 45), "trading"), ("midday", time(13, 0), "trading"))
+PASSES = (("night", time(20, 30), "sun-thu"), ("morning", time(9, 45), "trading"), ("midday", time(13, 0), "full"))   # not on a half day
 # IBKR's nightly reset drops every gateway for a while; a gateway that is down then is not news.
 RESET = (time(23, 30), time(1, 15))
 # Gateway messages that mean it is up but has lost IBKR's servers.
@@ -135,6 +135,9 @@ def failed_jobs() -> list[tuple[str, str, str]]:
 def _pass_days(kind: str, day: date, trading) -> bool:
     if kind == "sun-thu":
         return day.weekday() in (6, 0, 1, 2, 3)
+    if kind == "full":
+        from .journal import is_half_day
+        return trading(day) and not is_half_day(day)
     return trading(day)
 
 

@@ -27,7 +27,7 @@ goes in one side at a time. An order hits the bid or the ask and that is all (th
 whatever it didn't fill at once is cancelled before the run ends, so nothing is ever left resting in the book.
 (IBKR's overnight venue takes only limit orders, so the order is a limit at the bid or ask; cancelling the
 rest makes it a hit and nothing more.) Whatever is left is tried again every RETRY, or every FOLLOW while a
-trade is part of the way in, until the session's entry window ends (ENTRY_END), in whichever session is trading:
+trade is part of the way in, until the session's entry window ends (entry_end: 20 minutes before the close), in whichever session is trading:
   overnight    8:00 PM-3:50 AM ET  IBKR's OVERNIGHT venue, Sunday to Thursday nights
   pre-market   4:00-9:10 AM ET
   regular      9:30 AM-3:40 PM ET
@@ -55,7 +55,7 @@ from .gateway import CANARY, gateway_books, no_market
 
 log = logging.getLogger(__name__)
 
-ENTRY_END = time(15, 40)          # New York: the last 20 minutes belong to the close job
+ENTRY_GAP = timedelta(minutes=20)  # the last 20 minutes of the session belong to the close job
 RETRY = timedelta(minutes=15)     # between tries for what hasn't filled
 FOLLOW = timedelta(seconds=50)    # ... and every run (a minute) while a trade is part of the way in: it hits again for the rest
 PASS_MAX_NEW: int | None = None   # takes entered per pass: every one (the owner, 2026-11-16; three before that).
@@ -72,13 +72,21 @@ def venue(now: datetime) -> str | None:
     """Which session an order can trade in at `now` (New York), or None between sessions."""
     t, wd, today = now.time(), now.weekday(), now.date()
     trading = journal.is_trading_day(today)
-    if trading and time(9, 30) <= t < time(16, 0):
-        return "regular" if t < ENTRY_END else None
-    if trading and (time(16, 0) <= t < time(20, 0) or time(4, 0) <= t < PREMARKET_END):
+    close = journal.close_time(today)
+    if trading and time(9, 30) <= t < close:
+        return "regular" if t < entry_end(today) else None
+    after_end = time(20, 0) if close == time(16, 0) else time(close.hour + 4, close.minute)   # a half day's after-hours ends at 5:00 PM
+    if trading and (close <= t < after_end or time(4, 0) <= t < PREMARKET_END):
         return "extended"       # after-hours and pre-market, on SMART
     if (t >= time(20, 0) and wd in (6, 0, 1, 2, 3)) or (t < time(3, 50) and wd in (0, 1, 2, 3, 4)):
         return "overnight"      # IBKR's OVERNIGHT venue, Sunday to Thursday nights
     return None
+
+
+def entry_end(day: date) -> time:
+    """The last moment of the regular session an entry may go out: 20 minutes before the close (3:40 PM ET, or
+    12:40 PM ET on a half day)."""
+    return (datetime.combine(day, journal.close_time(day)) - ENTRY_GAP).time()
 
 
 def entered(trade: dict) -> dict[str, int]:
@@ -113,7 +121,7 @@ def book_fields(book_: tuple[float, float] | None) -> dict:
 def entry_session(now: datetime) -> date:
     """The session whose entries are going out at `now`: today until its close, then the next one."""
     today = now.date()
-    return today if journal.is_trading_day(today) and now.time() < time(16, 0) else journal.next_trading_day(today)
+    return today if journal.is_trading_day(today) and now.time() < journal.close_time(today) else journal.next_trading_day(today)
 
 
 def first_session(kind: str, session: date) -> date:

@@ -586,3 +586,40 @@ class Heal(unittest.TestCase):
             self.assertIsNone(entries.heal_gateway(stale, now + timedelta(minutes=30)))
             self.assertIn("restarted", entries.heal_gateway(stale, now + timedelta(minutes=61)))
             self.assertEqual(run.call_count, 2)
+
+
+class HalfDayTests(unittest.TestCase):
+    """The day after Thanksgiving closes at 1:00 PM ET: the close job runs at 12:45 PM ET, entries stop at 12:40 PM
+    ET, and the midday pass doesn't run."""
+
+    def test_calendar(self):
+        from factor_rotation import journal
+        self.assertTrue(journal.is_half_day(date(2026, 11, 27)))
+        self.assertFalse(journal.is_half_day(date(2026, 11, 25)))
+        self.assertEqual(journal.close_time(date(2026, 11, 27)).hour, 13)
+        self.assertEqual(journal.close_time(date(2026, 11, 25)).hour, 16)
+
+    def test_close_job_window(self):
+        from factor_rotation.cli import _trading_day
+        at = lambda d, h, m: datetime(2026, 11, d, h, m, tzinfo=NY)  # noqa: E731
+        self.assertTrue(_trading_day(closing=True, now=at(27, 12, 45)))
+        self.assertFalse(_trading_day(closing=True, now=at(27, 15, 45)))
+        self.assertTrue(_trading_day(closing=True, now=at(25, 15, 45)))
+        self.assertFalse(_trading_day(closing=True, now=at(25, 12, 45)))
+        self.assertFalse(_trading_day(full=True, now=at(27, 9, 0)))
+        self.assertTrue(_trading_day(full=True, now=at(25, 9, 0)))
+
+    def test_entry_window(self):
+        from factor_rotation.paper import entries
+        at = lambda h, m: datetime(2026, 11, 27, h, m, tzinfo=NY)  # noqa: E731
+        self.assertEqual(entries.venue(at(12, 30)), "regular")
+        self.assertIsNone(entries.venue(at(12, 41)))
+        self.assertEqual(entries.venue(at(13, 30)), "extended")
+        self.assertIsNone(entries.venue(at(17, 30)))
+        self.assertEqual(entries.entry_session(at(13, 30)), date(2026, 11, 30))
+        self.assertEqual(entries.venue(datetime(2026, 11, 25, 15, 30, tzinfo=NY)), "regular")
+
+    def test_watchdog_skips_midday(self):
+        from factor_rotation import watch
+        self.assertFalse(watch._pass_days("full", date(2026, 11, 27), lambda d: True))
+        self.assertTrue(watch._pass_days("full", date(2026, 11, 25), lambda d: True))
