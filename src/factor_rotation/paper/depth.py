@@ -3,7 +3,7 @@
 The evening pass hands its candidates to research agents. Over the first four nights (2026-11-09 to 11-12) an
 agent took four or five names at once and each name got about six web searches and two pages read: real, but
 set by the workload, and nothing held it there. Since 2026-11-14 the skill gives each name its own agent with a
-bare brief ("research it very deeply; I want to understand the story") and leaves the rest to the agent, and this
+bare brief ("research it; I want to understand the story", kept focused since 2026-11-19) and leaves the rest to the agent, and this
 module checks that every name got one and that it looked: a rule nobody measures is a hope. The counts are a floor
 for looking. They say nothing about whether the story is right; three agents to a name with a fixed fact sheet
 each were tried the same day and dropped for producing lists, not stories.
@@ -33,10 +33,13 @@ from ..config import NY
 from . import proposals
 
 JUDGE_MODEL, JUDGE_EFFORT = "claude-fable-5-2", "high"      # the pass itself: it judges and ranks
-AGENT_MODEL, AGENT_EFFORT = "claude-opus-5-5", "medium"     # its research agents: they gather facts
+AGENT_MODEL, AGENT_EFFORT = "claude-sonnet-5-5", "medium"   # its research agents: they gather facts (Opus 5.5 until 2026-11-16)
 MAX_NAMES = 2          # names to one agent; one is the rule, two when they share a story
-MIN_SEARCHES = 6       # web searches a name, over its agents
-MIN_READS = 4          # pages opened and read a name, over its agents (the first four nights averaged two)
+# The owner, 2026-11-19: research doesn't need to go as deep. The floors were 15 and 10 from 2026-11-16 (6 and 4
+# before), and a pass relaunched an agent for every name under them, about two agents a name and most of a 5-hour
+# usage limit a pass. Now a name under the floors is only noted; nothing is relaunched.
+MIN_SEARCHES = 8       # web searches a name, over its agents
+MIN_READS = 5          # pages opened and read a name, over its agents (the first four nights averaged two)
 NAMES_LINE = re.compile(r"^\s*NAMES:\s*(.+?)\s*$", re.M)
 
 

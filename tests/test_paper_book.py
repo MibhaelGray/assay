@@ -131,52 +131,6 @@ def take(pid="P01", name="AAA", long=("AAA",), short=("HHH",), conviction=3, hor
             "long": list(long), "short": list(short), "plan": {"horizon_days": horizon, "stop": {"spread_pct": stop}}}
 
 
-class Open(Case):
-    def run_open(self, live, broker, props=(take(),)):
-        if props is not None:
-            book._write(self.root / "proposals" / f"{DAY}.json", {"session": DAY.isoformat(), "screen": "2026-11-06", "passes": [], "proposals": list(props)})
-        with mock.patch.object(book, "quotes", lambda symbols, *a: {s: live[s] for s in symbols if s in live}), \
-                mock.patch.object(book, "_closes", lambda symbols: {s: 50.0 for s in symbols}):
-            return asyncio.run(book.open_session(DAY, broker))
-
-    def test_trades_the_take_with_its_own_plan_at_the_larger_size(self):
-        plan = self.run_open({"AAA": 50.0, "HHH": 100.0}, Broker(), [take(horizon=7, stop=-6.5), take("P02", "BBB", ("BBB",), decision="pass")])
-        (t,) = plan["trades"]
-        self.assertEqual((t["proposal_id"], t["horizon_days"], t["stop"], t["notional"], t["book"]), (f"{DAY}-P01", 7, {"spread_pct": -6.5}, 10_000, "dynamic"))
-        self.assertEqual([(leg["symbol"], leg["side"], leg["shares"]) for leg in t["legs"]], [("AAA", "long", 200), ("HHH", "short", 100)])
-        self.assertEqual((plan["proposals"], plan["warnings"]), ({"take": 1, "pass": 1}, []))
-
-    def test_takes_nothing_and_says_so_when_no_proposals_were_recorded(self):
-        plan = self.run_open({}, Broker(), None)
-        self.assertEqual(plan["trades"], [])
-        self.assertIn("No research proposals", plan["warnings"][0])
-
-    def test_no_warning_when_the_pass_took_nothing(self):
-        plan = self.run_open({}, Broker(), [take(decision="pass")])
-        self.assertEqual((plan["trades"], plan["warnings"]), ([], []))
-
-    def test_says_when_every_trade_was_sized_on_the_last_close(self):
-        plan = self.run_open({}, Broker())
-        self.assertEqual(plan["prices"], {"quoted": 0, "last_close": ["AAA", "HHH"]})
-        self.assertIn("price pull failed", plan["warnings"][0])
-        self.assertEqual(self.read("plans", DAY)["warnings"], plan["warnings"])
-
-    def test_names_the_legs_without_a_quote(self):
-        plan = self.run_open({"AAA": 51.0}, Broker())
-        self.assertEqual(plan["prices"], {"quoted": 1, "last_close": ["HHH"]})
-        self.assertIn("HHH", plan["warnings"][0])
-        with self.assertRaises(FileExistsError):
-            self.run_open({}, Broker())
-
-    def test_a_job_that_dies_while_sending_leaves_the_plan_so_a_rerun_cannot_send_twice(self):
-        with self.assertRaises(ConnectionError):
-            self.run_open({"AAA": 51.0, "HHH": 49.0}, Broker(fail_place=True))
-        plan = self.read("plans", DAY)
-        self.assertEqual((len(plan["trades"]), plan["orders"]), (1, []))
-        with self.assertRaises(FileExistsError):
-            self.run_open({}, Broker())
-
-
 class Takes(unittest.TestCase):
     prices = {s: 100.0 for s in ("AAA", "BBB", "CCC", "DDD", "EEE", "FFF", "GGG", "HHH", "XLY")}
 
@@ -196,57 +150,13 @@ class Takes(unittest.TestCase):
         self.assertEqual(sorted(k["reason"].split(":")[0] for k in skipped), ["already holds CCC", "stood down before the open"])
 
 
-class Check(Case):
-    def test_closes_the_filled_side_of_a_broken_pair_at_the_market(self):
-        self.write("plans", DAY, {"trades": [pair("T1"), pair("T2", "BBB", "HHH")], "orders": [{"status": "PreSubmitted"}]})
-        b = Broker(fills=[fill("T1", "HHH", "SLD", 25), fill("T2", "BBB", "BOT", 25), fill("T2", "HHH", "SLD", 25, n=1)],
-                   positions={"HHH": -50, "BBB": 25},
-                   orders=[{"trade_id": "T1", "symbol": "AAA", "action": "BUY", "shares": 25, "status": "Cancelled"}])
-        out = asyncio.run(book.check_session(DAY, b))
-        self.assertEqual(b.sent, [{"trade_id": "T1", "symbol": "HHH", "action": "BUY", "shares": 25, "kind": "MKT"}])
-        self.assertEqual([e["trade_id"] for e in out["exits"]], ["T1"])
-        self.assertIn("AAA (cancelled) never filled", out["warnings"][0])
-        self.assertEqual((self.state("T1"), self.state("T2")), ("closed", "open"))
-        self.assertEqual(book.reconcile(asyncio.run(b.positions())), [])
-        self.assertEqual(b.connections, 1)
-        self.assertIsNone(next(r for r in self.rows() if r["id"] == "T1")["model_bps"])
-        self.assertEqual(book.alerts(), out["warnings"])
-        with self.assertRaises(FileExistsError):
-            asyncio.run(book.check_session(DAY, b))
-
-    def rows(self):
-        import pandas as pd
-        with mock.patch.object(book.bars, "load", lambda symbols: pd.DataFrame()), \
-                mock.patch.object(book.storage, "modified", lambda p: None):
-            return book.rows()
-
-    def test_a_trade_with_no_fills_is_reported_and_nothing_is_sent(self):
-        self.write("plans", DAY, {"trades": [pair("T1")], "orders": [{"status": "PreSubmitted"}]})
-        b = Broker()
-        out = asyncio.run(book.check_session(DAY, b))
-        self.assertEqual((b.sent, [u["trade_id"] for u in out["unfilled"]], out["exits"]), ([], ["T1"], []))
-        self.assertIn("wasn't taken", out["warnings"][0])
-
-    def test_an_order_still_working_is_left_alone(self):
-        self.write("plans", DAY, {"trades": [pair("T1")], "orders": [{"status": "PreSubmitted"}]})
-        b = Broker(fills=[fill("T1", "HHH", "SLD", 25)], positions={"HHH": -25},
-                   orders=[{"trade_id": "T1", "symbol": "AAA", "action": "BUY", "shares": 25, "status": "Submitted"}])
-        out = asyncio.run(book.check_session(DAY, b))
-        self.assertEqual((b.sent, out["exits"], [w["trade_id"] for w in out["waiting"]]), ([], [], ["T1"]))
-
-    def test_nothing_to_do_without_a_plan(self):
-        out = asyncio.run(book.check_session(DAY, Broker()))
-        self.assertIn("no entries", out["note"])
-        self.assertFalse((self.root / "checks").exists())
-
-
 class Close(Case):
     def run_close(self, day, broker, prices):
         with mock.patch.object(book, "quotes", lambda symbols, *a: {s: prices[s] for s in symbols if s in prices}):
             return asyncio.run(book.close_session(day, broker=broker))
 
     def held(self, trade_id="T1", **kw):
-        self.write("plans", DAY, {"trades": [pair(trade_id, **kw)], "orders": [{"status": "PreSubmitted"}]})
+        self.write("entries", DAY, {"trades": [pair(trade_id, **kw)], "orders": [{"status": "PreSubmitted"}]})
         return Broker(fills=[fill(trade_id, "AAA", "BOT", 25), fill(trade_id, "HHH", "SLD", 25)], positions={"AAA": 25, "HHH": -25})
 
     def test_a_stop_rule_on_a_symbol_outside_the_trade_is_priced_and_fires(self):
@@ -384,6 +294,38 @@ class Proposals(Research):
                 self.propose(bad)
         self.assertFalse((self.root / "proposals").exists())
 
+    def test_sizing_risks_the_same_share_of_the_book_at_the_stop_and_more_on_conviction(self):
+        size = lambda c, stop, **kw: rules.side_dollars(c, stop, 1_000_000, ["AAA"], ["HHH"], **kw)  # noqa: E731
+        self.assertEqual([size(3, s)[0] for s in (-8, -5, -3)], [18_700, 30_000, 50_000])       # each loses $1,500 at its stop
+        self.assertEqual([size(c, -5)[0] for c in (3, 4, 5)], [30_000, 45_000, 60_000])         # 1x, 1.5x, 2x the risk
+        self.assertEqual(size(5, -3), (60_000, {"risk_dollars": 3000, "stop_pct": -3, "limited_by": "side cap"}))
+        self.assertEqual(size(3, -5, volumes={"AAA": 8_000_000.0})[1]["limited_by"], "liquidity: AAA")
+        self.assertEqual(size(3, -5, volumes={"AAA": 8_000_000.0})[0], 20_000)                  # 0.25% of $8M a day
+        # A basket side splits its dollars, so two $8M names carry twice what one does; a $15,000 account scales down.
+        self.assertEqual(rules.side_dollars(3, -5, 1_000_000, ["AAA", "BBB"], ["HHH"], {"AAA": 8e6, "BBB": 8e6})[0], 30_000)
+        self.assertEqual(rules.side_dollars(3, -5, 15_000, ["AAA"], ["HHH"])[0], 400)
+
+    def test_the_leg_hardest_to_fill_leads_and_the_others_only_follow_its_fills(self):
+        t = {"legs": [{"symbol": "ARKK", "side": "long", "shares": 139, "ref_price": 72.0},
+                      {"symbol": "RCAT", "side": "short", "shares": 3838, "ref_price": 2.6}], "hedge": None}
+        self.assertEqual(rules.lead_leg(t, {"ARKK": 450e6, "RCAT": 27e6}), "RCAT")              # $10,000 is more of $27M a day
+        self.assertEqual(rules.lead_leg(t, {"ARKK": 450e6}), "RCAT")                            # no volume on record: the hardest
+        self.assertEqual(rules.lead_leg({**t, "hedge": "ARKK"}), "RCAT")                        # nothing known: the name, not its hedge
+        t["lead"] = "RCAT"
+        due = lambda f, **kw: [(leg["symbol"], n) for leg, n in rules.entry_due(t, f, **kw)]  # noqa: E731
+        self.assertEqual(due({"ARKK": 0, "RCAT": 0}), [("RCAT", 3838)])                         # the lead alone at first
+        self.assertEqual(due({"ARKK": 0, "RCAT": 100}), [("RCAT", 3738)])                       # 2.6% in: under a tenth, the hedge waits
+        self.assertEqual(due({"ARKK": 0, "RCAT": 960}), [("ARKK", 34), ("RCAT", 2878)])         # a quarter in: 34 of 139
+        self.assertEqual(due({"ARKK": 34, "RCAT": 3838}), [("ARKK", 105)])                      # the lead done: the hedge completes
+        self.assertEqual(due({"ARKK": 0, "RCAT": 3838}, committed={"ARKK": 139}, lead=False), [])   # already on order
+
+    def test_an_outright_take_also_says_why_not_hedged(self):
+        with self.assertRaisesRegex(ValueError, "hedge_why"):
+            self.propose(verdict(hedge=None, hedge_why=None))
+        _, doc, _ = self.propose(verdict(hedge=None, hedge_why="its own story; the hedge would give up the market's move"))
+        take = doc["proposals"][0]
+        self.assertEqual((take["short"], take["hedge_why"]), ([], "its own story; the hedge would give up the market's move"))
+
     def test_a_take_through_earnings_must_say_why(self):
         self.reports = {"AAA": [{"date": "2026-11-10", "session": "after_close"}]}     # trades on session 3
         with self.assertRaisesRegex(ValueError, "AAA reports 2026-11-10 after close, which trades on session 3"):
@@ -396,7 +338,8 @@ class Proposals(Research):
     def test_the_pass_can_choose_its_own_hedge_and_record_its_own_idea(self):
         own = verdict(candidate=None, name="Refiners", setup="catalyst", direction="long", long=["CCC", "DDD", "EEE"], short=["XLE"])
         _, doc, _ = self.propose(verdict(hedge="XLY"), own, {"candidate": "BBB", "decision": "take", "conviction": 3, "reason": "r", "reasoning": REASONING,
-                                                             "wrong_if": "w", "hedge": None, "plan": {"horizon_days": 2, "stop": {"spread_pct": -4}}})
+                                                             "wrong_if": "w", "hedge": None, "hedge_why": "its own story",
+                                                             "plan": {"horizon_days": 2, "stop": {"spread_pct": -4}}})
         self.assertEqual([(p["name"], p["source"], p["long"], p["short"]) for p in doc["proposals"]],
                          [("AAA", "screen 2026-11-06 #1", ["AAA"], ["XLY"]), ("Refiners", "own", ["CCC", "DDD", "EEE"], ["XLE"]),
                           ("BBB", "screen 2026-11-06 #2", [], ["BBB"])])
@@ -456,13 +399,14 @@ class Review(Research):
         super().setUp()
         t = {**pair("T1", horizon=2), "notional": 10_000, "proposal_id": f"{DAY}-P01", "conviction": 4, "wrong_if": "x"}
         t["legs"] = [{**leg, "shares": 100} for leg in t["legs"]]
-        self.write("plans", DAY, {"trades": [t], "orders": [{"status": "PreSubmitted"}]})
+        self.write("entries", DAY, {"trades": [t], "orders": [{"status": "PreSubmitted"}]})
         self.broker = Broker(fills=[fill("T1", "AAA", "BOT", 100), fill("T1", "HHH", "SLD", 100)], positions={"AAA": 100, "HHH": -100})
         asyncio.run(book.sync(DAY, self.broker))
 
-    def review(self, session, hour=15, **r):
-        return learn.record_review({"session": session.isoformat(), "reviews": [{"trade_id": "T1", "thesis": "intact", "reason": "why", **r}]},
-                                   datetime(session.year, session.month, session.day, hour, 10, tzinfo=NY))
+    def review(self, session, **r):
+        """A pass's review of the trade, as daily.record leaves it for the close job (journal/paper/pass_reviews/)."""
+        self.write("pass_reviews", session, {"passes": [{"pass": "midday", "at": f"{session}T13:00:00-05:00",
+                                                         "reviews": [{"trade_id": "T1", "thesis": "intact", "reason": "why", **r}]}]})
 
     def close(self, day, prices):
         with mock.patch.object(book, "quotes", lambda symbols, *a: {s: prices[s] for s in symbols if s in prices}):
@@ -479,16 +423,6 @@ class Review(Research):
         out = self.close(DAY, {"AAA": 94.0, "HHH": 100.0})
         self.assertIn("stopped: down 6.0%", out["exits"][0]["reason"])
 
-    def test_the_review_must_cover_every_open_trade_in_time_and_only_extend_on_the_last_session(self):
-        with self.assertRaisesRegex(ValueError, "missing: T1"):
-            learn.record_review({"session": DAY.isoformat(), "reviews": []}, datetime(2026, 11, 9, 15, 10, tzinfo=NY))
-        with self.assertRaisesRegex(ValueError, "2:44 PM CT"):
-            self.review(DAY, hour=16, action="hold")
-        with self.assertRaisesRegex(ValueError, "last session"):
-            self.review(DAY, action="extend", sessions=2)
-        with self.assertRaisesRegex(ValueError, "1-3 sessions"):
-            self.review(NEXT, action="extend", sessions=4)
-
     def test_a_winner_on_its_last_session_is_extended_once(self):
         self.close(DAY, {"AAA": 101.0, "HHH": 100.0})
         self.review(NEXT, action="extend", sessions=2, reason="the second leg of the story lands Thursday")
@@ -498,9 +432,9 @@ class Review(Research):
         self.assertEqual((t["horizon_days"], t["planned_horizon_days"], t["extended"]), (4, 2, True))
         third, fourth = book.journal.sessions_from(DAY, 4)[2:]
         self.assertEqual(self.close(third, {"AAA": 103.0, "HHH": 100.0})["exits"], [])
-        with self.assertRaisesRegex(ValueError, "already been extended"):
-            self.review(fourth, action="extend", sessions=1)
-        self.assertIn("time limit: session 4 of 4", self.close(fourth, {"AAA": 103.0, "HHH": 100.0})["exits"][0]["reason"])
+        self.review(fourth, action="extend", sessions=1)                         # a second extension is refused at the close
+        self.assertIn("time limit: session 4 of 4; the extension asked for was refused: it was extended before",
+                      self.close(fourth, {"AAA": 103.0, "HHH": 100.0})["exits"][0]["reason"])
 
     def test_a_loser_is_not_extended(self):
         self.close(DAY, {"AAA": 100.0, "HHH": 100.0})
@@ -550,7 +484,7 @@ class Learn(Research):
 
     def test_a_post_mortem_tag_has_to_agree_with_the_result(self):
         t = {**pair("T1", horizon=1), "proposal_id": f"{DAY}-P01"}
-        self.write("plans", DAY, {"trades": [t], "orders": [{"status": "PreSubmitted"}]})
+        self.write("entries", DAY, {"trades": [t], "orders": [{"status": "PreSubmitted"}]})
         b = Broker(fills=[fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)], positions={"AAA": 25, "HHH": -25})
         with mock.patch.object(book, "quotes", lambda symbols, *a: {"AAA": 100.0, "HHH": 100.0}):
             asyncio.run(book.close_session(DAY, broker=b))                       # the time limit; exits fill at 100, so it loses its commissions
@@ -568,7 +502,7 @@ class Learn(Research):
 class Pnl(Case):
     def setUp(self):
         super().setUp()
-        self.write("plans", DAY, {"trades": [pair("T1")]})
+        self.write("entries", DAY, {"trades": [pair("T1")]})
         self.bars = frame({"AAA": [104.0, 106.0], "HHH": [101.0, 102.0]})
         for target, name, value in ((book.bars, "load", lambda symbols: self.bars), (book.journal, "_bars_settled", lambda d: True)):
             p = mock.patch.object(target, name, value)
@@ -612,7 +546,7 @@ class Pnl(Case):
     def test_a_position_entered_after_the_last_bar_sits_at_its_fill(self):
         self.bars = frame({"AAA": [104.0], "HHH": [101.0]})
         self.fills(NEXT, ("AAA", "BOT", 100.0, "2026-11-10T14:30:02+00:00"), ("HHH", "SLD", 100.0, "2026-11-10T14:30:02+00:00"))
-        self.write("plans", DAY, {"trades": [pair("T1", entry=NEXT)]})
+        self.write("entries", DAY, {"trades": [pair("T1", entry=NEXT)]})
         rows = book.pnl_by_session()
         self.assertEqual((rows[-1]["date"], rows[-1]["pnl"]), (NEXT.isoformat(), -2.0))
         self.assertEqual(book.rows()[0]["pnl"], -2.0)
@@ -658,45 +592,3 @@ class SwingFillsOnly(unittest.TestCase):
             self.assertEqual([x["symbol"] for x in book._book_fills()], ["MU"])
 
 
-class Midday(Review):
-    def midday(self, hour=12, **r):
-        return learn.record_midday({"session": DAY.isoformat(), "reviews": [{"trade_id": "T1", "thesis": "intact", "reason": "why", **r}]},
-                                   datetime(DAY.year, DAY.month, DAY.day, hour, 20, tzinfo=NY))
-
-    def test_an_exit_is_closed_at_the_market_once_and_the_close_leaves_it_alone(self):
-        self.midday(action="exit", thesis="broken", reason="guidance was withdrawn at 11:00 AM")
-        out = asyncio.run(book.midday_session(DAY, broker=self.broker))
-        self.assertEqual(out["exits"][0]["reason"], "midday check: guidance was withdrawn at 11:00 AM")
-        self.assertEqual(sorted((o["symbol"], o["action"], o["kind"], o["shares"]) for o in self.broker.sent),
-                         [("AAA", "SELL", "MKT", 100), ("HHH", "BUY", "MKT", 100)])
-        self.assertEqual(self.state("T1"), "closed")
-        again = asyncio.run(book.midday_session(DAY, broker=self.broker))
-        self.assertEqual((again["orders"], len(self.broker.sent)), ([], 2))
-        self.assertEqual(self.close(DAY, {"AAA": 90.0, "HHH": 100.0})["exits"], [])
-
-    def test_an_exit_that_does_not_fill_goes_again_into_the_close(self):
-        self.midday(action="exit", thesis="played_out", reason="the move is done")
-        self.broker.fill = lambda o: o["kind"] != "MKT"
-        asyncio.run(book.midday_session(DAY, broker=self.broker))
-        self.assertEqual(self.state("T1"), "closing")
-        out = self.close(DAY, {"AAA": 100.0, "HHH": 100.0})
-        self.assertEqual([r["trade_id"] for r in out["retried"]], ["T1"])
-        asyncio.run(book.sync(DAY, self.broker))
-        self.assertEqual(self.state("T1"), "closed")
-
-    def test_a_hold_sends_nothing_and_no_check_is_a_note(self):
-        self.assertIn("no midday check", asyncio.run(book.midday_session(DAY, broker=self.broker))["note"])
-        self.midday(action="hold")
-        out = asyncio.run(book.midday_session(DAY, broker=self.broker))
-        self.assertEqual((out["orders"], self.broker.sent, self.state("T1")), ([], [], "open"))
-
-    def test_the_check_is_refused_outside_its_window_or_without_a_broken_thesis(self):
-        with self.assertRaisesRegex(ValueError, "between 9:00 AM and 1:45 PM CT"):
-            self.midday(hour=15, action="hold")
-        with self.assertRaisesRegex(ValueError, "broken or played_out"):
-            self.midday(action="exit", thesis="weakened", reason="it is losing")
-        with self.assertRaisesRegex(ValueError, "missing: T1"):
-            learn.record_midday({"session": DAY.isoformat(), "reviews": []}, datetime(2026, 11, 9, 12, 0, tzinfo=NY))
-        self.midday(action="hold")
-        with self.assertRaises(FileExistsError):
-            self.midday(action="hold")

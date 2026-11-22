@@ -1,19 +1,18 @@
 """The paper book's jobs and records, in journal/paper/:
 
-    proposals/<session>.json  the research pass's verdict on each candidate (proposals.py); only takes are traded
-    reviews/<session>.json    the pre-close review: hold, exit early or extend, per open automatic trade (learn.py)
-    plans/<session>.json   write-once at 9:15 AM ET: the trades taken, the ones skipped and why, the orders sent
-    checks/<session>.json  write-once at 9:40 AM ET: entries that never filled, and broken trades closed on the spot
-    exits/<session>.json   write-once at 3:45 PM ET: each trade leaving at the close, why, and the orders sent
-    fills/<session>.json   the day's fills, commissions, positions and account value from the paper account
-    HALT                   the kill switch: while it exists no new trades open (exits still go out)
-    PAUSE-<book>           the 10% pause (drawdown.py): that book opens nothing new until resumed
+    proposals/<session>.json     each pass's verdict on each candidate (daily.py, proposals.py); only takes are traded
+    pass_reviews/<session>.json  each pass's hold, exit or extend for every open trade (daily.py)
+    entries/<session>.json       the order job's trades, written before their first order goes out, and each run (entries.py)
+    exits/<session>.json         write-once at 3:45 PM ET: each trade leaving at the close, why, and the orders sent
+    fills/<session>.json         the day's fills, commissions, positions and account value from the paper account
+    HALT                         the kill switch: while it exists no new trades open (exits still go out)
+    PAUSE-<book>                 the 10% pause (drawdown.py): the book opens nothing new until resumed
 
 A trade's state comes from these files: planned, open once its entry fills are in, closing once an exit is
 sent, closed once the exit fills are in. Results are in bp of one side's notional, next to a model result
 from daily bars (the same shares, first open to last close), so the difference is the cost of real fills.
 
-Each job's file carries a `warnings` list in plain words (a failed price pull, an order that wasn't accepted,
+Each job's record carries a `warnings` list in plain words (an order that wasn't accepted, a leg with no quote,
 a stop that couldn't be checked); `alerts()` hands the latest to the dashboard and the report.
 """
 
@@ -26,17 +25,16 @@ from time import sleep
 
 import pandas as pd
 
-from .. import bars, drawdown, journal, storage
-from ..config import CT, NY
+from .. import bars, journal, storage
+from ..config import NY
 from . import proposals, rules
-from .broker import WORKING, DryRun, GuardError, IBPaper, PaperSettings, unref
+from .broker import DryRun, IBPaper, PaperSettings, unref
 
 log = logging.getLogger(__name__)
 ROOT = journal.JOURNAL / "paper"
 HALT = ROOT / "HALT"
 # Price pulls: (tries, seconds between). The Mac may have just woken for the job with no network yet. The
 # paper gateway can't stand in: it has no market data while the live session is logged in.
-OPEN_QUOTES = (4, 20)      # the 9:15 AM job must send by 9:27 AM
 CLOSE_QUOTES = (3, 15)     # the 3:45 PM job must send by 3:49 PM
 # An order that will never fill. A market-on-close order sent before the close sits at "PendingSubmit", so
 # that status is no cause for alarm; a message from the gateway always is worth reading.
@@ -116,13 +114,6 @@ def _order_warnings(orders: list[dict]) -> list[str]:
     return out
 
 
-def _closes(symbols: list[str]) -> dict[str, float]:
-    df = bars.load(symbols)
-    if df.empty:
-        return {}
-    return df.sort_values("date").groupby("symbol")["close"].last().to_dict()
-
-
 # ---- State ------------------------------------------------------------------------------------------------
 def _cleanup_ref(f: dict) -> tuple[str, str] | None:
     """A by-hand order labelled "cleanup-<trade id>" (no "|SYMBOL"), as the 2026-11-16 CTVA cover was: it belongs to
@@ -150,25 +141,15 @@ def _avg(fills: list[dict]) -> tuple[int, float | None, float]:
 
 
 def recorded() -> list[dict]:
-    """Every swing trade that has had an order sent for it, oldest first. A trade is written down before its first
-    order goes out, wherever that order comes from: the 9:15 AM entry job's plan, or the early entries outside
-    regular hours (early.py), which can fill hours before the plan exists. So a trade is in the book from its
-    first order, even if the entry job never runs. When both hold a trade, the plan's copy wins.
-    Since 2026-11-12: the entry job failed that morning, and two trades that had filled overnight were invisible
-    to the stops and the checks until a plan was written for them."""
-    out, seen = [], set()
-    for plan in _all("plans"):
-        for t in plan["trades"]:
-            seen.add(t["id"])
-            out.append(t)
+    """Every trade that has had an order sent for it, oldest first. The order job writes a trade down before its
+    first order goes out (entries.py), so it is in the book from then on. A take stood down before anything
+    filled was never in the book."""
+    out = []
     fills = _fills_by_ref()
-    for doc in [*_all("early"), *_all("entries")]:   # entries: the three-pass book's order job (entries.py)
+    for doc in _all("entries"):
         for t in doc.get("trades", []):
-            if t["id"] in seen:
+            if t.get("stood_down") and not any(fills.get((t["id"], leg["symbol"])) for leg in t["legs"]):
                 continue
-            filled = any(fills.get((t["id"], leg["symbol"])) for leg in t["legs"])
-            if t.get("stood_down") and not filled:
-                continue   # stood down before anything filled: never in the book
             out.append(t)
     return sorted(out, key=lambda t: (t["entry_date"], t["id"]))
 
@@ -177,7 +158,7 @@ def trades() -> list[dict]:
     """Every paper trade with its fills, exit and state, oldest first."""
     fills = _fills_by_ref()
     exits = {e["trade_id"]: {**e, "session": d["session"]}
-             for d in [*_all("plans"), *_all("checks"), *_all("midday"), *_all("entries"), *_all("exits")] for e in d.get("exits", [])}
+             for d in [*_all("entries"), *_all("exits")] for e in d.get("exits", [])}
     synced = {d["session"] for d in _all("fills")}
     longer = {e["trade_id"]: e["sessions"] for d in _all("exits") for e in d.get("extended", [])}
     out = []
@@ -245,97 +226,6 @@ def _broker(readonly: bool = False, dry: bool = False):
     return IBPaper(s, readonly=readonly) if s.send or readonly else DryRun(s)
 
 
-async def open_session(today: date, broker=None, dry: bool = False) -> dict:
-    """Plan today's entries and send them as market-on-open orders. Takes already entered outside regular hours
-    (early.py) are taken over: their early orders still working are cancelled, the shares that didn't fill go in
-    at the open, and a take stood down after it filled early is closed at the open."""
-    from . import early
-
-    path = ROOT / "plans" / f"{today}.json"
-    if path.exists():
-        raise FileExistsError(f"{path} exists; today's entries already went out")
-    s = PaperSettings()
-    dry = dry or (broker is None and not s.send)
-    doc = proposals.load(today)
-    props = doc["proposals"] if doc else []
-    early_trades = (early.load(today) or {}).get("trades", [])
-    held = [t for t in open_trades() if t["id"] not in {e["id"] for e in early_trades}]   # those are counted below
-    standing = {p["id"] for p in early._takes(doc)}
-    early_live = [t for t in early_trades if t["proposal_id"] in standing and not t.get("stood_down")]
-    plan = {"session": today.isoformat(), "built_at": datetime.now(NY).isoformat(), "screen": doc and doc["screen"],
-            "proposals": {v: sum(p["decision"] == v for p in props) for v in proposals.DECISIONS} if doc else None,
-            "dry_run": dry, "trades": [], "skipped": [], "orders": [], "prices": {}, "early": [], "exits": [], "warnings": []}
-    kept, orders = [], []
-    if HALT.exists():
-        plan["halted"] = HALT.read_text().strip() or "halted"
-    elif why := drawdown.paused("swing"):
-        plan["halted"] = why
-    else:
-        entered_early = {t["proposal_id"] for t in early_trades}
-        fresh = [p for p in props if p["id"] not in entered_early]
-        symbols = {x for p in fresh if p["decision"] == "take" for x in [*p["long"], *p["short"]]}
-        live = quotes(sorted(symbols), *OPEN_QUOTES) if symbols else {}
-        prices = {**_closes(sorted(symbols)), **live}
-        used = {x for t in [*held, *early_live] for x in rules.core_symbols(t)}
-        takes, take_skip = rules.proposal_trades(fresh, today.isoformat(), prices, used, start=len(early_trades) + 1,
-                                                 room=rules.MAX_NEW - len(early_live))
-        if doc is None:
-            plan["warnings"].append(f"No research proposals were recorded for {today}, so the book took nothing.")
-        kept, cap_skip = rules.apply_caps(takes, [*held, *early_live])
-        plan["skipped"] = [*take_skip, *cap_skip]
-        used = sorted({leg["symbol"] for t in kept for leg in t["legs"]})
-        stale = [x for x in used if x not in live]
-        plan["prices"] = {"quoted": len(used) - len(stale), "last_close": stale}
-        if used and len(stale) == len(used):
-            plan["warnings"].append(f"The pre-market price pull failed after {OPEN_QUOTES[0]} tries, so all {len(kept)} trades were sized on the last close.")
-        elif stale:
-            plan["warnings"].append(f"No pre-market price for {', '.join(stale)}, so those legs were sized on the last close.")
-        orders = [{"trade_id": t["id"], "symbol": leg["symbol"], "action": "BUY" if leg["side"] == "long" else "SELL",
-                   "shares": leg["shares"], "kind": "MOO"} for t in kept for leg in t["legs"]]
-    if orders or early_trades:
-        async with (broker or _broker(dry=dry)) as b:
-            if early_trades:
-                cancelled = await b.cancel({t["id"] for t in early_trades})
-                if not dry:
-                    await asyncio.sleep(1)
-                    await _pull(b, today)
-                for t in early_trades:
-                    got = early.entered(t)
-                    side = lambda leg, opening: "BUY" if (leg["side"] == "long") == opening else "SELL"  # noqa: E731
-                    gone = t.get("stood_down") or (None if t["proposal_id"] in standing else "no longer a take")
-                    if gone:
-                        if any(got.values()):
-                            plan["trades"].append(t)
-                            plan["exits"].append({"trade_id": t["id"], "book": t["book"], "session_number": 1,
-                                                  "reason": f"stood down after filling early ({gone}); closed at the open"})
-                            plan["warnings"].append(f"{t['id']} {t['name']}: stood down after part of it filled early, so the filled shares close at the open.")
-                            orders += [{"trade_id": t["id"], "symbol": leg["symbol"], "action": side(leg, False), "shares": got[leg["symbol"]],
-                                        "kind": "MOO"} for leg in t["legs"] if got[leg["symbol"]] > 0]
-                        else:
-                            plan["skipped"].append({"name": t["proposal_id"], "reason": f"stood down before the open: {gone}"})
-                        continue
-                    plan["trades"].append(t)
-                    plan["early"].append({"trade_id": t["id"], "filled": got})
-                    if "halted" not in plan:
-                        orders += [{"trade_id": t["id"], "symbol": leg["symbol"], "action": side(leg, True),
-                                    "shares": leg["shares"] - got[leg["symbol"]], "kind": "MOO"}
-                                   for leg in t["legs"] if leg["shares"] > got[leg["symbol"]]]
-                if cancelled:
-                    plan["warnings"].append(f"{cancelled} early order{'' if cancelled == 1 else 's'} still working at 8:15 AM CT "
-                                            "were cancelled; their unfilled shares go in at the open.")
-            plan["trades"] += kept
-            # Connected, so orders are about to go: the plan is on disk first, and if the job dies while
-            # sending, a rerun is refused rather than sending the same orders twice.
-            if not dry:
-                _write(path, plan)
-            if orders:
-                plan["orders"] = await b.place(orders)
-        plan["warnings"] += _order_warnings(plan["orders"])
-    if not dry:
-        _write(path, plan)
-    return plan
-
-
 async def sync(today: date, broker=None) -> dict:
     """Pull today's fills, positions and account value; keep fills already stored."""
     async with (broker or IBPaper(readonly=True)) as b:
@@ -348,7 +238,9 @@ async def _pull(b, today: date) -> dict:
     new = await b.fills()
     positions = await b.positions()
     nav = await b.net_liquidation()
-    marks = await b.marks() if hasattr(b, "marks") else {}
+    # IBKR's own prices for what the account holds. With nothing held there is nothing to price, and the gateway
+    # doesn't answer the request at all: it timed out after 30 seconds on every pull of an empty account.
+    marks = await b.marks() if positions and hasattr(b, "marks") else {}
     old = (_read(path) or {}).get("fills", [])
     seen = {f["exec_id"] for f in new}
     payload = {"session": today.isoformat(), "pulled_at": datetime.now(NY).isoformat(),
@@ -361,14 +253,7 @@ async def _pull(b, today: date) -> dict:
 
 def _gaps(positions: dict[str, float]) -> dict[str, tuple[float, float]]:
     """symbol -> (account, books) wherever the account's position differs from what the books think they hold."""
-    from ..intraday import orders as intraday   # the intraday book shares the account; it is flat by 3:45 PM
-
-    from ..intraday import extended
-
-    now = datetime.now(NY)
-    expected: dict[str, float] = dict(intraday.held_now(now.date()))   # trades() counts the early entries itself
-    for s, v in extended.held_now(extended.night_of(now)).items():   # the extended-hours book, until its 9:31 AM clean-up
-        expected[s] = expected.get(s, 0) + v
+    expected: dict[str, float] = {}
     for t in trades():
         for h in t["held"]:
             sign = 1 if h["side"] == "long" else -1
@@ -395,98 +280,6 @@ def _gaps(positions: dict[str, float]) -> dict[str, tuple[float, float]]:
 def reconcile(positions: dict[str, float]) -> list[str]:
     """Differences between the account's positions and what the books think they hold."""
     return [f"{s}: account {a:g}, books {b:g}" for s, (a, b) in _gaps(positions).items()]
-
-
-async def check_session(today: date, broker=None, dry: bool = False) -> dict:
-    """A few minutes after the open: pull the fills and see what each entry order did. A trade with no fills
-    wasn't taken. A trade with some legs filled and others dead is broken: its filled legs are closed now
-    with plain market orders, so half a pair doesn't sit unhedged until the close."""
-    path = ROOT / "checks" / f"{today}.json"
-    if path.exists():
-        raise FileExistsError(f"{path} exists; today's post-open check already ran")
-    plan = _read(ROOT / "plans" / f"{today}.json")
-    s = PaperSettings()
-    dry = dry or (broker is None and not s.send)
-    out = {"session": today.isoformat(), "built_at": datetime.now(NY).isoformat(), "dry_run": dry, "unfilled": [],
-           "waiting": [], "exits": [], "orders": [], "order_status": [], "warnings": []}
-    if dry or not plan or not plan["trades"]:
-        out["note"] = "dry run: nothing checked" if dry else f"no entries were sent for {today}"
-        return out
-    if not plan.get("orders"):
-        out["warnings"].append("The plan has trades but no order statuses, so the entry job stopped while sending. "
-                               "Legs that filled are handled here; the rest were never sent.")
-    async with (broker or _broker(dry=dry)) as b:
-        await _pull(b, today)
-        status = {(o["trade_id"], o["symbol"], o["action"]): o["status"] for o in await b.orders()}
-        now = datetime.now(CT).strftime("%-I:%M %p")
-        orders = []
-        for t in trades():
-            if t["entry_date"] != today.isoformat() or t["exit"]:
-                continue
-            filled = {h["symbol"] for h in t["held"]}
-            dead = {leg["symbol"]: status.get((t["id"], leg["symbol"], "BUY" if leg["side"] == "long" else "SELL"), "not found")
-                    for leg in t["legs"] if leg["symbol"] not in filled}
-            if not dead:
-                continue
-            out["order_status"] += [{"trade_id": t["id"], "symbol": x, "status": st} for x, st in dead.items()]
-            what = ", ".join(f"{x} ({st.lower()})" for x, st in sorted(dead.items()))
-            if any(st in WORKING for st in dead.values()):
-                out["waiting"].append({"trade_id": t["id"], "symbols": sorted(dead)})
-                out["warnings"].append(f"{t['id']} {t['name']}: the order for {what} is still working, perhaps a delayed open, "
-                                       "so nothing was closed. The 2:45 PM CT check handles it.")
-            elif not filled:
-                out["unfilled"].append({"trade_id": t["id"], "name": t["name"], "symbols": sorted(dead)})
-                out["warnings"].append(f"{t['id']} {t['name']}: no leg filled at the open ({what}), so the trade wasn't taken.")
-            else:
-                out["exits"].append({"trade_id": t["id"], "book": t["book"], "session_number": 1, "intraday": True,
-                                     "reason": f"broken: {', '.join(sorted(dead))} never filled at the open; the rest closed at {now} CT"})
-                out["warnings"].append(f"{t['id']} {t['name']}: {what} never filled at the open, so the filled side was closed at {now} CT.")
-                orders += [{"trade_id": t["id"], "symbol": h["symbol"], "action": "SELL" if h["side"] == "long" else "BUY",
-                            "shares": h["shares"] - h["exit_shares"], "kind": "MKT"} for h in t["held"] if h["shares"] > h["exit_shares"]]
-        if orders:
-            _write(path, out)  # on disk before anything is sent, as in open_session
-            out["orders"] = await b.place(orders)
-            out["warnings"] += _order_warnings(out["orders"])
-            await asyncio.sleep(3)
-            await _pull(b, today)  # the closing fills, so the trade shows as closed straight away
-    _write(path, out)
-    return out
-
-
-async def midday_session(today: date, broker=None, dry: bool = False) -> dict:
-    """Close, at the market, the open trades the midday check said to exit (learn.record_midday). Safe to run
-    more than once: a trade already leaving is left alone, so a second run only picks up a check recorded late.
-    An exit that doesn't fill leaves the trade "closing", and the 3:45 PM job sends it again into the close."""
-    path = ROOT / "midday" / f"{today}.json"
-    doc = _read(path)
-    s = PaperSettings()
-    dry = dry or (broker is None and not s.send)
-    out = {"session": today.isoformat(), "dry_run": dry, "exits": [], "orders": [], "warnings": []}
-    if not doc:
-        out["note"] = f"no midday check is recorded for {today}"
-        return out
-    wanted = {r["trade_id"]: r for r in doc["reviews"] if r["action"] == "exit"}
-    leaving = [t for t in open_trades() if t["id"] in wanted]
-    if not leaving:
-        out["note"] = "the midday check asked for no exits" if not wanted else "its exits have already gone out"
-        return out
-    now = datetime.now(NY)
-    exits = [{"trade_id": t["id"], "book": t["book"], "session_number": _session(t, today), "intraday": True,
-              "at": now.strftime("%-I:%M %p"), "reason": f"midday check: {wanted[t['id']]['reason']}"} for t in leaving]
-    orders = [{"trade_id": t["id"], "symbol": h["symbol"], "action": "SELL" if h["side"] == "long" else "BUY",
-               "shares": h["shares"] - h["exit_shares"], "kind": "MKT"} for t in leaving for h in t["held"] if h["shares"] > h["exit_shares"]]
-    out["exits"] = exits
-    async with (broker or _broker(dry=dry)) as b:
-        if not dry:   # on disk before anything is sent, as in open_session
-            _write(path, {**doc, "exits": [*doc.get("exits", []), *exits]})
-        out["orders"] = await b.place(orders)
-        out["warnings"] += _order_warnings(out["orders"])
-        if not dry:
-            await asyncio.sleep(3)
-            await _pull(b, today)  # the closing fills, so the trade shows as closed straight away
-            _write(path, {**doc, "exits": [*doc.get("exits", []), *exits],
-                          "orders": [*doc.get("orders", []), *out["orders"]], "warnings": [*doc.get("warnings", []), *out["warnings"]]})
-    return out
 
 
 async def close_session(today: date, flatten: bool = False, broker=None, dry: bool = False) -> dict:
@@ -556,7 +349,7 @@ async def close_session(today: date, flatten: bool = False, broker=None, dry: bo
                    "orders": [], "warnings": warnings}
         if orders:
             if not dry:
-                _write(path, payload)  # on disk before anything is sent, as in open_session
+                _write(path, payload)  # on disk before anything is sent, so a job that dies while sending can't send twice
             payload["orders"] = await b.place(orders)
             payload["warnings"] += _order_warnings(payload["orders"])
     if not dry:
@@ -565,11 +358,16 @@ async def close_session(today: date, flatten: bool = False, broker=None, dry: bo
 
 
 def alerts() -> list[str]:
-    """The warnings from the latest session's jobs, in the order the jobs ran."""
-    plans = sorted((ROOT / "plans").glob("*.json"))
-    if not plans:
-        return []
-    return [w for kind in ("plans", "checks", "exits") for w in (_read(ROOT / kind / plans[-1].name) or {}).get("warnings", [])]
+    """The warnings from the latest session's jobs: the order job's last run, then the close job."""
+    out = []
+    entries = sorted((ROOT / "entries").glob("*.json"))
+    if entries:
+        runs = (_read(entries[-1]) or {}).get("runs") or []
+        out += runs[-1].get("warnings", []) if runs else []
+    exits = sorted((ROOT / "exits").glob("*.json"))
+    if exits:
+        out += (_read(exits[-1]) or {}).get("warnings", [])
+    return out
 
 
 # ---- Results ----------------------------------------------------------------------------------------------

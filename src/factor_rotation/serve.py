@@ -21,7 +21,7 @@ from multiprocessing import get_context
 from time import perf_counter
 from urllib.parse import parse_qs, urlsplit
 
-from . import bars, charts, earnings, hormuz, journal, localdash
+from . import bars, charts, earnings, journal, localdash
 from .config import NY
 from .market import basket_library
 from .paper import book
@@ -36,7 +36,6 @@ PAPER_SYNC_LIMIT = 150  # seconds: the connect's retries plus the requests' own 
 _lock = threading.Lock()
 _earnings_running = threading.Lock()
 _check_running = threading.Lock()
-_hormuz_running = threading.Lock()
 _checked_on = None
 _workers = None
 
@@ -45,6 +44,13 @@ def _symbols() -> list[str]:
     lib = basket_library()["baskets"]
     names = {*bar_universe(), *bars.INDEXES, *(b["hedge"] for b in lib),
              *(m["symbol"] for b in lib for m in b["members"]), *book.symbols_held()}
+    try:   # the small-cap shadow book's takes, so the Portfolio view marks them at today's prices
+        from .smallcap import score
+        names |= set(score.take_names())
+        from .smallcap import universe as small_universe   # the Baskets view's Small caps tab
+        names |= set(small_universe.symbols())
+    except Exception:
+        pass
     return sorted(names)
 
 
@@ -97,31 +103,6 @@ def _earnings_in_background() -> str | None:
     return "Earnings dates are updating in the background and will show on your next refresh"
 
 
-def _hormuz_in_background() -> None:
-    """Ship transits and futures history for the Hormuz view, when over six hours old. The page is rebuilt after."""
-    if not hormuz.stale() or not _hormuz_running.acquire(blocking=False):
-        return
-
-    def work():
-        try:
-            hormuz.pull()
-            with _lock:
-                localdash.build()
-        except Exception:
-            log.exception("hormuz_refresh_failed")
-        finally:
-            _hormuz_running.release()
-
-    threading.Thread(target=work, daemon=True).start()
-
-
-def _hormuz_quotes() -> None:
-    try:
-        hormuz.pull_quotes()
-    except Exception as e:
-        log.warning("hormuz_quotes_failed error=%r", e)
-
-
 def _daily_check_in_background(symbols: list[str]) -> None:
     """Once a day, behind a refresh: the 5-day pull that catches past prices Yahoo has re-based for a dividend or
     split, and replaces today's bar from the chart feed. The page is rebuilt only if a name needed its full history."""
@@ -154,8 +135,6 @@ def refresh() -> dict:
     with ThreadPoolExecutor(max_workers=2) as pool:
         synced = pool.submit(_sync_paper)
         pulled = bars.collect_quotes(symbols)
-        _hormuz_quotes()
-        _hormuz_in_background()
         note = _earnings_in_background()
         paper = synced.result()  # the book's panels, the shortlist and the P/L all count today's fills
         info = localdash.build(workers=_workers)
@@ -249,7 +228,6 @@ def _start_workers() -> None:
 def run(port: int = 8765) -> None:
     localdash.build()
     _start_workers()
-    _hormuz_in_background()
     server = ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, directory=str(localdash.DASHBOARD)))
     log.info("dashboard at http://localhost:%d/local.html", port)
     server.serve_forever()

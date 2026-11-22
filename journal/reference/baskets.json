@@ -1,6 +1,6 @@
 {
-  "note": "Themed baskets: equal-weight groups of stocks for ideas no single ETF captures. A watchlist, not recorded ideas. Members come from IBKR's theme data (search_investment_topics / get_theme_details) and the dossier; every member is checked with IBKR (search_contracts for a US listing, get_price_snapshot avg_90d_usd_volume of at least about $20M; names in the standard universe skip the volume check). The snapshot is IBKR's change from the prior close at the time shown; after 16:00 it includes after-hours trades. Members added 2026-11-12 come from the widened universe (universe.INDEX_STOCKS: S&P 500 and 400 names trading at least $20M a day on our Yahoo bars), so like other universe names they skip the IBKR volume check and have no snapshot until the next refresh. Since 2026-11-16 every basket must pass the cohesion test (`fr baskets check`, basket_check.py): over the last 120 sessions, each member's daily return after removing its hedge's part correlates at least 0.25 with the rest of the basket's, and the basket averages at least 0.35. Re-run monthly and before adding a basket.",
-  "updated": "2026-11-12",
+  "note": "Themed baskets: equal-weight groups of stocks for ideas no single ETF captures. A watchlist, not recorded ideas. Members come from IBKR's theme data (search_investment_topics / get_theme_details) and the dossier; every member is checked with IBKR (search_contracts for a US listing, get_price_snapshot avg_90d_usd_volume of at least about $20M; names in the standard universe skip the volume check). The snapshot is IBKR's change from the prior close at the time shown; after 16:00 it includes after-hours trades. Members added 2026-11-12 come from the widened universe (universe.INDEX_STOCKS: S&P 500 and 400 names trading at least $20M a day on our Yahoo bars), so like other universe names they skip the IBKR volume check and have no snapshot until the next refresh. Since 2026-11-16 every basket must pass the cohesion test (`fr baskets check`, basket_check.py): over the last 120 sessions, each member's daily return after removing its hedge's part correlates at least 0.25 with the rest of the basket's, and the basket averages at least 0.35. Re-run monthly and before adding a basket. On 2026-11-16 the S&P 500 was sorted into industry baskets from its GICS sub-industries (with S&P 400 peers where a group needed a third name); a group or member that failed the cohesion test was left out, so about a sixth of the index is in no basket and is screened as single stocks only.",
+  "updated": "2026-11-16",
   "snapshot_at": "2026-11-05T16:00:00-05:00",
   "baskets": [
     {
@@ -691,6 +691,18 @@
           "avg_usd_volume_90d": 155202692,
           "change_pct": 5.16,
           "added": "2026-11-09"
+        },
+        {
+          "symbol": "LDOS",
+          "why": "Leidos: Diversified Support Services",
+          "change_pct": -0.39,
+          "avg_usd_volume_90d": 163299434
+        },
+        {
+          "symbol": "TXT",
+          "why": "Textron: Aerospace & Defense",
+          "change_pct": -1.14,
+          "avg_usd_volume_90d": 146115072
         }
       ],
       "hedge_change_pct": -4.12
@@ -1520,6 +1532,18 @@
           "symbol": "BMRN",
           "why": "BioMarin: rare-disease enzymes and Voxzogo",
           "avg_usd_volume_90d": 131683766
+        },
+        {
+          "symbol": "ABBV",
+          "why": "AbbVie: Biotechnology",
+          "change_pct": -0.16,
+          "avg_usd_volume_90d": 1320293236
+        },
+        {
+          "symbol": "INCY",
+          "why": "Incyte: Biotechnology",
+          "change_pct": -0.58,
+          "avg_usd_volume_90d": 200180172
         }
       ]
     },
@@ -1720,6 +1744,24 @@
           "symbol": "MCD",
           "why": "McDonald's: the largest quick-service chain",
           "avg_usd_volume_90d": 1349422110
+        },
+        {
+          "symbol": "DRI",
+          "why": "Darden Restaurants: Restaurants",
+          "change_pct": 0.96,
+          "avg_usd_volume_90d": 237114356
+        },
+        {
+          "symbol": "DPZ",
+          "why": "Domino's: Restaurants",
+          "change_pct": 1.37,
+          "avg_usd_volume_90d": 274132247
+        },
+        {
+          "symbol": "YUM",
+          "why": "Yum! Brands: Restaurants",
+          "change_pct": 0.55,
+          "avg_usd_volume_90d": 371450345
         }
       ]
     },
@@ -1809,6 +1851,2738 @@
           "why": "Magnite: the largest independent sell-side ad platform, selling app, web and connected-TV ad space",
           "change_pct": -1.71,
           "avg_usd_volume_90d": 57786031
+        }
+      ]
+    },
+    {
+      "id": "telecom_cable",
+      "name": "Telecom and cable",
+      "hedge": "XLC",
+      "story": "The phone and broadband carriers: steady subscription cash flows, heavy debt and big dividends. They trade on subscriber adds, price competition and interest rates, and tend to hold up when growth stocks fall.",
+      "watch": "Quarterly subscriber adds and churn, price moves by any carrier, fixed-wireless against cable broadband, long rates.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "VZ",
+          "why": "Verizon: Integrated Telecommunication Services",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 1086410439
+        },
+        {
+          "symbol": "T",
+          "why": "AT&T: Integrated Telecommunication Services",
+          "change_pct": 0.81,
+          "avg_usd_volume_90d": 1160960883
+        },
+        {
+          "symbol": "TMUS",
+          "why": "T-Mobile US: Wireless Telecommunication Services",
+          "change_pct": 0.04,
+          "avg_usd_volume_90d": 896517433
+        },
+        {
+          "symbol": "CMCSA",
+          "why": "Comcast: Cable & Satellite",
+          "change_pct": 1.75,
+          "avg_usd_volume_90d": 691374719
+        },
+        {
+          "symbol": "CHTR",
+          "why": "Charter Communications: Cable & Satellite",
+          "change_pct": 0.4,
+          "avg_usd_volume_90d": 386445030
+        }
+      ]
+    },
+    {
+      "id": "entertainment",
+      "name": "Entertainment",
+      "hedge": "XLC",
+      "story": "Streaming, studios, parks and live events. They trade on subscriber and attendance numbers and on how much consumers still spend on going out and staying in.",
+      "watch": "Netflix and Disney subscriber and ad numbers, concert and park demand, sports-rights deals.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "NFLX",
+          "why": "Netflix: Movies & Entertainment",
+          "change_pct": -2.25,
+          "avg_usd_volume_90d": 2746566848
+        },
+        {
+          "symbol": "DIS",
+          "why": "Walt Disney Company (The): Movies & Entertainment",
+          "change_pct": -0.23,
+          "avg_usd_volume_90d": 952802730
+        },
+        {
+          "symbol": "LYV",
+          "why": "Live Nation Entertainment: Movies & Entertainment",
+          "change_pct": -0.43,
+          "avg_usd_volume_90d": 371372410
+        },
+        {
+          "symbol": "TKO",
+          "why": "TKO Group Holdings: Movies & Entertainment",
+          "change_pct": -2.61,
+          "avg_usd_volume_90d": 206856840
+        }
+      ]
+    },
+    {
+      "id": "consumer_internet",
+      "name": "Consumer internet marketplaces",
+      "hedge": "QQQ",
+      "story": "Apps that match buyers and sellers: rides, delivery, stays, used cars, goods and ads. They trade on order growth and take rates, and on consumer spending as a whole.",
+      "watch": "Bookings and order growth, take rates, gig-worker rules, consumer spending data.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "DASH",
+          "why": "DoorDash: Specialized Consumer Services",
+          "change_pct": -1.01,
+          "avg_usd_volume_90d": 855783032
+        },
+        {
+          "symbol": "UBER",
+          "why": "Uber: Passenger Ground Transportation",
+          "change_pct": 0.43,
+          "avg_usd_volume_90d": 1283104281
+        },
+        {
+          "symbol": "ABNB",
+          "why": "Airbnb: Hotels, Resorts & Cruise Lines",
+          "change_pct": -0.32,
+          "avg_usd_volume_90d": 794671990
+        },
+        {
+          "symbol": "CVNA",
+          "why": "Carvana: Automotive Retail",
+          "change_pct": -2.25,
+          "avg_usd_volume_90d": 617055486
+        },
+        {
+          "symbol": "EBAY",
+          "why": "eBay Inc.: Broadline Retail",
+          "change_pct": -0.02,
+          "avg_usd_volume_90d": 486587949
+        },
+        {
+          "symbol": "RDDT",
+          "why": "Reddit: Interactive Media & Services",
+          "change_pct": -5.67,
+          "avg_usd_volume_90d": 898751646
+        }
+      ]
+    },
+    {
+      "id": "hotels_casinos",
+      "name": "Hotels and casinos",
+      "hedge": "XLY",
+      "story": "Hotel chains and casino operators. They trade on travel demand, room rates, Las Vegas and Macau.",
+      "watch": "Room revenue (RevPAR), Macau gaming revenue each month, Las Vegas visitation, group and business travel.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "HLT",
+          "why": "Hilton Worldwide: Hotels, Resorts & Cruise Lines",
+          "change_pct": 0.2,
+          "avg_usd_volume_90d": 626506832
+        },
+        {
+          "symbol": "MAR",
+          "why": "Marriott International: Hotels, Resorts & Cruise Lines",
+          "change_pct": 0.6,
+          "avg_usd_volume_90d": 582509145
+        },
+        {
+          "symbol": "LVS",
+          "why": "Las Vegas Sands: Casinos & Gaming",
+          "change_pct": -1.41,
+          "avg_usd_volume_90d": 237137667
+        },
+        {
+          "symbol": "WYNN",
+          "why": "Wynn Resorts: Casinos & Gaming",
+          "change_pct": -3.34,
+          "avg_usd_volume_90d": 173328805
+        },
+        {
+          "symbol": "MGM",
+          "why": "MGM Resorts: Casinos & Gaming",
+          "change_pct": -0.78,
+          "avg_usd_volume_90d": 138974276
+        }
+      ]
+    },
+    {
+      "id": "homebuilders",
+      "name": "Homebuilders",
+      "hedge": "XLY",
+      "story": "The big US homebuilders. They trade on mortgage rates more than anything else, then on orders, margins and incentives.",
+      "watch": "Mortgage rates and the 10-year yield, new-home sales and housing starts, builder orders and incentives.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "DHI",
+          "why": "D. R. Horton: Homebuilding",
+          "change_pct": -0.55,
+          "avg_usd_volume_90d": 401201090
+        },
+        {
+          "symbol": "LEN",
+          "why": "Lennar: Homebuilding",
+          "change_pct": 0.22,
+          "avg_usd_volume_90d": 309201855
+        },
+        {
+          "symbol": "NVR",
+          "why": "NVR, Inc.: Homebuilding",
+          "change_pct": -1.03,
+          "avg_usd_volume_90d": 245036580
+        },
+        {
+          "symbol": "PHM",
+          "why": "PulteGroup: Homebuilding",
+          "change_pct": -0.02,
+          "avg_usd_volume_90d": 221393627
+        }
+      ]
+    },
+    {
+      "id": "apparel",
+      "name": "Apparel and footwear",
+      "hedge": "XLY",
+      "story": "Clothing, shoe and accessory brands. They trade on consumer demand, inventory, tariffs and China.",
+      "watch": "Same-store and brand sales, inventory and markdowns, tariffs on Asian imports, China demand.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "NKE",
+          "why": "Nike, Inc.: Apparel, Accessories & Luxury Goods",
+          "change_pct": 0.71,
+          "avg_usd_volume_90d": 1095274553
+        },
+        {
+          "symbol": "DECK",
+          "why": "Deckers Brands: Footwear",
+          "change_pct": -3.87,
+          "avg_usd_volume_90d": 262528889
+        },
+        {
+          "symbol": "RL",
+          "why": "Ralph Lauren Corporation: Apparel, Accessories & Luxury Goods",
+          "change_pct": 0.85,
+          "avg_usd_volume_90d": 226269997
+        },
+        {
+          "symbol": "LULU",
+          "why": "Lululemon Athletica: Apparel, Accessories & Luxury Goods",
+          "change_pct": -0.18,
+          "avg_usd_volume_90d": 459435148
+        },
+        {
+          "symbol": "TPR",
+          "why": "Tapestry, Inc.: Apparel, Accessories & Luxury Goods",
+          "change_pct": 0.41,
+          "avg_usd_volume_90d": 373027144
+        }
+      ]
+    },
+    {
+      "id": "autos",
+      "name": "Automakers and parts",
+      "hedge": "XLY",
+      "story": "Detroit's carmakers and a large parts supplier. They trade on US auto sales, pricing, tariffs and the cost of the shift to electric vehicles. Tesla doesn't move with them and is left out.",
+      "watch": "Monthly US auto sales, tariffs, union contracts, EV losses, used-car prices.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "F",
+          "why": "Ford Motor Company: Automobile Manufacturers",
+          "change_pct": -2.85,
+          "avg_usd_volume_90d": 603126837
+        },
+        {
+          "symbol": "GM",
+          "why": "General Motors: Automobile Manufacturers",
+          "change_pct": -2.71,
+          "avg_usd_volume_90d": 594988688
+        },
+        {
+          "symbol": "APTV",
+          "why": "Aptiv: Automotive Parts & Equipment",
+          "change_pct": -2.43,
+          "avg_usd_volume_90d": 174550765
+        }
+      ]
+    },
+    {
+      "id": "auto_parts_retail",
+      "name": "Auto parts retail",
+      "hedge": "XLY",
+      "story": "Parts stores for repairing cars already on the road. Demand is steady and rises as the fleet ages, so they tend to hold up when consumers pull back.",
+      "watch": "Same-store sales, age of the US vehicle fleet, miles driven, tariffs on parts.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "AZO",
+          "why": "AutoZone: Automotive Retail",
+          "change_pct": 0.31,
+          "avg_usd_volume_90d": 713541623
+        },
+        {
+          "symbol": "ORLY",
+          "why": "O'Reilly Automotive: Automotive Retail",
+          "change_pct": 0.55,
+          "avg_usd_volume_90d": 554213740
+        },
+        {
+          "symbol": "GPC",
+          "why": "Genuine Parts Company: Distributors",
+          "change_pct": -0.94,
+          "avg_usd_volume_90d": 146158068
+        }
+      ]
+    },
+    {
+      "id": "home_specialty_retail",
+      "name": "Home improvement and specialty retail",
+      "hedge": "XLY",
+      "story": "Big-ticket and specialty stores: home improvement, furnishings, electronics, farm supply and beauty. They trade on housing turnover and on how freely consumers spend on non-essentials.",
+      "watch": "Existing-home sales, same-store sales, big-ticket demand, mortgage rates.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "HD",
+          "why": "Home Depot (The): Home Improvement Retail",
+          "change_pct": -0.34,
+          "avg_usd_volume_90d": 1423196620
+        },
+        {
+          "symbol": "LOW",
+          "why": "Lowe's: Home Improvement Retail",
+          "change_pct": -1.23,
+          "avg_usd_volume_90d": 662515948
+        },
+        {
+          "symbol": "WSM",
+          "why": "Williams-Sonoma, Inc.: Homefurnishing Retail",
+          "change_pct": -0.79,
+          "avg_usd_volume_90d": 250552511
+        },
+        {
+          "symbol": "TSCO",
+          "why": "Tractor Supply: Other Specialty Retail",
+          "change_pct": 4.12,
+          "avg_usd_volume_90d": 378683874
+        },
+        {
+          "symbol": "ULTA",
+          "why": "Ulta Beauty: Other Specialty Retail",
+          "change_pct": -1.27,
+          "avg_usd_volume_90d": 300569477
+        },
+        {
+          "symbol": "BBY",
+          "why": "Best Buy: Computer & Electronics Retail",
+          "change_pct": -0.69,
+          "avg_usd_volume_90d": 298923985
+        }
+      ]
+    },
+    {
+      "id": "discount_stores",
+      "name": "Discount stores",
+      "hedge": "XLP",
+      "story": "Dollar stores and Target: retailers to lower- and middle-income shoppers. They trade on that shopper's health, on theft and on tariffs.",
+      "watch": "Same-store sales and traffic, tariffs, food-stamp (SNAP) changes, wage and theft costs.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "DG",
+          "why": "Dollar General: Consumer Staples Merchandise Retail",
+          "change_pct": 1.52,
+          "avg_usd_volume_90d": 291769694
+        },
+        {
+          "symbol": "DLTR",
+          "why": "Dollar Tree: Consumer Staples Merchandise Retail",
+          "change_pct": 0.45,
+          "avg_usd_volume_90d": 299588761
+        },
+        {
+          "symbol": "TGT",
+          "why": "Target Corporation: Consumer Staples Merchandise Retail",
+          "change_pct": -0.7,
+          "avg_usd_volume_90d": 604056795
+        }
+      ]
+    },
+    {
+      "id": "household_products",
+      "name": "Household products",
+      "hedge": "XLP",
+      "story": "Makers of everyday brands: detergent, toothpaste, tissue, bleach. Defensive, bought for steady earnings, and sensitive to input costs, pricing and private-label competition.",
+      "watch": "Volume against price in quarterly sales, commodity and packaging costs, the dollar, private-label share.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PG",
+          "why": "Procter & Gamble: Personal Care Products",
+          "change_pct": 1.9,
+          "avg_usd_volume_90d": 1357718072
+        },
+        {
+          "symbol": "CL",
+          "why": "Colgate-Palmolive: Household Products",
+          "change_pct": 1.32,
+          "avg_usd_volume_90d": 439995040
+        },
+        {
+          "symbol": "KMB",
+          "why": "Kimberly-Clark: Household Products",
+          "change_pct": 1.75,
+          "avg_usd_volume_90d": 504718145
+        },
+        {
+          "symbol": "CHD",
+          "why": "Church & Dwight: Household Products",
+          "change_pct": 1.54,
+          "avg_usd_volume_90d": 191188549
+        },
+        {
+          "symbol": "CLX",
+          "why": "Clorox: Household Products",
+          "change_pct": 0.65,
+          "avg_usd_volume_90d": 282011141
+        }
+      ]
+    },
+    {
+      "id": "packaged_food",
+      "name": "Packaged food",
+      "hedge": "XLP",
+      "story": "Big packaged-food brands. Volumes have been weak as shoppers trade down and weight-loss drugs cut appetites, so they trade on volume, pricing power and input costs.",
+      "watch": "Volume trends, promotions, ingredient costs, weight-loss drug uptake, food-policy news.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "GIS",
+          "why": "General Mills: Packaged Foods & Meats",
+          "change_pct": 2.68,
+          "avg_usd_volume_90d": 331532342
+        },
+        {
+          "symbol": "KHC",
+          "why": "Kraft Heinz: Packaged Foods & Meats",
+          "change_pct": -0.16,
+          "avg_usd_volume_90d": 399241335
+        },
+        {
+          "symbol": "MKC",
+          "why": "McCormick & Company: Packaged Foods & Meats",
+          "change_pct": 0.36,
+          "avg_usd_volume_90d": 167649953
+        },
+        {
+          "symbol": "SJM",
+          "why": "J.M. Smucker Company (The): Packaged Foods & Meats",
+          "change_pct": 2.15,
+          "avg_usd_volume_90d": 156819838
+        },
+        {
+          "symbol": "MDLZ",
+          "why": "Mondelez International: Packaged Foods & Meats",
+          "change_pct": -0.0,
+          "avg_usd_volume_90d": 503802163
+        }
+      ]
+    },
+    {
+      "id": "agriculture",
+      "name": "Agriculture",
+      "hedge": "XLB",
+      "story": "Grain traders, fertilizer makers and Deere: the farm economy. They trade on crop prices, farm income, trade policy with China and biofuel rules.",
+      "watch": "Corn and soybean prices, China buying, fertilizer prices and natural gas, biofuel blending rules, farm income.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ADM",
+          "why": "Archer Daniels Midland: Agricultural Products & Services",
+          "change_pct": -3.13,
+          "avg_usd_volume_90d": 288039630
+        },
+        {
+          "symbol": "BG",
+          "why": "Bunge Global: Agricultural Products & Services",
+          "change_pct": -2.59,
+          "avg_usd_volume_90d": 177420978
+        },
+        {
+          "symbol": "CF",
+          "why": "CF Industries: Fertilizers & Agricultural Chemicals",
+          "change_pct": -4.19,
+          "avg_usd_volume_90d": 294968019
+        },
+        {
+          "symbol": "MOS",
+          "why": "Mosaic Company (The): Fertilizers & Agricultural Chemicals",
+          "change_pct": -3.15,
+          "avg_usd_volume_90d": 194056748
+        },
+        {
+          "symbol": "DE",
+          "why": "Deere & Company: Agricultural & Farm Machinery",
+          "change_pct": -2.9,
+          "avg_usd_volume_90d": 774597826
+        }
+      ]
+    },
+    {
+      "id": "oil_services",
+      "name": "Oil services",
+      "hedge": "XLE",
+      "story": "The companies that drill and complete wells for producers. They trade on oil companies' spending plans, which follow the oil price with a lag.",
+      "watch": "Producer capital budgets, rig counts, the oil price, international and offshore activity.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SLB",
+          "why": "Schlumberger: Oil & Gas Equipment & Services",
+          "change_pct": -3.08,
+          "avg_usd_volume_90d": 640759912
+        },
+        {
+          "symbol": "HAL",
+          "why": "Halliburton: Oil & Gas Equipment & Services",
+          "change_pct": -3.79,
+          "avg_usd_volume_90d": 362083498
+        },
+        {
+          "symbol": "BKR",
+          "why": "Baker Hughes: Oil & Gas Equipment & Services",
+          "change_pct": -3.03,
+          "avg_usd_volume_90d": 463493488
+        }
+      ]
+    },
+    {
+      "id": "oil_producers",
+      "name": "Oil producers",
+      "hedge": "XLE",
+      "story": "Independent oil and gas producers. The most direct stock exposure to the oil price, plus buybacks and deals. Exxon and Chevron don't move with them beyond the sector and are left out.",
+      "watch": "WTI and Brent, OPEC+ decisions, inventories, mergers, capital-return plans.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "COP",
+          "why": "ConocoPhillips: Oil & Gas Exploration & Production",
+          "change_pct": -1.24,
+          "avg_usd_volume_90d": 873685442
+        },
+        {
+          "symbol": "EOG",
+          "why": "EOG Resources: Oil & Gas Exploration & Production",
+          "change_pct": -1.8,
+          "avg_usd_volume_90d": 450010316
+        },
+        {
+          "symbol": "OXY",
+          "why": "Occidental Petroleum: Oil & Gas Exploration & Production",
+          "change_pct": -2.37,
+          "avg_usd_volume_90d": 526164077
+        },
+        {
+          "symbol": "DVN",
+          "why": "Devon Energy: Oil & Gas Exploration & Production",
+          "change_pct": -4.96,
+          "avg_usd_volume_90d": 507025766
+        },
+        {
+          "symbol": "FANG",
+          "why": "Diamondback Energy: Oil & Gas Exploration & Production",
+          "change_pct": -4.07,
+          "avg_usd_volume_90d": 441343132
+        },
+        {
+          "symbol": "APA",
+          "why": "APA Corporation: Oil & Gas Exploration & Production",
+          "change_pct": -2.35,
+          "avg_usd_volume_90d": 240624964
+        }
+      ]
+    },
+    {
+      "id": "pipelines",
+      "name": "Pipelines",
+      "hedge": "XLE",
+      "story": "Gas and liquids pipeline operators paid mostly on volume, not price. They trade on gas demand from LNG exports and power plants, including data centers.",
+      "watch": "LNG export projects, gas demand from power and data centers, permitting, long rates.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "WMB",
+          "why": "Williams Companies: Oil & Gas Storage & Transportation",
+          "change_pct": -2.14,
+          "avg_usd_volume_90d": 549042338
+        },
+        {
+          "symbol": "KMI",
+          "why": "Kinder Morgan: Oil & Gas Storage & Transportation",
+          "change_pct": -1.57,
+          "avg_usd_volume_90d": 387080957
+        },
+        {
+          "symbol": "OKE",
+          "why": "Oneok: Oil & Gas Storage & Transportation",
+          "change_pct": -1.86,
+          "avg_usd_volume_90d": 317353347
+        },
+        {
+          "symbol": "TRGP",
+          "why": "Targa Resources: Oil & Gas Storage & Transportation",
+          "change_pct": -1.75,
+          "avg_usd_volume_90d": 346945153
+        }
+      ]
+    },
+    {
+      "id": "custody_asset_managers",
+      "name": "Asset managers and custody banks",
+      "hedge": "XLF",
+      "story": "Firms paid on the assets they manage or hold. Earnings rise and fall with markets and fund flows.",
+      "watch": "Market levels, fund flows, fee pressure, rates on client cash.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "BLK",
+          "why": "BlackRock: Asset Management & Custody Banks",
+          "change_pct": -2.04,
+          "avg_usd_volume_90d": 718795550
+        },
+        {
+          "symbol": "BNY",
+          "why": "BNY Mellon: Asset Management & Custody Banks",
+          "change_pct": -1.12,
+          "avg_usd_volume_90d": 524076000
+        },
+        {
+          "symbol": "STT",
+          "why": "State Street Corporation: Asset Management & Custody Banks",
+          "change_pct": -1.97,
+          "avg_usd_volume_90d": 346930805
+        },
+        {
+          "symbol": "NTRS",
+          "why": "Northern Trust: Asset Management & Custody Banks",
+          "change_pct": -1.57,
+          "avg_usd_volume_90d": 196129887
+        },
+        {
+          "symbol": "IVZ",
+          "why": "Invesco: Asset Management & Custody Banks",
+          "change_pct": -1.49,
+          "avg_usd_volume_90d": 144421363
+        },
+        {
+          "symbol": "BEN",
+          "why": "Franklin Resources: Asset Management & Custody Banks",
+          "change_pct": -2.8,
+          "avg_usd_volume_90d": 133078467
+        }
+      ]
+    },
+    {
+      "id": "card_lenders",
+      "name": "Card lenders",
+      "hedge": "XLF",
+      "story": "Credit-card lenders. They trade on consumer spending, on losses from unpaid balances and on rules about card fees and rates.",
+      "watch": "Monthly card charge-offs and delinquencies, card spending, proposed caps on card rates or late fees.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "AXP",
+          "why": "American Express: Consumer Finance",
+          "change_pct": -0.48,
+          "avg_usd_volume_90d": 942980338
+        },
+        {
+          "symbol": "COF",
+          "why": "Capital One: Consumer Finance",
+          "change_pct": -0.95,
+          "avg_usd_volume_90d": 796764002
+        },
+        {
+          "symbol": "SYF",
+          "why": "Synchrony Financial: Consumer Finance",
+          "change_pct": -0.68,
+          "avg_usd_volume_90d": 272661435
+        }
+      ]
+    },
+    {
+      "id": "big_banks",
+      "name": "Big banks",
+      "hedge": "XLF",
+      "story": "The largest US banks. They trade on the gap between what they earn on loans and pay on deposits, on credit losses, on deal and trading activity, and on capital rules.",
+      "watch": "The yield curve, loan growth and credit costs, Fed stress tests and capital rules, deal activity.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "JPM",
+          "why": "JPMorgan Chase: Diversified Banks",
+          "change_pct": -2.31,
+          "avg_usd_volume_90d": 2478819099
+        },
+        {
+          "symbol": "BAC",
+          "why": "Bank of America: Diversified Banks",
+          "change_pct": -1.84,
+          "avg_usd_volume_90d": 2025390532
+        },
+        {
+          "symbol": "WFC",
+          "why": "Wells Fargo: Diversified Banks",
+          "change_pct": -1.41,
+          "avg_usd_volume_90d": 1223081238
+        },
+        {
+          "symbol": "C",
+          "why": "Citigroup: Diversified Banks",
+          "change_pct": -2.17,
+          "avg_usd_volume_90d": 1298334299
+        },
+        {
+          "symbol": "PNC",
+          "why": "PNC Financial Services: Diversified Banks",
+          "change_pct": -1.15,
+          "avg_usd_volume_90d": 416467225
+        },
+        {
+          "symbol": "USB",
+          "why": "U.S. Bancorp: Diversified Banks",
+          "change_pct": -0.92,
+          "avg_usd_volume_90d": 450441277
+        },
+        {
+          "symbol": "TFC",
+          "why": "Truist Financial: Diversified Banks",
+          "change_pct": -0.78,
+          "avg_usd_volume_90d": 365542739
+        }
+      ]
+    },
+    {
+      "id": "exchanges_data",
+      "name": "Exchanges and financial data",
+      "hedge": "XLF",
+      "story": "Exchanges, rating agencies and index providers: toll-takers on trading and debt issuance, with subscription data businesses.",
+      "watch": "Trading volumes and volatility, bond issuance, index and data subscription growth.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SPGI",
+          "why": "S&P Global: Financial Exchanges & Data",
+          "change_pct": -0.42,
+          "avg_usd_volume_90d": 795531888
+        },
+        {
+          "symbol": "MCO",
+          "why": "Moody's Corporation: Financial Exchanges & Data",
+          "change_pct": -0.38,
+          "avg_usd_volume_90d": 403788364
+        },
+        {
+          "symbol": "MSCI",
+          "why": "MSCI: Financial Exchanges & Data",
+          "change_pct": 0.96,
+          "avg_usd_volume_90d": 362800535
+        },
+        {
+          "symbol": "ICE",
+          "why": "Intercontinental Exchange: Financial Exchanges & Data",
+          "change_pct": -0.12,
+          "avg_usd_volume_90d": 529018763
+        },
+        {
+          "symbol": "CME",
+          "why": "CME Group: Financial Exchanges & Data",
+          "change_pct": 0.44,
+          "avg_usd_volume_90d": 558867412
+        },
+        {
+          "symbol": "NDAQ",
+          "why": "Nasdaq, Inc.: Financial Exchanges & Data",
+          "change_pct": 0.05,
+          "avg_usd_volume_90d": 323617995
+        },
+        {
+          "symbol": "CBOE",
+          "why": "Cboe Global Markets: Financial Exchanges & Data",
+          "change_pct": 0.55,
+          "avg_usd_volume_90d": 342478318
+        },
+        {
+          "symbol": "FDS",
+          "why": "FactSet: Financial Exchanges & Data",
+          "change_pct": -0.16,
+          "avg_usd_volume_90d": 237157248
+        }
+      ]
+    },
+    {
+      "id": "insurance_brokers",
+      "name": "Insurance brokers",
+      "hedge": "XLF",
+      "story": "Brokers paid a share of the premiums they place. They trade on insurance pricing: rising premiums lift them, and softening prices hurt.",
+      "watch": "Commercial insurance pricing surveys, organic growth in quarterly reports, acquisitions.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "MRSH",
+          "why": "Marsh McLennan: Insurance Brokers",
+          "change_pct": 1.01,
+          "avg_usd_volume_90d": 457796092
+        },
+        {
+          "symbol": "AON",
+          "why": "Aon plc: Insurance Brokers",
+          "change_pct": 1.42,
+          "avg_usd_volume_90d": 494218090
+        },
+        {
+          "symbol": "AJG",
+          "why": "Arthur J. Gallagher & Co.: Insurance Brokers",
+          "change_pct": 1.43,
+          "avg_usd_volume_90d": 381367319
+        },
+        {
+          "symbol": "WTW",
+          "why": "Willis Towers Watson: Insurance Brokers",
+          "change_pct": 0.83,
+          "avg_usd_volume_90d": 171882150
+        },
+        {
+          "symbol": "BRO",
+          "why": "Brown & Brown: Insurance Brokers",
+          "change_pct": 2.2,
+          "avg_usd_volume_90d": 164622939
+        },
+        {
+          "symbol": "ERIE",
+          "why": "Erie Indemnity: Insurance Brokers",
+          "change_pct": 0.43,
+          "avg_usd_volume_90d": 61092490
+        }
+      ]
+    },
+    {
+      "id": "investment_banks",
+      "name": "Investment banks and brokers",
+      "hedge": "XLF",
+      "story": "Deal-making, trading and brokerage. They trade on market activity: mergers, stock and bond offerings, and trading volumes.",
+      "watch": "Deal and IPO calendars, trading volumes, market levels.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "GS",
+          "why": "Goldman Sachs: Investment Banking & Brokerage",
+          "change_pct": -2.73,
+          "avg_usd_volume_90d": 2049870208
+        },
+        {
+          "symbol": "MS",
+          "why": "Morgan Stanley: Investment Banking & Brokerage",
+          "change_pct": -2.66,
+          "avg_usd_volume_90d": 1114179266
+        },
+        {
+          "symbol": "IBKR",
+          "why": "Interactive Brokers: Investment Banking & Brokerage",
+          "change_pct": -4.11,
+          "avg_usd_volume_90d": 383654458
+        }
+      ]
+    },
+    {
+      "id": "wealth_brokers",
+      "name": "Wealth managers",
+      "hedge": "XLF",
+      "story": "Retail brokerage and financial-advice firms. They earn on client assets and on the cash clients leave idle, so they trade on markets and short-term rates.",
+      "watch": "Client asset flows, yields on client cash, the Fed, market levels.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SCHW",
+          "why": "Charles Schwab Corporation: Investment Banking & Brokerage",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 835862664
+        },
+        {
+          "symbol": "RJF",
+          "why": "Raymond James Financial: Investment Banking & Brokerage",
+          "change_pct": -0.91,
+          "avg_usd_volume_90d": 201077405
+        },
+        {
+          "symbol": "AMP",
+          "why": "Ameriprise Financial: Asset Management & Custody Banks",
+          "change_pct": -1.03,
+          "avg_usd_volume_90d": 287550846
+        }
+      ]
+    },
+    {
+      "id": "life_insurers",
+      "name": "Life insurers",
+      "hedge": "XLF",
+      "story": "Life and retirement insurers. Higher long rates help what they earn on their bond portfolios; credit losses and markets hurt.",
+      "watch": "Long-term yields, credit spreads, equity markets, mortality and disability trends.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "MET",
+          "why": "MetLife: Life & Health Insurance",
+          "change_pct": -1.17,
+          "avg_usd_volume_90d": 320480700
+        },
+        {
+          "symbol": "PRU",
+          "why": "Prudential Financial: Life & Health Insurance",
+          "change_pct": -0.52,
+          "avg_usd_volume_90d": 206547948
+        },
+        {
+          "symbol": "AFL",
+          "why": "Aflac: Life & Health Insurance",
+          "change_pct": 0.37,
+          "avg_usd_volume_90d": 235225552
+        },
+        {
+          "symbol": "PFG",
+          "why": "Principal Financial Group: Life & Health Insurance",
+          "change_pct": -1.13,
+          "avg_usd_volume_90d": 150692719
+        },
+        {
+          "symbol": "GL",
+          "why": "Globe Life: Life & Health Insurance",
+          "change_pct": -0.84,
+          "avg_usd_volume_90d": 93390970
+        }
+      ]
+    },
+    {
+      "id": "multiline_insurers",
+      "name": "Multi-line insurers",
+      "hedge": "XLF",
+      "story": "Insurers that write several kinds of cover. They trade with insurance pricing and catastrophe losses, like the property insurers.",
+      "watch": "Commercial pricing, catastrophe losses, reserve changes.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "AIG",
+          "why": "American International Group: Multi-line Insurance",
+          "change_pct": -0.13,
+          "avg_usd_volume_90d": 306045152
+        },
+        {
+          "symbol": "AIZ",
+          "why": "Assurant: Multi-line Insurance",
+          "change_pct": 0.52,
+          "avg_usd_volume_90d": 106820419
+        },
+        {
+          "symbol": "L",
+          "why": "Loews Corporation: Multi-line Insurance",
+          "change_pct": -0.05,
+          "avg_usd_volume_90d": 87455073
+        }
+      ]
+    },
+    {
+      "id": "pc_insurers",
+      "name": "Property and casualty insurers",
+      "hedge": "XLF",
+      "story": "Home, auto and business insurers, with a reinsurer and Berkshire. They trade on premium rates, catastrophe losses and what they earn on their investments.",
+      "watch": "Hurricane and wildfire losses, auto and home premium rates, reserve releases, reinsurance renewals.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PGR",
+          "why": "Progressive Corporation: Property & Casualty Insurance",
+          "change_pct": 0.66,
+          "avg_usd_volume_90d": 573809395
+        },
+        {
+          "symbol": "CB",
+          "why": "Chubb Limited: Property & Casualty Insurance",
+          "change_pct": 1.47,
+          "avg_usd_volume_90d": 586391866
+        },
+        {
+          "symbol": "TRV",
+          "why": "Travelers Companies (The): Property & Casualty Insurance",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 615635988
+        },
+        {
+          "symbol": "ALL",
+          "why": "Allstate: Property & Casualty Insurance",
+          "change_pct": 1.04,
+          "avg_usd_volume_90d": 458315483
+        },
+        {
+          "symbol": "HIG",
+          "why": "Hartford (The): Property & Casualty Insurance",
+          "change_pct": 0.25,
+          "avg_usd_volume_90d": 227135522
+        },
+        {
+          "symbol": "ACGL",
+          "why": "Arch Capital Group: Property & Casualty Insurance",
+          "change_pct": 1.17,
+          "avg_usd_volume_90d": 253914530
+        },
+        {
+          "symbol": "WRB",
+          "why": "W. R. Berkley Corporation: Property & Casualty Insurance",
+          "change_pct": 1.39,
+          "avg_usd_volume_90d": 169305057
+        },
+        {
+          "symbol": "CINF",
+          "why": "Cincinnati Financial: Property & Casualty Insurance",
+          "change_pct": 0.89,
+          "avg_usd_volume_90d": 115120965
+        },
+        {
+          "symbol": "EG",
+          "why": "Everest Group: Reinsurance",
+          "change_pct": 1.36,
+          "avg_usd_volume_90d": 146753497
+        },
+        {
+          "symbol": "BRK B",
+          "why": "Berkshire Hathaway: Multi-Sector Holdings",
+          "change_pct": -0.02,
+          "avg_usd_volume_90d": 2364793252
+        }
+      ]
+    },
+    {
+      "id": "regional_banks",
+      "name": "Regional banks",
+      "hedge": "XLF",
+      "story": "Mid-sized lenders. More sensitive than the big banks to deposit costs, commercial real estate and the yield curve, and frequent merger candidates.",
+      "watch": "Deposit costs and loan margins, commercial real-estate losses, the yield curve, bank mergers.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "MTB",
+          "why": "M&T Bank: Regional Banks",
+          "change_pct": -0.61,
+          "avg_usd_volume_90d": 236516434
+        },
+        {
+          "symbol": "FITB",
+          "why": "Fifth Third Bancorp: Regional Banks",
+          "change_pct": -1.6,
+          "avg_usd_volume_90d": 331724887
+        },
+        {
+          "symbol": "HBAN",
+          "why": "Huntington Bancshares: Regional Banks",
+          "change_pct": -1.2,
+          "avg_usd_volume_90d": 405229768
+        },
+        {
+          "symbol": "RF",
+          "why": "Regions Financial Corporation: Regional Banks",
+          "change_pct": -0.9,
+          "avg_usd_volume_90d": 276874099
+        },
+        {
+          "symbol": "CFG",
+          "why": "Citizens Financial Group: Regional Banks",
+          "change_pct": -1.26,
+          "avg_usd_volume_90d": 271939393
+        },
+        {
+          "symbol": "KEY",
+          "why": "KeyCorp: Regional Banks",
+          "change_pct": -1.07,
+          "avg_usd_volume_90d": 285445716
+        }
+      ]
+    },
+    {
+      "id": "payments",
+      "name": "Payments",
+      "hedge": "XLF",
+      "story": "Card networks and payment processors. They trade on consumer spending volumes and on regulation of card fees and competition from newer ways to pay.",
+      "watch": "Card volumes, cross-border travel spending, swipe-fee rules and lawsuits, stablecoin and pay-by-bank competition.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "V",
+          "why": "Visa Inc.: Transaction & Payment Processing Services",
+          "change_pct": 0.16,
+          "avg_usd_volume_90d": 2538861196
+        },
+        {
+          "symbol": "MA",
+          "why": "Mastercard: Transaction & Payment Processing Services",
+          "change_pct": 0.08,
+          "avg_usd_volume_90d": 1749074780
+        },
+        {
+          "symbol": "FISV",
+          "why": "Fiserv: Transaction & Payment Processing Services",
+          "change_pct": -0.72,
+          "avg_usd_volume_90d": 380239660
+        },
+        {
+          "symbol": "FIS",
+          "why": "Fidelity National Information Services: Transaction & Payment Processing Services",
+          "change_pct": -4.2,
+          "avg_usd_volume_90d": 257404134
+        },
+        {
+          "symbol": "GPN",
+          "why": "Global Payments: Transaction & Payment Processing Services",
+          "change_pct": -2.26,
+          "avg_usd_volume_90d": 262019054
+        },
+        {
+          "symbol": "PYPL",
+          "why": "PayPal: Transaction & Payment Processing Services",
+          "change_pct": -0.76,
+          "avg_usd_volume_90d": 740044203
+        },
+        {
+          "symbol": "CPAY",
+          "why": "Corpay: Transaction & Payment Processing Services",
+          "change_pct": -0.11,
+          "avg_usd_volume_90d": 203810745
+        },
+        {
+          "symbol": "JKHY",
+          "why": "Jack Henry & Associates: Transaction & Payment Processing Services",
+          "change_pct": 0.7,
+          "avg_usd_volume_90d": 150429609
+        }
+      ]
+    },
+    {
+      "id": "drug_distributors",
+      "name": "Drug distributors",
+      "hedge": "XLV",
+      "story": "The three wholesalers that move most US prescription drugs. Thin margins on huge volume, helped by specialty and weight-loss drugs.",
+      "watch": "Drug-pricing policy, generic prices, specialty-drug volumes, opioid settlements.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "MCK",
+          "why": "McKesson: Health Care Distributors",
+          "change_pct": 0.2,
+          "avg_usd_volume_90d": 779223581
+        },
+        {
+          "symbol": "COR",
+          "why": "Cencora: Health Care Distributors",
+          "change_pct": -0.58,
+          "avg_usd_volume_90d": 430387515
+        },
+        {
+          "symbol": "CAH",
+          "why": "Cardinal Health: Health Care Distributors",
+          "change_pct": 0.98,
+          "avg_usd_volume_90d": 435606379
+        }
+      ]
+    },
+    {
+      "id": "medical_devices",
+      "name": "Medical devices",
+      "hedge": "XLV",
+      "story": "Makers of devices and equipment used in procedures and chronic care. They trade on procedure volumes, hospital budgets, new-product cycles and tariffs.",
+      "watch": "Surgical procedure volumes, hospital capital spending, product approvals, tariffs, China tenders.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ABT",
+          "why": "Abbott Laboratories: Health Care Equipment",
+          "change_pct": -0.99,
+          "avg_usd_volume_90d": 993447107
+        },
+        {
+          "symbol": "MDT",
+          "why": "Medtronic: Health Care Equipment",
+          "change_pct": 0.02,
+          "avg_usd_volume_90d": 1248673524
+        },
+        {
+          "symbol": "SYK",
+          "why": "Stryker Corporation: Health Care Equipment",
+          "change_pct": 0.35,
+          "avg_usd_volume_90d": 842498535
+        },
+        {
+          "symbol": "BSX",
+          "why": "Boston Scientific: Health Care Equipment",
+          "change_pct": -1.47,
+          "avg_usd_volume_90d": 890041938
+        },
+        {
+          "symbol": "ISRG",
+          "why": "Intuitive Surgical: Health Care Equipment",
+          "change_pct": -1.32,
+          "avg_usd_volume_90d": 1109372244
+        },
+        {
+          "symbol": "EW",
+          "why": "Edwards Lifesciences: Health Care Equipment",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 366824980
+        },
+        {
+          "symbol": "BDX",
+          "why": "Becton Dickinson: Health Care Equipment",
+          "change_pct": -0.72,
+          "avg_usd_volume_90d": 332775485
+        },
+        {
+          "symbol": "ZBH",
+          "why": "Zimmer Biomet: Health Care Equipment",
+          "change_pct": -1.74,
+          "avg_usd_volume_90d": 214092256
+        },
+        {
+          "symbol": "DXCM",
+          "why": "Dexcom: Health Care Equipment",
+          "change_pct": -2.06,
+          "avg_usd_volume_90d": 378131344
+        },
+        {
+          "symbol": "PODD",
+          "why": "Insulet Corporation: Health Care Equipment",
+          "change_pct": -4.72,
+          "avg_usd_volume_90d": 235321600
+        },
+        {
+          "symbol": "RMD",
+          "why": "ResMed: Health Care Equipment",
+          "change_pct": -0.56,
+          "avg_usd_volume_90d": 301689532
+        },
+        {
+          "symbol": "IDXX",
+          "why": "Idexx Laboratories: Health Care Equipment",
+          "change_pct": -0.51,
+          "avg_usd_volume_90d": 333395251
+        },
+        {
+          "symbol": "GEHC",
+          "why": "GE HealthCare: Health Care Equipment",
+          "change_pct": -0.07,
+          "avg_usd_volume_90d": 287054506
+        },
+        {
+          "symbol": "BAX",
+          "why": "Baxter International: Health Care Equipment",
+          "change_pct": -1.05,
+          "avg_usd_volume_90d": 167472160
+        },
+        {
+          "symbol": "STE",
+          "why": "Steris: Health Care Equipment",
+          "change_pct": -0.91,
+          "avg_usd_volume_90d": 164672742
+        }
+      ]
+    },
+    {
+      "id": "big_pharma",
+      "name": "Big pharma",
+      "hedge": "XLV",
+      "story": "Large drug makers facing patent expiries on their biggest products. They trade on drug-pricing policy, pipeline readouts and deals. Lilly, J&J and AbbVie trade on their own stories and are left out.",
+      "watch": "Drug-pricing and tariff policy, patent expiries, trial readouts, acquisitions.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PFE",
+          "why": "Pfizer: Pharmaceuticals",
+          "change_pct": -0.1,
+          "avg_usd_volume_90d": 966711936
+        },
+        {
+          "symbol": "MRK",
+          "why": "Merck & Co.: Pharmaceuticals",
+          "change_pct": -2.23,
+          "avg_usd_volume_90d": 1391103220
+        },
+        {
+          "symbol": "BMY",
+          "why": "Bristol Myers Squibb: Pharmaceuticals",
+          "change_pct": -0.79,
+          "avg_usd_volume_90d": 701478450
+        }
+      ]
+    },
+    {
+      "id": "labs_cro",
+      "name": "Labs and clinical research",
+      "hedge": "XLV",
+      "story": "The two big testing labs and a clinical-trial contractor. They trade on test volumes, reimbursement and drug-maker research spending.",
+      "watch": "Test volumes and Medicare lab rates, biotech funding, drug-maker R&D budgets.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "LH",
+          "why": "Labcorp: Health Care Services",
+          "change_pct": 0.53,
+          "avg_usd_volume_90d": 238226689
+        },
+        {
+          "symbol": "DGX",
+          "why": "Quest Diagnostics: Health Care Services",
+          "change_pct": 1.01,
+          "avg_usd_volume_90d": 241045426
+        },
+        {
+          "symbol": "IQV",
+          "why": "IQVIA: Life Sciences Tools & Services",
+          "change_pct": -0.15,
+          "avg_usd_volume_90d": 367142826
+        }
+      ]
+    },
+    {
+      "id": "dental_supplies",
+      "name": "Dental and medical supplies",
+      "hedge": "XLV",
+      "story": "Dental and medical consumables: distributors, aligners, wound care and contact lenses. They trade on patient visits and elective spending.",
+      "watch": "Dental visit trends, elective-procedure demand, consumer confidence, tariffs.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "HSIC",
+          "why": "Henry Schein: Health Care Distributors",
+          "change_pct": -1.46,
+          "avg_usd_volume_90d": 112918862
+        },
+        {
+          "symbol": "ALGN",
+          "why": "Align Technology: Health Care Supplies",
+          "change_pct": -1.39,
+          "avg_usd_volume_90d": 154967147
+        },
+        {
+          "symbol": "SOLV",
+          "why": "Solventum: Health Care Technology",
+          "change_pct": -0.48,
+          "avg_usd_volume_90d": 95029230
+        },
+        {
+          "symbol": "COO",
+          "why": "Cooper Companies (The): Health Care Supplies",
+          "change_pct": -1.23,
+          "avg_usd_volume_90d": 187625789
+        }
+      ]
+    },
+    {
+      "id": "air_freight",
+      "name": "Parcel and freight forwarding",
+      "hedge": "XLI",
+      "story": "Parcel carriers and freight brokers. They trade on shipping volumes, pricing and trade flows.",
+      "watch": "Parcel volumes and pricing, tariffs and trade volumes, Amazon's own delivery, freight rates.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "UPS",
+          "why": "United Parcel Service: Air Freight & Logistics",
+          "change_pct": -0.52,
+          "avg_usd_volume_90d": 517116125
+        },
+        {
+          "symbol": "FDX",
+          "why": "FedEx: Air Freight & Logistics",
+          "change_pct": 1.08,
+          "avg_usd_volume_90d": 463625035
+        },
+        {
+          "symbol": "EXPD",
+          "why": "Expeditors International: Air Freight & Logistics",
+          "change_pct": 0.28,
+          "avg_usd_volume_90d": 216763368
+        },
+        {
+          "symbol": "CHRW",
+          "why": "C.H. Robinson: Air Freight & Logistics",
+          "change_pct": 0.16,
+          "avg_usd_volume_90d": 286887460
+        }
+      ]
+    },
+    {
+      "id": "building_products",
+      "name": "Building products",
+      "hedge": "XLI",
+      "story": "Heating, cooling, plumbing and hardware for buildings. They trade on housing, renovation and commercial construction.",
+      "watch": "Housing starts and remodeling, HVAC demand and refrigerant rules, commercial construction.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "CARR",
+          "why": "Carrier Global: Building Products",
+          "change_pct": -4.67,
+          "avg_usd_volume_90d": 372147165
+        },
+        {
+          "symbol": "LII",
+          "why": "Lennox International: Building Products",
+          "change_pct": -4.74,
+          "avg_usd_volume_90d": 226515604
+        },
+        {
+          "symbol": "MAS",
+          "why": "Masco: Building Products",
+          "change_pct": -0.11,
+          "avg_usd_volume_90d": 173695647
+        },
+        {
+          "symbol": "AOS",
+          "why": "A. O. Smith: Building Products",
+          "change_pct": -0.53,
+          "avg_usd_volume_90d": 95507500
+        },
+        {
+          "symbol": "ALLE",
+          "why": "Allegion: Building Products",
+          "change_pct": -0.53,
+          "avg_usd_volume_90d": 197674430
+        }
+      ]
+    },
+    {
+      "id": "trucking",
+      "name": "Trucking",
+      "hedge": "XLI",
+      "story": "Truckload, intermodal and less-than-truckload carriers. They trade on freight demand and pricing, an early read on the goods economy.",
+      "watch": "Freight tonnage and rates, industrial production, retailer inventories, diesel.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ODFL",
+          "why": "Old Dominion: Cargo Ground Transportation",
+          "change_pct": -0.14,
+          "avg_usd_volume_90d": 348726843
+        },
+        {
+          "symbol": "JBHT",
+          "why": "J.B. Hunt: Cargo Ground Transportation",
+          "change_pct": -0.28,
+          "avg_usd_volume_90d": 247850032
+        },
+        {
+          "symbol": "FDXF",
+          "why": "FedEx Freight: Cargo Ground Transportation",
+          "change_pct": -0.76,
+          "avg_usd_volume_90d": 179697730
+        }
+      ]
+    },
+    {
+      "id": "environmental_services",
+      "name": "Waste and environmental services",
+      "hedge": "XLI",
+      "story": "Trash haulers, pest control and water testing: steady, contract-based services with pricing power.",
+      "watch": "Pricing against inflation, volumes, recycled-commodity prices, acquisitions.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "WM",
+          "why": "Waste Management: Environmental & Facilities Services",
+          "change_pct": 0.21,
+          "avg_usd_volume_90d": 483636261
+        },
+        {
+          "symbol": "RSG",
+          "why": "Republic Services: Environmental & Facilities Services",
+          "change_pct": 1.02,
+          "avg_usd_volume_90d": 322926503
+        },
+        {
+          "symbol": "ROL",
+          "why": "Rollins, Inc.: Environmental & Facilities Services",
+          "change_pct": 0.59,
+          "avg_usd_volume_90d": 230976218
+        },
+        {
+          "symbol": "VLTO",
+          "why": "Veralto: Environmental & Facilities Services",
+          "change_pct": 1.74,
+          "avg_usd_volume_90d": 176822639
+        }
+      ]
+    },
+    {
+      "id": "industrial_machinery",
+      "name": "Industrial machinery",
+      "hedge": "XLI",
+      "story": "Makers of pumps, tools, elevators and factory equipment. They trade on manufacturing activity and capital spending.",
+      "watch": "The ISM manufacturing index, order trends, tariffs and input costs.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ITW",
+          "why": "Illinois Tool Works: Industrial Machinery & Supplies & Components",
+          "change_pct": -1.0,
+          "avg_usd_volume_90d": 362049385
+        },
+        {
+          "symbol": "DOV",
+          "why": "Dover Corporation: Industrial Machinery & Supplies & Components",
+          "change_pct": -1.82,
+          "avg_usd_volume_90d": 244343433
+        },
+        {
+          "symbol": "IR",
+          "why": "Ingersoll Rand: Industrial Machinery & Supplies & Components",
+          "change_pct": -1.92,
+          "avg_usd_volume_90d": 345319177
+        },
+        {
+          "symbol": "OTIS",
+          "why": "Otis Worldwide: Industrial Machinery & Supplies & Components",
+          "change_pct": 0.28,
+          "avg_usd_volume_90d": 302726011
+        },
+        {
+          "symbol": "PNR",
+          "why": "Pentair: Industrial Machinery & Supplies & Components",
+          "change_pct": 0.2,
+          "avg_usd_volume_90d": 206398244
+        },
+        {
+          "symbol": "SNA",
+          "why": "Snap-on: Industrial Machinery & Supplies & Components",
+          "change_pct": -0.98,
+          "avg_usd_volume_90d": 133668711
+        },
+        {
+          "symbol": "SWK",
+          "why": "Stanley Black & Decker: Industrial Machinery & Supplies & Components",
+          "change_pct": -0.31,
+          "avg_usd_volume_90d": 172445500
+        },
+        {
+          "symbol": "GWW",
+          "why": "W. W. Grainger: Industrial Machinery & Supplies & Components",
+          "change_pct": 0.44,
+          "avg_usd_volume_90d": 362580251
+        },
+        {
+          "symbol": "XYL",
+          "why": "Xylem Inc.: Industrial Machinery & Supplies & Components",
+          "change_pct": 1.86,
+          "avg_usd_volume_90d": 266390495
+        },
+        {
+          "symbol": "FTV",
+          "why": "Fortive: Industrial Machinery & Supplies & Components",
+          "change_pct": -0.57,
+          "avg_usd_volume_90d": 155708848
+        }
+      ]
+    },
+    {
+      "id": "automation_instruments",
+      "name": "Automation and instruments",
+      "hedge": "XLI",
+      "story": "Factory-automation and precision-instrument makers. They trade on industrial capital spending and factory building.",
+      "watch": "Factory orders, automation spending, semiconductor and life-science demand.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "EMR",
+          "why": "Emerson Electric: Electrical Components & Equipment",
+          "change_pct": -3.44,
+          "avg_usd_volume_90d": 420977028
+        },
+        {
+          "symbol": "ROK",
+          "why": "Rockwell Automation: Electrical Components & Equipment",
+          "change_pct": -4.36,
+          "avg_usd_volume_90d": 363346298
+        },
+        {
+          "symbol": "AME",
+          "why": "Ametek: Electrical Components & Equipment",
+          "change_pct": -2.63,
+          "avg_usd_volume_90d": 339996546
+        },
+        {
+          "symbol": "IEX",
+          "why": "IDEX Corporation: Industrial Machinery & Supplies & Components",
+          "change_pct": -1.71,
+          "avg_usd_volume_90d": 157956729
+        },
+        {
+          "symbol": "NDSN",
+          "why": "Nordson Corporation: Industrial Machinery & Supplies & Components",
+          "change_pct": -0.67,
+          "avg_usd_volume_90d": 115028322
+        }
+      ]
+    },
+    {
+      "id": "railroads",
+      "name": "Railroads",
+      "hedge": "XLI",
+      "story": "The big US freight railroads. They trade on carloads, pricing, service and mergers.",
+      "watch": "Weekly carloads, coal and intermodal volumes, merger review, labor.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "UNP",
+          "why": "Union Pacific Corporation: Rail Transportation",
+          "change_pct": 0.42,
+          "avg_usd_volume_90d": 783830825
+        },
+        {
+          "symbol": "CSX",
+          "why": "CSX Corporation: Rail Transportation",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 565975327
+        },
+        {
+          "symbol": "NSC",
+          "why": "Norfolk Southern: Rail Transportation",
+          "change_pct": 0.42,
+          "avg_usd_volume_90d": 360371428
+        }
+      ]
+    },
+    {
+      "id": "aero_engines",
+      "name": "Commercial aerospace",
+      "hedge": "XLI",
+      "story": "Jet-engine and aircraft-part makers that earn most on spares and service. They trade on flying hours and aircraft build rates. Boeing trades on its own story and is left out.",
+      "watch": "Airline flying hours, Boeing and Airbus build rates, engine shop visits, supply-chain delays.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "GE",
+          "why": "GE Aerospace: Aerospace & Defense",
+          "change_pct": -2.0,
+          "avg_usd_volume_90d": 1423364094
+        },
+        {
+          "symbol": "TDG",
+          "why": "TransDigm Group: Aerospace & Defense",
+          "change_pct": -1.16,
+          "avg_usd_volume_90d": 470299132
+        },
+        {
+          "symbol": "HWM",
+          "why": "Howmet Aerospace: Aerospace & Defense",
+          "change_pct": -3.61,
+          "avg_usd_volume_90d": 747460137
+        }
+      ]
+    },
+    {
+      "id": "business_data",
+      "name": "Business data services",
+      "hedge": "XLI",
+      "story": "Credit bureaus, insurance analytics and investor communications: subscription data businesses tied to lending and insurance activity.",
+      "watch": "Mortgage and credit volumes, insurance industry spending, AI competition for data.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "EFX",
+          "why": "Equifax: Research & Consulting Services",
+          "change_pct": 0.73,
+          "avg_usd_volume_90d": 285804195
+        },
+        {
+          "symbol": "VRSK",
+          "why": "Verisk Analytics: Research & Consulting Services",
+          "change_pct": 2.38,
+          "avg_usd_volume_90d": 255510259
+        },
+        {
+          "symbol": "BR",
+          "why": "Broadridge Financial Solutions: Data Processing & Outsourced Services",
+          "change_pct": 1.45,
+          "avg_usd_volume_90d": 182059894
+        }
+      ]
+    },
+    {
+      "id": "design_software",
+      "name": "Design and analytics software",
+      "hedge": "XLK",
+      "story": "Software sold for a specific job: chip design, tax, credit scoring, engineering and government data. They trade on software spending and on whether AI helps or threatens each one.",
+      "watch": "Software earnings and guidance, chip-design spending, AI competition, government contracts.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "CDNS",
+          "why": "Cadence Design Systems: Application Software",
+          "change_pct": -4.2,
+          "avg_usd_volume_90d": 776758768
+        },
+        {
+          "symbol": "SNPS",
+          "why": "Synopsys: Application Software",
+          "change_pct": -3.05,
+          "avg_usd_volume_90d": 888574216
+        },
+        {
+          "symbol": "INTU",
+          "why": "Intuit: Application Software",
+          "change_pct": 1.13,
+          "avg_usd_volume_90d": 1163966540
+        },
+        {
+          "symbol": "PLTR",
+          "why": "Palantir Technologies: Application Software",
+          "change_pct": -4.52,
+          "avg_usd_volume_90d": 5199360368
+        },
+        {
+          "symbol": "FICO",
+          "why": "Fair Isaac: Application Software",
+          "change_pct": -0.4,
+          "avg_usd_volume_90d": 544872163
+        },
+        {
+          "symbol": "PTC",
+          "why": "PTC Inc.: Application Software",
+          "change_pct": 0.19,
+          "avg_usd_volume_90d": 371259435
+        },
+        {
+          "symbol": "TRMB",
+          "why": "Trimble Inc.: Application Software",
+          "change_pct": -1.64,
+          "avg_usd_volume_90d": 158925306
+        },
+        {
+          "symbol": "TYL",
+          "why": "Tyler Technologies: Application Software",
+          "change_pct": 0.45,
+          "avg_usd_volume_90d": 291228361
+        }
+      ]
+    },
+    {
+      "id": "network_gear",
+      "name": "Networking equipment",
+      "hedge": "XLK",
+      "story": "Makers of switches and routers. They trade on data-center and corporate network spending, increasingly for AI.",
+      "watch": "Cloud capital spending, enterprise orders, AI networking demand.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "CSCO",
+          "why": "Cisco: Communications Equipment",
+          "change_pct": -1.17,
+          "avg_usd_volume_90d": 2111670141
+        },
+        {
+          "symbol": "ANET",
+          "why": "Arista Networks: Communications Equipment",
+          "change_pct": -5.21,
+          "avg_usd_volume_90d": 1266059162
+        },
+        {
+          "symbol": "FFIV",
+          "why": "F5, Inc.: Communications Equipment",
+          "change_pct": -1.44,
+          "avg_usd_volume_90d": 282945796
+        }
+      ]
+    },
+    {
+      "id": "it_services",
+      "name": "IT services",
+      "hedge": "XLK",
+      "story": "Consultants and outsourcers. They trade on corporate technology budgets and on whether AI replaces the work they bill for.",
+      "watch": "Bookings and guidance, corporate IT budgets, AI's effect on consulting work.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ACN",
+          "why": "Accenture: IT Consulting & Other Services",
+          "change_pct": -1.11,
+          "avg_usd_volume_90d": 1232660205
+        },
+        {
+          "symbol": "IBM",
+          "why": "IBM: IT Consulting & Other Services",
+          "change_pct": -1.87,
+          "avg_usd_volume_90d": 1624461393
+        },
+        {
+          "symbol": "CTSH",
+          "why": "Cognizant: IT Consulting & Other Services",
+          "change_pct": -1.14,
+          "avg_usd_volume_90d": 417742253
+        },
+        {
+          "symbol": "IT",
+          "why": "Gartner: IT Consulting & Other Services",
+          "change_pct": -2.4,
+          "avg_usd_volume_90d": 224691015
+        }
+      ]
+    },
+    {
+      "id": "pc_server_hardware",
+      "name": "PC and server hardware",
+      "hedge": "XLK",
+      "story": "Makers of PCs, servers and storage. They trade on AI-server demand, the PC replacement cycle and memory costs.",
+      "watch": "AI-server orders and margins, PC shipments, memory prices, tariffs.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "DELL",
+          "why": "Dell Technologies: Technology Hardware, Storage & Peripherals",
+          "change_pct": -6.96,
+          "avg_usd_volume_90d": 3546617230
+        },
+        {
+          "symbol": "HPE",
+          "why": "Hewlett Packard Enterprise: Technology Hardware, Storage & Peripherals",
+          "change_pct": -3.56,
+          "avg_usd_volume_90d": 1077389249
+        },
+        {
+          "symbol": "HPQ",
+          "why": "HP Inc.: Technology Hardware, Storage & Peripherals",
+          "change_pct": -2.86,
+          "avg_usd_volume_90d": 434419031
+        },
+        {
+          "symbol": "NTAP",
+          "why": "NetApp: Technology Hardware, Storage & Peripherals",
+          "change_pct": -1.94,
+          "avg_usd_volume_90d": 462539719
+        },
+        {
+          "symbol": "SMCI",
+          "why": "Supermicro: Technology Hardware, Storage & Peripherals",
+          "change_pct": -6.87,
+          "avg_usd_volume_90d": 1532503958
+        },
+        {
+          "symbol": "P",
+          "why": "Everpure: Technology Hardware, Storage & Peripherals",
+          "change_pct": -3.99,
+          "avg_usd_volume_90d": 468056006
+        }
+      ]
+    },
+    {
+      "id": "electronic_components",
+      "name": "Electronic components",
+      "hedge": "XLK",
+      "story": "Connectors, sensors, test gear and contract manufacturing. They trade on electronics demand across data centers, cars and industry.",
+      "watch": "Data-center and AI build-outs, auto and industrial demand, tariffs.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "APH",
+          "why": "Amphenol: Electronic Components",
+          "change_pct": -3.58,
+          "avg_usd_volume_90d": 1039673261
+        },
+        {
+          "symbol": "TEL",
+          "why": "TE Connectivity: Electronic Manufacturing Services",
+          "change_pct": -1.34,
+          "avg_usd_volume_90d": 450480411
+        },
+        {
+          "symbol": "FLEX",
+          "why": "Flex Ltd.: Electronic Manufacturing Services",
+          "change_pct": -0.24,
+          "avg_usd_volume_90d": 462304331
+        },
+        {
+          "symbol": "JBL",
+          "why": "Jabil: Electronic Manufacturing Services",
+          "change_pct": -2.95,
+          "avg_usd_volume_90d": 360434856
+        },
+        {
+          "symbol": "KEYS",
+          "why": "Keysight Technologies: Electronic Equipment & Instruments",
+          "change_pct": -4.05,
+          "avg_usd_volume_90d": 425965584
+        },
+        {
+          "symbol": "TDY",
+          "why": "Teledyne Technologies: Electronic Equipment & Instruments",
+          "change_pct": -2.45,
+          "avg_usd_volume_90d": 214850275
+        }
+      ]
+    },
+    {
+      "id": "internet_infrastructure",
+      "name": "Internet infrastructure",
+      "hedge": "XLK",
+      "story": "Domain names, web hosting, consumer security and messaging plumbing: steady subscription businesses.",
+      "watch": "Domain renewals and pricing, small-business formation, AI's effect on web traffic.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "VRSN",
+          "why": "Verisign: Internet Services & Infrastructure",
+          "change_pct": -1.47,
+          "avg_usd_volume_90d": 253693973
+        },
+        {
+          "symbol": "GDDY",
+          "why": "GoDaddy: Internet Services & Infrastructure",
+          "change_pct": -1.66,
+          "avg_usd_volume_90d": 197143933
+        },
+        {
+          "symbol": "GEN",
+          "why": "Gen Digital: Systems Software",
+          "change_pct": 0.0,
+          "avg_usd_volume_90d": 195960503
+        },
+        {
+          "symbol": "TWLO",
+          "why": "Twilio: Systems Software",
+          "change_pct": -5.58,
+          "avg_usd_volume_90d": 700464568
+        }
+      ]
+    },
+    {
+      "id": "processors",
+      "name": "Processor chips",
+      "hedge": "SPY",
+      "story": "Designers and makers of computer, phone and networking chips. Measured against the S&P 500, because Nvidia dominates the chip funds and trades on its own.",
+      "watch": "AI-chip orders, PC and phone demand, export rules for China, foundry news, TSMC's monthly sales (about the 10th).",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "AMD",
+          "why": "Advanced Micro Devices: Semiconductors",
+          "change_pct": -5.58,
+          "avg_usd_volume_90d": 13413371834
+        },
+        {
+          "symbol": "INTC",
+          "why": "Intel: Semiconductors",
+          "change_pct": -7.02,
+          "avg_usd_volume_90d": 10634512175
+        },
+        {
+          "symbol": "QCOM",
+          "why": "Qualcomm: Semiconductors",
+          "change_pct": -2.29,
+          "avg_usd_volume_90d": 2151044412
+        },
+        {
+          "symbol": "AVGO",
+          "why": "Broadcom: Semiconductors",
+          "change_pct": -3.92,
+          "avg_usd_volume_90d": 8404163417
+        },
+        {
+          "symbol": "TSM",
+          "why": "Taiwan Semiconductor Manufacturing: Semiconductors (foundry); added 2026-11-18, cohesion 0.58 against the basket",
+          "change_pct": 0.62,
+          "avg_usd_volume_90d": 5105663701
+        }
+      ]
+    },
+    {
+      "id": "construction_materials",
+      "name": "Construction materials",
+      "hedge": "XLB",
+      "story": "Crushed stone, cement and asphalt. Local pricing power, tied to road and building work.",
+      "watch": "Highway funding, construction starts, pricing announcements, weather.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "VMC",
+          "why": "Vulcan Materials Company: Construction Materials",
+          "change_pct": -0.49,
+          "avg_usd_volume_90d": 301063489
+        },
+        {
+          "symbol": "MLM",
+          "why": "Martin Marietta Materials: Construction Materials",
+          "change_pct": -0.63,
+          "avg_usd_volume_90d": 389390311
+        },
+        {
+          "symbol": "CRH",
+          "why": "CRH plc: Construction Materials",
+          "change_pct": -0.85,
+          "avg_usd_volume_90d": 453161318
+        }
+      ]
+    },
+    {
+      "id": "packaging",
+      "name": "Packaging",
+      "hedge": "XLB",
+      "story": "Boxes, cans, labels and plastic packaging. They trade on consumer-goods volumes and on box and can pricing.",
+      "watch": "Containerboard prices, box shipments, consumer-goods volumes, mill closures.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PKG",
+          "why": "Packaging Corporation of America: Paper & Plastic Packaging Products & Materials",
+          "change_pct": -0.22,
+          "avg_usd_volume_90d": 157038591
+        },
+        {
+          "symbol": "IP",
+          "why": "International Paper: Paper & Plastic Packaging Products & Materials",
+          "change_pct": -3.51,
+          "avg_usd_volume_90d": 189913097
+        },
+        {
+          "symbol": "SW",
+          "why": "Smurfit Westrock: Paper & Plastic Packaging Products & Materials",
+          "change_pct": -1.04,
+          "avg_usd_volume_90d": 209825709
+        },
+        {
+          "symbol": "AMCR",
+          "why": "Amcor: Paper & Plastic Packaging Products & Materials",
+          "change_pct": -0.07,
+          "avg_usd_volume_90d": 159421090
+        },
+        {
+          "symbol": "AVY",
+          "why": "Avery Dennison: Paper & Plastic Packaging Products & Materials",
+          "change_pct": -0.36,
+          "avg_usd_volume_90d": 143058431
+        },
+        {
+          "symbol": "BALL",
+          "why": "Ball Corporation: Metal, Glass & Plastic Containers",
+          "change_pct": -0.12,
+          "avg_usd_volume_90d": 129841125
+        }
+      ]
+    },
+    {
+      "id": "coatings_chemicals",
+      "name": "Coatings and specialty chemicals",
+      "hedge": "XLB",
+      "story": "Paint and cleaning-chemical makers. They trade on housing and industrial demand and on raw-material costs.",
+      "watch": "Housing turnover, industrial production, raw-material costs, pricing.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SHW",
+          "why": "Sherwin-Williams: Specialty Chemicals",
+          "change_pct": 0.19,
+          "avg_usd_volume_90d": 620160356
+        },
+        {
+          "symbol": "ECL",
+          "why": "Ecolab: Specialty Chemicals",
+          "change_pct": -0.28,
+          "avg_usd_volume_90d": 390044789
+        },
+        {
+          "symbol": "PPG",
+          "why": "PPG Industries: Specialty Chemicals",
+          "change_pct": -0.48,
+          "avg_usd_volume_90d": 197852980
+        }
+      ]
+    },
+    {
+      "id": "healthcare_reits",
+      "name": "Health care REITs",
+      "hedge": "XLRE",
+      "story": "Owners of senior housing and medical buildings. They trade on senior-housing occupancy and long rates.",
+      "watch": "Senior-housing occupancy and rents, long-term yields, acquisitions.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "WELL",
+          "why": "Welltower: Health Care REITs",
+          "change_pct": 0.08,
+          "avg_usd_volume_90d": 666096612
+        },
+        {
+          "symbol": "VTR",
+          "why": "Ventas: Health Care REITs",
+          "change_pct": -0.04,
+          "avg_usd_volume_90d": 311390052
+        },
+        {
+          "symbol": "DOC",
+          "why": "Healthpeak Properties: Health Care REITs",
+          "change_pct": -0.7,
+          "avg_usd_volume_90d": 113567060
+        }
+      ]
+    },
+    {
+      "id": "residential_reits",
+      "name": "Residential REITs",
+      "hedge": "XLRE",
+      "story": "Apartment and rental-home landlords. They trade on rents, new supply and long rates.",
+      "watch": "Rent growth, apartment supply, job growth in the Sun Belt and coasts, long-term yields.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "MAA",
+          "why": "Mid-America Apartment Communities: Multi-Family Residential REITs",
+          "change_pct": -0.06,
+          "avg_usd_volume_90d": 130292066
+        },
+        {
+          "symbol": "UDR",
+          "why": "UDR, Inc.: Multi-Family Residential REITs",
+          "change_pct": -0.19,
+          "avg_usd_volume_90d": 138286351
+        },
+        {
+          "symbol": "CPT",
+          "why": "Camden Property Trust: Multi-Family Residential REITs",
+          "change_pct": 0.01,
+          "avg_usd_volume_90d": 102565304
+        },
+        {
+          "symbol": "ESS",
+          "why": "Essex Property Trust: Multi-Family Residential REITs",
+          "change_pct": 0.05,
+          "avg_usd_volume_90d": 143019614
+        },
+        {
+          "symbol": "VMRK",
+          "why": "Vivmark Residential: Multi-Family Residential REITs",
+          "change_pct": 0.83,
+          "avg_usd_volume_90d": 316508838
+        },
+        {
+          "symbol": "INVH",
+          "why": "Invitation Homes: Single-Family Residential REITs",
+          "change_pct": 0.93,
+          "avg_usd_volume_90d": 134900763
+        }
+      ]
+    },
+    {
+      "id": "retail_reits",
+      "name": "Retail REITs",
+      "hedge": "XLRE",
+      "story": "Mall, shopping-center and single-tenant landlords. They trade on retailer health, leasing and long rates.",
+      "watch": "Occupancy and leasing spreads, retailer bankruptcies, long-term yields.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SPG",
+          "why": "Simon Property Group: Retail REITs",
+          "change_pct": -0.08,
+          "avg_usd_volume_90d": 284437205
+        },
+        {
+          "symbol": "O",
+          "why": "Realty Income: Retail REITs",
+          "change_pct": -0.46,
+          "avg_usd_volume_90d": 395800733
+        },
+        {
+          "symbol": "KIM",
+          "why": "Kimco Realty: Retail REITs",
+          "change_pct": 0.7,
+          "avg_usd_volume_90d": 127682910
+        },
+        {
+          "symbol": "REG",
+          "why": "Regency Centers: Retail REITs",
+          "change_pct": 0.62,
+          "avg_usd_volume_90d": 100333363
+        },
+        {
+          "symbol": "FRT",
+          "why": "Federal Realty Investment Trust: Retail REITs",
+          "change_pct": 0.95,
+          "avg_usd_volume_90d": 100865976
+        }
+      ]
+    },
+    {
+      "id": "tower_reits",
+      "name": "Cell tower REITs",
+      "hedge": "XLRE",
+      "story": "Owners of cell towers leased to the phone carriers. Among the most rate-sensitive stocks.",
+      "watch": "Carrier network spending, long-term yields, satellite competition.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "AMT",
+          "why": "American Tower: Telecom Tower REITs",
+          "change_pct": -0.47,
+          "avg_usd_volume_90d": 496333796
+        },
+        {
+          "symbol": "CCI",
+          "why": "Crown Castle: Telecom Tower REITs",
+          "change_pct": -1.62,
+          "avg_usd_volume_90d": 325655037
+        },
+        {
+          "symbol": "SBAC",
+          "why": "SBA Communications: Telecom Tower REITs",
+          "change_pct": -1.45,
+          "avg_usd_volume_90d": 185009510
+        }
+      ]
+    },
+    {
+      "id": "datacenter_reits",
+      "name": "Data center REITs",
+      "hedge": "XLRE",
+      "story": "Landlords of data centers and records storage. They trade on AI and cloud leasing demand and on power availability.",
+      "watch": "Leasing volumes and rents, hyperscaler capital spending, power constraints.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "EQIX",
+          "why": "Equinix: Data Center REITs",
+          "change_pct": -1.02,
+          "avg_usd_volume_90d": 591428237
+        },
+        {
+          "symbol": "DLR",
+          "why": "Digital Realty: Data Center REITs",
+          "change_pct": -0.68,
+          "avg_usd_volume_90d": 431975065
+        },
+        {
+          "symbol": "IRM",
+          "why": "Iron Mountain: Other Specialized REITs",
+          "change_pct": -1.04,
+          "avg_usd_volume_90d": 195483751
+        }
+      ]
+    },
+    {
+      "id": "electric_utilities",
+      "name": "Electric utilities",
+      "hedge": "XLU",
+      "story": "Regulated electric companies. Bought for dividends, so they move against long rates, with growth now coming from data-center power demand.",
+      "watch": "The 10-year yield, rate cases, data-center load forecasts, storms.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "DUK",
+          "why": "Duke Energy: Electric Utilities",
+          "change_pct": 1.11,
+          "avg_usd_volume_90d": 510153790
+        },
+        {
+          "symbol": "SO",
+          "why": "Southern Company: Electric Utilities",
+          "change_pct": 1.12,
+          "avg_usd_volume_90d": 573727724
+        },
+        {
+          "symbol": "EXC",
+          "why": "Exelon: Electric Utilities",
+          "change_pct": 0.45,
+          "avg_usd_volume_90d": 346961863
+        },
+        {
+          "symbol": "AEP",
+          "why": "American Electric Power: Electric Utilities",
+          "change_pct": 0.12,
+          "avg_usd_volume_90d": 471680259
+        },
+        {
+          "symbol": "WEC",
+          "why": "WEC Energy Group: Electric Utilities",
+          "change_pct": -0.12,
+          "avg_usd_volume_90d": 286702821
+        },
+        {
+          "symbol": "EVRG",
+          "why": "Evergy: Electric Utilities",
+          "change_pct": -0.45,
+          "avg_usd_volume_90d": 181185377
+        },
+        {
+          "symbol": "LNT",
+          "why": "Alliant Energy: Electric Utilities",
+          "change_pct": -0.71,
+          "avg_usd_volume_90d": 185679275
+        },
+        {
+          "symbol": "PPL",
+          "why": "PPL Corporation: Electric Utilities",
+          "change_pct": 0.36,
+          "avg_usd_volume_90d": 267903525
+        },
+        {
+          "symbol": "FE",
+          "why": "FirstEnergy: Electric Utilities",
+          "change_pct": 1.17,
+          "avg_usd_volume_90d": 204905493
+        },
+        {
+          "symbol": "ES",
+          "why": "Eversource Energy: Electric Utilities",
+          "change_pct": 1.48,
+          "avg_usd_volume_90d": 177913351
+        },
+        {
+          "symbol": "PNW",
+          "why": "Pinnacle West Capital: Multi-Utilities",
+          "change_pct": -1.56,
+          "avg_usd_volume_90d": 132410322
+        }
+      ]
+    },
+    {
+      "id": "multi_utilities",
+      "name": "Multi-utilities",
+      "hedge": "XLU",
+      "story": "Regulated electric-and-gas utilities, with the largest renewable developer. Rate-sensitive like the electric group.",
+      "watch": "The 10-year yield, rate cases, renewable tax credits, capital plans.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "NEE",
+          "why": "NextEra Energy: Multi-Utilities",
+          "change_pct": 0.26,
+          "avg_usd_volume_90d": 966492377
+        },
+        {
+          "symbol": "D",
+          "why": "Dominion Energy: Multi-Utilities",
+          "change_pct": 0.21,
+          "avg_usd_volume_90d": 281348995
+        },
+        {
+          "symbol": "ED",
+          "why": "Consolidated Edison: Multi-Utilities",
+          "change_pct": 0.73,
+          "avg_usd_volume_90d": 248931682
+        },
+        {
+          "symbol": "CMS",
+          "why": "CMS Energy: Multi-Utilities",
+          "change_pct": 0.58,
+          "avg_usd_volume_90d": 262106844
+        },
+        {
+          "symbol": "AEE",
+          "why": "Ameren: Multi-Utilities",
+          "change_pct": -0.45,
+          "avg_usd_volume_90d": 182302648
+        },
+        {
+          "symbol": "DTE",
+          "why": "DTE Energy: Multi-Utilities",
+          "change_pct": 0.14,
+          "avg_usd_volume_90d": 197617119
+        },
+        {
+          "symbol": "XEL",
+          "why": "Xcel Energy: Multi-Utilities",
+          "change_pct": -0.49,
+          "avg_usd_volume_90d": 459583993
+        }
+      ]
+    },
+    {
+      "id": "california_utilities",
+      "name": "California utilities",
+      "hedge": "XLU",
+      "story": "The California utilities, which trade on wildfire liability more than on rates.",
+      "watch": "Fire season, wildfire-fund legislation, liability rulings, state regulators.",
+      "source": "S&P 500 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "EIX",
+          "why": "Edison International: Electric Utilities",
+          "change_pct": 2.97,
+          "avg_usd_volume_90d": 274403383
+        },
+        {
+          "symbol": "PCG",
+          "why": "PG&E Corporation: Multi-Utilities",
+          "change_pct": 3.25,
+          "avg_usd_volume_90d": 506083860
+        },
+        {
+          "symbol": "SRE",
+          "why": "Sempra: Multi-Utilities",
+          "change_pct": -1.27,
+          "avg_usd_volume_90d": 318706085
+        }
+      ]
+    },
+    {
+      "id": "steel",
+      "name": "Steel",
+      "hedge": "XLB",
+      "story": "US steelmakers and a metals distributor. They trade on steel prices, tariffs on imports, and construction and auto demand.",
+      "watch": "Hot-rolled steel prices, Section 232 tariffs, construction and auto demand, scrap costs.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "NUE",
+          "why": "Nucor: Steel",
+          "change_pct": 0.37,
+          "avg_usd_volume_90d": 350484784
+        },
+        {
+          "symbol": "STLD",
+          "why": "Steel Dynamics: Steel",
+          "change_pct": -1.65,
+          "avg_usd_volume_90d": 256288381
+        },
+        {
+          "symbol": "RS",
+          "why": "Reliance, Inc.: Steel",
+          "change_pct": -1.46,
+          "avg_usd_volume_90d": 129343554
+        },
+        {
+          "symbol": "CMC",
+          "why": "Commercial Metals: Steel",
+          "change_pct": -4.31,
+          "avg_usd_volume_90d": 74933613
+        },
+        {
+          "symbol": "CLF",
+          "why": "Cleveland-Cliffs: Steel",
+          "change_pct": -4.43,
+          "avg_usd_volume_90d": 242697998
+        }
+      ]
+    },
+    {
+      "id": "hospitals",
+      "name": "Hospitals and care facilities",
+      "hedge": "XLV",
+      "story": "Hospital, rehab and nursing-home operators. They trade on patient volumes, labor costs and what Medicare, Medicaid and insurers pay.",
+      "watch": "Admissions and surgery volumes, Medicaid and exchange-subsidy policy, nurse wages, Medicare rate rules.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "HCA",
+          "why": "HCA Healthcare: Health Care Facilities",
+          "change_pct": 2.55,
+          "avg_usd_volume_90d": 612491573
+        },
+        {
+          "symbol": "UHS",
+          "why": "Universal Health Services: Health Care Facilities",
+          "change_pct": 1.92,
+          "avg_usd_volume_90d": 133915939
+        },
+        {
+          "symbol": "THC",
+          "why": "Tenet Health: Health Care Facilities",
+          "change_pct": 1.93,
+          "avg_usd_volume_90d": 234953438
+        },
+        {
+          "symbol": "ENSG",
+          "why": "Ensign Group: Health Care Facilities",
+          "change_pct": -0.1,
+          "avg_usd_volume_90d": 66006428
+        },
+        {
+          "symbol": "EHC",
+          "why": "Encompass Health: Health Care Facilities",
+          "change_pct": 0.79,
+          "avg_usd_volume_90d": 120562290
+        }
+      ]
+    },
+    {
+      "id": "office_reits",
+      "name": "Office REITs",
+      "hedge": "XLRE",
+      "story": "Office and lab landlords. They trade on leasing, return-to-office and the cost of refinancing their debt.",
+      "watch": "Leasing volumes, office attendance, refinancing rates, lab-space demand.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "BXP",
+          "why": "BXP, Inc.: Office REITs",
+          "change_pct": 0.2,
+          "avg_usd_volume_90d": 90402873
+        },
+        {
+          "symbol": "VNO",
+          "why": "Vornado Realty Trust: Office REITs",
+          "change_pct": 0.03,
+          "avg_usd_volume_90d": 52544719
+        },
+        {
+          "symbol": "CUZ",
+          "why": "Cousins Properties: Office REITs",
+          "change_pct": 0.91,
+          "avg_usd_volume_90d": 43792860
+        },
+        {
+          "symbol": "KRC",
+          "why": "Kilroy Realty Corp: Office REITs",
+          "change_pct": 0.5,
+          "avg_usd_volume_90d": 48610752
+        },
+        {
+          "symbol": "ARE",
+          "why": "Alexandria Real Estate Equities: Office REITs",
+          "change_pct": -0.71,
+          "avg_usd_volume_90d": 99750552
+        },
+        {
+          "symbol": "CDP",
+          "why": "COPT Defense Properties: Office REITs",
+          "change_pct": 0.75,
+          "avg_usd_volume_90d": 30656732
+        }
+      ]
+    },
+    {
+      "id": "gas_utilities",
+      "name": "Gas utilities",
+      "hedge": "XLU",
+      "story": "Regulated natural-gas distributors. Rate-sensitive like other utilities, with weather and pipe-replacement spending on top.",
+      "watch": "The 10-year yield, rate cases, winter weather, electrification rules.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "ATO",
+          "why": "Atmos Energy: Gas Utilities",
+          "change_pct": -0.08,
+          "avg_usd_volume_90d": 172771960
+        },
+        {
+          "symbol": "OGS",
+          "why": "One Gas: Gas Utilities",
+          "change_pct": 0.17,
+          "avg_usd_volume_90d": 44541730
+        },
+        {
+          "symbol": "SR",
+          "why": "Spire: Gas Utilities",
+          "change_pct": 0.05,
+          "avg_usd_volume_90d": 40040325
+        },
+        {
+          "symbol": "SWX",
+          "why": "Southwest Gas Corp: Gas Utilities",
+          "change_pct": -1.78,
+          "avg_usd_volume_90d": 54192284
+        },
+        {
+          "symbol": "NJR",
+          "why": "New Jersey Resources: Gas Utilities",
+          "change_pct": 1.12,
+          "avg_usd_volume_90d": 35201530
+        },
+        {
+          "symbol": "NFG",
+          "why": "National Fuel Gas: Gas Utilities",
+          "change_pct": 0.12,
+          "avg_usd_volume_90d": 67334741
+        },
+        {
+          "symbol": "UGI",
+          "why": "UGI Corp: Gas Utilities",
+          "change_pct": 0.37,
+          "avg_usd_volume_90d": 65331031
+        },
+        {
+          "symbol": "CNP",
+          "why": "CenterPoint Energy: Multi-Utilities",
+          "change_pct": -1.24,
+          "avg_usd_volume_90d": 283668189
+        }
+      ]
+    },
+    {
+      "id": "food_distributors",
+      "name": "Food distributors",
+      "hedge": "XLP",
+      "story": "Suppliers to restaurants, hospitals and schools. They trade on restaurant traffic and food-cost inflation.",
+      "watch": "Restaurant traffic, food inflation, case volumes, merger talk in the group.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "SYY",
+          "why": "Sysco: Food Distributors",
+          "change_pct": 1.48,
+          "avg_usd_volume_90d": 288763196
+        },
+        {
+          "symbol": "USFD",
+          "why": "US Foods: Food Distributors",
+          "change_pct": -0.24,
+          "avg_usd_volume_90d": 232452397
+        },
+        {
+          "symbol": "PFGC",
+          "why": "Performance Food Group: Food Distributors",
+          "change_pct": 0.75,
+          "avg_usd_volume_90d": 171837014
+        }
+      ]
+    },
+    {
+      "id": "trucks_farm_machinery",
+      "name": "Trucks and farm machinery",
+      "hedge": "XLI",
+      "story": "Makers of trucks, tractors, cranes and rail equipment. They trade on freight and farm income and on order backlogs. Caterpillar and Cummins trade on their own and are left out.",
+      "watch": "Truck orders, crop prices and farm income, dealer inventories, tariffs on steel and parts.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PCAR",
+          "why": "Paccar: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -1.06,
+          "avg_usd_volume_90d": 407535057
+        },
+        {
+          "symbol": "WAB",
+          "why": "Wabtec: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -2.09,
+          "avg_usd_volume_90d": 273480406
+        },
+        {
+          "symbol": "AGCO",
+          "why": "AGCO: Agricultural & Farm Machinery",
+          "change_pct": -2.84,
+          "avg_usd_volume_90d": 109425978
+        },
+        {
+          "symbol": "CNH",
+          "why": "CNH Industrial: Agricultural & Farm Machinery",
+          "change_pct": -3.78,
+          "avg_usd_volume_90d": 209768933
+        },
+        {
+          "symbol": "TEX",
+          "why": "Terex: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -4.21,
+          "avg_usd_volume_90d": 80401795
+        },
+        {
+          "symbol": "OSK",
+          "why": "Oshkosh: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -1.44,
+          "avg_usd_volume_90d": 102373076
+        },
+        {
+          "symbol": "ALSN",
+          "why": "Allison Transmission: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -1.7,
+          "avg_usd_volume_90d": 94577747
+        },
+        {
+          "symbol": "TTC",
+          "why": "Toro: Agricultural & Farm Machinery",
+          "change_pct": -0.64,
+          "avg_usd_volume_90d": 67840514
+        },
+        {
+          "symbol": "GATX",
+          "why": "GATX: Construction Machinery & Heavy Transportation Equipment",
+          "change_pct": -0.72,
+          "avg_usd_volume_90d": 38898943
+        }
+      ]
+    },
+    {
+      "id": "industrial_reits",
+      "name": "Industrial REITs",
+      "hedge": "XLRE",
+      "story": "Warehouse landlords. They trade on e-commerce and trade volumes, rents and new supply.",
+      "watch": "Warehouse rents and vacancy, import volumes, tariffs, new construction.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "PLD",
+          "why": "Prologis: Industrial REITs",
+          "change_pct": -0.83,
+          "avg_usd_volume_90d": 551895936
+        },
+        {
+          "symbol": "EGP",
+          "why": "EastGroup Properties: Industrial REITs",
+          "change_pct": -0.68,
+          "avg_usd_volume_90d": 103300431
+        },
+        {
+          "symbol": "STAG",
+          "why": "STAG Industrial: Industrial REITs",
+          "change_pct": -1.11,
+          "avg_usd_volume_90d": 59144368
+        },
+        {
+          "symbol": "FR",
+          "why": "First Industrial Realty Trust: Industrial REITs",
+          "change_pct": -0.43,
+          "avg_usd_volume_90d": 75307164
+        },
+        {
+          "symbol": "REXR",
+          "why": "Rexford Industrial Realty: Industrial REITs",
+          "change_pct": -0.32,
+          "avg_usd_volume_90d": 100779687
+        }
+      ]
+    },
+    {
+      "id": "industrial_distributors",
+      "name": "Building and industrial distributors",
+      "hedge": "XLI",
+      "story": "Distributors of plumbing, HVAC, waterworks and fasteners. An early read on construction and factory activity.",
+      "watch": "Daily sales reports (Fastenal), housing and commercial construction, pricing.",
+      "source": "S&P 500 and S&P 400 industry group (GICS sub-industries), kept after the cohesion check of 2026-11-16",
+      "members": [
+        {
+          "symbol": "FERG",
+          "why": "Ferguson Enterprises: Trading Companies & Distributors",
+          "change_pct": -1.28,
+          "avg_usd_volume_90d": 498373627
+        },
+        {
+          "symbol": "WSO",
+          "why": "Watsco: Trading Companies & Distributors",
+          "change_pct": -4.16,
+          "avg_usd_volume_90d": 174375807
+        },
+        {
+          "symbol": "CNM",
+          "why": "Core & Main: Trading Companies & Distributors",
+          "change_pct": -2.51,
+          "avg_usd_volume_90d": 94892655
+        },
+        {
+          "symbol": "FAST",
+          "why": "Fastenal: Trading Companies & Distributors",
+          "change_pct": -0.14,
+          "avg_usd_volume_90d": 381548876
         }
       ]
     }

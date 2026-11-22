@@ -161,10 +161,11 @@ def _day_move(closes: pd.Series, stored: float | None) -> float | None:
     return (closes.iloc[-1] / closes.iloc[-2] - 1) * 100 if len(closes) > 1 else stored
 
 
-def _baskets() -> list[dict]:
+def _baskets(lib: dict | None = None, section: str = "basket") -> list[dict]:
     """The basket watchlist. Daily-bar stats need every member's bars; until the collector has pulled
-    a name, its basket shows only the snapshot and says how many names are waiting."""
-    lib = basket_library()
+    a name, its basket shows only the snapshot and says how many names are waiting. `lib` and `section` draw another
+    set of baskets the same way: the small-cap universe's, as `sc_basket` rows (_smallcap_baskets)."""
+    lib = basket_library() if lib is None else lib
     rows = []
     for b in lib["baskets"]:
         symbols = [m["symbol"] for m in b["members"]]
@@ -178,7 +179,7 @@ def _baskets() -> list[dict]:
             s = m["symbol"]
             c = closes[s].dropna() if s in closes.columns else pd.Series(dtype=float)
             member_rows.append({
-                "section": "basket_member", "basket": b["id"], "symbol": s, "why": m.get("why", ""),
+                "section": f"{section}_member", "basket": b["id"], "symbol": s, "why": m.get("why", ""),
                 "avg_usd_volume_90d": m.get("avg_usd_volume_90d"), "change_pct": _num(_day_move(c, m.get("change_pct")), 2),
                 "ret_5d": _num(c.iloc[-1] / c.iloc[-6] - 1) if len(c) > 5 else None,
                 "ret_20d": _num(c.iloc[-1] / c.iloc[-21] - 1) if len(c) > 20 else None,
@@ -190,7 +191,7 @@ def _baskets() -> list[dict]:
         hedge_today = _day_move(hedge_close, b.get("hedge_change_pct"))
         pulled = storage.modified(bars_path(b["hedge"]))
         row = {
-            "section": "basket", "id": b["id"], "name": b["name"], "hedge": b["hedge"], "story": b.get("story", ""),
+            "section": section, "id": b["id"], "name": b["name"], "hedge": b["hedge"], "story": b.get("story", ""),
             "watch": b.get("watch", ""), "caution": b.get("caution", ""), "source": b.get("source", ""),
             "members": ", ".join(symbols), "n_members": len(symbols), "missing_bars": len(symbols) - len(have),
             "snapshot_at": pulled.astimezone(NY).isoformat() if pulled else lib.get("snapshot_at"),
@@ -308,27 +309,26 @@ def _portfolio() -> list[dict]:
         return []
 
 
-def _intraday() -> list[dict]:
-    """The intraday book's rehearsal; a failure here never costs the rest of the page."""
+def _smallcap_baskets() -> list[dict]:
+    """The small-cap universe as baskets against IWM, for the Baskets view's Small caps tab (smallcap/baskets.py)."""
     try:
-        if _restart():   # shut down with the first book; its record is in journal/archive
-            return []
-        from .intraday import live
+        from .smallcap import baskets
 
-        return live.rows()
+        return _baskets(baskets.library(), "sc_basket")
     except Exception as e:
-        logging.getLogger(__name__).warning("intraday_rows_failed error=%r", e)
+        logging.getLogger(__name__).warning("smallcap_baskets_failed error=%r", e)
         return []
 
 
-def _hormuz() -> list[dict]:
-    """Strait of Hormuz traffic and prices, a side panel: a failure here never costs the rest of the page."""
+def _smallcap() -> list[dict]:
+    """The small-cap shadow book for the Portfolio view's Small-cap tab (smallcap/book.py, score.py); a failure never costs
+    the page."""
     try:
-        from . import hormuz
+        from .smallcap import book, score
 
-        return hormuz.rows()
+        return [*score.dashboard(), *book.rows(), *_smallcap_baskets()]
     except Exception as e:
-        logging.getLogger(__name__).warning("hormuz_rows_failed error=%r", e)
+        logging.getLogger(__name__).warning("smallcap_rows_failed error=%r", e)
         return []
 
 
@@ -387,7 +387,7 @@ def build(as_of: date | None = None, workers=None) -> list[dict]:
         meta |= {"design": started.get("design"), "book_started": started.get("started"), "book_capital": started.get("capital")}
     pairs = _live_pairs(brief, as_of)
     meta["factor_live"] = pairs is not brief
-    return [meta, *_factors(pairs), *_gamma(as_of, brief), *_flows(brief), *_screen(newest, screen_job), *rows_first, *_hormuz(), *_routine(), *_intraday(), *_portfolio()]
+    return [meta, *_factors(pairs), *_gamma(as_of, brief), *_flows(brief), *_screen(newest, screen_job), *rows_first, *_routine(), *_portfolio(), *_smallcap()]
 
 
 def _restart() -> dict | None:

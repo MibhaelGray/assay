@@ -15,7 +15,7 @@ Yahoo finds candidates and sizes trades. It never prices an order: that takes th
 """
 
 import logging
-from datetime import date, datetime, time
+from datetime import datetime, time
 
 import pandas as pd
 
@@ -123,7 +123,3 @@ def clock(at: str | datetime) -> str:
     """A time for a reader: 6:55 PM CT."""
     at = datetime.fromisoformat(at) if isinstance(at, str) else at
     return f"{at.astimezone(CT):%-I:%M %p} CT"
-
-
-def session_of(d: date) -> str:
-    return pd.Timestamp(d).strftime("%a %b %-d")

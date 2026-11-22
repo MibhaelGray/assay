@@ -1,7 +1,7 @@
 """The candidate screen: where a research pass should look.
 
 Code checks every stock, ETF, themed basket and factor pair we have bars for against a fixed list of setups
-(journal.SETUPS) and writes the best 20 or so to journal/screens/<as_of>.json, each with the numbers that
+(journal.SETUPS) and writes the best 40 or so to journal/screens/<as_of>.json, each with the numbers that
 triggered it and a one-line chart verdict. The pass researches only those. A breakout or breakdown also says
 how tight the base was and which way the trend ran (TIGHT_BASE and ADJUST below). The screen never decides: it says
 where to look, and every recorded idea carries its setup so results can be compared setup by setup.
@@ -9,6 +9,13 @@ where to look, and every recorded idea carries its setup so results can be compa
 Two ways to run it. `build()` is the nightly screen on settled daily bars. `build_live(slot)` is the screen for
 one of the three daily passes (night, morning, midday): the same setups on the latest prices, which may be
 after-hours, pre-market or a session still trading (live.py), plus the names moving sharply right now.
+
+The night pass's takes trade in IBKR's overnight session, where a leg wider than 2% is passed on (paper/entries.py).
+So the night screen asks the gateway for each candidate's overnight bid and ask before the pass sees it, and a
+candidate whose own legs are wider than that, or have no overnight market, is dropped and the next name moves up:
+no research on a name the book can't trade tonight (the owner, 2026-11-18). The default hedge's spread is shown,
+not gated, since the pass can choose another hedge or none. If the gateway can't be asked, nothing is dropped and
+the screen says so.
 """
 
 import json
@@ -24,7 +31,9 @@ from .market import _regime, basket_library
 from .universe import BARS_ONLY, BROAD, ETFS, FACTOR_PAIRS, INDUSTRIES, SECTORS, screen_universe
 
 MIN_DOLLAR_VOLUME = 20e6
-TOP = 20
+OVERNIGHT_CLIENT = 93   # the night screen's spread check: its own gateway connection, apart from the order job's
+OVERNIGHT_ROUNDS = 6    # times the shortlist is refilled after dropping names that can't trade overnight
+TOP = 40   # 20 until 2026-11-16: more verdicts a pass, so the ranking test speaks sooner (the owner)
 MORE = 15
 HEAVY_VOLUME = 1.5
 # How much each setup counts when ranking, before its strength (0-1) is added. Earnings and relative strength
@@ -47,7 +56,7 @@ LIVE_MIN_BARS = 10
 LIVE_HEAVY = 2.0
 REJUDGE_ATR = 1.5
 REJUDGE_SESSIONS = 2
-SLOTS = ("night", "morning", "midday")
+SLOTS = ("night", "late", "late2", "late3", "late4", "morning", "midday")   # proposals.NEW_PASSES
 EARNINGS_SETUPS = {"earnings_gap_held", "earnings_gap_faded"}
 # Two things about the chart behind a breakout or breakdown, recorded on every stock and ETF candidate.
 # Tightness: the average daily range (true range over the prior close) of the 10 sessions before today, over
@@ -65,17 +74,19 @@ LOOSE_BASE = 1.0
 ADJUST = {"tight_base": 0.15, "breakout_in_downtrend": -0.3}
 BASE_SETUPS = {"breakout", "breakdown"}
 
-# The shortlist is 20 slots, and each should hold a different idea.
+# The shortlist is TOP slots, and each should hold a different idea.
 # - A name the paper book holds, or closed within RECENT_EXIT sessions, isn't a candidate: an earnings setup
 #   re-lists the same name for three nights. Fresh signals on those names go to `in_book` for the pre-close review.
-# - No setup takes more than MAX_PER_SETUP slots, so one kind of day (a market-wide turn, a heavy earnings
-#   week) can't fill the list.
+# - No setup takes more than MAX_PER_SETUP slots while other setups have names to give, so one kind of day (a
+#   market-wide turn, a heavy earnings week) can't crowd the others out. The list is still always full when it can
+#   be (the owner, 2026-11-16): slots the cap leaves empty go to the best of what it cut, so if TOP names pass
+#   the screen, TOP are judged.
 # - Funds that gave the same signal and move together (TWIN_CORR over 60 sessions) are one idea: the best-ranked
 #   stays and names the others in `moved_with`.
 # - A stock's default hedge is the market, sector or industry fund it has moved with most over 60 sessions,
 #   unless its basket's own hedge is within KEEP_BASKET_WITHIN of that. Under MIN_HEDGE_CORR nothing hedges
 #   it: SPY stays as the default and `hedge_fit.weak` says so. A fund is always set against SPY.
-MAX_PER_SETUP = 5
+MAX_PER_SETUP = 10   # a quarter of the list, as 5 was of 20
 RECENT_EXIT = 3
 TWIN_CORR = 0.9
 MIN_HEDGE_CORR = 0.4
@@ -206,6 +217,11 @@ def _shortlist(ranked: list[dict], r60: pd.DataFrame, in_book: dict[str, str], j
             used[c["setup"]] = used.get(c["setup"], 0) + 1
         else:
             rest.append(c)
+    if len(top) < TOP and rest:   # the cap left slots empty: fill them, and keep the whole list in rank order
+        fill = rest[:TOP - len(top)]
+        rest = rest[len(fill):]
+        order = {id(c): i for i, c in enumerate(kept)}
+        top = sorted(top + fill, key=lambda c: order[id(c)])
     return top, rest, held
 
 
@@ -572,8 +588,95 @@ def _live_of(sym: str, f: dict, snap: dict | None, reports: dict) -> dict | None
     return out
 
 
-def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None) -> dict:
-    """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull."""
+def _gateway_overnight(symbols: list[str]) -> tuple[dict, dict]:
+    """(symbol -> bid, ask; symbol -> why none) on IBKR's overnight venue, SPY included."""
+    import asyncio
+
+    from .paper.gateway import CANARY, IBMarket
+
+    async def ask():
+        async with IBMarket(client_id=OVERNIGHT_CLIENT) as m:
+            await m.quotes(sorted({*symbols, CANARY}), overnight=True, tries=2, need_books=True)
+            return m.books, m.missing
+    try:
+        return asyncio.run(ask())
+    except Exception as e:  # noqa: BLE001 - no check means nothing dropped, said in the screen
+        return {}, {s: f"the gateway couldn't be asked ({type(e).__name__})" for s in symbols}
+
+
+class OvernightCheck:
+    """Called with each shortlist; returns the candidates to drop, {name: why}. `books` stands in for the gateway:
+    a function from symbols to (books, missing), as _gateway_overnight."""
+
+    def __init__(self, books=None):
+        self.ask = books or _gateway_overnight
+        self.books: dict = {}
+        self.missing: dict = {}
+        self.unchecked: str | None = None
+
+    def _quote(self, symbols: set[str]) -> None:
+        from .paper.gateway import CANARY
+        todo = sorted(symbols - set(self.books) - set(self.missing))
+        if not todo or self.unchecked:
+            return
+        books, missing = self.ask(todo)
+        if CANARY not in self.books and not books.get(CANARY):
+            self.unchecked = (missing.get(CANARY) or next(iter(missing.values()), None)
+                              or "the gateway sent no quote for SPY")
+            return
+        self.books.update(books)
+        self.missing.update({s: w for s, w in missing.items() if s not in books})
+
+    def spread(self, symbol: str) -> float | None:
+        from .paper import rules
+        return rules.spread_pct(self.books.get(symbol))
+
+    def __call__(self, top: list[dict]) -> dict[str, dict]:
+        from .paper import rules
+        from .paper.gateway import no_market
+        legs = {}
+        for c in top:
+            sides = rules._sides(c)
+            if sides is None:
+                continue
+            hedge = None if c["kind"] == "factor" else (c.get("hedge") or "SPY")
+            own = [x for x in (*sides[0], *sides[1]) if x != hedge or x == c["name"]]
+            legs[c["name"]] = (own, hedge if hedge and hedge not in own else None)
+        self._quote({x for own, h in legs.values() for x in (*own, *([h] if h else []))})
+        if self.unchecked:
+            return {}
+        drop = {}
+        for c in top:
+            if c["name"] not in legs:
+                continue
+            own, hedge = legs[c["name"]]
+            wide = {x: v for x in own if (v := self.spread(x)) is not None and v > rules.MAX_CROSS_SPREAD}
+            none = [x for x in own if x in self.missing and no_market(self.missing[x])]
+            if wide or none:
+                why = [f"{x} {v:.1%} wide" for x, v in wide.items()] + [f"{x} has no overnight bid and ask" for x in none]
+                drop[c["name"]] = {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "direction": c["direction"],
+                                   "why": "; ".join(why)}
+                continue
+            c["overnight"] = {x: _pct_or_none(self.spread(x)) for x in own}
+            if hedge:
+                hs = self.spread(hedge)
+                c["overnight_hedge"] = {"symbol": hedge, "spread": _pct_or_none(hs),
+                                        "tradeable": hs is not None and hs <= rules.MAX_CROSS_SPREAD}
+        return drop
+
+    def report(self, dropped: dict[str, dict]) -> dict:
+        if self.unchecked:
+            return {"checked": False, "why": f"overnight spreads weren't checked: {self.unchecked}", "dropped": []}
+        return {"checked": True, "quoted": len(self.books), "dropped": list(dropped.values())}
+
+
+def _pct_or_none(x: float | None) -> str | None:
+    return None if x is None else f"{x:.2%}"
+
+
+def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None, books=None) -> dict:
+    """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull and
+    `books` for the night screen's overnight quotes (OvernightCheck)."""
     from .paper import proposals
 
     if slot not in SLOTS:
@@ -585,7 +688,8 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
     if "SPY" not in snaps:
         raise RuntimeError("no live prices from Yahoo (SPY is missing), so there is no live screen")
     frame, snaps, partial = _with_live(bars.load(names), snaps)
-    payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial})
+    check = (OvernightCheck(books) if slot == "night" else None)
+    payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check})
     spy = snaps["SPY"]
     payload.update({"session": session.isoformat(), "slot": slot, "live": True, "phase": spy["phase"], "prices_at": spy["at"],
                     "session_minutes": (spy.get("regular") or {}).get("minutes") if spy["phase"] == "regular" else None,
@@ -690,8 +794,18 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     for c in kept:
         counts[c["setup"]] = counts.get(c["setup"], 0) + 1
 
-    again: list[dict] = []
-    top, rest, held = _shortlist(kept, r60, _book_names(days.sessions, as_of), _judged(live_["session"]) if live_ else None, again)
+    in_book, judged = _book_names(days.sessions, as_of), (_judged(live_["session"]) if live_ else None)
+    check = (live_ or {}).get("check")
+    dropped: dict[str, dict] = {}
+    for _ in range(OVERNIGHT_ROUNDS if check else 1):
+        again: list[dict] = []
+        top, rest, held = _shortlist([c for c in kept if c["name"] not in dropped], r60, in_book, judged, again)
+        if not check:
+            break
+        new = check(top)
+        if not new:
+            break
+        dropped.update(new)
 
     liquid = {s for s, f in feats.items() if s not in ETFS and f["usd_volume"] >= MIN_DOLLAR_VOLUME}
     upcoming = []
@@ -722,6 +836,7 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         "earnings_ahead": upcoming[:40],
         "calendar_ahead": events,
         "regime": _regime_notes(as_of),
+        **({"overnight": check.report(dropped)} if check else {}),
     }
 
 
@@ -781,5 +896,13 @@ def summary(payload: dict) -> str:
         lines.append("Left out, already in the book: " + ", ".join(f"{c['name']} ({c['setup']} {c['direction']})" for c in payload["in_book"]))
     if payload.get("judged_recently"):
         lines.append("Left out, judged by a recent pass: " + ", ".join(c["name"] for c in payload["judged_recently"]))
+    if (o := payload.get("overnight")) and not o["checked"]:
+        lines.append(o["why"].capitalize())
+    elif o and o["dropped"]:
+        lines.append("Left out, can't trade overnight inside a 2% spread: " + ", ".join(f"{d['name']} ({d['why']})" for d in o["dropped"]))
+    wide_hedge = [f"{c['name']} (hedge {c['overnight_hedge']['symbol']} {c['overnight_hedge']['spread'] or 'no quote'})"
+                  for c in payload["candidates"] if c.get("overnight_hedge") and not c["overnight_hedge"]["tradeable"]]
+    if wide_hedge:
+        lines.append("Default hedge too wide overnight, choose another or none: " + ", ".join(wide_hedge))
     lines += payload["regime"]
     return "\n".join(lines)

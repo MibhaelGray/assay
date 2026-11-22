@@ -46,36 +46,33 @@ class Marks(unittest.TestCase):
 
 
 class Accounts(unittest.TestCase):
-    def accounts(self, sync, swing, intraday, pos=(), first=None):
-        books = {"swing": swing, "intraday": intraday}
-        with mock.patch.object(portfolio, "fills", lambda b: books[b]), mock.patch.object(portfolio, "_last_sync", lambda: sync), \
+    def accounts(self, sync, swing, pos=(), first=None):
+        with mock.patch.object(portfolio, "fills", lambda b: swing), mock.patch.object(portfolio, "_last_sync", lambda: sync), \
                 mock.patch.object(portfolio, "_first_sync", lambda: first if first is not None else sync), \
                 mock.patch.object(portfolio, "restart", lambda: None):   # not the live book.json
             return portfolio.accounts(list(pos))
 
-    def test_each_book_is_its_capital_plus_its_own_pnl_and_the_rest_is_unassigned(self):
+    def test_the_book_is_its_capital_plus_its_own_pnl_and_the_rest_is_unassigned(self):
         swing = [fill("AAA", "BOT", 100, 10.0), fill("AAA", "SLD", 50, 12.0, 11)]       # +100 realized, 50 open
-        intraday = [fill("HHH", "SLD", 10, 50.0)]
-        a = self.accounts({"net_liquidation": 1_026_000.0, "marks": {"AAA": 11.0, "HHH": 49.0}}, swing, intraday)
-        s, i = a["books"]
+        a = self.accounts({"net_liquidation": 1_026_000.0, "marks": {"AAA": 11.0}}, swing)
+        [s] = a["books"]
         self.assertEqual((s["realized"], s["open"], s["commission"], s["value"]), (100.0, 50.0, 2.0, 900_148.0))
-        self.assertEqual((i["open"], i["value"]), (10.0, 100_009.0))
-        self.assertEqual(a["unassigned"], 1_026_000.0 - 900_148.0 - 100_009.0)
+        self.assertEqual(a["unassigned"], 1_026_000.0 - 900_148.0)
 
     def test_returns_on_the_whole_account_are_against_its_value_when_the_books_began(self):
         a = self.accounts({"net_liquidation": 1_010_000.0, "marks": {}}, [fill("AAA", "BOT", 100, 10.0, commission=0.0),
-                          fill("AAA", "SLD", 100, 110.0, 11, commission=0.0)], [],
+                          fill("AAA", "SLD", 100, 110.0, 11, commission=0.0)],
                           first={"net_liquidation": 1_000_000.0, "session": "2026-11-09"})
         self.assertEqual((a["books"][0]["account_pct"], a["books"][0]["return_pct"]), (1.0, 1.111))
         self.assertEqual((a["start_value"], a["pnl"], a["account_pct"]), (1_000_000.0, 10_000.0, 1.0))
 
     def test_a_symbol_ibkr_gave_no_price_for_is_marked_at_the_close(self):
-        a = self.accounts({"net_liquidation": 1e6, "marks": {}}, [fill("AAA", "BOT", 100, 10.0)], [],
+        a = self.accounts({"net_liquidation": 1e6, "marks": {}}, [fill("AAA", "BOT", 100, 10.0)],
                           [{"book": "swing", "symbol": "AAA", "last": 10.5}])
         self.assertEqual((a["books"][0]["open"], a["books"][0]["marked_at_close"]), (50.0, ["AAA"]))
 
     def test_no_sync_yet_leaves_the_account_and_unassigned_blank(self):
-        a = self.accounts({}, [], [])
+        a = self.accounts({}, [])
         self.assertEqual((a["net_liquidation"], a["unassigned"], a["books"][0]["value"]), (None, None, 900_000.0))
 
 

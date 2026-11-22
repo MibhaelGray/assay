@@ -2,7 +2,7 @@
 
 Back to the [README](../README.md).
 
-**Stopped at the restart of 2026-11-15.** Its jobs (`intraday-tick`, `intraday-ext`) are retired and its record is in `journal/archive/first-book-2026-11-15/intraday/`. The rest of this section describes it as it ran.
+**Stopped at the restart of 2026-11-15.** Its code (`src/factor_rotation/intraday/`, `fr intraday`) was removed on 2026-11-17 and is in git history before that date. Its jobs (`intraday-tick`, `intraday-ext`) are retired and its record is in `journal/archive/first-book-2026-11-15/intraday/`. The rest of this section describes it as it ran.
 
 A second book that trades the same ideas on a 15-minute clock, flat by 3:45 PM ET. Since 2026-11-12 Haiku's takes are traded on the paper account; passes and unjudged signals are only followed.
 

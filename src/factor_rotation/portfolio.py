@@ -1,32 +1,32 @@
-"""Both paper books as one portfolio, for the dashboard's Portfolio view: positions and profit-and-loss history.
+"""The paper book as a portfolio, for the dashboard's Portfolio view: positions and profit-and-loss history.
 
-A position is one symbol in one book: the shares still held across that book's open trades, their average cost,
-the latest daily-bar price, and what they have made today and in all. The history is each book's running
-profit and loss after commissions, from its fills, at each session's close (book.pnl_by_session) or at each
-15-minute bar (book.pnl_intraday). "all" is the two books' fills together.
+A position is one symbol: the shares still held across the book's open trades, their average cost, the latest
+daily-bar price, and what they have made today and in all. The history is the book's running profit and loss
+after commissions, from its fills, at each session's close (book.pnl_by_session) or at each 15-minute bar
+(book.pnl_intraday).
 
-Both books trade one IBKR paper account, so each is given a share of it as its own capital (CAPITAL) and kept
-as a sub-account: its value is that capital plus its realized and open profit and loss, after commissions,
-from its own fills. Whatever the account is worth beyond the two books is "unassigned": the account's value
-before the books began, interest, borrow fees, and any position no book claims. It should move slowly; a jump
-there means something is off the books (accounts()).
+The book is a sub-account of one IBKR paper account: its value is its capital plus its realized and open profit
+and loss, after commissions, from its own fills. Whatever the account is worth beyond the book is "unassigned":
+the account's value before the book began, interest, borrow fees, and any position the book doesn't claim. It
+should move slowly; a jump there means something is off the books (accounts()).
+
+The functions still take a book's name and return rows per book, because the dashboard's data is keyed that way
+and the first design ran two books; `running()` says which exist (one, "swing", since the 2026-11-15 restart).
 """
 
 import json
-from datetime import date, datetime, time
+from datetime import datetime
 from pathlib import Path
 
 import pandas as pd
 
-from . import bars, drawdown, journal
+from . import bars, drawdown
 from .config import NY
 from .paper import book
 
-BOOKS = ("swing", "intraday")
-
-# Each book's share of the paper account, set 2026-11-12. The swing book's limits (paper/rules.py: $900,000 gross)
-# and the intraday book's (three takes at $10,000 a side) fit inside them.
-CAPITAL = {"swing": 900_000.0, "intraday": 100_000.0}
+# The book's capital when there is no journal/paper/book.json to say (a test, a scratch journal). The running
+# book's capital comes from book.json (`fr paper restart`: $1,000,000).
+CAPITAL = {"swing": 900_000.0}
 
 
 def restart() -> dict | None:
@@ -46,32 +46,9 @@ def running() -> tuple[str, ...]:
     return tuple((restart() or {}).get("capital") or CAPITAL)
 
 
-def intraday_fills() -> list[dict]:
-    """Every fill on the intraday book's orders, regular session and extended hours, oldest first."""
-    root = journal.JOURNAL / "intraday"
-    out, seen = [], set()
-    for kind, key in (("days", "date"), ("nights", "night")):
-        for path in sorted((root / kind).glob("*.json")) if (root / kind).exists() else []:
-            doc = json.loads(path.read_text())
-            for sig in doc["signals"]:
-                p = sig.get("paper") or {}
-                for f in p.get("fills", []) if not p.get("dry_run") else []:
-                    if f["exec_id"] in seen:
-                        continue
-                    seen.add(f["exec_id"])
-                    d = date.fromisoformat(doc[key])
-                    at = datetime.fromisoformat(f["time"]).astimezone(NY) if f.get("time") else datetime.combine(d, time(9, 30), NY)
-                    out.append({**f, "session": d, "at": at})
-    return sorted(out, key=lambda f: f["at"])
-
-
-def fills(which: str) -> list[dict]:
-    swing = book._book_fills() if book.ROOT.exists() else []
-    if which == "swing":
-        return swing
-    if which == "intraday":
-        return intraday_fills()
-    return sorted([*swing, *intraday_fills()], key=lambda f: f["at"])
+def fills(which: str = "swing") -> list[dict]:
+    """A book's fills, oldest first. One book runs, so every name ("swing", "all") is the swing book's."""
+    return book._book_fills() if book.ROOT.exists() else []
 
 
 def _held(fs: list[dict]) -> dict[str, dict]:
@@ -85,7 +62,7 @@ def _held(fs: list[dict]) -> dict[str, dict]:
 def deployed(fs: list[dict], now: datetime | None = None) -> dict:
     """How much of a book's money was at work: gross exposure at cost (longs plus shorts, each at its average
     cost) after every fill, averaged over the time since the book's first fill, the peak, and what is out now.
-    Calendar time, so a book that is flat overnight (the intraday book) has its idle hours counted against it.
+    Calendar time, so hours a book sits flat are counted against it.
     Return on capital deployed is the book's profit and loss over this average."""
     if not fs:
         return {"now": 0.0, "peak": 0.0, "average": 0.0, "since": None}
@@ -141,8 +118,6 @@ def positions() -> list[dict]:
             if t["state"] != "closed":
                 for leg in t["held"]:
                     names.setdefault(("swing", leg["symbol"]), []).append(t["name"])
-    for (sym, name) in _intraday_names():
-        names.setdefault(("intraday", sym), []).append(name)
     out = []
     for b, held in by_book.items():
         for s, p in held.items():
@@ -162,22 +137,6 @@ def positions() -> list[dict]:
                         "day_pnl": round(q * (price - base), 2) + 0.0, "since": p["since"].date().isoformat(),
                         "trades": sorted(set(names.get((b, s), [])))})
     return sorted(out, key=lambda r: -abs(r["value"]))
-
-
-def _intraday_names() -> list[tuple[str, str]]:
-    """(symbol, trade name) for each leg of the intraday book's takes that have orders out, from its latest day
-    and night files, so its open positions can be shown by trade."""
-    out = []
-    for kind in ("days", "nights"):
-        root = journal.JOURNAL / "intraday" / kind
-        files = sorted(root.glob("*.json")) if root.exists() else []
-        for sig in json.loads(files[-1].read_text())["signals"] if files else []:
-            p = sig.get("paper") or {}
-            if p.get("dry_run") or not p.get("fills") or p.get("state") in ("closed", "not sent"):
-                continue
-            name = f"{'Long' if sig.get('direction') == 'long' else 'Short'} {sig['symbol']} vs {sig.get('hedge')}"
-            out += [(s, name) for s in (sig["symbol"], sig.get("hedge")) if s]
-    return out
 
 
 def _syncs(newest_first: bool) -> list[Path]:

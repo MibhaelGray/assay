@@ -1,8 +1,10 @@
 # ETF Factor Rotation
 
-A research and paper-trading project. It collects daily bars from Yahoo Finance and option chains from IBKR for the largest ETFs and stocks, turns them into positioning, volatility and technical signals, and screens about 1,060 names for trade setups. Three times a day a Claude research pass judges the screen and ranks every candidate. A paper book trades only its best one to three ideas, and every verdict and its reasoning is kept and scored.
+A research and paper-trading project. It collects daily bars from Yahoo Finance for the largest ETFs and stocks (option chains from IBKR can be pulled by hand; no job does it), turns them into positioning, volatility and technical signals, and screens about 1,060 names for trade setups. Three times a day a Claude research pass judges the screen and ranks every candidate. A paper book trades only the ideas it has conviction in, and every verdict and its reasoning is kept and scored.
 
 What the project is for, and the rules it is built by: [PROJECT.md](PROJECT.md). Read that first.
+
+Beside the books there is a research lab ([docs/research-lab.md](docs/research-lab.md), `fr lab`): it tests trading ideas held one to five sessions on history from 2010, records every variant it tries in `journal/lab/`, and places no orders.
 
 ## How it runs
 
@@ -10,25 +12,32 @@ Everything runs on one Mac through launchd (times Central, trading days):
 
 | When | Job | What it does |
 |---|---|---|
-| 9:00 AM, 2:30 PM; ETFs hourly 10 AM–1 PM | `fr options` | option chains from IBKR into `data/` |
 | 3:30 PM | `fr bars` | daily bars from Yahoo |
 | 6:00 PM | nightly | brief, earnings dates, scan and screen; commits and pushes `journal/` |
 | 7:30 PM (Sun–Thu) | night pass | judges the after-hours screen for the next session |
 | 8:45 AM | morning pass | judges the pre-market and first minutes of trading |
 | 12:00 PM | midday pass | judges the morning's trading, reviews open trades |
 | every minute | `fr paper enter` | sends a recorded pass's takes and exits to the paper account |
-| 2:45 PM | `fr paper close` | stops and time limits, into the closing auction |
+| every 5 minutes | `fr watch` | phone alert (ntfy app and Telegram) when a job fails, a pass doesn't record, quotes are refused (including by an IBKR login open on your phone) or the gateway is down |
+| every 2 min, 8:30 AM-2:40 PM | `fr paper enter` | stops: a trade past its stop exits at once, hitting the bid or ask |
+| 2:45 PM | `fr paper close` | time limits, and any stop exit not sent during the day, into the closing auction |
 | 3:20 PM | `fr paper sync` | fills, positions and account value |
 
-Each pass runs Claude Code headless (`fr pass <name>`). The judge is Fable 5.2 at high effort, and its research agents are Opus 5.5 at medium effort. Each pass screens on live prices (`fr screen --live`), researches the candidates on the web, gives every one a verdict, a conviction (1–5) and a rank, and records them with `fr paper propose`. The pass never sends an order itself.
+Each pass runs Claude Code headless (`fr pass <name>`). The judge is Fable 5.2 at high effort, and its research agents are Sonnet 5.5 at medium effort, one to a name, with about 2,500 web searches a pass between them. Each pass screens on live prices (`fr screen --live`), researches the candidates on the web, gives every one a verdict, a conviction (1–5) and a rank, and records them with `fr paper propose`. The pass never sends an order itself.
 
 ## The swing book
 
 One paper book of $1,000,000 on an IBKR paper account, live since the night of 2026-11-15:
 
-- A pass takes its best one to three ideas at conviction 3 or more, $10,000 a side, each with its own stop (1–8%) and time limit (1–10 sessions). The rules are in the `swing-pass` skill and `paper/rules.py`.
-- Every order needs the paper gateway's own bid and ask. A leg whose spread is over 2% isn't crossed. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
+- A pass judges up to 40 candidates (always 40 when 40 names pass the screen) and takes every idea at conviction 3 or more, each with its own stop (1–8%) and time limit (1–10 sessions).
+- Each trade is sized by its risk: it loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5. A typical trade is 3% of the book a side; none is over 6%. The rules are in the `swing-pass` skill and `paper/rules.py`.
+- A trade's hardest-to-fill leg is ordered first; its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own.
+- Every order needs the paper gateway's own bid and ask. Inside a 2% spread an order hits the bid or the ask, and whatever doesn't fill at once is cancelled, so nothing is left resting. If any leg's spread is over 2% when the trade is due, the trade is passed on: it never enters (since 2026-11-18, trades fill at once or not at all). Overnight, a leg with no overnight market is passed on the same way, and the night screen drops names over a 2% overnight spread before the pass researches them. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
 - A book down 10% of its capital from its high pauses itself until `fr paper resume`. `fr paper halt` stops new entries by hand.
+
+## The small-cap book (shadow run)
+
+Since 2026-11-19 a second experiment runs beside the swing book and places no trades. Each trading day three passes (9:30 AM, 1:00 PM and 4:30 PM CT, regular hours only) screen about 366 thinly covered US operating companies worth $250M to $1B (no biotech, banks or REITs) for SEC filings (activist stakes, late filings, distress 8-Ks), insider buying, earnings reports and large moves, research each candidate and record a verdict, direction and rank on every one. `fr smallcap score` sets the verdicts against what the stocks did against IWM (the small-cap ETF). The trading side gets built only if the first three weeks show an edge. Design: [docs/small-cap-book.md](docs/small-cap-book.md).
 
 ## Safety
 
@@ -60,7 +69,6 @@ Setting up the collector (IBKR login, gateway, launchd): [docs/operations.md](do
 - **Market:** regime, factor board, dealer gamma and forced flows
 - **Baskets:** a table or a treemap heat map
 - **Earnings**
-- **Hormuz**
 - **Chart**
 
 The same page is published to claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv).
@@ -70,15 +78,15 @@ The same page is published to claude.ai as the [Factor Rotation Ledger](https://
 | Path | Holds |
 |---|---|
 | `src/factor_rotation/` | the `fr` command and everything behind it |
-| `journal/` | what the project decides, in git: briefs, screens, research notes, the paper book (`journal/paper/`), reference lists such as `baskets.json`, and the first book's archive |
+| `journal/` | what the project decides, in git: briefs, screens, research notes, the paper book (`journal/paper/`), the small-cap shadow run (`journal/smallcap/`), reference lists such as `baskets.json`, and the first book's archive |
 | `data/` | market data on the collector's disk, not in git: bars, option chains, pass logs |
 | `dashboard/` | the dashboard page and its local wrapper |
-| `deploy/` | launchd and systemd schedules, `run.sh`, the gateway's docker-compose file, the pass prompts |
+| `deploy/` | the launchd schedule (`launchd/install.py`), `run.sh`, the gateway's docker-compose file, the pass prompts |
 | `.claude/skills/swing-pass/` | what a research pass is told |
 
 ## More detail
 
 - [docs/operations.md](docs/operations.md): data sources, every job, the headless passes, collector setup, moving and backup
 - [docs/signals.md](docs/signals.md): options data, forced flows, the screen and universe, themed baskets, the dashboard, the Portfolio view
-- [docs/paper-trading.md](docs/paper-trading.md): order rules and guards, and the first book (2026-11-09 to 11-15)
-- [docs/intraday-book.md](docs/intraday-book.md): the intraday book, archived at the restart
+- [docs/paper-trading.md](docs/paper-trading.md): order rules and guards, and the first book (2026-11-09 to 11-15; history, its jobs were removed on 2026-11-17)
+- [docs/intraday-book.md](docs/intraday-book.md): the intraday book, archived at the restart (history; its code was removed on 2026-11-17)

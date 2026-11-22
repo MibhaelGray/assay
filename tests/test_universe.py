@@ -18,6 +18,11 @@ class Tiers(unittest.TestCase):
         self.assertTrue(set(universe.INDEX_STOCKS) <= set(universe.bar_universe()))
         self.assertFalse(set(universe.INDEX_STOCKS) & set(universe.CONSTITUENTS))
 
+    def test_big_us_listed_foreign_companies_are_screened(self):
+        self.assertIn("TSM", universe.FOREIGN_STOCKS)
+        self.assertTrue(set(universe.FOREIGN_STOCKS) <= set(universe.screen_universe()))
+        self.assertTrue(all(universe.INDEX_STOCK_INFO[s]["usd_volume_20d"] >= 20_000_000 for s in universe.FOREIGN_STOCKS))
+
     def test_option_chains_stay_on_the_core_funds(self):
         self.assertFalse(set(universe.MORE_INDUSTRIES) & set(universe.option_universe()))
         self.assertFalse(set(universe.INDEX_STOCKS) & set(universe.option_universe()))

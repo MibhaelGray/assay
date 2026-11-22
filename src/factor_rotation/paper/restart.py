@@ -28,16 +28,9 @@ CAPITAL = 1_000_000.0
 DESIGN = "three-pass"
 
 
-def blockers(now: datetime | None = None) -> list[str]:
-    """Why the book can't be restarted yet: anything either book still holds or is still trading."""
-    from ..intraday import extended, orders
-
-    now = now or datetime.now(NY)
+def blockers() -> list[str]:
+    """Why the book can't be restarted yet: anything it still holds or is still trading."""
     out = [f"swing trade {t['id']} {t['name']} is {t['state']}" for t in book.trades() if t["state"] in ("planned", "open", "closing")]
-    held = dict(orders.held_now(now.date()))
-    for s, v in extended.held_now(extended.night_of(now)).items():
-        held[s] = held.get(s, 0) + v
-    out += [f"the intraday book holds {v:+g} {s}" for s, v in sorted(held.items()) if v]
     fills = sorted((book.ROOT / "fills").glob("*.json"))
     last = json.loads(fills[-1].read_text()) if fills else {}
     out += [f"the account held {v:+g} {s} at the last sync ({last.get('pulled_at', 'unknown')[:16]})" for s, v in sorted((last.get("positions") or {}).items()) if v]
@@ -48,7 +41,7 @@ def plan(now: datetime | None = None) -> dict:
     now = now or datetime.now(NY)
     archive = journal.JOURNAL / "archive" / f"first-book-{now.date()}"
     moves = [(journal.JOURNAL / name, archive / name) for name in ("paper", "intraday") if (journal.JOURNAL / name).exists()]
-    return {"at": now.isoformat(timespec="seconds"), "archive": archive, "moves": moves, "blockers": blockers(now),
+    return {"at": now.isoformat(timespec="seconds"), "archive": archive, "moves": moves, "blockers": blockers(),
             "already": json.loads((book.ROOT / "book.json").read_text()) if (book.ROOT / "book.json").exists() else None}
 
 

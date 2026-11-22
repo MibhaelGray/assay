@@ -3,9 +3,9 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # One IB job at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
-# use the paper gateway and have their own lock, so a long option pull can't make the 3:45 PM exits miss the
+# use the paper gateway and have their own lock, so a long by-hand option pull can't make the 3:45 PM exits miss the
 # market-on-close cutoff.
-case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; paper-*) lock=/tmp/fr-paper.lock ;; intraday-*) lock=/tmp/fr-intraday.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
+case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; lab-*) lock=/tmp/fr-lab.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
 if [ -z "${FR_LOCKED:-}" ]; then
   export FR_LOCKED=1
   if command -v flock >/dev/null; then exec flock "$lock" "$0" "$@"; fi
@@ -15,8 +15,8 @@ fi
 # Keep the Mac awake until this job ends.
 caffeinate -i -w $$ &
 
-# This script is what launchd starts, so a job running here is a scheduled one. A tick or pass run by hand has
-# no FR_SCHEDULED and only looks: it writes nothing to the journal and sends no orders.
+# This script is what launchd starts, so a job running here is a scheduled one. An order job run by hand has no
+# FR_SCHEDULED and only looks: it sends no orders unless given --execute.
 export FR_SCHEDULED=1
 
 # Collector settings (FR_*) from .env; the gateway login in it is only for docker compose.
@@ -41,47 +41,49 @@ case "$1" in
   options-all)  exec uv run fr options --group all ;;
   options-etfs) exec uv run fr options --group etfs ;;
   bars)         exec uv run fr bars ;;
-  paper-open|paper-check|paper-midday|paper-close|paper-sync)
-    # Nothing to do until the paper account is set up in .env (docs/paper-trading.md).
+  paper-close|paper-sync)
+    # Nothing to do until the paper account is set up in .env (docs/operations.md).
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
     uv run fr trading-day || exit 0
     exec uv run fr paper "${1#paper-}" ;;
-  paper-early)
-    # Entries outside regular hours (paper/early.py). Not gated on the trading day: Sunday night enters Monday's takes.
-    [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
-    exec uv run fr paper early ;;
   paper-enter)
     # The three-pass book's order job (paper/entries.py), every minute. Not gated on the trading day: Sunday night
     # trades Monday's night pass. A run with nothing to do prints nothing.
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
     exec uv run fr paper enter ;;
+  publish)
+    # The public site (publish.py): pull today's prices and the paper account, push the page if it changed.
+    exec uv run fr publish --pull ;;
+  watch)
+    # The watchdog (watch.py): phone alerts when a pass, a job or the paper gateway breaks. Every five minutes.
+    exec uv run fr watch ;;
   side-facts)
     # Facts recorded beside the night's verdicts, which no research pass reads (paper/side.py). Yahoo only.
     exec uv run fr paper side ;;
-  pass-pre-close)
-    uv run fr trading-day || exit 0
-    exec uv run fr pass "${1#pass-}" --shadow ;;
   pass-night)
     # Sunday to Thursday evenings, for the next session. launchd starts it Monday to Friday and on Sunday
     # (install.py); Friday's run stops here.
     [ "$(TZ=America/New_York date +%u)" = 5 ] && exit 0
     exec uv run fr pass night ;;
+  pass-smallcap|pass-smallcap-morning|pass-smallcap-midday)
+    # The small-cap book's three passes, regular-hours prices only (smallcap/__init__.py). A shadow run: no orders.
+    uv run fr trading-day || exit 0
+    exec uv run fr pass "${1#pass-}" ;;
   pass-morning|pass-midday)
     uv run fr trading-day || exit 0
     exec uv run fr pass "${1#pass-}" ;;
-  intraday-tick)
-    uv run fr trading-day || exit 0
-    exec uv run fr intraday tick ;;
+  lab-session)
+    # One unattended research session in the lab (docs/research-lab.md). No orders, no gateway. It gives way to a
+    # trading pass: if one is running, this run is skipped, so the two never draw on Claude's usage at once.
+    if command -v flock >/dev/null; then flock -n /tmp/fr-pass.lock true || exit 0; else lockf -s -t 0 /tmp/fr-pass.lock true || exit 0; fi
+    exec uv run fr lab session ;;
   keep-awake)
-    # Hold off idle sleep until 9:40 AM New York time, so the extended-hours ticks and early entries run all night.
+    # Hold off idle sleep until 9:40 AM New York time, so the order job and the night pass run all night.
     # A closed lid still sleeps the Mac, and so does a flat battery.
     secs=$(python3 -c 'from datetime import datetime, timedelta; from zoneinfo import ZoneInfo
 n = datetime.now(ZoneInfo("America/New_York")); e = n.replace(hour=9, minute=40, second=0, microsecond=0)
 e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_seconds()))')
     exec caffeinate -i -t "$secs" ;;
-  intraday-ext)
-    # After-hours, overnight and pre-market (intraday/extended.py); the tick decides which session is trading.
-    exec uv run fr intraday ext ;;
   nightly)
     uv run fr trading-day || exit 0
     # The repo may be a working checkout with edits in progress: stash them around the pull, and commit only
@@ -101,7 +103,7 @@ e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_secon
     uv run fr scan || echo "stock scan failed; run it by hand tonight" >&2
     uv run fr screen || echo "screen failed; run it by hand tonight" >&2
     written=()
-    for d in journal/briefs journal/scans journal/screens journal/paper journal/archive journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
+    for d in journal/briefs journal/scans journal/screens journal/paper journal/smallcap journal/archive journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
     git add -- "${written[@]}"
     git diff --cached --quiet -- "${written[@]}" ||
       git commit --quiet -m "Journal $(TZ=America/New_York date +%F): brief, screen and paper book" -- "${written[@]}"

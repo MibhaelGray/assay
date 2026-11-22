@@ -46,35 +46,35 @@ class Depth(unittest.TestCase):
         (d / f"agent-{key}.meta.json").write_text(json.dumps({"description": what, "effort": "medium"}))
 
     def test_a_name_with_its_own_agent_and_enough_reading_passes(self):
-        self.agent("a", "NAMES: YETI\nWhat is the story?", searches=9, reads=5)
+        self.agent("a", "NAMES: YETI\nWhat is the story?", searches=19, reads=12)
         self.agent("m", "What is the market arguing about this week?", searches=12, reads=6, what="Market stories")   # no NAMES line: not measured
         m = depth.measure(candidates=["YETI"])
-        self.assertEqual((m["names"], m["thin"], m["flags"]), ({"YETI": {"searches": 9, "reads": 5, "agents": 1, "shared_with": 0}}, {}, []))
+        self.assertEqual((m["names"], m["thin"], m["flags"]), ({"YETI": {"searches": 19, "reads": 12, "agents": 1, "shared_with": 0}}, {}, []))
         self.assertEqual((m["judge"], len(m["agents"])), ({"model": depth.JUDGE_MODEL, "effort": "high"}, 2))
         self.assertIn("Every name is at or over the floors.", depth.report(m))
 
     def test_thin_research_a_crowded_agent_and_a_candidate_nobody_researched_are_named(self):
-        self.agent("a", "NAMES: AAA, BBB, CCC\nthe story please", searches=30, reads=15)       # plenty of work, three names
-        self.agent("b", "NAMES: DDD", searches=7, reads=2)
+        self.agent("a", "NAMES: AAA, BBB, CCC\nthe story please", searches=60, reads=36)       # plenty of work, three names
+        self.agent("b", "NAMES: DDD", searches=16, reads=3)
         m = depth.measure(candidates=["AAA", "BBB", "CCC", "DDD", "EEE"])
-        self.assertEqual(m["names"]["AAA"], {"searches": 10, "reads": 5, "agents": 1, "shared_with": 2})
+        self.assertEqual(m["names"]["AAA"], {"searches": 20, "reads": 12, "agents": 1, "shared_with": 2})
         self.assertEqual(m["thin"], {"AAA": "its agent had 3 names; 2 at most", "BBB": "its agent had 3 names; 2 at most",
-                                     "CCC": "its agent had 3 names; 2 at most", "DDD": "2 pages read, the floor is 4",
+                                     "CCC": "its agent had 3 names; 2 at most", "DDD": "3 pages read, the floor is 5",
                                      "EEE": "no research agent named it"})
         self.assertIn("Thin: AAA, BBB, CCC, DDD, EEE.", depth.report(m))
-        self.agent("c", "NAMES: DDD\nHere is the first write-up; what is wrong or missing?", searches=3, reads=4)   # a second agent counts on top
+        self.agent("c", "NAMES: DDD\nHere is the first write-up; what is wrong or missing?", searches=3, reads=2)   # a second agent counts on top
         again = depth.measure(candidates=["DDD"])
         self.assertEqual((again["names"]["DDD"]["agents"], "DDD" in again["thin"]), (2, False))
 
     def test_the_wrong_model_is_flagged_for_the_pass_and_for_an_agent(self):
-        self.main("claude-opus-5-5")
+        self.main("claude-opus-5-5")   # the judge on the wrong model
         self.agent("a", "NAMES: YETI", searches=9, reads=5, model="claude-fable-5-2")
         with mock.patch.dict(os.environ, {"CLAUDE_EFFORT": "medium"}):
             flags = depth.measure(candidates=[])["flags"]
         self.assertEqual(len(flags), 3)
         self.assertIn("this pass is running on claude-opus-5-5, not claude-fable-5-2", flags[0])
         self.assertIn("medium effort, not high", flags[1])
-        self.assertIn("the agent for YETI ran on claude-fable-5-2, not claude-opus-5-5", flags[2])
+        self.assertIn("the agent for YETI ran on claude-fable-5-2, not claude-sonnet-5-5", flags[2])
 
     def test_the_measurement_is_kept_once_a_session_and_a_missing_transcript_breaks_nothing(self):
         self.agent("a", "NAMES: YETI", searches=9, reads=5)

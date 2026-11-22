@@ -15,9 +15,10 @@ from unittest import mock
 import numpy as np
 import pandas as pd
 
-from factor_rotation import live, screen
+from factor_rotation import live, screen, watch
 from factor_rotation.config import NY
-from factor_rotation.paper import book, daily, early, entries, learn, proposals
+from factor_rotation.paper import book, daily, entries, learn, proposals
+from factor_rotation.paper.broker import GuardError, check_order
 from test_paper_book import DAY, NEXT, Broker, Case, fill, frame, take
 
 SUNDAY_NIGHT = datetime(2026, 11, 8, 20, 45, tzinfo=NY)     # the night before DAY, a Monday: the overnight session
@@ -144,6 +145,23 @@ class Sessions(unittest.TestCase):
         self.assertEqual((entries.entry_session(at(9, 15, 59)), entries.entry_session(at(9, 16, 0)), entries.entry_session(at(8, 21, 0))),
                          (DAY, NEXT, DAY))
         self.assertEqual((entries.first_session("night", DAY), entries.first_session("midday", DAY)), (DAY, NEXT))
+        self.assertEqual(entries.venue(at(10, 17, 0)), "extended")     # Tuesday after-hours
+        self.assertEqual(entries.venue(at(11, 2, 0)), "overnight")
+        self.assertIsNone(entries.venue(at(11, 3, 55)))                # IBKR's overnight ends at 3:50 AM
+        self.assertIsNone(entries.venue(at(13, 21, 0)))                # Friday night: no overnight session
+        self.assertEqual(entries.venue(at(8, 20, 30)), "overnight")    # Sunday night is
+
+    def test_an_order_buys_at_the_ask_and_sells_at_the_bid_and_needs_a_price_and_a_session(self):
+        self.assertEqual(entries.crossing("BUY", (99.0, 100.0)), 100.0)
+        self.assertEqual(entries.crossing("SELL", (99.0, 100.0)), 99.0)
+        self.assertIsNone(entries.crossing("SELL", None))               # no book, no price, no order
+        self.assertEqual(entries.limit_price("SELL", 99.0), 98.5)
+        o = {"trade_id": "T", "symbol": "AAA", "action": "BUY", "shares": 5, "kind": "LMT"}
+        with self.assertRaises(GuardError):
+            check_order({**o, "venue": "overnight"})
+        with self.assertRaises(GuardError):
+            check_order({**o, "limit": 10.0, "venue": "lunch"})
+        check_order({**o, "limit": 10.0, "venue": "overnight"})
 
 
 def candidate(name, hedge="HHH", setup="live_move", direction="long"):
@@ -165,11 +183,13 @@ class Pass(Case):
     def setUp(self):
         super().setUp()
         self.reports, self.bars, self.prices = {}, pd.DataFrame(), {"AAA": 50.0, "BBB": 20.0, "HHH": 100.0, "SPY": 500.0}
+        self.sent = []   # phone messages (watch.send), kept here instead of sent
         for target, name, value in ((proposals.earnings, "load", lambda: {"names": self.reports}),
                                     (proposals.bars, "load", lambda symbols: self.bars),
                                     (book.journal, "_bars_settled", lambda d: True),
                                     (book, "PaperSettings", lambda: mock.Mock(send=True)),
-                                    (entries.drawdown, "paused", lambda b: None)):
+                                    (entries.drawdown, "paused", lambda b: None),
+                                    (watch, "send", lambda title, text: self.sent.append((title, text)))):
             p = mock.patch.object(target, name, value)
             p.start()
             self.addCleanup(p.stop)
@@ -183,12 +203,15 @@ class Pass(Case):
     def record(self, kind, now, *verdicts, reviews=()):
         return daily.record({"session": DAY.isoformat(), "pass": kind, "proposals": list(verdicts), "reviews": list(reviews)}, now)
 
-    def enter(self, now, broker, books=None, missing=None):
+    def enter(self, now, broker, books=None, missing=None, marks=None):
+        """`marks` are the stop check's prices (book.quotes); every leg is at 100, where the stand-in fills, unless given."""
         books = books if books is not None else {s: (p - 0.05, p + 0.05) for s, p in self.prices.items()}
 
         async def gateway(symbols, overnight):
             return {s: books[s] for s in symbols if s in books}, {s: w for s, w in (missing or {}).items() if s in symbols}
-        return asyncio.run(entries.run(now, broker, quotes=gateway, prices=lambda symbols: {s: self.prices[s] for s in symbols if s in self.prices}))
+        stop_prices = lambda symbols: {s: (marks or {}).get(s, 100.0) for s in symbols}  # noqa: E731
+        return asyncio.run(entries.run(now, broker, quotes=gateway, prices=lambda symbols: {s: self.prices[s] for s in symbols if s in self.prices},
+                                       stop_prices=stop_prices))
 
 
 class Record(Pass):
@@ -210,11 +233,12 @@ class Record(Pass):
         with self.assertRaisesRegex(ValueError, "rank every verdict"):
             self.record("night", SUNDAY_NIGHT, {**verdict("AAA", 1), "rank": None})
 
-    def test_a_candidate_it_skipped_is_recorded_as_not_reviewed(self):
+    def test_a_draft_that_skips_a_candidate_is_refused(self):
         self.screen("night", "AAA", "BBB")
-        _, doc, notes = self.record("night", SUNDAY_NIGHT, verdict("AAA", 1))
-        self.assertEqual([(p["name"], p["reviewed"]) for p in doc["proposals"]], [("AAA", True), ("BBB", False)])
-        self.assertIn("BBB (screen #2) had no verdict", notes[0])
+        with self.assertRaisesRegex(ValueError, r"1 of 2 have none: BBB \(screen #2\)"):
+            self.record("night", SUNDAY_NIGHT, verdict("AAA", 1))
+        _, doc, _ = self.record("night", SUNDAY_NIGHT, verdict("AAA", 1), verdict("BBB", 2, "pass", 2))
+        self.assertEqual([(p["name"], p["rank"]) for p in doc["proposals"]], [("AAA", 1), ("BBB", 2)])
 
     def test_the_next_pass_adds_to_the_same_session_and_must_review_what_is_open(self):
         self.screen("night", "AAA")
@@ -229,6 +253,21 @@ class Record(Pass):
         self.assertEqual(proposals.reviews(DAY)[f"{DAY}-S01"]["pass"], "morning")
 
 
+class Slow(Broker):
+    """Fills at most `take[symbol]` shares of each order in that symbol; every other symbol fills whole."""
+
+    def __init__(self, take):
+        super().__init__()
+        self.take = take
+
+    async def place(self, orders):
+        self.sent += orders
+        for o in orders:
+            if n := min(o["shares"], self.take.get(o["symbol"], o["shares"])):
+                self._fills.append(fill(o["trade_id"], o["symbol"], "BOT" if o["action"] == "BUY" else "SLD", n, n=len(self._fills)))
+        return [{**o, "order_id": i, "status": "Submitted", "note": ""} for i, o in enumerate(orders)]
+
+
 class Enter(Pass):
     def night_take(self, *verdicts):
         self.screen("night", *[v["candidate"] for v in verdicts])
@@ -240,14 +279,33 @@ class Enter(Pass):
         r = self.enter(SUNDAY_NIGHT, b)
         self.assertEqual((r["venue"], r["passes"], r["new"]), ("overnight", ["night"], [f"{DAY}-S01"]))
         self.assertEqual([(o["symbol"], o["action"], o["shares"], o["kind"], o["ref_price"], o["limit"], o["venue"]) for o in b.sent],
-                         [("AAA", "BUY", 200, "LMT", 50.05, 50.3, "overnight"), ("HHH", "SELL", 100, "LMT", 99.95, 99.45, "overnight")])
+                         [("AAA", "BUY", 540, "LMT", 50.05, 50.3, "overnight"), ("HHH", "SELL", 270, "LMT", 99.95, 99.45, "overnight")])
         saved = entries.load(DAY)
         t = saved["trades"][0]
         self.assertEqual((t["pass"], t["first_session"], t["proposal_id"]), ("night", DAY.isoformat(), f"{DAY}-P01"))
+        # Sized by risk: 0.15% of the $900,000 test book ($1,350) over the 5% stop is $27,000 a side.
+        self.assertEqual((t["notional"], t["sizing"]), (27_000, {"risk_dollars": 1350, "stop_pct": -5.0, "limited_by": "risk"}))
         self.assertEqual(saved["marks"]["night"]["prices"], {"AAA": 50.0, "BBB": 20.0, "HHH": 100.0, "SPY": 500.0})   # the pass too
         self.assertEqual(self.state(f"{DAY}-S01"), "open")
         self.assertEqual(self.enter(SUNDAY_NIGHT.replace(minute=46), b)["note"], "nothing new")
         self.assertEqual(len(b.sent), 2)
+
+    def test_a_stronger_idea_and_a_tighter_stop_get_more_and_a_thin_leg_gets_less(self):
+        self.prices["CCC"] = 10.0
+        self.screen("night", "AAA", "BBB", "CCC")
+        self.record("night", SUNDAY_NIGHT, verdict("AAA", 1, conviction=5, hedge=None),
+                    verdict("BBB", 2, hedge=None, plan={"horizon_days": 3, "stop": {"spread_pct": -8}}), verdict("CCC", 3, hedge=None))
+        books = {s: (p - 0.01, p + 0.01) for s, p in self.prices.items()}
+
+        async def gateway(symbols, overnight):
+            return {s: books[s] for s in symbols}, {}
+        r = asyncio.run(entries.run(SUNDAY_NIGHT, Broker(), quotes=gateway, prices=lambda symbols: {s: self.prices[s] for s in symbols},
+                                    volumes=lambda symbols: {"CCC": 4_000_000.0, "AAA": 900_000_000.0}))
+        self.assertEqual(r["skipped"], [])
+        sized = {t["name"]: (t["notional"], t["sizing"]["limited_by"]) for t in entries.load(DAY)["trades"]}
+        # conviction 5 risks twice as much ($2,700 over 5%), capped at 6% of the book; an 8% stop gets $1,350 / 8%;
+        # a leg trading $4M a day holds the trade to a quarter of a percent of that.
+        self.assertEqual(sized, {"AAA": (54_000, "risk"), "BBB": (16_800, "risk"), "CCC": (10_000, "liquidity: CCC")})
 
     def test_no_order_goes_out_without_a_quote_in_the_regular_session_either(self):
         self.screen("morning", "AAA")
@@ -262,22 +320,94 @@ class Enter(Pass):
         self.assertEqual([(o["symbol"], o["venue"]) for o in r["orders"]], [("AAA", "regular"), ("HHH", "regular")])
         self.assertEqual(entries.load(DAY)["trades"][0]["first_session"], NEXT.isoformat())
 
-    def test_a_wide_spread_holds_the_whole_trade_until_part_of_it_has_filled(self):
+    def test_a_wide_spread_passes_on_the_trade_instead_of_waiting(self):
         self.night_take(verdict("AAA", 1))
         b = Broker()
         r = self.enter(SUNDAY_NIGHT, b, books={"AAA": (49.0, 51.0), "HHH": (99.95, 100.05)})
         self.assertEqual(b.sent, [])
-        self.assertIn("spread wider than 2% (AAA 4.0%)", r["warnings"][0])
-        self.assertEqual([w["id"] for w in entries.waiting(DAY)], [f"{DAY}-S01"])
+        self.assertEqual(r["passed"], [f"{DAY}-S01"])
+        self.assertIn("spread wider than 2% (AAA 4.0%), so the trade is passed on", r["warnings"][0])
+        self.assertEqual(entries.waiting(DAY), [])
+        r = self.enter(SUNDAY_NIGHT.replace(minute=50), b)          # the spread is fine later: still nothing sent
+        self.assertEqual(b.sent, [])
 
-    def test_the_best_three_takes_of_a_pass_are_entered(self):
+    def test_no_overnight_market_passes_on_the_trade_but_a_gateway_fault_waits(self):
+        nothing = {"AAA": "the gateway sent no bid or ask within 8 seconds and gave no reason"}
+        refused = {"AAA": "the live IBKR login is in use somewhere else (IBKR error 10197)"}
+        spy = {"SPY": (599.95, 600.05), "HHH": (99.95, 100.05)}
+        self.night_take(verdict("AAA", 1))
+        r = self.enter(SUNDAY_NIGHT, Broker(), books={"HHH": (99.95, 100.05)}, missing=nothing)   # SPY unquoted too: the gateway
+        self.assertEqual(r["passed"], [])
+        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=1), Broker(), books=spy, missing=refused)   # a refusal is a fault
+        self.assertEqual(r["passed"], [])
+        self.assertIn("waits for the next try", r["warnings"][0])
+        b = Broker()
+        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=20), b, books=spy, missing=nothing)
+        self.assertEqual((b.sent, r["passed"]), ([], [f"{DAY}-S01"]))
+        self.assertIn("so the trade is passed on", r["warnings"][0])
+        self.assertEqual(entries.waiting(DAY), [])
+
+    def test_a_late_pass_by_hand_is_a_second_night_pass_and_its_takes_are_traded(self):
+        self.screen("night", "AAA")
+        self.record("night", SUNDAY_NIGHT, verdict("AAA", 1, "pass", 2))
+        later = SUNDAY_NIGHT.replace(hour=22)
+        self.screen("late", "BBB")
+        self.record("late", later, verdict("BBB", 1, hedge=None))
+        with self.assertRaisesRegex(ValueError, "already recorded"):
+            self.record("late", later, verdict("BBB", 1, hedge=None))
+        r = self.enter(later, Broker())
+        self.assertEqual((r["passes"], r["new"]), (["night", "late"], [f"{DAY}-S01"]))
+        t = entries.load(DAY)["trades"][0]
+        self.assertEqual((t["pass"], t["first_session"], t["name"]), ("late", DAY.isoformat(), "BBB"))
+
+    def test_a_second_late_pass_records_under_the_next_free_name(self):
+        self.screen("night", "AAA")
+        self.record("night", SUNDAY_NIGHT, verdict("AAA", 1, "pass", 2))
+        later = SUNDAY_NIGHT.replace(hour=22)
+        self.assertEqual(proposals.next_late(later), "late")
+        self.screen("late", "CCC")
+        self.record("late", later, verdict("CCC", 1, "pass", 2))
+        self.assertEqual(proposals.next_late(later), "late2")
+        self.screen("late2", "BBB")
+        self.record("late2", later, verdict("BBB", 1, hedge=None))
+        r = self.enter(later, Broker())
+        self.assertEqual(r["passes"], ["night", "late", "late2"])
+        t = entries.load(DAY)["trades"][0]
+        self.assertEqual((t["pass"], t["first_session"], t["name"]), ("late2", DAY.isoformat(), "BBB"))
+
+    def test_the_hedge_is_never_ordered_while_the_lead_has_not_filled(self):
+        self.night_take(verdict("AAA", 1))
+        b = Slow({"AAA": 0})
+        r = self.enter(SUNDAY_NIGHT, b)
+        self.assertEqual([(o["symbol"], o["shares"]) for o in b.sent], [("AAA", 540)])          # the lead alone
+        # It hit the ask and nothing filled, so the order is cancelled in the same run: nothing is left resting.
+        self.assertEqual((r["cancelled_unfilled"], [o["symbol"] for o in b.cancelled]), (1, ["AAA"]))
+        self.assertEqual(entries.load(DAY)["trades"][0]["lead"], "AAA")
+        self.enter(SUNDAY_NIGHT.replace(minute=59), b)                                          # 14 minutes on: not due yet
+        self.enter(SUNDAY_NIGHT.replace(hour=21, minute=0), b)                                  # the quarter-hour try
+        self.assertEqual([(o["symbol"], o["shares"]) for o in b.sent], [("AAA", 540), ("AAA", 540)])
+
+    def test_the_other_legs_follow_the_share_of_the_lead_that_has_filled_and_are_tried_every_minute(self):
+        self.night_take(verdict("AAA", 1))
+        b = Slow({"AAA": 135})                                                                  # a quarter of the lead at a time
+        self.enter(SUNDAY_NIGHT, b)
+        sent = lambda: [(o["symbol"], o["action"], o["shares"]) for o in b.sent]  # noqa: E731
+        self.assertEqual(sent(), [("AAA", "BUY", 540), ("HHH", "SELL", 67)])                    # a quarter of 270, rounded down
+        self.assertIn("a minute after", self.enter(SUNDAY_NIGHT + timedelta(seconds=30), b)["note"])
+        self.enter(SUNDAY_NIGHT + timedelta(minutes=1), b)
+        self.assertEqual(sent()[2:], [("AAA", "BUY", 405), ("HHH", "SELL", 68)])                # half in: 135 of 270
+        # A hedge that can't be sent holds the lead back too, so the stock doesn't run ahead of it.
+        r = self.enter(SUNDAY_NIGHT.replace(minute=55), b, books={"AAA": (49.95, 50.05), "HHH": (95.0, 105.0)})
+        self.assertEqual(len(b.sent), 4)
+        self.assertIn("the rest of the trade waits", r["warnings"][0])
+
+    def test_every_take_of_a_pass_is_entered_until_the_book_is_full(self):
         names = ["AAA", "BBB", "CCC", "DDD"]
         self.prices.update({"CCC": 10.0, "DDD": 10.0})
         self.screen("night", *names)
         self.record("night", SUNDAY_NIGHT, *[verdict(n, i, hedge=None) for i, n in enumerate(names, 1)])
         r = self.enter(SUNDAY_NIGHT, Broker())
-        self.assertEqual(len(r["new"]), entries.PASS_MAX_NEW)
-        self.assertEqual([k["name"] for k in r["skipped"]], [f"{DAY}-P04"])
+        self.assertEqual((len(r["new"]), r["skipped"]), (4, []))   # no count cap; the book's capital is the limit (rules.apply_caps)
 
     def test_a_pass_can_stand_down_a_take_that_has_not_filled_and_exit_one_that_has(self):
         self.night_take(verdict("AAA", 1, hedge=None), verdict("BBB", 2, hedge=None))
@@ -296,7 +426,7 @@ class Enter(Pass):
         self.assertNotIn(f"{DAY}-S02", [t["id"] for t in book.trades()])   # stood down before anything filled: never in the book
 
     def test_an_exit_asked_for_at_night_waits_for_the_regular_session(self):
-        self.write("plans", date(2026, 11, 6), {"trades": [take_trade("T1")]})
+        self.write("entries", date(2026, 11, 6), {"trades": [take_trade("T1")]})
         self.write("fills", date(2026, 11, 6), {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)]})
         self.screen("night")
         self.record("night", SUNDAY_NIGHT, reviews=[{"trade_id": "T1", "action": "exit", "thesis": "played_out", "reason": "the move is done"}])
@@ -304,6 +434,58 @@ class Enter(Pass):
         self.assertEqual(self.enter(SUNDAY_NIGHT, b)["orders"], [])
         r = self.enter(MORNING, b)
         self.assertEqual(sorted((o["symbol"], o["action"]) for o in r["orders"]), [("AAA", "SELL"), ("HHH", "BUY")])
+
+    def held_trade(self):
+        """T1: long AAA, short HHH, 25 shares each at 100, a 5% stop, entered the session before DAY."""
+        self.write("entries", date(2026, 11, 6), {"trades": [take_trade("T1")]})
+        self.write("fills", date(2026, 11, 6), {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)]})
+        self.prices.update({"AAA": 94.0, "HHH": 100.0})
+
+    def test_a_trade_past_its_stop_comes_out_during_the_day_not_at_the_close(self):
+        self.held_trade()
+        r = self.enter(MORNING, Broker(), marks={"AAA": 94.0})        # down 6% against a 5% stop
+        self.assertEqual([(e["trade_id"], e["at"]) for e in r["exits"]], [("T1", "10:00 AM CT")])
+        self.assertEqual(r["exits"][0]["reason"], "stopped: down 6.0% at 10:00 AM CT, past the 5% stop")
+        self.assertEqual(sorted((o["symbol"], o["action"], o["venue"]) for o in r["orders"]), [("AAA", "SELL", "regular"), ("HHH", "BUY", "regular")])
+        self.assertEqual(self.state("T1"), "closed")
+        with mock.patch.object(book, "quotes", lambda symbols, *a: {"AAA": 90.0, "HHH": 100.0}):
+            self.assertEqual(asyncio.run(book.close_session(DAY, broker=Broker()))["exits"], [])   # nothing left for the close
+
+    def test_a_trade_inside_its_stop_stays_and_the_check_waits_its_turn(self):
+        self.held_trade()
+        r = self.enter(MORNING, Broker(), marks={"AAA": 96.0})        # down 4%
+        self.assertEqual((r["exits"], r["orders"]), ([], []))
+        self.assertEqual(entries.load(DAY)["last_stop_check"], MORNING.isoformat())
+        soon = self.enter(MORNING + timedelta(minutes=1), Broker(), marks={"AAA": 90.0})
+        self.assertEqual(soon["exits"], [])                           # a minute later: not due yet
+        later = self.enter(MORNING + entries.STOP_EVERY, Broker(), marks={"AAA": 90.0})
+        self.assertEqual([e["trade_id"] for e in later["exits"]], ["T1"])
+
+    def test_stops_are_not_checked_outside_the_regular_session(self):
+        self.held_trade()
+        r = self.enter(SUNDAY_NIGHT, Broker(), marks={"AAA": 80.0})
+        self.assertEqual((r["exits"], r["orders"]), ([], []))
+
+    def test_a_stop_exit_with_no_quote_is_not_sent_and_is_tried_again(self):
+        self.held_trade()
+        r = self.enter(MORNING, Broker(), marks={"AAA": 94.0}, books={"HHH": (99.95, 100.05)})
+        self.assertEqual((r["exits"], r["orders"]), ([], []))
+        self.assertIn("its stop exit wasn't sent", " ".join(r["warnings"]))
+        self.assertEqual(self.state("T1"), "open")
+        again = self.enter(MORNING + entries.STOP_EVERY, Broker(), marks={"AAA": 94.0})
+        self.assertEqual([e["trade_id"] for e in again["exits"]], ["T1"])
+
+    def test_the_phone_hears_how_a_pass_was_traded_once_and_in_counts_only(self):
+        self.night_take(verdict("AAA", 1, hedge=None), verdict("BBB", 2, hedge=None))
+        self.enter(SUNDAY_NIGHT, Broker(), books={"AAA": (49.95, 50.05), "BBB": (19.0, 21.0)})   # BBB 10% wide
+        self.assertEqual(self.sent, [("Night pass traded", "2 takes: 1 in, 1 passed on (a spread over 2%, or no overnight market).")])
+        self.enter(SUNDAY_NIGHT + timedelta(minutes=1), Broker())
+        self.assertEqual(len(self.sent), 1)                      # the pass is told once, not every minute
+
+    def test_a_pass_with_no_takes_says_so(self):
+        self.night_take(verdict("AAA", 1, "pass", 2))
+        self.enter(SUNDAY_NIGHT, Broker())
+        self.assertEqual(self.sent, [("Night pass traded", "The night pass took no trades.")])
 
     def test_a_halt_stops_the_entries_and_still_marks_the_pass(self):
         self.night_take(verdict("AAA", 1))
@@ -377,7 +559,7 @@ class Restart(Case):
         from factor_rotation import portfolio
         from factor_rotation.paper import restart
 
-        self.write("plans", DAY, {"trades": [take_trade("T1", DAY)]})
+        self.write("entries", DAY, {"trades": [take_trade("T1", DAY)]})
         self.write("fills", DAY, {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)], "positions": {"AAA": 25, "HHH": -25}})
         (self.root / "lessons.md").write_text("- turn longs after a downgrade: 0 for 6\n")
         now = datetime(2026, 11, 9, 17, 0, tzinfo=NY)
@@ -388,10 +570,10 @@ class Restart(Case):
         self.write("exits", DAY, {"exits": [{"trade_id": "T1", "reason": "flatten"}]})
         self.write("fills", NEXT, {"fills": [fill("T1", "AAA", "SLD", 25, n=2), fill("T1", "HHH", "BOT", 25, n=3)], "positions": {}})
         self.assertFalse(restart.run(now=now)["done"])                       # a look
-        self.assertEqual((portfolio.capital("swing"), portfolio.running()), (900_000.0, ("swing", "intraday")))
+        self.assertEqual((portfolio.capital("swing"), portfolio.running()), (900_000.0, ("swing",)))   # the default until book.json says
         p = restart.run(execute=True, now=now)
         self.assertTrue(p["done"])
-        self.assertTrue((self.root.parent / "archive" / "first-book-2026-11-09" / "paper" / "plans" / f"{DAY}.json").exists())
+        self.assertTrue((self.root.parent / "archive" / "first-book-2026-11-09" / "paper" / "entries" / f"{DAY}.json").exists())
         self.assertEqual(book.trades(), [])                                  # the record starts again
         self.assertEqual((portfolio.capital("swing"), portfolio.running(), book.capital()), (1_000_000.0, ("swing",), 1_000_000.0))
         self.assertIn("turn longs after a downgrade", (self.root / "lessons.md").read_text())
@@ -399,6 +581,16 @@ class Restart(Case):
 
 
 class Heal(unittest.TestCase):
+    def test_after_a_restart_the_next_run_tries_again_at_once(self):
+        from unittest import mock
+        from factor_rotation.paper import book, entries
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(book, "ROOT", Path(d)):
+            now = datetime(2026, 11, 17, 9, 0, tzinfo=NY)
+            session = entries.entry_session(now)
+            book._write(entries.path(session), {"session": session.isoformat(), "last_attempt": now.isoformat(), "runs": [], "trades": []})
+            entries.retry_soon(now)
+            self.assertIsNone(entries.load(session)["last_attempt"])
+
     """A gateway stuck on IBKR's competing-session error is restarted, at most once an hour."""
 
     def test_only_when_every_quote_is_refused_for_a_competing_session(self):

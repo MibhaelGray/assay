@@ -1,0 +1,1463 @@
+{
+ "note": "Companies based outside the US (or redomiciled from it) that trade on a US exchange, as ADRs or ordinary shares, and are in neither the S&P 500 nor the S&P 400, so index_stocks.json misses them (the owner's request, 2026-11-18, after noticing TSMC was nowhere on the screen). Each has a median daily dollar volume of at least $20M over 20 sessions, the same floor as index_stocks.json. Candidates were a hand-made list of about 250 well-known US listings; names already in the universe or a basket were left out. Name, country, sector and industry from Yahoo. Refresh with the index list.",
+ "updated": "2026-11-18",
+ "floor_usd": 20000000,
+ "stocks": {
+  "ABEV": {
+   "index": "foreign",
+   "name": "Ambev S.A.",
+   "country": "Brazil",
+   "sector": "Consumer Defensive",
+   "industry": "Beverages - Brewers",
+   "usd_volume_20d": 63177780
+  },
+  "AEM": {
+   "index": "foreign",
+   "name": "Agnico Eagle Mines Limited",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 340690028
+  },
+  "AER": {
+   "index": "foreign",
+   "name": "AerCap Holdings N.V.",
+   "country": "Ireland",
+   "sector": "Industrials",
+   "industry": "Rental & Leasing Services",
+   "usd_volume_20d": 223624957
+  },
+  "AGI": {
+   "index": "foreign",
+   "name": "Alamos Gold Inc.",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 110537944
+  },
+  "ALC": {
+   "index": "foreign",
+   "name": "Alcon Inc.",
+   "country": "Switzerland",
+   "sector": "Healthcare",
+   "industry": "Medical Instruments & Supplies",
+   "usd_volume_20d": 161847719
+  },
+  "AMX": {
+   "index": "foreign",
+   "name": "America Movil, S.A.B. de C.V.",
+   "country": "Mexico",
+   "sector": "Communication Services",
+   "industry": "Telecom Services",
+   "usd_volume_20d": 55225256
+  },
+  "ARGX": {
+   "index": "foreign",
+   "name": "argenx SE",
+   "country": "Netherlands",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 319825148
+  },
+  "ARM": {
+   "index": "foreign",
+   "name": "Arm Holdings plc",
+   "country": "United Kingdom",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 1058134954
+  },
+  "ASND": {
+   "index": "foreign",
+   "name": "Ascendis Pharma A/S",
+   "country": "Denmark",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 156944727
+  },
+  "ASX": {
+   "index": "foreign",
+   "name": "ASE Technology Holding Co., Ltd",
+   "country": "Taiwan",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 383087178
+  },
+  "ATAT": {
+   "index": "foreign",
+   "name": "Atour Lifestyle Holdings Limite",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Lodging",
+   "usd_volume_20d": 33035010
+  },
+  "AU": {
+   "index": "foreign",
+   "name": "AngloGold Ashanti PLC",
+   "country": "United States",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 206445470
+  },
+  "AZN": {
+   "index": "foreign",
+   "name": "AstraZeneca PLC",
+   "country": "United Kingdom",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - General",
+   "usd_volume_20d": 486335279
+  },
+  "B": {
+   "index": "foreign",
+   "name": "Barrick Mining Corporation",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 309341649
+  },
+  "BAM": {
+   "index": "foreign",
+   "name": "Brookfield Asset Management Inc",
+   "country": "United States",
+   "sector": "Financial Services",
+   "industry": "Asset Management",
+   "usd_volume_20d": 131331149
+  },
+  "BAP": {
+   "index": "foreign",
+   "name": "Credicorp Ltd.",
+   "country": "Peru",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 125701167
+  },
+  "BBD": {
+   "index": "foreign",
+   "name": "Banco Bradesco Sa",
+   "country": "Brazil",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 128376768
+  },
+  "BBVA": {
+   "index": "foreign",
+   "name": "Banco Bilbao Vizcaya Argentaria",
+   "country": "Spain",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 41241488
+  },
+  "BCE": {
+   "index": "foreign",
+   "name": "BCE, Inc.",
+   "country": "Canada",
+   "sector": "Communication Services",
+   "industry": "Telecom Services",
+   "usd_volume_20d": 100970974
+  },
+  "BCS": {
+   "index": "foreign",
+   "name": "Barclays PLC",
+   "country": "United Kingdom",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 119979581
+  },
+  "BEKE": {
+   "index": "foreign",
+   "name": "KE Holdings Inc",
+   "country": "China",
+   "sector": "Real Estate",
+   "industry": "Real Estate Services",
+   "usd_volume_20d": 80776506
+  },
+  "BHP": {
+   "index": "foreign",
+   "name": "BHP Group Limited",
+   "country": "Australia",
+   "sector": "Basic Materials",
+   "industry": "Other Industrial Metals & Mining",
+   "usd_volume_20d": 236574541
+  },
+  "BIDU": {
+   "index": "foreign",
+   "name": "Baidu, Inc.",
+   "country": "China",
+   "sector": "Communication Services",
+   "industry": "Internet Content & Information",
+   "usd_volume_20d": 186792286
+  },
+  "BILI": {
+   "index": "foreign",
+   "name": "Bilibili Inc.",
+   "country": "China",
+   "sector": "Communication Services",
+   "industry": "Internet Content & Information",
+   "usd_volume_20d": 40521616
+  },
+  "BMO": {
+   "index": "foreign",
+   "name": "Bank Of Montreal",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 72995302
+  },
+  "BN": {
+   "index": "foreign",
+   "name": "Brookfield Corporation",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Asset Management",
+   "usd_volume_20d": 183221502
+  },
+  "BNS": {
+   "index": "foreign",
+   "name": "Bank Nova Scotia Halifax Pfd 3",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 84218805
+  },
+  "BNTX": {
+   "index": "foreign",
+   "name": "BioNTech SE",
+   "country": "Germany",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 79877365
+  },
+  "BORR": {
+   "index": "foreign",
+   "name": "Borr Drilling Limited",
+   "country": "Bermuda",
+   "sector": "Energy",
+   "industry": "Oil & Gas Drilling",
+   "usd_volume_20d": 31774550
+  },
+  "BP": {
+   "index": "foreign",
+   "name": "BP p.l.c.",
+   "country": "United Kingdom",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 355881769
+  },
+  "BTI": {
+   "index": "foreign",
+   "name": "British American Tobacco  Indus",
+   "country": "United Kingdom",
+   "sector": "Consumer Defensive",
+   "industry": "Tobacco",
+   "usd_volume_20d": 300817478
+  },
+  "BUD": {
+   "index": "foreign",
+   "name": "Anheuser-Busch Inbev SA Sponsor",
+   "country": "Belgium",
+   "sector": "Consumer Defensive",
+   "industry": "Beverages - Brewers",
+   "usd_volume_20d": 204778252
+  },
+  "BVN": {
+   "index": "foreign",
+   "name": "Buenaventura Mining Company Inc",
+   "country": "Peru",
+   "sector": "Basic Materials",
+   "industry": "Other Precious Metals & Mining",
+   "usd_volume_20d": 24870062
+  },
+  "BZ": {
+   "index": "foreign",
+   "name": "KANZHUN LIMITED - American Depo",
+   "country": "China",
+   "sector": "Communication Services",
+   "industry": "Internet Content & Information",
+   "usd_volume_20d": 70524008
+  },
+  "CAMT": {
+   "index": "foreign",
+   "name": "Camtek Ltd.",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Semiconductor Equipment & Materials",
+   "usd_volume_20d": 49518376
+  },
+  "CCEP": {
+   "index": "foreign",
+   "name": "Coca-Cola Europacific Partners ",
+   "country": "United Kingdom",
+   "sector": "Consumer Defensive",
+   "industry": "Beverages - Non-Alcoholic",
+   "usd_volume_20d": 178177545
+  },
+  "CHKP": {
+   "index": "foreign",
+   "name": "Check Point Software Technologi",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 231417960
+  },
+  "CIB": {
+   "index": "foreign",
+   "name": "Grupo Cibest S.A.",
+   "country": "Colombia",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 23392241
+  },
+  "CLS": {
+   "index": "foreign",
+   "name": "Celestica, Inc.",
+   "country": "Canada",
+   "sector": "Technology",
+   "industry": "Electronic Components",
+   "usd_volume_20d": 842695815
+  },
+  "CM": {
+   "index": "foreign",
+   "name": "Canadian Imperial Bank of Comme",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 61020390
+  },
+  "CNI": {
+   "index": "foreign",
+   "name": "Canadian National Railway Compa",
+   "country": "Canada",
+   "sector": "Industrials",
+   "industry": "Railroads",
+   "usd_volume_20d": 145961747
+  },
+  "CNQ": {
+   "index": "foreign",
+   "name": "Canadian Natural Resources Limi",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas E&P",
+   "usd_volume_20d": 320901654
+  },
+  "CP": {
+   "index": "foreign",
+   "name": "Canadian Pacific Kansas City Li",
+   "country": "Canada",
+   "sector": "Industrials",
+   "industry": "Railroads",
+   "usd_volume_20d": 196714026
+  },
+  "CPNG": {
+   "index": "foreign",
+   "name": "Coupang, Inc.",
+   "country": "United States",
+   "sector": "Consumer Cyclical",
+   "industry": "Internet Retail",
+   "usd_volume_20d": 169421449
+  },
+  "CVE": {
+   "index": "foreign",
+   "name": "Cenovus Energy Inc",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 181873443
+  },
+  "CX": {
+   "index": "foreign",
+   "name": "Cemex, S.A.B. de C.V. Sponsored",
+   "country": "Mexico",
+   "sector": "Basic Materials",
+   "industry": "Building Materials",
+   "usd_volume_20d": 72676525
+  },
+  "DAC": {
+   "index": "foreign",
+   "name": "Danaos Corporation",
+   "country": "Greece",
+   "sector": "Industrials",
+   "industry": "Marine Shipping",
+   "usd_volume_20d": 23006152
+  },
+  "DB": {
+   "index": "foreign",
+   "name": "Deutsche Bank AG",
+   "country": "Germany",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 82317275
+  },
+  "DEO": {
+   "index": "foreign",
+   "name": "Diageo plc",
+   "country": "United Kingdom",
+   "sector": "Consumer Defensive",
+   "industry": "Beverages - Wineries & Distilleries",
+   "usd_volume_20d": 92432875
+  },
+  "DLO": {
+   "index": "foreign",
+   "name": "DLocal Limited",
+   "country": "Uruguay",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 31567117
+  },
+  "DNN": {
+   "index": "foreign",
+   "name": "Denison Mines Corp",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Uranium",
+   "usd_volume_20d": 56685168
+  },
+  "E": {
+   "index": "foreign",
+   "name": "ENI S.p.A.",
+   "country": "Italy",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 20080226
+  },
+  "EC": {
+   "index": "foreign",
+   "name": "Ecopetrol S.A.",
+   "country": "Colombia",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 27132849
+  },
+  "EDU": {
+   "index": "foreign",
+   "name": "New Oriental Education & Techno",
+   "country": "China",
+   "sector": "Consumer Defensive",
+   "industry": "Education & Training Services",
+   "usd_volume_20d": 33413468
+  },
+  "ENB": {
+   "index": "foreign",
+   "name": "Enbridge Inc",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas Midstream",
+   "usd_volume_20d": 196186174
+  },
+  "EQNR": {
+   "index": "foreign",
+   "name": "Equinor ASA",
+   "country": "Norway",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 213585599
+  },
+  "EQX": {
+   "index": "foreign",
+   "name": "Equinox Gold Corp.",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 127640310
+  },
+  "ERIC": {
+   "index": "foreign",
+   "name": "Ericsson",
+   "country": "Sweden",
+   "sector": "Technology",
+   "industry": "Communication Equipment",
+   "usd_volume_20d": 106172774
+  },
+  "FER": {
+   "index": "foreign",
+   "name": "Ferrovial N.V.",
+   "country": "Netherlands",
+   "sector": "Industrials",
+   "industry": "Engineering & Construction",
+   "usd_volume_20d": 157104052
+  },
+  "FLUT": {
+   "index": "foreign",
+   "name": "Flutter Entertainment plc",
+   "country": "United States",
+   "sector": "Consumer Cyclical",
+   "industry": "Gambling",
+   "usd_volume_20d": 211540813
+  },
+  "FMS": {
+   "index": "foreign",
+   "name": "Fresenius Medical Care AG",
+   "country": "Germany",
+   "sector": "Healthcare",
+   "industry": "Medical Care Facilities",
+   "usd_volume_20d": 27372319
+  },
+  "FMX": {
+   "index": "foreign",
+   "name": "Fomento Economico Mexicano S.A.",
+   "country": "Mexico",
+   "sector": "Consumer Defensive",
+   "industry": "Beverages - Brewers",
+   "usd_volume_20d": 85121187
+  },
+  "FNV": {
+   "index": "foreign",
+   "name": "Franco-Nevada Corporation",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 145420817
+  },
+  "FUTU": {
+   "index": "foreign",
+   "name": "Futu Holdings Limited",
+   "country": "Hong Kong",
+   "sector": "Financial Services",
+   "industry": "Capital Markets",
+   "usd_volume_20d": 93178074
+  },
+  "GDS": {
+   "index": "foreign",
+   "name": "GDS Holdings Limited",
+   "country": "China",
+   "sector": "Technology",
+   "industry": "Information Technology Services",
+   "usd_volume_20d": 51784918
+  },
+  "GFI": {
+   "index": "foreign",
+   "name": "Gold Fields Limited",
+   "country": "South Africa",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 130646435
+  },
+  "GFL": {
+   "index": "foreign",
+   "name": "GFL Environmental Inc. Subordin",
+   "country": "United States",
+   "sector": "Industrials",
+   "industry": "Waste Management",
+   "usd_volume_20d": 238384700
+  },
+  "GGAL": {
+   "index": "foreign",
+   "name": "Grupo Financiero Galicia S.A.",
+   "country": "Argentina",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 36799136
+  },
+  "GGB": {
+   "index": "foreign",
+   "name": "Gerdau S.A.",
+   "country": "Brazil",
+   "sector": "Basic Materials",
+   "industry": "Steel",
+   "usd_volume_20d": 80614869
+  },
+  "GLBE": {
+   "index": "foreign",
+   "name": "Global-E Online Ltd.",
+   "country": "Israel",
+   "sector": "Consumer Cyclical",
+   "industry": "Internet Retail",
+   "usd_volume_20d": 52225661
+  },
+  "GLOB": {
+   "index": "foreign",
+   "name": "Globant S.A.",
+   "country": "Luxembourg",
+   "sector": "Technology",
+   "industry": "Information Technology Services",
+   "usd_volume_20d": 45945383
+  },
+  "GMAB": {
+   "index": "foreign",
+   "name": "Genmab A/S",
+   "country": "Denmark",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 234473922
+  },
+  "GRAB": {
+   "index": "foreign",
+   "name": "Grab Holdings Limited",
+   "country": "Singapore",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 197924908
+  },
+  "GSK": {
+   "index": "foreign",
+   "name": "GSK plc",
+   "country": "United Kingdom",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - General",
+   "usd_volume_20d": 157270254
+  },
+  "HDB": {
+   "index": "foreign",
+   "name": "HDFC Bank Limited",
+   "country": "India",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 188137639
+  },
+  "HMC": {
+   "index": "foreign",
+   "name": "Honda Motor Company, Ltd.",
+   "country": "Japan",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 25927218
+  },
+  "HMY": {
+   "index": "foreign",
+   "name": "Harmony Gold Mining Company Lim",
+   "country": "South Africa",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 51235474
+  },
+  "HSBC": {
+   "index": "foreign",
+   "name": "HSBC Holdings, plc.",
+   "country": "United Kingdom",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 156871735
+  },
+  "HTHT": {
+   "index": "foreign",
+   "name": "H World Group Limited",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Lodging",
+   "usd_volume_20d": 84913811
+  },
+  "IAG": {
+   "index": "foreign",
+   "name": "Iamgold Corporation",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 83359085
+  },
+  "IBN": {
+   "index": "foreign",
+   "name": "ICICI Bank Limited",
+   "country": "India",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 210070131
+  },
+  "ICLR": {
+   "index": "foreign",
+   "name": "ICON plc",
+   "country": "Ireland",
+   "sector": "Healthcare",
+   "industry": "Diagnostics & Research",
+   "usd_volume_20d": 189149513
+  },
+  "IHG": {
+   "index": "foreign",
+   "name": "Intercontinental Hotels Group",
+   "country": "United Kingdom",
+   "sector": "Consumer Cyclical",
+   "industry": "Lodging",
+   "usd_volume_20d": 37297247
+  },
+  "IMO": {
+   "index": "foreign",
+   "name": "Imperial Oil Limited",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 65231894
+  },
+  "INFY": {
+   "index": "foreign",
+   "name": "Infosys Limited",
+   "country": "India",
+   "sector": "Technology",
+   "industry": "Information Technology Services",
+   "usd_volume_20d": 189563741
+  },
+  "ING": {
+   "index": "foreign",
+   "name": "ING Group, N.V.",
+   "country": "Netherlands",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 83089891
+  },
+  "ITUB": {
+   "index": "foreign",
+   "name": "Itau Unibanco Banco Holding SA",
+   "country": "Brazil",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 211601538
+  },
+  "KB": {
+   "index": "foreign",
+   "name": "KB Financial Group Inc",
+   "country": "South Korea",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 26176197
+  },
+  "KGC": {
+   "index": "foreign",
+   "name": "Kinross Gold Corporation",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 186026665
+  },
+  "KSPI": {
+   "index": "foreign",
+   "name": "Joint Stock Company Kaspi.kz - ",
+   "country": "Kazakhstan",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 43534986
+  },
+  "LEGN": {
+   "index": "foreign",
+   "name": "Legend Biotech Corporation",
+   "country": "United States",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 48564722
+  },
+  "LI": {
+   "index": "foreign",
+   "name": "Li Auto Inc.",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 27543261
+  },
+  "LOGI": {
+   "index": "foreign",
+   "name": "Logitech International S.A. - R",
+   "country": "Switzerland",
+   "sector": "Technology",
+   "industry": "Computer Hardware",
+   "usd_volume_20d": 95789486
+  },
+  "LTM": {
+   "index": "foreign",
+   "name": "LATAM Airlines Group S.A.",
+   "country": "Chile",
+   "sector": "Industrials",
+   "industry": "Airlines",
+   "usd_volume_20d": 40409785
+  },
+  "LYG": {
+   "index": "foreign",
+   "name": "Lloyds Banking Group Plc",
+   "country": "United Kingdom",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 102529547
+  },
+  "MELI": {
+   "index": "foreign",
+   "name": "MercadoLibre, Inc.",
+   "country": "Uruguay",
+   "sector": "Consumer Cyclical",
+   "industry": "Internet Retail",
+   "usd_volume_20d": 891380803
+  },
+  "MFC": {
+   "index": "foreign",
+   "name": "Manulife Financial Corporation",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Insurance - Life",
+   "usd_volume_20d": 62394018
+  },
+  "MFG": {
+   "index": "foreign",
+   "name": "Mizuho Financial Group, Inc. Sp",
+   "country": "Japan",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 40129454
+  },
+  "MGA": {
+   "index": "foreign",
+   "name": "Magna International, Inc.",
+   "country": "Canada",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Parts",
+   "usd_volume_20d": 71807705
+  },
+  "MMYT": {
+   "index": "foreign",
+   "name": "MakeMyTrip Limited",
+   "country": "India",
+   "sector": "Consumer Cyclical",
+   "industry": "Travel Services",
+   "usd_volume_20d": 38929866
+  },
+  "MT": {
+   "index": "foreign",
+   "name": "Arcelor Mittal NY Registry Shar",
+   "country": "Luxembourg",
+   "sector": "Basic Materials",
+   "industry": "Steel",
+   "usd_volume_20d": 80642660
+  },
+  "MUFG": {
+   "index": "foreign",
+   "name": "Mitsubishi UFJ Financial Group,",
+   "country": "Japan",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 59219301
+  },
+  "NGG": {
+   "index": "foreign",
+   "name": "National Grid Transco, PLC Nati",
+   "country": "United Kingdom",
+   "sector": "Utilities",
+   "industry": "Utilities - Regulated Electric",
+   "usd_volume_20d": 62690843
+  },
+  "NICE": {
+   "index": "foreign",
+   "name": "NICE Ltd",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 56977042
+  },
+  "NIO": {
+   "index": "foreign",
+   "name": "NIO Inc.",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 104895154
+  },
+  "NOK": {
+   "index": "foreign",
+   "name": "Nokia Corporation Sponsored",
+   "country": "Finland",
+   "sector": "Technology",
+   "industry": "Communication Equipment",
+   "usd_volume_20d": 514423738
+  },
+  "NTES": {
+   "index": "foreign",
+   "name": "NetEase, Inc.",
+   "country": "China",
+   "sector": "Communication Services",
+   "industry": "Electronic Gaming & Multimedia",
+   "usd_volume_20d": 106085726
+  },
+  "NTR": {
+   "index": "foreign",
+   "name": "Nutrien Ltd.",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Agricultural Inputs",
+   "usd_volume_20d": 121311503
+  },
+  "NU": {
+   "index": "foreign",
+   "name": "Nu Holdings Ltd.",
+   "country": "Brazil",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 1000089080
+  },
+  "NVMI": {
+   "index": "foreign",
+   "name": "Nova Ltd.",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Semiconductor Equipment & Materials",
+   "usd_volume_20d": 92298058
+  },
+  "NVO": {
+   "index": "foreign",
+   "name": "Novo Nordisk A/S",
+   "country": "Denmark",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - General",
+   "usd_volume_20d": 466731006
+  },
+  "NVS": {
+   "index": "foreign",
+   "name": "Novartis AG",
+   "country": "Switzerland",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - General",
+   "usd_volume_20d": 324822900
+  },
+  "NWG": {
+   "index": "foreign",
+   "name": "NatWest Group plc",
+   "country": "United Kingdom",
+   "sector": "Financial Services",
+   "industry": "Banks - Regional",
+   "usd_volume_20d": 70639029
+  },
+  "NXE": {
+   "index": "foreign",
+   "name": "Nexgen Energy Ltd.",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Uranium",
+   "usd_volume_20d": 43484227
+  },
+  "ONC": {
+   "index": "foreign",
+   "name": "BeOne Medicines Ltd.",
+   "country": "Switzerland",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 139949548
+  },
+  "OTEX": {
+   "index": "foreign",
+   "name": "Open Text Corporation",
+   "country": "Canada",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 33961068
+  },
+  "PAAS": {
+   "index": "foreign",
+   "name": "Pan American Silver Corp.",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 191994246
+  },
+  "PAC": {
+   "index": "foreign",
+   "name": "Grupo Aeroportuario Del Pacific",
+   "country": "Mexico",
+   "sector": "Industrials",
+   "industry": "Airports & Air Services",
+   "usd_volume_20d": 29928969
+  },
+  "PAGS": {
+   "index": "foreign",
+   "name": "PagSeguro Digital Ltd.",
+   "country": "Brazil",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 33266556
+  },
+  "PBR": {
+   "index": "foreign",
+   "name": "Petroleo Brasileiro S.A. Petrob",
+   "country": "Brazil",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 442722816
+  },
+  "PHG": {
+   "index": "foreign",
+   "name": "Koninklijke Philips N.V. NY Reg",
+   "country": "Netherlands",
+   "sector": "Healthcare",
+   "industry": "Medical Devices",
+   "usd_volume_20d": 40653779
+  },
+  "QSR": {
+   "index": "foreign",
+   "name": "Restaurant Brands International",
+   "country": "United States",
+   "sector": "Consumer Cyclical",
+   "industry": "Restaurants",
+   "usd_volume_20d": 179822264
+  },
+  "RACE": {
+   "index": "foreign",
+   "name": "Ferrari N.V.",
+   "country": "Italy",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 170223847
+  },
+  "RDY": {
+   "index": "foreign",
+   "name": "Dr. Reddy's Laboratories Ltd",
+   "country": "India",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - Specialty & Generic",
+   "usd_volume_20d": 35133676
+  },
+  "RELX": {
+   "index": "foreign",
+   "name": "RELX PLC PLC",
+   "country": "United Kingdom",
+   "sector": "Industrials",
+   "industry": "Specialty Business Services",
+   "usd_volume_20d": 75708751
+  },
+  "RIO": {
+   "index": "foreign",
+   "name": "Rio Tinto Plc",
+   "country": "United Kingdom",
+   "sector": "Basic Materials",
+   "industry": "Other Industrial Metals & Mining",
+   "usd_volume_20d": 230393158
+  },
+  "RY": {
+   "index": "foreign",
+   "name": "Royal Bank Of Canada",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 207709774
+  },
+  "RYAAY": {
+   "index": "foreign",
+   "name": "Ryanair Holdings plc",
+   "country": "Ireland",
+   "sector": "Industrials",
+   "industry": "Airlines",
+   "usd_volume_20d": 65101340
+  },
+  "SAN": {
+   "index": "foreign",
+   "name": "Banco Santander, S.A. Sponsored",
+   "country": "Spain",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 97820389
+  },
+  "SAP": {
+   "index": "foreign",
+   "name": "SAP  SE",
+   "country": "Germany",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 486537957
+  },
+  "SBLK": {
+   "index": "foreign",
+   "name": "Star Bulk Carriers Corp.",
+   "country": "Greece",
+   "sector": "Industrials",
+   "industry": "Marine Shipping",
+   "usd_volume_20d": 32970970
+  },
+  "SBS": {
+   "index": "foreign",
+   "name": "Companhia de saneamento Basico ",
+   "country": "Brazil",
+   "sector": "Utilities",
+   "industry": "Utilities - Regulated Water",
+   "usd_volume_20d": 60327101
+  },
+  "SBSW": {
+   "index": "foreign",
+   "name": "D/B/A Sibanye-Stillwater Limite",
+   "country": "South Africa",
+   "sector": "Basic Materials",
+   "industry": "Other Precious Metals & Mining",
+   "usd_volume_20d": 44734950
+  },
+  "SE": {
+   "index": "foreign",
+   "name": "Sea Limited",
+   "country": "Singapore",
+   "sector": "Consumer Cyclical",
+   "industry": "Internet Retail",
+   "usd_volume_20d": 585783331
+  },
+  "SHEL": {
+   "index": "foreign",
+   "name": "Shell PLC",
+   "country": "United Kingdom",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 498215697
+  },
+  "SHOP": {
+   "index": "foreign",
+   "name": "Shopify Inc.",
+   "country": "Canada",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 936500227
+  },
+  "SLF": {
+   "index": "foreign",
+   "name": "Sun Life Financial Inc.",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Insurance - Diversified",
+   "usd_volume_20d": 29339073
+  },
+  "SMFG": {
+   "index": "foreign",
+   "name": "Sumitomo Mitsui Financial Group",
+   "country": "Japan",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 31341019
+  },
+  "SNN": {
+   "index": "foreign",
+   "name": "Smith & Nephew SNATS, Inc.",
+   "country": "United Kingdom",
+   "sector": "Healthcare",
+   "industry": "Medical Devices",
+   "usd_volume_20d": 42890225
+  },
+  "SNY": {
+   "index": "foreign",
+   "name": "Sanofi",
+   "country": "France",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - General",
+   "usd_volume_20d": 134012153
+  },
+  "SONY": {
+   "index": "foreign",
+   "name": "Sony Group Corporation",
+   "country": "Japan",
+   "sector": "Technology",
+   "industry": "Consumer Electronics",
+   "usd_volume_20d": 108053631
+  },
+  "SPOT": {
+   "index": "foreign",
+   "name": "Spotify Technology S.A.",
+   "country": "Sweden",
+   "sector": "Communication Services",
+   "industry": "Internet Content & Information",
+   "usd_volume_20d": 926518124
+  },
+  "SQM": {
+   "index": "foreign",
+   "name": "Sociedad Quimica y Minera S.A.",
+   "country": "Chile",
+   "sector": "Basic Materials",
+   "industry": "Specialty Chemicals",
+   "usd_volume_20d": 43266740
+  },
+  "STLA": {
+   "index": "foreign",
+   "name": "Stellantis N.V.",
+   "country": "Netherlands",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 164144857
+  },
+  "STM": {
+   "index": "foreign",
+   "name": "STMicroelectronics N.V.",
+   "country": "Switzerland",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 445401239
+  },
+  "STNE": {
+   "index": "foreign",
+   "name": "StoneCo Ltd.",
+   "country": "Cayman Islands",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 50744493
+  },
+  "SU": {
+   "index": "foreign",
+   "name": "Suncor Energy  Inc.",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 289838117
+  },
+  "SUZ": {
+   "index": "foreign",
+   "name": "Suzano S.A.",
+   "country": "Brazil",
+   "sector": "Basic Materials",
+   "industry": "Paper & Paper Products",
+   "usd_volume_20d": 39342479
+  },
+  "TAK": {
+   "index": "foreign",
+   "name": "Takeda Pharmaceutical Company L",
+   "country": "Japan",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - Specialty & Generic",
+   "usd_volume_20d": 62414119
+  },
+  "TAL": {
+   "index": "foreign",
+   "name": "TAL Education Group",
+   "country": "China",
+   "sector": "Consumer Defensive",
+   "industry": "Education & Training Services",
+   "usd_volume_20d": 63067885
+  },
+  "TCOM": {
+   "index": "foreign",
+   "name": "Trip.com Group Limited",
+   "country": "Singapore",
+   "sector": "Consumer Cyclical",
+   "industry": "Travel Services",
+   "usd_volume_20d": 117797420
+  },
+  "TD": {
+   "index": "foreign",
+   "name": "Toronto Dominion Bank (The)",
+   "country": "Canada",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 137514670
+  },
+  "TEVA": {
+   "index": "foreign",
+   "name": "Teva Pharmaceutical Industries ",
+   "country": "Israel",
+   "sector": "Healthcare",
+   "industry": "Drug Manufacturers - Specialty & Generic",
+   "usd_volume_20d": 281578537
+  },
+  "TFII": {
+   "index": "foreign",
+   "name": "TFI International Inc.",
+   "country": "Canada",
+   "sector": "Industrials",
+   "industry": "Trucking",
+   "usd_volume_20d": 37006591
+  },
+  "TM": {
+   "index": "foreign",
+   "name": "Toyota Motor Corporation",
+   "country": "Japan",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 60034095
+  },
+  "TME": {
+   "index": "foreign",
+   "name": "Tencent Music Entertainment Gro",
+   "country": "China",
+   "sector": "Communication Services",
+   "industry": "Internet Content & Information",
+   "usd_volume_20d": 54907855
+  },
+  "TRI": {
+   "index": "foreign",
+   "name": "Thomson Reuters Corp",
+   "country": "Canada",
+   "sector": "Industrials",
+   "industry": "Specialty Business Services",
+   "usd_volume_20d": 172924288
+  },
+  "TRP": {
+   "index": "foreign",
+   "name": "TC Energy Corporation",
+   "country": "Canada",
+   "sector": "Energy",
+   "industry": "Oil & Gas Midstream",
+   "usd_volume_20d": 105798227
+  },
+  "TS": {
+   "index": "foreign",
+   "name": "Tenaris S.A.",
+   "country": "Luxembourg",
+   "sector": "Energy",
+   "industry": "Oil & Gas Equipment & Services",
+   "usd_volume_20d": 71145183
+  },
+  "TSEM": {
+   "index": "foreign",
+   "name": "Tower Semiconductor Ltd.",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 499062605
+  },
+  "TSM": {
+   "index": "foreign",
+   "name": "Taiwan Semiconductor Manufactur",
+   "country": "Taiwan",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 5490560329
+  },
+  "TTE": {
+   "index": "foreign",
+   "name": "TotalEnergies SE",
+   "country": "France",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 99997736
+  },
+  "TU": {
+   "index": "foreign",
+   "name": "Telus Corporation",
+   "country": "Canada",
+   "sector": "Communication Services",
+   "industry": "Telecom Services",
+   "usd_volume_20d": 57430452
+  },
+  "UBS": {
+   "index": "foreign",
+   "name": "UBS Group AG Registered",
+   "country": "Switzerland",
+   "sector": "Financial Services",
+   "industry": "Banks - Diversified",
+   "usd_volume_20d": 90256496
+  },
+  "UGP": {
+   "index": "foreign",
+   "name": "Ultrapar Participacoes S.A. (Ne",
+   "country": "Brazil",
+   "sector": "Energy",
+   "industry": "Oil & Gas Refining & Marketing",
+   "usd_volume_20d": 25855358
+  },
+  "UL": {
+   "index": "foreign",
+   "name": "Unilever PLC",
+   "country": "United Kingdom",
+   "sector": "Consumer Defensive",
+   "industry": "Household & Personal Products",
+   "usd_volume_20d": 218404124
+  },
+  "UMC": {
+   "index": "foreign",
+   "name": "United Microelectronics Corpora",
+   "country": "Taiwan",
+   "sector": "Technology",
+   "industry": "Semiconductors",
+   "usd_volume_20d": 210555317
+  },
+  "VALE": {
+   "index": "foreign",
+   "name": "VALE S.A.",
+   "country": "Brazil",
+   "sector": "Basic Materials",
+   "industry": "Other Industrial Metals & Mining",
+   "usd_volume_20d": 400711027
+  },
+  "VIPS": {
+   "index": "foreign",
+   "name": "Vipshop Holdings Limited",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Internet Retail",
+   "usd_volume_20d": 28590151
+  },
+  "VIST": {
+   "index": "foreign",
+   "name": "Vista Energy S.A.B. de C.V.",
+   "country": "Mexico",
+   "sector": "Energy",
+   "industry": "Oil & Gas E&P",
+   "usd_volume_20d": 74462646
+  },
+  "VOD": {
+   "index": "foreign",
+   "name": "Vodafone Group Plc",
+   "country": "United Kingdom",
+   "sector": "Communication Services",
+   "industry": "Telecom Services",
+   "usd_volume_20d": 56120295
+  },
+  "WCN": {
+   "index": "foreign",
+   "name": "Waste Connections, Inc.",
+   "country": "United States",
+   "sector": "Industrials",
+   "industry": "Waste Management",
+   "usd_volume_20d": 374686657
+  },
+  "WIX": {
+   "index": "foreign",
+   "name": "Wix.com Ltd.",
+   "country": "Israel",
+   "sector": "Technology",
+   "industry": "Software - Infrastructure",
+   "usd_volume_20d": 57173826
+  },
+  "WPM": {
+   "index": "foreign",
+   "name": "Wheaton Precious Metals Corp",
+   "country": "Canada",
+   "sector": "Basic Materials",
+   "industry": "Gold",
+   "usd_volume_20d": 224207836
+  },
+  "XP": {
+   "index": "foreign",
+   "name": "XP Inc.",
+   "country": "Cayman Islands",
+   "sector": "Financial Services",
+   "industry": "Capital Markets",
+   "usd_volume_20d": 183343103
+  },
+  "XPEV": {
+   "index": "foreign",
+   "name": "XPeng Inc.",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Auto Manufacturers",
+   "usd_volume_20d": 62448268
+  },
+  "YMM": {
+   "index": "foreign",
+   "name": "Full Truck Alliance Co. Ltd.",
+   "country": "China",
+   "sector": "Technology",
+   "industry": "Software - Application",
+   "usd_volume_20d": 66673137
+  },
+  "YPF": {
+   "index": "foreign",
+   "name": "YPF Sociedad Anonima",
+   "country": "Argentina",
+   "sector": "Energy",
+   "industry": "Oil & Gas Integrated",
+   "usd_volume_20d": 50665770
+  },
+  "YUMC": {
+   "index": "foreign",
+   "name": "Yum China Holdings, Inc.",
+   "country": "China",
+   "sector": "Consumer Cyclical",
+   "industry": "Restaurants",
+   "usd_volume_20d": 86201010
+  },
+  "ZIM": {
+   "index": "foreign",
+   "name": "ZIM Integrated Shipping Service",
+   "country": "Israel",
+   "sector": "Industrials",
+   "industry": "Marine Shipping",
+   "usd_volume_20d": 30870379
+  },
+  "ZLAB": {
+   "index": "foreign",
+   "name": "Zai Lab Limited",
+   "country": "China",
+   "sector": "Healthcare",
+   "industry": "Biotechnology",
+   "usd_volume_20d": 25492105
+  },
+  "ZTO": {
+   "index": "foreign",
+   "name": "ZTO Express (Cayman) Inc.",
+   "country": "China",
+   "sector": "Industrials",
+   "industry": "Integrated Freight & Logistics",
+   "usd_volume_20d": 32974918
+  }
+ }
+}

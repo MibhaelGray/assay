@@ -64,7 +64,12 @@ def next_entry_session(now: datetime) -> date:
 # Each pass screens the latest prices, judges, and its takes are traded as soon as it has recorded (entries.py).
 # When each may record, New York time. A pass belongs to the session its trades enter for: the night pass to
 # the next session (or today's, once it is past midnight), the two day passes to today's.
-NEW_PASSES = ("night", "morning", "midday")
+# A fourth kind, "late", is a second pass in the night window, run by hand (the owner, 2026-11-16): the same rules
+# as the night pass, for names the passes before it did not judge. It can be run more than once a session (the owner,
+# 2026-11-17): each run records under the next free name of LATE (`next_late`).
+LATE = ("late", "late2", "late3", "late4")
+NIGHT_KINDS = ("night", *LATE)
+NEW_PASSES = (*NIGHT_KINDS, "morning", "midday")
 NIGHT_FROM, NIGHT_UNTIL = time(16, 0), time(3, 50)     # the close to the end of IBKR's overnight session
 MORNING_WINDOW = (time(9, 30), time(12, 30))
 MIDDAY_WINDOW = (time(12, 30), time(15, 30))           # recorded in time for entries before the 3:40 PM cutoff
@@ -74,12 +79,12 @@ def pass_session(kind: str, now: datetime) -> date:
     """The session a pass run at `now` belongs to. Raises if that pass can't run now."""
     today, t = now.date(), now.time()
     open_day = journal.is_trading_day(today)
-    if kind == "night":
+    if kind in NIGHT_KINDS:
         if t < NIGHT_UNTIL:
             return today if open_day else journal.next_trading_day(today)
         if t >= NIGHT_FROM or not open_day:
             return journal.next_trading_day(today)
-        raise ValueError("the night pass runs between the 3:00 PM CT close and 2:50 AM CT, not during the session")
+        raise ValueError(f"the {kind} pass runs between the 3:00 PM CT close and 2:50 AM CT, not during the session")
     window = {"morning": MORNING_WINDOW, "midday": MIDDAY_WINDOW}.get(kind)
     if window is None:
         raise ValueError(f"pass must be one of: {', '.join(NEW_PASSES)}")
@@ -87,6 +92,15 @@ def pass_session(kind: str, now: datetime) -> date:
         ct = lambda x: f"{(x.hour - 1) % 12 or 12}:{x.minute:02d} {'PM' if x.hour - 1 >= 12 else 'AM'}"  # noqa: E731
         raise ValueError(f"the {kind} pass runs on a trading day between {ct(window[0])} and {ct(window[1])} CT")
     return today
+
+
+def next_late(now: datetime) -> str:
+    """The name a late pass started at `now` records under: the first of LATE its session has not used."""
+    used = {p["pass"] for p in (load(pass_session("late", now)) or {}).get("passes", [])}
+    free = [k for k in LATE if k not in used]
+    if not free:
+        raise ValueError(f"the session already has {len(LATE)} late passes, the most it can hold")
+    return free[0]
 
 
 def _text(v) -> bool:
@@ -229,8 +243,9 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
             raise ValueError(f"{who}: a take needs reasoning with each of: {', '.join(journal.REASONING)}")
         if not _text(raw.get("wrong_if")):
             raise ValueError(f"{who}: a take needs wrong_if: what you would see, inside the time limit, that proves it wrong")
-        if p["long"] and p["short"] and not _text(raw.get("hedge_why")):
-            raise ValueError(f"{who}: a two-sided take needs hedge_why: why this is the right thing on the other side")
+        if not _text(raw.get("hedge_why")):   # every take, hedged or outright (the owner, 2026-11-16)
+            raise ValueError(f"{who}: a take needs hedge_why: why it is better hedged against this fund than outright, or "
+                             "outright than hedged (the S&P 500 is the benchmark)")
         if (inside := reports_inside(legs, session, p["plan"]["horizon_days"])) and not _text(raw.get("through_earnings")):
             raise ValueError(f"{who}: {'; '.join(inside)}, inside the {p['plan']['horizon_days']}-session time limit. Shorten the "
                              "time limit, or give through_earnings saying why the trade holds through the report")
@@ -335,11 +350,10 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
 
 
 def reviews(session: date) -> dict[str, dict]:
-    """The latest decision on each trade for a session, by trade id: the pre-close review's
-    (learn.record_review), then each of the three daily passes' in the order they recorded (daily.record)."""
-    path = root() / "reviews" / f"{session}.json"
-    out = {r["trade_id"]: r for r in json.loads(path.read_text())["reviews"]} if path.exists() else {}
+    """The latest decision on each trade for a session, by trade id: each pass's reviews in the order the passes
+    recorded (daily.record)."""
     path = root() / "pass_reviews" / f"{session}.json"
+    out = {}
     for p in json.loads(path.read_text())["passes"] if path.exists() else []:
         out.update({r["trade_id"]: {**r, "pass": p["pass"]} for r in p["reviews"]})
     return out

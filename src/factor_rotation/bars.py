@@ -274,23 +274,3 @@ def intraday_closes(symbols: list[str], sessions: int = 5) -> dict[str, pd.Serie
         idx = idx.tz_localize("UTC") if idx.tz is None else idx
         out[symbol] = pd.Series(close.to_numpy(float), index=idx.tz_convert(NY)).sort_index()
     return out
-
-
-def collect_intraday(symbols: list[str], day) -> dict[str, pd.DataFrame]:
-    """15-minute bars from 04:00 to 16:00 New York time on `day`; pull after the close."""
-    import yfinance as yf
-    tickers = {_ticker(s): s for s in symbols}
-    data = yf.download(list(tickers), start=day, end=day + pd.Timedelta(days=1), interval="15m", prepost=True,
-                       auto_adjust=False, group_by="ticker", threads=True, progress=False)
-    out = {}
-    for ticker, symbol in tickers.items():
-        if ticker not in data.columns.get_level_values(0):
-            log.warning("no_intraday_bars symbol=%s", symbol)
-            continue
-        df = data[ticker].rename(columns=str.lower)[["open", "high", "low", "close", "volume"]].dropna(subset=["close"])
-        idx = pd.DatetimeIndex(df.index)
-        idx = idx.tz_localize("UTC") if idx.tz is None else idx
-        idx = idx.tz_convert(NY)
-        df = df.assign(time=idx.strftime("%H:%M"))
-        out[symbol] = df[(idx.date == day) & df["time"].ge("04:00") & df["time"].lt("16:00")].reset_index(drop=True)
-    return out

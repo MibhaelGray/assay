@@ -35,11 +35,11 @@ class Check(unittest.TestCase):
     def state(self, key, now, day=DAY):
         return next(r for r in routine.check(day, now) if r["key"] == key)
 
-    def test_a_plan_file_means_the_entry_job_ran(self):
-        self.write(f"paper/plans/{DAY}.json", {"built_at": at(9, 15).isoformat(), "trades": [{}], "orders": [{}, {}]})
-        r = self.state("paper-open", at(10))
-        self.assertEqual(r["state"], "done")
-        self.assertEqual(r["detail"], "1 trades, 2 orders")
+    def test_a_pass_in_the_sessions_proposals_means_the_pass_ran(self):
+        self.write(f"paper/proposals/{DAY}.json", {"passes": [{"pass": "morning", "at": at(10, 5).isoformat(), "proposals": 40, "takes": 3}]})
+        r = self.state("pass-morning", at(11))
+        self.assertEqual((r["state"], r["detail"], r["late_min"]), ("done", "40 verdicts, 3 takes", None))
+        self.assertEqual(self.state("pass-midday", at(16))["state"], "missed")
 
     def test_before_its_time_a_step_is_upcoming_then_due_then_missed(self):
         self.assertEqual(self.state("paper-close", at(15))["state"], "upcoming")
@@ -65,17 +65,17 @@ class Check(unittest.TestCase):
         self.assertEqual(r["state"], "failed")
         self.assertIn("No brief", r["detail"])
 
-    def test_the_evening_pass_is_found_in_the_next_sessions_proposals(self):
-        self.write("paper/proposals/2026-11-11.json", {"passes": [{"pass": "evening", "at": at(20).isoformat()}]})
-        self.assertEqual(self.state("evening", at(23))["state"], "done")
+    def test_the_night_pass_is_found_in_the_next_sessions_proposals(self):
+        self.write("paper/proposals/2026-11-11.json", {"passes": [{"pass": "night", "at": at(20, 45).isoformat()}]})
+        self.assertEqual(self.state("pass-night", at(23))["state"], "done")
 
-    def test_a_manual_entry_is_not_a_pre_open_pass(self):
-        self.write(f"paper/proposals/{DAY}.json", {"passes": [{"pass": "manual", "at": at(12).isoformat()}]})
-        self.assertEqual(self.state("preopen", at(12, 30))["state"], "missed")
+    def test_a_late_pass_by_hand_is_not_the_night_pass(self):
+        self.write("paper/proposals/2026-11-11.json", {"passes": [{"pass": "late", "at": at(22).isoformat()}]})
+        self.assertEqual(self.state("pass-night", at(23, 30))["state"], "missed")
 
     def test_a_holiday_has_nothing_scheduled(self):
         holiday = date(2026, 11, 26)
-        self.assertEqual(self.state("paper-open", at(12, d=holiday), holiday)["state"], "off")
+        self.assertEqual(self.state("paper-close", at(12, d=holiday), holiday)["state"], "off")
 
 
 if __name__ == "__main__":

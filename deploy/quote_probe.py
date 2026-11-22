@@ -2,7 +2,7 @@
 
     uv run python deploy/quote_probe.py [SYMBOL ...]
 
-Asks for each symbol twice, the way the order jobs do (intraday/extended.IBMarket): once on SMART, which is the
+Asks for each symbol twice, the way the order job does (paper/gateway.IBMarket): once on SMART, which is the
 regular session, pre-market and after-hours, and once on IBKR's OVERNIGHT venue. It also asks for EURUSD, whose
 data is free: a forex quote with no stock quotes means the stock subscription is what is missing (error 10089),
 and no forex quote either means another session is holding the market data (error 10197) or the gateway is down.
@@ -15,7 +15,7 @@ from datetime import datetime
 from pathlib import Path
 
 from factor_rotation.config import CT
-from factor_rotation.intraday.extended import IBMarket
+from factor_rotation.paper.gateway import IBMarket
 
 SYMBOLS = ["SPY", "XLK", "AAPL", "CSCO", "CTVA"]
 CLIENT_ID = 92  # its own, so it can run beside the order jobs

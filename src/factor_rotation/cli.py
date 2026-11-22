@@ -20,6 +20,26 @@ def _universe(group: str, symbols: str | None) -> list[str]:
     return {"etfs": list(OPTION_INDEXES) + CORE_ETFS, "stocks": OPTION_STOCKS, "all": option_universe()}[group]
 
 
+def _smallcap(a) -> None:
+    """The small-cap book's jobs. A shadow run: none of them sends an order or touches the paper account."""
+    from .smallcap import record, score, screen, universe
+    if a.job == "universe":
+        return print(universe.summary(universe.build()))
+    if a.job == "screen":
+        try:
+            return print(screen.summary(screen.build(slot=a.slot)))
+        except ValueError as e:
+            sys.exit(f"no screen: {e}")
+    if a.job == "record":
+        if len(a.args) != 1:
+            sys.exit("usage: fr smallcap record <draft.json>")
+        try:
+            return print(record.summary(record.record(Path(a.args[0]))))
+        except ValueError as e:
+            sys.exit(f"not recorded: {e}")
+    print(score.report(score.measure()))
+
+
 def _today() -> date:
     return datetime.now(NY).date()
 
@@ -65,16 +85,16 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("action", choices=["check"])
     c.add_argument("--json", action="store_true")
     c = sub.add_parser("screen", help="check every name, basket and factor pair against the setups; write the shortlist")
-    c.add_argument("--live", choices=["night", "morning", "midday"], default=None,
+    c.add_argument("--live", choices=["night", "late", "late2", "late3", "late4", "morning", "midday"], default=None,
                    help="the screen for one of the three daily passes, on the latest prices (after-hours, pre-market or the session so far)")
 
     c = sub.add_parser("paper", help="paper-trading jobs on the IBKR paper account (see paper/__init__.py)")
     c.add_argument("--execute", action="store_true",
                    help="a job that sends orders only looks when it is run by hand: it prints what it would send "
                         "and sends nothing. This makes it count, as the scheduled job does")
-    c.add_argument("job", choices=["open", "early", "enter", "check", "midday", "close", "sync", "status", "report", "halt", "resume", "restart",
-                                   "propose", "review", "midday-check", "postmortem", "learn", "hedges", "side", "holds", "depth"])
-    c.add_argument("args", nargs="*", help="propose, review, midday-check, postmortem: the draft JSON file; hedges: the symbols on one side; "
+    c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume", "restart",
+                                   "propose", "postmortem", "learn", "hedges", "side", "holds", "depth"])
+    c.add_argument("args", nargs="*", help="propose, postmortem: the draft JSON file; hedges: the symbols on one side; "
                                            "side: `report` to score the side facts instead of pulling them")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
     c.add_argument("--carry", action="store_true", help="restart: go ahead although the first book still holds positions; they stay "
@@ -83,19 +103,31 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--book", choices=["swing", "intraday"],  # restart: see paper/restart.py
                    help="resume: lift that book's 10%% pause (drawdown.py) instead of the HALT file")
     c = sub.add_parser("pass", help="run one of the swing book's research passes as a background job (see passes.py)")
-    c.add_argument("name", choices=["pre-close", "night", "morning", "midday"])
-    c.add_argument("--shadow", action="store_true", help="work on a copy of the journal, so the app's pass stays the one that counts")
+    c.add_argument("name", choices=["night", "late", "morning", "midday", "smallcap", "smallcap-morning", "smallcap-midday"])
+    c.add_argument("--shadow", action="store_true", help="a trial run: work on a copy of the journal with orders off")
+    c = sub.add_parser("smallcap", help="the small-cap book's shadow run: universe, screen, record, score (smallcap/__init__.py)")
+    c.add_argument("job", choices=["universe", "screen", "record", "score"])
+    c.add_argument("args", nargs="*", help="record: the draft JSON file")
+    c.add_argument("--pass", dest="slot", choices=["morning", "midday", "night"], default="night",
+                   help="screen: morning and midday read the session so far, in regular hours; night reads the close")
+    c = sub.add_parser("lab", help="the research lab: test ideas held 1-5 sessions on history, with an honest count (lab/__init__.py)")
+    c.add_argument("job", choices=["pull", "build", "fetch", "ideas", "run", "board", "holdout", "show", "session"])
+    c.add_argument("args", nargs="*", help="run: idea ids, or 'new' for every idea not yet in the ledger; holdout: <idea> <variant>; show: <idea>; fetch: earnings or a file in lab/sources")
+    c.add_argument("--market", default="us")
+    c.add_argument("--fresh", action="store_true", help="pull: throw away the downloaded chunks and start again")
+    c.add_argument("--force", action="store_true", help="holdout: look although the rules say not to; the look is marked forced")
+    c = sub.add_parser("watch", help="the watchdog: phone alerts when a pass, a job or the paper gateway breaks (watch.py)")
+    c.add_argument("--test", action="store_true", help="send one test alert and stop")
+    c.add_argument("--telegram-chats", action="store_true", help="list the chats that messaged the Telegram bot, to find FR_TELEGRAM_CHAT")
     c = sub.add_parser("quotes", help="current prices from Yahoo for stocks, ETFs, indexes (VIX, TNX) and futures (ES=F, CL=F)")
     c.add_argument("names", nargs="+")
-    c = sub.add_parser("intraday", help="the intraday book: 15-minute bars and the replay of its setups (see intraday/__init__.py)")
-    c.add_argument("job", choices=["bars", "replay", "tick", "ext", "report"])
-    c.add_argument("--execute", action="store_true",
-                   help="a tick run by hand only looks: it writes nothing and sends no orders. This makes it count, "
-                        "as the scheduled job does. The scheduled jobs set FR_SCHEDULED=1 and need no flag")
     c = sub.add_parser("dashboard", help="build a local copy of the dashboard (dashboard/local.html) and open it")
     c.add_argument("--as-of", default=None, help="brief date for tonight's market rows (default: the latest brief)")
     c.add_argument("--out", type=Path, default=None)
     c.add_argument("--no-open", action="store_true", help="build without opening it in the browser")
+    c = sub.add_parser("publish", help="put a fresh copy of the dashboard on the public GitHub site")
+    c.add_argument("--pull", action="store_true", help="first pull today's prices and the paper account, as the local Refresh button does")
+    c.add_argument("--force", action="store_true", help="push even if the page hasn't changed")
 
     a = p.parse_args(argv)
     if a.cmd == "options":
@@ -128,6 +160,12 @@ def main(argv: list[str] | None = None) -> None:
         brief = journal.build_brief(as_of)
         print(f"journal/briefs/{as_of}.json  pairs={len(brief['factor_pairs'])} options={len(brief['options'])} "
               f"bars_through={brief['bars_through']} snapshot={brief['options_snapshot']}")
+    elif a.cmd == "watch":
+        from . import watch
+        if a.telegram_chats:
+            print("\n".join(watch.telegram_chats()) or "no chats yet: send the bot a message in Telegram first")
+        else:
+            watch.test() if a.test else watch.run()
     elif a.cmd == "trading-day":
         sys.exit(0 if journal.is_trading_day(_today()) else 1)
     elif a.cmd == "serve":
@@ -149,47 +187,14 @@ def main(argv: list[str] | None = None) -> None:
             print(f"  refused {r}")
         print(out.get("message") or "")
         sys.exit(0 if out["ok"] else 1)
+    elif a.cmd == "smallcap":
+        return _smallcap(a)
+    elif a.cmd == "lab":
+        from .lab import cli as lab_cli
+        lab_cli.main(a)
     elif a.cmd == "quotes":
         from . import quotes
         print(quotes.text(quotes.fetch(a.names)))
-    elif a.cmd == "intraday":
-        from .intraday import bars15, replay
-        if a.job == "bars":
-            print(json.dumps(bars15.collect(replay.universe())))
-        elif a.job == "tick":
-            from .intraday import live
-            dry = _looking(a)
-            out = live.tick(dry=dry)
-            print(f"intraday tick {out['date']}{' (a look: nothing written or sent)' if dry else ''}: "
-                  + (out.get("skipped") or f"bar closed {out['bar_closed']}, {len(out['new'])} new, {out['open']} open, {out['total']} today"))
-            for x in out.get("new", []):
-                v = x["verdict"]
-                print(f"  {x['symbol']:<6} vs {x['hedge']:<5} {x['setup']:<12} {x['direction']:<5} {v['decision']:<10} {v.get('why') or v.get('error') or ''}")
-            for x in out.get("paper", []):
-                r = x.get("result")
-                print(f"  paper {x['id']:<16} {x['state']:<9} {x.get('exit_reason') or ''}" + (f"  {r['dollars']:+.2f} ({r['bp']:+.1f} bp)" if r else ""))
-            _notify("intraday", out.get("warnings", []))
-        elif a.job == "ext":
-            from .intraday import extended
-            dry = _looking(a)
-            out = extended.tick(dry=dry)
-            print(f"intraday ext {out.get('night', '')}{' (a look: nothing written or sent)' if dry else ''}: "
-                  + (out.get("skipped") or f"{out['session']}, {out['quoted']} prices from {out['prices']}, "
-                                           f"{len(out['new'])} new"))
-            for x in out.get("new", []):
-                v = x["verdict"]
-                print(f"  {x['symbol']:<6} vs {x['hedge']:<5} {x['direction']:<5} {x['numbers']['move_atr']:+.1f} ATR  {v['decision']:<10} {v.get('why') or v.get('error') or ''}")
-            for x in out.get("paper", []):
-                r = x.get("result")
-                print(f"  paper {x['id']:<24} {x['state']:<9} {x.get('exit_reason') or ''}" + (f"  {r['dollars']:+.2f} ({r['bp']:+.1f} bp)" if r else ""))
-            _notify("intraday ext", out.get("warnings", []))
-        elif a.job == "report":
-            from .intraday import extended, live
-            print(json.dumps({"day": live.report(), "extended_hours": extended.report()}, indent=1))
-        else:
-            path, payload = replay.write()
-            print(path)
-            print(replay.text(payload))
     elif a.cmd == "baskets":
         from . import basket_check
         basket_check.main(a.json)
@@ -227,6 +232,12 @@ def main(argv: list[str] | None = None) -> None:
         print(f"{info['out']}  market_rows={info['market_rows']} ({info['market']})")
         if not a.no_open:
             webbrowser.open(out.resolve().as_uri())
+    elif a.cmd == "publish":
+        from . import publish
+        info = publish.run(pull=a.pull, force=a.force)
+        what = "published" if info["pushed"] else "nothing changed, not pushed"
+        extra = "".join(f"; {k}: {info[k]}" for k in ("paper", "failed") if info.get(k))
+        print(f"{what} at {info['at']} ({info['market']}): {info['url']}{extra}")
     elif a.cmd == "paper":
         _paper(a)
 
@@ -300,30 +311,7 @@ def _research(a) -> None:
                     print(f"  note: {n}")
                 _keep_depth(doc["session"])
                 return
-            path, doc, notes = proposals.record(d)
-            takes = [p for p in doc["proposals"] if p["decision"] == "take"]
-            print(f"{path}: {len(doc['proposals'])} verdicts for {doc['session']}, {len(takes)} takes "
-                  f"(the entry job trades up to {proposals.rules.MAX_NEW}, strongest conviction first, then by rank); "
-                  f"{sum(bool(p.get('rank')) for p in doc['proposals'])} ranked")
-            for p in takes:
-                st = p.get("stats") or {}
-                legs = " / ".join(filter(None, [p["long"] and "long " + ", ".join(p["long"]), p["short"] and "short " + ", ".join(p["short"])]))
-                print(f"  {p['id']}  {p['name'][:24]:<24} conviction {p['conviction']}  {p['plan']['horizon_days']}d, stop {abs(p['plan']['stop']['spread_pct']):g}%  {legs}"
-                      + (f"  (hedge correlation {st['corr_60d']:+.2f}, beta {st['beta_60d']:.2f})" if st else "")
-                      + (f"  {p['preopen']['decision'].upper().replace('_', ' ')}: {p['preopen']['reason']}" if p.get("preopen") else ""))
-            for n in notes:
-                print(f"  note: {n}")
-            _keep_depth(doc["session"])
-        elif a.job == "review":
-            path = learn.record_review(draft())
-            for r in json.loads(path.read_text())["reviews"]:
-                print(f"  {r['trade_id']}: {r['action']}" + (f" {r['sessions']} sessions" if r["action"] == "extend" else "") + f" ({r['thesis']}): {r['reason']}")
-            print(f"{path}: the 2:45 PM CT exit check will read it")
-        elif a.job == "midday-check":
-            path = learn.record_midday(draft())
-            for r in json.loads(path.read_text())["reviews"]:
-                print(f"  {r['trade_id']}: {r['action']} ({r['thesis']}): {r['reason']}")
-            print(f"{path}: the next midday job (12:15 PM and 1:15 PM CT) closes the exits at the market")
+            sys.exit(f'fr paper propose refused: the draft needs "pass": one of {", ".join(proposals.NEW_PASSES)}')
         elif a.job == "postmortem":
             print(learn.record_postmortems(draft()))
         elif a.job == "learn":
@@ -342,7 +330,7 @@ def _paper(a) -> None:
     from .paper import book
     from .paper.broker import IBPaper, PaperSettings
 
-    if a.job in ("propose", "review", "midday-check", "postmortem", "learn", "hedges"):
+    if a.job in ("propose", "postmortem", "learn", "hedges"):
         return _research(a)
     if a.job == "depth":
         # How much research each candidate got, from this session's transcripts (paper/depth.py). `args`: a session id.
@@ -363,27 +351,24 @@ def _paper(a) -> None:
             print("  ! nothing from Yahoo for " + ", ".join(r["failed"]) + "; the next run tries again")
         return
     today = _today()
-    if a.job in ("open", "check", "midday", "close", "sync") and not journal.is_trading_day(today):
+    if a.job in ("close", "sync") and not journal.is_trading_day(today):
         logging.info("market_closed date=%s", today)
         return
-    # A job that starts late (the Mac woke from sleep, say) must not send orders after the auction cutoffs:
-    # market-on-open by 9:28 AM ET, market-on-close by 3:50 PM ET. Missed entries are simply not taken;
-    # missed exits go out the next session, since a trade past its time limit exits at the next check.
+    # A close job that starts late (the Mac woke from sleep, say) must not send after the auction cutoff:
+    # market-on-close by 3:50 PM ET. Missed exits go out the next session, since a trade past its time limit
+    # exits at the next check.
     now = datetime.now(NY).strftime("%H:%M")
-    # The post-open check closes half-filled trades at the market, so it runs only while the market is open
-    # and before the 3:45 PM exits, which deal with whatever is left.
-    window = {"open": ("09:00", "09:27"), "check": ("09:33", "15:29"), "midday": ("10:00", "15:29"),
-              "close": ("15:30", "15:49")}.get(a.job)
-    if window and not (window[0] <= now <= window[1]) and PaperSettings().send:
+    if a.job == "close" and not ("15:30" <= now <= "15:49") and PaperSettings().send:
         ct = lambda hm: f"{(int(hm[:2]) - 1) % 12 or 12}:{hm[3:]} {'PM' if int(hm[:2]) - 1 >= 12 else 'AM'}"  # New York to Central
-        print(f"paper {a.job}: {ct(now)} CT is outside {ct(window[0])}-{ct(window[1])} CT, so nothing was sent")
+        print(f"paper close: {ct(now)} CT is outside {ct('15:30')}-{ct('15:49')} CT, so nothing was sent")
         sys.exit(1)
-    looking = _looking(a) if a.job in ("early", "enter", "open", "check", "midday", "close") else False
+    looking = _looking(a) if a.job in ("enter", "close") else False
     if a.job == "enter":
         # The three-pass book's order job (paper/entries.py): trades a pass's takes and exits once it has recorded.
         from .paper import entries
         r = asyncio.run(entries.run(dry=looking))
         if not looking and (healed := entries.heal_gateway(r.get("no_quote") or {})):   # after the run: its connection is closed
+            entries.retry_soon()
             r["warnings"].append(healed + "; the next try is in a minute or two.")
         if r.get("note") and not any(r[k] for k in ("passes", "orders", "warnings")):
             # launchd runs this every minute; a run with nothing to do stays out of the log
@@ -396,39 +381,6 @@ def _paper(a) -> None:
         for k in r["skipped"]:
             print(f"  skipped {k['name']}: {k['reason']}")
         _notify("enter", r["warnings"])
-    elif a.job == "early":
-        from .paper import early
-        r = asyncio.run(early.run(dry=looking))
-        tag = _dry_tag(r["dry_run"], looking)
-        print(f"paper early {r['at']}{tag}: " + (r.get("note") or f"{r['venue']} session, {len(r['new'])} new takes, "
-                                                 f"{r['cancelled']} cancelled, {len(r['orders'])} limit orders"))
-        for o in r["orders"]:
-            print(f"  {o['trade_id']:<16} {o['action']:<4} {o['shares']:>6} {o['symbol']:<6} limit {o['limit']:.2f}  {o.get('status', '')}")
-        for k in r["skipped"]:
-            print(f"  skipped {k['name']}: {k['reason']}")
-        _notify("early", r["warnings"])
-    elif a.job == "open":
-        plan = asyncio.run(book.open_session(today, dry=looking))
-        tag = _dry_tag(plan["dry_run"], looking)
-        print(f"paper open {today}{tag}: {len(plan['trades'])} trades, {len(plan['orders'])} orders, {len(plan['skipped'])} skipped"
-              + (f"; HALTED: {plan['halted']}" if plan.get("halted") else ""))
-        for t in plan["trades"]:
-            print(f"  {t['id']:<28} {t['book']:<9} {t['name'][:34]:<34} {t['setup']:<20} {t['horizon_days']}d stop {journal.stop_text(t) or '-'}")
-        for k in plan["skipped"]:
-            print(f"  skipped {k['name']}: {k['reason']}")
-        _notify("open", plan.get("warnings", []))
-    elif a.job == "check":
-        out = asyncio.run(book.check_session(today, dry=looking))
-        print(f"paper check {today}: " + (out.get("note") or f"{len(out['unfilled'])} trades never filled, {len(out['exits'])} broken trades "
-                                          f"closed with {len(out['orders'])} orders, {len(out['waiting'])} still waiting"))
-        _notify("check", out["warnings"])
-    elif a.job == "midday":
-        out = asyncio.run(book.midday_session(today, dry=looking))
-        tag = _dry_tag(out["dry_run"], looking)
-        print(f"paper midday {today}{tag}: " + (out.get("note") or f"{len(out['exits'])} exits, {len(out['orders'])} market orders"))
-        for e in out["exits"]:
-            print(f"  {e['trade_id']}: {e['reason']}")
-        _notify("midday", out["warnings"])
     elif a.job == "close":
         out = asyncio.run(book.close_session(today, flatten=a.flatten, dry=looking))
         tag = _dry_tag(out["dry_run"], looking)

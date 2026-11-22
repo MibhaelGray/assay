@@ -1,8 +1,8 @@
 """The daily routine and whether each step ran, for the dashboard's Today view.
 
-Each step is judged by what it leaves behind, not by its process: the entry job's plan, the exit check's file, a
-research pass's entry in the proposals. A launchd job that ran but left nothing is shown as failed with the last
-line of its log. Times are New York.
+Each step is judged by what it leaves behind, not by its process: a research pass's entry in the session's
+proposals, the exit check's file, the sync's fills. A launchd job that ran but left nothing is shown as failed
+with the last line of its log. Times are New York.
 """
 
 import json
@@ -10,21 +10,19 @@ from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 from . import bars, journal, storage
-from .config import NY
+from .config import CT, NY
 
 LOGS = Path.home() / "Library" / "Logs" / "factor-rotation"
 
 # key, time, name, what, who runs it, days, minutes before a step with nothing to show is called missed
 STEPS = [
-    ("preopen", time(8, 17), "Pre-open pass", "Lets last night's takes stand or stands them down. Must record by 9:14 AM.", "research", "session", 57),
-    ("paper-open", time(9, 15), "Paper open", "Sends the day's entries as market-on-open orders.", "job", "session", 15),
-    ("paper-check", time(9, 40), "Paper check", "Pulls fills and closes half-filled pairs.", "job", "session", 15),
-    ("preclose", time(14, 50), "Pre-close review", "Hold, exit or extend for each open trade. Must record by 3:44 PM.", "research", "session", 54),
+    ("pass-morning", time(9, 45), "Morning pass", "Judges the pre-market and the first minutes of trading. Its takes trade as soon as it records.", "research", "session", 120),
+    ("pass-midday", time(13, 0), "Midday pass", "Judges the morning's trading and reviews every open trade.", "research", "session", 120),
     ("paper-close", time(15, 45), "Paper close", "Enforces stops and time limits; exits go as market-on-close orders.", "job", "session", 15),
     ("paper-sync", time(16, 20), "Paper sync", "Pulls the day's fills, positions and account value.", "job", "session", 20),
     ("bars", time(16, 30), "Bars", "Five years of daily prices for every name.", "job", "session", 30),
     ("nightly", time(19, 0), "Nightly job", "Brief, earnings dates, scan and screen.", "job", "session", 60),
-    ("evening", time(19, 30), "Evening pass", "Judges the screen and records take or pass for the next open.", "research", "eve", 240),
+    ("pass-night", time(20, 30), "Night pass", "Judges the after-hours screen and records take or pass for the next session.", "research", "eve", 120),
 ]
 
 
@@ -39,32 +37,31 @@ def _at(s: str | None) -> datetime | None:
     return datetime.fromisoformat(s).astimezone(NY) if s else None
 
 
-def _pass_at(session: date, kind: str) -> datetime | None:
+def _pass(session: date, kind: str) -> tuple[datetime | None, str | None]:
+    """When that pass recorded for the session, and what it left: its verdicts and takes."""
     doc = _read(journal.JOURNAL / "paper" / "proposals" / f"{session}.json") or {}
-    times = [_at(p["at"]) for p in doc.get("passes", []) if p.get("pass") == kind]
-    return min(times) if times else None
+    found = [p for p in doc.get("passes", []) if p.get("pass") == kind]
+    if not found:
+        return None, None
+    p = min(found, key=lambda p: p["at"])
+    note = f"{p['proposals']} verdicts, {p['takes']} takes" if "proposals" in p and "takes" in p else None
+    return _at(p["at"]), note
 
 
 def _evidence(key: str, day: date) -> tuple[datetime | None, str | None]:
     """When the step left its mark on `day`, and a note. (None, note) when it left something unusable."""
     paper = journal.JOURNAL / "paper"
-    if key == "preopen":
-        return _pass_at(day, "preopen"), None
-    if key == "evening":
-        return _pass_at(journal.next_trading_day(day), "evening"), None
-    if key == "preclose":
-        doc = _read(paper / "reviews" / f"{day}.json")
-        return (_at(doc.get("recorded_at") or doc.get("at")) or datetime.combine(day, time(15, 0), NY), None) if doc else (None, None)
-    if key in ("paper-open", "paper-check", "paper-close"):
-        doc = _read(paper / {"paper-open": "plans", "paper-check": "checks", "paper-close": "exits"}[key] / f"{day}.json")
+    if key in ("pass-morning", "pass-midday"):
+        return _pass(day, key[5:])
+    if key == "pass-night":
+        return _pass(journal.next_trading_day(day), "night")
+    if key == "paper-close":
+        doc = _read(paper / "exits" / f"{day}.json")
         if not doc:
             return None, None
         note = "; ".join(doc.get("warnings") or []) or None
-        if key == "paper-open":
-            note = f"{len(doc.get('trades', []))} trades, {len(doc.get('orders', []))} orders" + (f"; {note}" if note else "")
-        if key == "paper-close":
-            orders = doc.get("orders", 0)
-            note = f"{len(doc.get('exits', []))} exits, {len(orders) if isinstance(orders, list) else orders} orders" + (f"; {note}" if note else "")
+        orders = doc.get("orders", 0)
+        note = f"{len(doc.get('exits', []))} exits, {len(orders) if isinstance(orders, list) else orders} orders" + (f"; {note}" if note else "")
         return _at(doc.get("built_at")), note
     if key == "paper-sync":
         doc = _read(paper / "fills" / f"{day}.json")
@@ -84,8 +81,8 @@ def _evidence(key: str, day: date) -> tuple[datetime | None, str | None]:
         brief = (journal.JOURNAL / "briefs" / f"{day}.json").exists()
         if not screen:
             return None, ("brief written but no screen" if brief else None)
-        if not brief:  # the evening pass builds its own screen when the nightly job didn't
-            return None, "No brief: the job stopped early. A screen was built later, at " + _at(screen.get("built_at")).strftime("%-I:%M %p")
+        if not brief:
+            return None, f"No brief: the job stopped early. A screen was built later, at {_at(screen.get('built_at')).astimezone(CT):%-I:%M %p} CT"
         return _at(screen.get("built_at")), None
     return None, None
 
@@ -123,7 +120,7 @@ def check(day: date, now: datetime) -> list[dict]:
     out = []
     for key, at, name, what, who, days, grace in STEPS:
         due = datetime.combine(day, at, NY)
-        row = {"key": key, "time": at.strftime("%-I:%M %p"), "name": name, "what": what, "who": who, "day": day.isoformat()}
+        row = {"key": key, "time": f"{due.astimezone(CT):%-I:%M %p} CT", "name": name, "what": what, "who": who, "day": day.isoformat()}
         if not _due(days, day):
             out.append({**row, "state": "off", "detail": "Not scheduled on this day"})
             continue
@@ -136,7 +133,7 @@ def check(day: date, now: datetime) -> list[dict]:
         elif now < due + timedelta(minutes=grace):
             out.append({**row, "state": "running", "detail": note or "Due; nothing recorded yet"})
         else:
-            tail = _log_tail(key, due) if who == "job" else None
+            tail = _log_tail(key, due)   # every step is a launchd job with its own log, the passes included
             failed = bool(tail or note)
             out.append({**row, "state": "failed" if failed else "missed",
                         "detail": note or (f"Ran but left nothing. Last log line: {tail}" if tail else "Nothing recorded")})

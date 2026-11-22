@@ -8,7 +8,8 @@ Two tiers (widened 2026-11-12):
 - CORE_ETFS and CONSTITUENTS: the original 46 funds and 110 largest stocks. Option chains and the intraday
   book's universe stay on these. The daily brief and the market regime use every fund but only these stocks.
 - ETFS adds more industry funds, and INDEX_STOCKS (index_stocks.json) adds the rest of the S&P 500 and
-  S&P 400 that trades at least $20M a day. The swing screen, the nightly bars and earnings dates, and the
+  S&P 400 that trades at least $20M a day, and (since 2026-11-18) the big US-listed foreign companies neither
+  index holds (foreign_stocks.json). The swing screen, the nightly bars and earnings dates, and the
   hedge choices cover both tiers.
 """
 
@@ -73,7 +74,11 @@ CONSTITUENTS = [
 
 # The rest of the S&P 500 and S&P 400 above the $20M volume floor, with each name's index, GICS sector and
 # sub-industry (index_stocks.json).
-INDEX_STOCK_INFO: dict[str, dict] = json.loads((Path(__file__).with_name("index_stocks.json")).read_text())["stocks"]
+# Since 2026-11-18 also big foreign companies listed in the US that neither index holds, such as TSMC
+# (foreign_stocks.json, "index": "foreign"), on the same $20M floor.
+INDEX_STOCK_INFO: dict[str, dict] = {**json.loads((Path(__file__).with_name("index_stocks.json")).read_text())["stocks"],
+                                     **json.loads((Path(__file__).with_name("foreign_stocks.json")).read_text())["stocks"]}
+FOREIGN_STOCKS = sorted(s for s, i in INDEX_STOCK_INFO.items() if i["index"] == "foreign")
 INDEX_STOCKS = sorted(s for s in INDEX_STOCK_INFO if s not in CONSTITUENTS)
 
 

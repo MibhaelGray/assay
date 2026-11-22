@@ -205,14 +205,21 @@ class Shortlist(unittest.TestCase):
         top, _, _ = screen._shortlist([cand("MPC", "turn", 2.6), cand("VLO", "turn", 2.5)], r, {})
         self.assertEqual(len(top), 2)
 
-    def test_no_setup_takes_more_than_its_share(self):
+    def test_no_setup_takes_more_than_its_share_while_others_have_names(self):
+        n = screen.TOP
+        ranked = [cand(f"T{i}", "turn", 3 - i / 1000) for i in range(n)] + [cand(f"S{i}", "stretched", 1 - i / 1000) for i in range(n)]
+        top, rest, _ = screen._shortlist(ranked, self.r, {})
+        self.assertEqual(len(top), n)
+        self.assertEqual(sum(c["setup"] == "stretched" for c in top), screen.MAX_PER_SETUP)   # the weaker setup keeps its seats
+        self.assertEqual(sum(c["setup"] == "turn" for c in top), n - screen.MAX_PER_SETUP)    # the cap's empty slots are filled
+        self.assertEqual(rest[0]["name"], f"T{n - screen.MAX_PER_SETUP}")
+
+    def test_the_list_is_full_whenever_enough_names_pass(self):
         ranked = [cand(f"T{i}", "turn", 3 - i / 100) for i in range(12)] + [cand(f"S{i}", "stretched", 1 - i / 100) for i in range(3)]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
-        self.assertEqual(sum(c["setup"] == "turn" for c in top), screen.MAX_PER_SETUP)
-        self.assertEqual(sum(c["setup"] == "stretched" for c in top), 3)
-        self.assertEqual([c["name"] for c in rest[:2]], ["T5", "T6"])
+        self.assertEqual(([c["name"] for c in top], rest), ([c["name"] for c in ranked], []))   # 15 pass, 15 are judged, in rank order
 
-    def test_the_list_stops_at_twenty(self):
+    def test_the_list_stops_at_its_limit(self):
         ranked = [cand(f"N{i}", s, 3 - i / 100) for i, s in enumerate(s for s in list(screen.WEIGHTS) for _ in range(3))]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
         self.assertEqual(len(top), screen.TOP)
@@ -243,6 +250,45 @@ class BookNames(unittest.TestCase):
         self.assertEqual(sorted(names), ["ABNB", "MTUM", "RDW", "USMV"])
         self.assertIn("holds it", names["ABNB"])
         self.assertIn("closed it on 2026-11-09", names["RDW"])
+
+
+class Overnight(unittest.TestCase):
+    """The night screen drops what can't be hit inside a 2% spread overnight, before the pass researches it."""
+
+    def check(self, books, missing=None):
+        asked = []
+
+        def gateway(symbols):
+            asked.append(list(symbols))
+            return ({s: books[s] for s in [*symbols, "SPY"] if s in books}, {s: w for s, w in (missing or {}).items() if s in symbols})
+        return screen.OvernightCheck(gateway), asked
+
+    def test_wide_or_unquoted_names_are_dropped_a_wide_hedge_is_only_shown(self):
+        top = [{**cand("AAA", "turn", 3), "hedge": "XLK"}, {**cand("BBB", "turn", 2), "hedge": "XLK"},
+               {**cand("CCC", "turn", 1), "hedge": "XRT"}, {**cand("DDD", "turn", 1), "hedge": "XLK"},
+               {"name": "Refiners", "kind": "basket", "members": ["MPC", "VLO", "PSX"], "hedge": "XLE", "setup": "turn", "direction": "long"}]
+        chk, asked = self.check({"SPY": (599.9, 600.1), "AAA": (99.9, 100.1), "BBB": (95.0, 105.0), "CCC": (49.9, 50.1),
+                                 "XLK": (199.9, 200.1), "XRT": (60.0, 70.0), "MPC": (150.0, 150.2), "VLO": (100.0, 112.0),
+                                 "PSX": (130.0, 130.2), "XLE": (90.0, 90.1)},
+                                {"DDD": "the gateway sent no bid or ask within 8 seconds and gave no reason"})
+        drop = chk(top)
+        self.assertEqual(set(drop), {"BBB", "DDD", "Refiners"})
+        self.assertIn("VLO 11.3% wide", drop["Refiners"]["why"])
+        self.assertIn("no overnight bid and ask", drop["DDD"]["why"])
+        ccc = top[2]["overnight_hedge"]
+        self.assertEqual((ccc["symbol"], ccc["tradeable"]), ("XRT", False))
+        self.assertTrue(top[0]["overnight_hedge"]["tradeable"])
+        chk(top)                       # asked again: nothing new to quote
+        self.assertEqual(len(asked), 1)
+
+    def test_a_gateway_fault_drops_nothing_and_says_so(self):
+        refused = {"AAA": "the live IBKR login is in use somewhere else (IBKR error 10197)"}
+        chk, _ = self.check({"SPY": (599.9, 600.1), "SPY_HEDGE": (1, 1)}, refused)
+        self.assertEqual(chk([{**cand("AAA", "turn", 3), "hedge": "SPY"}]), {})      # one name refused: not dropped
+        chk, _ = self.check({}, {"SPY": "the gateway couldn't be asked (ConnectionRefusedError)"})
+        self.assertEqual(chk([cand("AAA", "turn", 3)]), {})
+        self.assertFalse(chk.report({})["checked"])
+        self.assertIn("ConnectionRefusedError", chk.report({})["why"])
 
 
 if __name__ == "__main__":

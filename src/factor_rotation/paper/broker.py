@@ -6,11 +6,10 @@ Before any order goes out, every one of these must hold, or the run stops:
 2. FR_PAPER_ACCOUNT is set and looks like a paper account (DU, optionally one letter, or DF, then digits).
 3. After connecting, every account the gateway manages is a paper account and FR_PAPER_ACCOUNT is one of them.
 4. FR_PAPER_SEND=1. Without it every job is a dry run that prints the orders it would send.
-Orders can only be market-on-open entries, market-on-close exits, a plain market order (the post-open check
-uses it to close the filled legs of a trade whose other legs never filled), or a day limit order outside regular
-hours (the early entries, paper/early.py: pre-market and after-hours on SMART, the overnight session on IBKR's
-OVERNIGHT venue), for whole shares of a US stock or ETF, and each carries FR_PAPER_ACCOUNT and an orderRef naming
-its trade and leg, so fills can be matched back.
+Orders can only be a day limit order priced at the bid or ask (the order job, paper/entries.py: the regular
+session, pre-market and after-hours on SMART, the overnight session on IBKR's OVERNIGHT venue) or a
+market-on-close exit (the close job), for whole shares of a US stock or ETF, and each carries FR_PAPER_ACCOUNT
+and an orderRef naming its trade and leg, so fills can be matched back.
 """
 
 import asyncio
@@ -26,8 +25,8 @@ log = logging.getLogger(__name__)
 PAPER_PORTS = {4002, 7497}
 LIVE_PORTS = {4001, 7496}
 PAPER_ACCOUNT = re.compile(r"^(DU[A-Z]?|DF)\d+$")
-KINDS = {"MOO", "MOC", "MKT", "LMT"}
-ORDER_TYPE = {"MOO": ("MKT", "OPG"), "MOC": ("MOC", "DAY"), "MKT": ("MKT", "DAY"), "LMT": ("LMT", "DAY")}   # kind -> (orderType, tif)
+KINDS = {"MOC", "LMT"}
+ORDER_TYPE = {"MOC": ("MOC", "DAY"), "LMT": ("LMT", "DAY")}   # kind -> (orderType, tif)
 VENUES = {"extended", "overnight", "regular"}  # a limit order's session: pre-market or after-hours, 8:00 PM-3:50 AM ET, or the
 # regular session (the three-pass book prices every order on the gateway's bid and ask, paper/entries.py)
 WAITING = {"", "PendingSubmit", "ApiPending"}       # an order the gateway hasn't answered for yet

@@ -86,8 +86,3 @@ def list_files(prefix: str) -> list[str]:
         if i.type == fs.FileType.File and i.path.endswith(".parquet")
     ]
     return sorted(posixpath.relpath(p, root) for p in files)
-
-
-def read_many(prefix: str) -> pd.DataFrame:
-    frames = [read(f) for f in list_files(prefix)]
-    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()

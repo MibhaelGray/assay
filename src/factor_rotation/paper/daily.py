@@ -18,7 +18,7 @@ import json
 from datetime import date, datetime
 from pathlib import Path
 
-from .. import journal, screen as screens
+from .. import screen as screens
 from ..config import NY
 from . import book, entries, proposals, rules
 
@@ -126,15 +126,13 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
             raise ValueError(f"{b['name']} is ranked {b['rank']} with conviction {b['conviction']}, below {a['name']} at rank "
                              f"{a['rank']} with conviction {a['conviction']}: an idea with more conviction ranks higher")
     takes = [p for p in new if p["decision"] == "take"]
-    if len(takes) > entries.PASS_MAX_NEW:
+    if entries.PASS_MAX_NEW and len(takes) > entries.PASS_MAX_NEW:
         notes.append(f"{len(takes)} takes: the order job enters the {entries.PASS_MAX_NEW} with the most conviction, then by rank")
     judged = {p["name"] for p in new}
-    for name, (rank, c) in cands.items():
-        if name not in judged:
-            new.append({**proposals._from_screen(c, rank, screen), **stamp, "decision": "pass", "conviction": None,
-                        "reason": "not reviewed", "reviewed": False, "reasoning": None, "wrong_if": None, "hedge_why": None,
-                        "through_earnings": None, "preopen": None, "stats": None, "rank": None, "ranked": None})
-            notes.append(f"{name} (screen #{rank}) had no verdict, so it is recorded as not reviewed")
+    # The owner, 2026-11-16: if 40 names pass the screen, 40 are judged and ranked. A draft that skips one is refused.
+    if skipped := [f"{name} (screen #{rank})" for name, (rank, _) in cands.items() if name not in judged]:
+        raise ValueError(f"every candidate on the screen needs a verdict and a rank; {len(skipped)} of {len(cands)} have none: "
+                         f"{', '.join(skipped)}")
     reviews = _reviews(draft.get("reviews", []), session)
     for k, p in enumerate(new, len(doc["proposals"]) + 1):
         p["id"] = f"{session}-P{k:02d}"

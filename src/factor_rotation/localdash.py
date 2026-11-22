@@ -12,7 +12,6 @@ from datetime import date
 from pathlib import Path
 
 from . import journal
-from .config import NY
 
 log = logging.getLogger(__name__)
 
@@ -49,7 +48,6 @@ def _embed(obj) -> str:
 def build(out: Path = DEFAULT_OUT, as_of: date | None = None, workers=None) -> dict:
     market, market_note = _market_rows(as_of, workers)
     page = (DASHBOARD / "page.html").read_text()
-    geo = (DASHBOARD / "hormuz-geo.json").read_text().replace("</", "<\\/") if (DASHBOARD / "hormuz-geo.json").exists() else "null"
     html = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -60,7 +58,7 @@ def build(out: Path = DEFAULT_OUT, as_of: date | None = None, workers=None) -> d
 {(DASHBOARD / "tokens.css").read_text()}
 </style>
 <script src="{D3}"></script>
-<script>window.__DASH_DATA__ = {{"market": {_embed(market)}}}; window.__HORMUZ_GEO__ = {geo};</script>
+<script>window.__DASH_DATA__ = {{"market": {_embed(market)}}};</script>
 <script>
 {(DASHBOARD / "shim.js").read_text()}
 </script>

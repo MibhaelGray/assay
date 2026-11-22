@@ -10,7 +10,7 @@ from datetime import datetime
 from factor_rotation.config import NY
 from factor_rotation.paper import learn, side
 
-from test_paper_book import DAY, SCREEN, SUNDAY_EVENING, Research, frame, verdict
+from test_paper_book import DAY, SCREEN, Research, frame, verdict
 
 NAMES = ["AAA", "BBB", "CCC", "DDD"]
 PLAN = {"horizon_days": 2, "stop": {"spread_pct": -8}}

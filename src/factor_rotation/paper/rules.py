@@ -3,11 +3,12 @@
 A trade is a dict:
     {"id", "book", "source", "proposal_id", "conviction", "name", "setup", "direction", "why", "wrong_if",
      "entry_date", "horizon_days", "stop": {"spread_pct": -3.0} and/or {"rules": [...]},
-     "notional": 10000, "legs": [{"symbol", "side": "long" | "short", "shares", "ref_price"}], "hedge"}
+     "notional": 30000, "sizing": {...}, "legs": [{"symbol", "side": "long" | "short", "shares", "ref_price"}], "hedge"}
 
-Each side of a trade gets `notional` dollars: a pair is $10,000 long and $10,000 short, an outright trade
-$10,000 on one side, and a basket side splits its $10,000 evenly across its members. Results are quoted in bp
-of one side's notional (long return minus short return). `book` is always "dynamic", the automatic book's name
+Each side of a trade gets `notional` dollars: a pair is that much long and that much short, an outright trade
+that much on one side, and a basket side splits it evenly across its members. The swing book sizes each trade by
+its risk (see side_dollars); the first book gave every trade a flat $10,000. Results are quoted in bp of one
+side's notional (long return minus short return). `book` is always "dynamic", the automatic book's name
 in the files; the selective book, which traded the recorded ideas as they stood, was retired on 2026-11-09.
 """
 
@@ -18,7 +19,17 @@ from ..universe import ETFS
 # Sizing and caps. Paper money, but the caps keep a bug from building a silly book. The book trades only what
 # the research pass takes (proposals.py), so it holds few trades and each is large enough that the broker's $1
 # minimum commission is about 4 bp a round trip, not the 16 bp it costs at $2,500 a side.
-NOTIONAL = 10_000          # dollars per side
+NOTIONAL = 10_000          # dollars per side: the first book's flat size, and the size when no capital is given
+# The swing book's sizing (the owner, 2026-11-16). Every trade loses the same share of the book if it hits its
+# stop, and a stronger idea risks more: dollars a side = capital x RISK x CONVICTION_RISK / the stop. So a jumpy
+# name with an 8% stop gets less than a quiet one with a 3% stop, and a conviction 5 twice a conviction 3. At
+# RISK 0.15% a typical trade (conviction 3, 5% stop) is 3% of the book a side, and the book is full, long plus
+# short, at about 16 of them. In shares of capital, so the same rule sizes a $15,000 account.
+RISK = 0.0015                                  # of capital, lost at the stop by a conviction-3 trade
+CONVICTION_RISK = {3: 1.0, 4: 1.5, 5: 2.0}     # multiples of RISK
+MAX_SIDE = 0.06                                # of capital: the most on one side, however tight the stop
+MAX_ADV = 0.0025                               # of a leg's average daily dollar volume: never large for its stock
+MAX_SYMBOL_SHARE = 0.10                        # of capital: net exposure to one symbol, hedges across trades included
 MAX_NEW = 5                # takes opened per session, strongest conviction first
 MAX_OPEN = 60              # open trades
 MAX_GROSS = 900_000        # dollars, long plus short
@@ -34,6 +45,9 @@ MIN_CONVICTION = 3         # a take below this is a pass
 # overnight trades pay on the way out too, so its limit is half that (intraday/extended.py).
 # The user's numbers, 2026-11-12: swing 2%, intraday 1%. (Briefly 1% and 0.5% that day, which on IBKR's quotes
 # would have held back all three of the night's off-hours entries, sending two to the open.)
+# The owner, 2026-11-16 (after an hour at 1.5%): 2% stands, since a trade may be held up to ten sessions. Inside it,
+# hit the bid or the ask; over it, send nothing, and nothing is ever left resting (entries.py cancels what an order
+# didn't fill at once). If one leg of a trade can't be hit, none of its legs is sent.
 MAX_CROSS_SPREAD = 0.02
 
 
@@ -118,6 +132,63 @@ def size_legs(longs: list[str], shorts: list[str], prices: dict[str, float], not
     return legs
 
 
+def side_dollars(conviction: int, stop_pct: float, capital: float, longs: list[str], shorts: list[str],
+                 volumes: dict[str, float] | None = None) -> tuple[int, dict]:
+    """Dollars for each side of a take, and how they were set. `stop_pct` is the plan's stop (a loss, so its
+    sign doesn't matter); `volumes` is each leg's average daily dollar volume, where known. The size is the
+    smallest of: the risk budget over the stop, MAX_SIDE of capital, and MAX_ADV of the thinnest leg's volume
+    (a basket side splits its dollars, so each member counts for its share). Rounded down to $100."""
+    risk = capital * RISK * CONVICTION_RISK[max(min(conviction, 5), 3)]
+    limits = {"risk": risk / (abs(stop_pct) / 100), "side cap": capital * MAX_SIDE}
+    for side in (longs, shorts):
+        for s in side:
+            if v := (volumes or {}).get(s):
+                limits[f"liquidity: {s}"] = MAX_ADV * v * len(side)
+    by = min(limits, key=limits.get)
+    return math.floor(limits[by] / 100) * 100, {"risk_dollars": round(risk), "stop_pct": -abs(stop_pct), "limited_by": by}
+
+
+# Entering a trade with more than one leg (the owner, 2026-11-16, after the night the ARKK hedge of a Red Cat short
+# filled in seconds and the short took ninety minutes). No leg may get ahead of the leg that is hardest to fill:
+# that leg, the lead, is ordered in full, and every other leg is only ever ordered up to the share of the lead that
+# has filled. A stuck lead then means nothing happened, not that the book holds a hedge with nothing against it.
+FOLLOW_STEP = 0.10         # a follower's top-up goes out once it is this share of its leg, or completes it
+
+
+def lead_leg(trade: dict, volumes: dict[str, float] | None = None) -> str:
+    """The leg hardest to fill: the one whose dollars are largest against its average daily dollar volume. A leg
+    with no volume on record counts as the hardest. Ties go to the trade's own names over its hedge fund, then to
+    the order the legs are in."""
+    core = core_symbols(trade)
+
+    def ease(item: tuple[int, dict]) -> tuple[float, bool, int]:
+        i, leg = item
+        v = (volumes or {}).get(leg["symbol"])
+        return (-(leg["shares"] * leg["ref_price"] / v) if v else -math.inf, leg["symbol"] not in core, i)
+    return min(enumerate(trade["legs"]), key=ease)[1]["symbol"]
+
+
+def entry_due(trade: dict, filled: dict[str, int], committed: dict[str, int] | None = None, lead: bool = True) -> list[tuple[dict, int]]:
+    """(leg, shares) to order now. The lead (trade["lead"]) gets whatever of it is left. Every other leg is
+    brought up to the lead's filled share, rounded down, once the top-up is FOLLOW_STEP of the leg or the lead is
+    done. `filled` is shares filled by symbol; `committed` is what the followers already have or have on order
+    (default: `filled`), and `lead=False` leaves the lead out, for a second round after its order has gone."""
+    committed = committed or filled
+    head = next(leg for leg in trade["legs"] if leg["symbol"] == trade["lead"])
+    share = min(filled.get(head["symbol"], 0) / head["shares"], 1.0)
+    out = []
+    for leg in trade["legs"]:
+        if leg is head:
+            if lead and (n := leg["shares"] - filled.get(leg["symbol"], 0)) > 0:
+                out.append((leg, n))
+            continue
+        target = leg["shares"] if share >= 1 else math.floor(leg["shares"] * share)
+        n = target - committed.get(leg["symbol"], 0)
+        if n >= 1 and (target == leg["shares"] or n >= leg["shares"] * FOLLOW_STEP):
+            out.append((leg, n))
+    return out
+
+
 def core_symbols(trade: dict) -> set[str]:
     """The symbols a trade is about, without a hedge ETF on the other side."""
     sides = {s: {l["symbol"] for l in trade["legs"] if l["side"] == s} for s in ("long", "short")}
@@ -136,12 +207,15 @@ def _hedge(longs: list[str], shorts: list[str]) -> str | None:
 
 
 def proposal_trades(proposals: list[dict], entry_date: str, prices: dict[str, float], held: set[str],
-                    start: int = 1, room: int = MAX_NEW) -> tuple[list[dict], list[dict]]:
+                    start: int = 1, room: int = MAX_NEW, capital: float | None = None,
+                    volumes: dict[str, float] | None = None) -> tuple[list[dict], list[dict]]:
     """The research pass's takes as trades, strongest conviction first, up to MAX_NEW, each with the plan
     the pass wrote. Skips a take stood down before the open, one whose stock, basket members or pair funds are
     already in an open automatic trade or one taken today (`held` is those core symbols), and anything it
     can't size. `start` numbers the ids after trades already made for the session (the early entries), and
-    `room` is how many of the session's MAX_NEW are left. Returns (trades, skipped with reasons)."""
+    `room` is how many of the session's MAX_NEW are left. With `capital` each take is sized by its risk
+    (side_dollars, with `volumes` for the liquidity limit); without it every take gets the flat NOTIONAL.
+    Returns (trades, skipped with reasons)."""
     trades, skipped, used = [], [], set(held)
     takes = [p for p in proposals if p["decision"] == "take"]
     # Strongest conviction first, then the pass's own ranking; a stable sort, so unranked takes keep the pass's order.
@@ -158,7 +232,9 @@ def proposal_trades(proposals: list[dict], entry_date: str, prices: dict[str, fl
         if clash := symbols & used:
             skipped.append({"name": p["id"], "reason": f"already holds {', '.join(sorted(clash))}"})
             continue
-        legs = size_legs(longs, shorts, prices)
+        notional, sizing = (side_dollars(p["conviction"], p["plan"]["stop"]["spread_pct"], capital, longs, shorts, volumes)
+                            if capital else (NOTIONAL, None))
+        legs = size_legs(longs, shorts, prices, notional)
         if legs is None:
             skipped.append({"name": p["id"], "reason": "no price, or a share costs more than its side's notional"})
             continue
@@ -166,7 +242,7 @@ def proposal_trades(proposals: list[dict], entry_date: str, prices: dict[str, fl
             "id": f"{entry_date}-A{len(trades) + start:02d}", "book": "dynamic", "source": f"proposal {p['id']}", "proposal_id": p["id"],
             "conviction": p["conviction"], "name": p["name"], "setup": p["setup"], "direction": p["direction"], "why": p["reason"],
             "wrong_if": p["wrong_if"], "entry_date": entry_date, "horizon_days": p["plan"]["horizon_days"], "stop": p["plan"]["stop"],
-            "notional": NOTIONAL, "legs": legs, "hedge": hedge,
+            "notional": notional, **({"sizing": sizing} if sizing else {}), "legs": legs, "hedge": hedge,
         })
         used |= symbols
     return trades, skipped
@@ -183,8 +259,10 @@ def exposure(trades: list[dict]) -> tuple[float, dict[str, float]]:
     return gross, net
 
 
-def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_GROSS) -> tuple[list[dict], list[dict]]:
-    """Keep new trades, in the order given, while every cap holds. `max_gross` is the book's capital."""
+def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_GROSS,
+               max_symbol: float = MAX_SYMBOL) -> tuple[list[dict], list[dict]]:
+    """Keep new trades, in the order given, while every cap holds. `max_gross` is the book's capital and
+    `max_symbol` the most net exposure to one symbol (the swing book: MAX_SYMBOL_SHARE of its capital)."""
     kept, skipped = [], []
     for t in new:
         trial = [*open_trades, *kept, t]
@@ -193,15 +271,16 @@ def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_
             skipped.append({"name": t["id"], "reason": f"over {MAX_OPEN} open trades"})
         elif gross > max_gross:
             skipped.append({"name": t["id"], "reason": f"gross would be ${gross:,.0f}, over ${max_gross:,.0f}"})
-        elif (big := [s for s, v in net.items() if abs(v) > MAX_SYMBOL and s in {l['symbol'] for l in t['legs']}]):
-            skipped.append({"name": t["id"], "reason": f"net exposure to {', '.join(big)} over ${MAX_SYMBOL:,.0f}"})
+        elif (big := [s for s, v in net.items() if abs(v) > max_symbol and s in {l['symbol'] for l in t['legs']}]):
+            skipped.append({"name": t["id"], "reason": f"net exposure to {', '.join(big)} over ${max_symbol:,.0f}"})
         else:
             kept.append(t)
     return kept, skipped
 
 
 def spread_return(held: list[dict], prices: dict[str, float]) -> float | None:
-    """The trade's return on one side's notional from its entry fills to `prices`; None if a price is missing.
+    """The trade's profit in dollars from its entry fills to `prices` (divide by its notional for the return on
+    one side); None if a price is missing.
     `held` is the filled legs: {"symbol", "side", "shares", "entry_price"}."""
     pnl = 0.0
     for leg in held:
@@ -213,22 +292,30 @@ def spread_return(held: list[dict], prices: dict[str, float]) -> float | None:
     return pnl
 
 
+def stop_reason(trade: dict, held: list[dict], prices: dict[str, float], when: str) -> str | None:
+    """Why the trade is past its stop at `prices` ("stopped: ..."), or None. `when` is the time named in the
+    reason ("2:45 PM CT"). Checked by the close job and, during the day, by the order job (entries.py)."""
+    stop = trade.get("stop") or {}
+    for rule in stop.get("rules", []):
+        px = prices.get(rule["symbol"])
+        side = "below" if "below" in rule else "above"
+        if px is not None and ((px < rule["below"]) if side == "below" else (px > rule["above"])):
+            return f"stopped: {rule['symbol']} at {px:,.2f} at {when}, {side} {rule[side]:,.2f}"
+    if "spread_pct" in stop:
+        pnl = spread_return(held, prices)
+        if pnl is not None and pnl / trade["notional"] * 100 <= stop["spread_pct"]:
+            return f"stopped: down {abs(pnl / trade['notional'] * 100):.1f}% at {when}, past the {abs(stop['spread_pct']):g}% stop"
+    return None
+
+
 def exit_reason(trade: dict, session: int, held: list[dict], prices: dict[str, float]) -> str | None:
     """Why this trade exits at today's close, or None to keep holding. `session` is 1 on the entry day."""
     filled = {leg["symbol"] for leg in held}
     if filled != {leg["symbol"] for leg in trade["legs"]}:
         missing = sorted({leg["symbol"] for leg in trade["legs"]} - filled)
         return f"broken: {', '.join(missing)} never filled"
-    stop = trade.get("stop") or {}
-    for rule in stop.get("rules", []):
-        px = prices.get(rule["symbol"])
-        side = "below" if "below" in rule else "above"
-        if px is not None and ((px < rule["below"]) if side == "below" else (px > rule["above"])):
-            return f"stopped: {rule['symbol']} at {px:,.2f} at 2:45 PM CT, {side} {rule[side]:,.2f}"
-    if "spread_pct" in stop:
-        pnl = spread_return(held, prices)
-        if pnl is not None and pnl / trade["notional"] * 100 <= stop["spread_pct"]:
-            return f"stopped: down {abs(pnl / trade['notional'] * 100):.1f}% at 2:45 PM CT, past the {abs(stop['spread_pct']):g}% stop"
+    if reason := stop_reason(trade, held, prices, "2:45 PM CT"):
+        return reason
     if session >= trade["horizon_days"]:
         return f"time limit: session {session} of {trade['horizon_days']}"
     return None

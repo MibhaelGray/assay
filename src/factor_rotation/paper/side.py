@@ -26,7 +26,6 @@ from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from statistics import mean
 
-from .. import journal
 from ..config import NY
 from ..universe import ETFS
 from . import proposals

@@ -101,6 +101,24 @@ def _core() -> set[str]:
     return {*members, *CONSTITUENTS, *(book.symbols_held() if book.ROOT.exists() else set())}
 
 
+KEEP_DAYS = 14   # a report this recent that Yahoo stops listing is kept from the last pull
+
+
+def merge(new: list[dict], old: list[dict], today) -> list[dict]:
+    """New rows, plus any report from the last pull dated in the KEEP_DAYS before today, or today, that the new rows
+    leave out. On 2026-11-17 Yahoo listed Nvidia's report that afternoon and dropped it from the 6:00 PM CT pull, an hour
+    after it reported, so the Earnings view lost it. A kept row is skipped when the new rows have a report within 10
+    days of it (Yahoo moved the date rather than dropped it)."""
+    from datetime import date, timedelta
+    have = [date.fromisoformat(r["date"]) for r in new]
+    extra = []
+    for r in old:
+        d = date.fromisoformat(r["date"])
+        if today - timedelta(days=KEEP_DAYS) <= d <= today and not any(abs((d - h).days) <= 10 for h in have):
+            extra.append(r)
+    return sorted([*new, *extra], key=lambda r: r["date"])
+
+
 def pull(sleep=None, now=None) -> dict:
     from time import sleep as _sleep
     sleep = sleep or _sleep
@@ -122,6 +140,7 @@ def pull(sleep=None, now=None) -> dict:
     failed = sorted(s for s, rows in got.items() if rows is None)
     stamp = now.isoformat(timespec="seconds")
     wanted = set(names)
+    got = {s: (merge(rows, kept.get(s, []), now.date()) if rows is not None else None) for s, rows in got.items()}
     payload = {"pulled_at": stamp, "source": "Yahoo Finance via yfinance",
                "names": {s: got[s] if got.get(s) is not None else kept[s] for s in sorted(wanted)
                          if got.get(s) is not None or s in kept},
