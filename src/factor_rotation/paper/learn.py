@@ -91,11 +91,7 @@ def needs_postmortem() -> list[dict]:
 
 # ---- Results ----------------------------------------------------------------------------------------------
 def _verdict(p: dict) -> str:
-    if not p["reviewed"]:
-        return "not reviewed"
-    if p["decision"] == "take" and (p.get("preopen") or {}).get("decision") == "stand_down":
-        return "stood down"
-    return p["decision"]
+    return p["decision"] if p.get("reviewed", True) else "not reviewed"
 
 
 def _mark_outcome(p: dict, px: pd.DataFrame) -> dict | None:
@@ -157,11 +153,8 @@ def outcomes() -> list[dict]:
     out = []
     for p in props:
         plan = None
-        if p["plan"] and (p["long"] or p["short"]) and not px.empty and p.get("pass") in proposals.NEW_PASSES:
+        if p["plan"] and (p["long"] or p["short"]) and not px.empty:
             plan = _mark_outcome(p, px)
-        elif p["plan"] and (p["long"] or p["short"]) and not px.empty:
-            idea = {"long": p["long"] or None, "short": p["short"] or None, **p["plan"]}
-            plan = journal._outcome(idea, date.fromisoformat(p["session"]), px)
         done = bool(plan) and plan["status"] in ("time", "stopped")
         r = paper.get(p["id"])
         reason = (r or {}).get("reason") or ""
@@ -174,7 +167,7 @@ def outcomes() -> list[dict]:
             "legs": " / ".join(filter(None, [", ".join(p["long"]) and f"long {', '.join(p['long'])}", ", ".join(p["short"]) and f"short {', '.join(p['short'])}"])),
             "horizon_days": (p["plan"] or {}).get("horizon_days"), "stop_pct": ((p["plan"] or {}).get("stop") or {}).get("spread_pct"),
             "stats": p.get("stats"), "wrong_if": p.get("wrong_if"), "reasoning": p.get("reasoning"), "hedge_why": p.get("hedge_why"),
-            "preopen": p.get("preopen"), "why": (p.get("signal") or {}).get("why"),
+            "why": (p.get("signal") or {}).get("why"),
             "plan_status": plan["status"] if plan else None, "plan_bps": plan["bps"] if done else None,
             "plan_so_far_bps": plan["bps"] if plan and not done and "bps" in plan else None,
             "plan_note": plan.get("note") if plan else None, "plan_exit": plan.get("exit_date") if done else None,

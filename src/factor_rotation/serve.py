@@ -44,13 +44,6 @@ def _symbols() -> list[str]:
     lib = basket_library()["baskets"]
     names = {*bar_universe(), *bars.INDEXES, *(b["hedge"] for b in lib),
              *(m["symbol"] for b in lib for m in b["members"]), *book.symbols_held()}
-    try:   # the small-cap shadow book's takes, so the Portfolio view marks them at today's prices
-        from .smallcap import score
-        names |= set(score.take_names())
-        from .smallcap import universe as small_universe   # the Baskets view's Small caps tab
-        names |= set(small_universe.symbols())
-    except Exception:
-        pass
     return sorted(names)
 
 

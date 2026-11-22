@@ -123,11 +123,11 @@ class Orders(unittest.TestCase):
         self.assertIn("held while shares are located", book._order_warnings([{**o, "status": "PreSubmitted", "note": "Order held while shares are located"}])[0])
 
 
-def take(pid="P01", name="AAA", long=("AAA",), short=("HHH",), conviction=3, horizon=4, stop=-5.0, preopen=None, decision="take"):
-    return {"id": f"{DAY}-{pid}", "session": DAY.isoformat(), "pass": "evening", "name": name, "kind": "stock", "setup": "breakout",
+def take(pid="P01", name="AAA", long=("AAA",), short=("HHH",), conviction=3, horizon=4, stop=-5.0, decision="take"):
+    return {"id": f"{DAY}-{pid}", "session": DAY.isoformat(), "pass": "night", "name": name, "kind": "stock", "setup": "breakout",
             "direction": "long", "source": "screen 2026-11-06 #1", "signal": {"why": "broke out"}, "decision": decision,
             "conviction": conviction, "reason": "the reason", "wrong_if": "closes back under the breakout", "reviewed": True,
-            "reasoning": None, "hedge_why": "its sector", "through_earnings": None, "stats": None, "preopen": preopen,
+            "reasoning": None, "hedge_why": "its sector", "through_earnings": None, "stats": None,
             "long": list(long), "short": list(short), "plan": {"horizon_days": horizon, "stop": {"spread_pct": stop}}}
 
 
@@ -137,17 +137,16 @@ class Takes(unittest.TestCase):
     def test_strongest_conviction_first_up_to_the_cap(self):
         names = ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"]
         props = [take(f"P{i}", n, (n,), ("XLY",), conviction=c) for i, (n, c) in enumerate(zip(names, [3, 5, 3, 4, 3, 3]), 1)]
-        trades, skipped = rules.proposal_trades(props, str(DAY), self.prices, set())
+        trades, skipped = rules.proposal_trades(props, str(DAY), self.prices, set(), room=5)
         self.assertEqual([t["name"] for t in trades], ["BBB", "DDD", "AAA", "CCC", "EEE"])
         self.assertEqual([t["id"][-3:] for t in trades], ["A01", "A02", "A03", "A04", "A05"])
         self.assertIn("came first", skipped[0]["reason"])
 
-    def test_skips_a_stand_down_a_pass_and_a_name_already_held(self):
-        props = [take("P1", preopen={"decision": "stand_down", "reason": "gapped 2 ATR"}), take("P2", "BBB", ("BBB",), ("XLY",), decision="pass"),
-                 take("P3", "CCC", ("CCC",), ("XLY",)), take("P4", "DDD", ("DDD",), ("XLY",))]
+    def test_skips_a_pass_and_a_name_already_held(self):
+        props = [take("P2", "BBB", ("BBB",), ("XLY",), decision="pass"), take("P3", "CCC", ("CCC",), ("XLY",)), take("P4", "DDD", ("DDD",), ("XLY",))]
         trades, skipped = rules.proposal_trades(props, str(DAY), self.prices, {"CCC"})
         self.assertEqual([t["name"] for t in trades], ["DDD"])        # XLY is a shared hedge, not a clash
-        self.assertEqual(sorted(k["reason"].split(":")[0] for k in skipped), ["already holds CCC", "stood down before the open"])
+        self.assertEqual([k["reason"] for k in skipped], ["already holds CCC"])
 
 
 class Close(Case):
@@ -205,7 +204,8 @@ from datetime import datetime  # noqa: E402
 import pandas as pd  # noqa: E402
 
 from factor_rotation.config import NY  # noqa: E402
-from factor_rotation.paper import learn, proposals  # noqa: E402
+from factor_rotation import screen  # noqa: E402
+from factor_rotation.paper import daily, entries, learn, proposals  # noqa: E402
 
 SUNDAY_EVENING = datetime(2026, 11, 8, 19, 30, tzinfo=NY)
 SCREEN = {"as_of": "2026-11-06", "next_session": DAY.isoformat(), "candidates": [
@@ -235,8 +235,7 @@ def frame(closes: dict[str, list[float]], opens: dict[str, float] | None = None)
 class Research(Case):
     def setUp(self):
         super().setUp()
-        (self.root.parent / "screens").mkdir()
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(SCREEN))
+        self.write_screen(SCREEN)
         self.reports = {}
         for target, name, value in ((proposals.earnings, "load", lambda: {"names": self.reports}),
                                     (proposals.bars, "load", lambda symbols: self.bars),
@@ -246,26 +245,45 @@ class Research(Case):
             self.addCleanup(p.stop)
         self.bars = pd.DataFrame()
 
-    def propose(self, *verdicts, kind="evening", now=SUNDAY_EVENING, checks=()):
-        if kind == "evening" and not any("rank" in v for v in verdicts):       # ranked in the order given
+    def write_screen(self, payload):
+        """The night pass's live screen for DAY (screen.live_path)."""
+        path = screen.live_path(DAY, "night")
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload))
+
+    def propose(self, *verdicts, judge_all=True):
+        """Record the night pass for DAY. A candidate the test doesn't judge gets a conviction-1 pass ranked last, since
+        a pass must judge every one; verdicts without ranks are ranked in the order given. The order job's marks are
+        set at 100 for every leg, the price the bars in `frame` open at, so plan results read as in the bars."""
+        verdicts = list(verdicts)
+        if judge_all:
+            judged = {v.get("candidate") for v in verdicts}
+            screen_ = json.loads(screen.live_path(DAY, "night").read_text())
+            verdicts += [{"candidate": c["name"], "decision": "pass", "conviction": 1, "reason": "not the test's subject"}
+                         for c in screen_["candidates"] if c["name"] not in judged]
+        if not any("rank" in v for v in verdicts):
             verdicts = [{**v, "rank": i} for i, v in enumerate(verdicts, 1)]
-        return proposals.record({"session": DAY.isoformat(), "pass": kind, "proposals": list(verdicts), "checks": list(checks)}, now)
+        out = daily.record({"session": DAY.isoformat(), "pass": "night", "proposals": verdicts}, SUNDAY_EVENING)
+        legs = {s for p in out[1]["proposals"] for s in [*p["long"], *p["short"]]} | {"SPY"}
+        state = entries.load(DAY) or entries._blank(DAY)
+        state["marks"]["night"] = {"at": SUNDAY_EVENING.isoformat(), "prices": {s: 100.0 for s in legs}}
+        book._write(entries.path(DAY), state)
+        return out
 
 
 class Proposals(Research):
-    def test_a_take_keeps_the_screen_numbers_and_an_unjudged_candidate_is_recorded_as_not_reviewed(self):
-        _, doc, notes = self.propose(verdict())
+    def test_a_take_keeps_the_screen_numbers_and_a_pass_gets_the_screens_legs_and_plan(self):
+        _, doc, _ = self.propose(verdict())
         a, b = doc["proposals"]
         self.assertEqual((a["id"], a["source"], a["signal"]["why"], a["long"], a["short"], a["plan"]),
                          (f"{DAY}-P01", "screen 2026-11-06 #1", "broke out on 2x volume", ["AAA"], ["HHH"], {"horizon_days": 4, "stop": {"spread_pct": -5.0}}))
-        self.assertEqual((b["decision"], b["reviewed"], b["long"], b["short"], b["plan"]),
-                         ("pass", False, ["HHH"], ["BBB"], {"horizon_days": 3, "stop": {"spread_pct": -6.0}}))
-        self.assertIn("BBB", notes[0])
+        self.assertEqual((b["decision"], b["long"], b["short"], b["plan"]),
+                         ("pass", ["HHH"], ["BBB"], {"horizon_days": 3, "stop": {"spread_pct": -6.0}}))
 
     def test_a_name_the_screen_left_out_because_the_book_holds_it_is_refused_with_the_reason(self):
         screen = {**SCREEN, "in_book": [{"name": "HELD", "kind": "stock", "setup": "breakout", "direction": "long", "score": 3.0,
                                          "why": "broke out", "in_book": "the book holds it (2026-11-09-A01)"}]}
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         with self.assertRaisesRegex(ValueError, "left out of the screen.*the book holds it"):
             self.propose(verdict(candidate="HELD"))
 
@@ -273,14 +291,14 @@ class Proposals(Research):
         screen = json.loads(json.dumps(SCREEN))
         screen["candidates"][0].update(hedge_fit={"corr_60d": 0.7, "beta_60d": 1.1, "chosen": "the best match of 24 funds", "weak": False},
                                        moved_with=["CCC"], adjust={"tight_base": 0.15})
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         _, doc, _ = self.propose(verdict())
         signal = doc["proposals"][0]["signal"]
         self.assertEqual((signal["hedge_fit"]["corr_60d"], signal["moved_with"], signal["adjust"]), (0.7, ["CCC"], {"tight_base": 0.15}))
 
     def test_a_pass_needs_only_a_verdict_and_gets_the_mechanical_plan(self):
         _, doc, notes = self.propose(verdict(), {"candidate": "BBB", "decision": "pass", "conviction": 2, "reason": "no story behind the move"})
-        self.assertEqual((doc["proposals"][1]["reviewed"], doc["proposals"][1]["plan"]["horizon_days"], notes), (True, 3, []))
+        self.assertEqual((doc["proposals"][1]["plan"]["horizon_days"], notes), (3, []))
 
     def test_what_a_take_must_carry(self):
         for bad, message in ((verdict(conviction=2), "conviction 3 or more"), (verdict(reasoning={"story": "x"}), "reasoning"),
@@ -348,18 +366,12 @@ class Proposals(Research):
         low = {"candidate": "BBB", "decision": "pass", "conviction": 2, "reason": "no story behind the move"}
         for bad in ([verdict(), low], [verdict(rank=1), low], [verdict(rank=1), {**low, "rank": 1}], [verdict(rank=1), {**low, "rank": 3}]):
             with self.assertRaisesRegex(ValueError, "rank every verdict in the draft from 1 .* to 2"):
-                proposals.record({"session": DAY.isoformat(), "pass": "evening", "proposals": bad}, SUNDAY_EVENING)
+                daily.record({"session": DAY.isoformat(), "pass": "night", "proposals": bad}, SUNDAY_EVENING)
         with self.assertRaisesRegex(ValueError, "AAA is ranked 2 with conviction 4, below BBB at rank 1 with conviction 2"):
             self.propose(verdict(rank=2), {**low, "rank": 1})
         self.assertFalse((self.root / "proposals").exists())
         _, doc, _ = self.propose(verdict(rank=1), {**low, "rank": 2})
         self.assertEqual([(p["name"], p["rank"], p["ranked"]) for p in doc["proposals"]], [("AAA", 1, 2), ("BBB", 2, 2)])
-
-    def test_an_unjudged_candidate_and_a_late_verdict_carry_no_rank(self):
-        self.propose(verdict())
-        _, doc, _ = self.propose({"candidate": "BBB", "decision": "pass", "conviction": 1, "reason": "gapped back up overnight"},
-                                 kind="preopen", now=datetime(2026, 11, 9, 8, 40, tzinfo=NY))
-        self.assertEqual([(p["rank"], p["ranked"]) for p in doc["proposals"]], [(1, 1), (None, None)])
 
     def test_within_a_conviction_the_better_ranked_take_is_traded_first(self):
         second = take("P01", "AAA", conviction=3)
@@ -369,28 +381,6 @@ class Proposals(Research):
         prices = {s: 100.0 for s in ("AAA", "BBB", "CCC", "HHH", "SPY", "QQQ")}
         trades, _ = rules.proposal_trades(ranked, str(DAY), prices, set())
         self.assertEqual([t["name"] for t in trades], ["CCC", "BBB", "AAA"])
-
-    def test_only_for_the_next_entries_and_never_rewritten(self):
-        with self.assertRaisesRegex(ValueError, "next entries, 2026-11-09"):
-            proposals.record({"session": "2026-11-10", "pass": "evening", "proposals": [verdict(rank=1)]}, SUNDAY_EVENING)
-        with self.assertRaisesRegex(ValueError, "next entries, 2026-11-10"):
-            self.propose(verdict(), now=datetime(2026, 11, 9, 9, 14, tzinfo=NY))
-        self.propose(verdict())
-        with self.assertRaisesRegex(ValueError, "already has a verdict"):
-            self.propose(verdict(), kind="preopen", now=datetime(2026, 11, 9, 8, 40, tzinfo=NY))
-
-    def test_the_pre_open_pass_stands_a_take_down_and_gives_a_late_verdict(self):
-        self.propose(verdict())
-        morning = datetime(2026, 11, 9, 8, 40, tzinfo=NY)
-        with self.assertRaisesRegex(ValueError, "no take with that id"):
-            self.propose(kind="preopen", now=morning, checks=[{"id": f"{DAY}-P02", "decision": "stand_down", "reason": "x"}])
-        _, doc, _ = self.propose({"candidate": "BBB", "decision": "pass", "conviction": 1, "reason": "gapped back up overnight"}, kind="preopen", now=morning,
-                                 checks=[{"id": f"{DAY}-P01", "decision": "stand_down", "reason": "gapped 2 ATR, the move is done"}])
-        a, b = doc["proposals"]
-        self.assertEqual((a["preopen"]["decision"], b["id"], b["reviewed"], b["pass"]), ("stand_down", f"{DAY}-P02", True, "preopen"))
-        trades, skipped = rules.proposal_trades(doc["proposals"], str(DAY), {"AAA": 100.0, "HHH": 100.0}, set())
-        self.assertEqual((trades, skipped[0]["reason"]), ([], "stood down before the open: gapped 2 ATR, the move is done"))
-
 
 class Review(Research):
     """One automatic trade, long 100 AAA / short 100 HHH from 100, opened on DAY with a 2-session limit."""
@@ -461,7 +451,7 @@ class Learn(Research):
     def test_the_ranking_is_scored_against_the_plan_results_night_by_night(self):
         names = ["AAA", "BBB", "CCC", "DDD"]
         screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n} for n in names]}
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         plan = {"horizon_days": 2, "stop": {"spread_pct": -8}}
         self.propose(verdict(plan=plan), *[{"candidate": n, "decision": "pass", "conviction": 2, "reason": "no story", "plan": plan} for n in names[1:]])
         self.assertEqual(learn.rank_table()["nights"], 0)                    # nothing has finished

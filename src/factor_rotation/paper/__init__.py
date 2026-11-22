@@ -1,6 +1,6 @@
 """Paper trading on IBKR: the ideas traded for real fills on a paper account, never a live one.
 
-One swing book of $1,000,000 (journal/paper/book.json, written by `fr paper restart`), run by three research
+One swing book of $1,000,000 (journal/paper/book.json, written at the 2026-11-15 restart), run by three research
 passes a day on live prices. A pass gives every candidate on its screen a verdict, a conviction and a rank
 (daily.py, proposals.py); only the takes are traded, each with the plan the pass wrote, inside the outer limits
 in rules.py. Each pass also reviews every open trade, and the book learns from every result (learn.py).

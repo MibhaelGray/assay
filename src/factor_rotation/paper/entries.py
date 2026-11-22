@@ -210,7 +210,7 @@ def heal_gateway(missing: dict[str, str], now: datetime | None = None) -> str | 
         return "the gateway refused every quote with a competing-session error, and docker wasn't found to restart it"
     book._write(stamp, {"at": now.isoformat(timespec="seconds"), "why": "every quote refused with IBKR error 10197"})
     done = subprocess.run([docker, "restart", name], capture_output=True, text=True, timeout=120)
-    return (f"the gateway refused every quote with a competing-session error (IBKR 10197), so the paper gateway was restarted"
+    return ("the gateway refused every quote with a competing-session error (IBKR 10197), so the paper gateway was restarted"
             if done.returncode == 0 else f"tried to restart the paper gateway after a competing-session error, but docker said: {done.stderr.strip()[:200]}")
 
 

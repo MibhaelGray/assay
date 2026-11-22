@@ -19,7 +19,7 @@ from factor_rotation import live, screen, watch
 from factor_rotation.config import NY
 from factor_rotation.paper import book, daily, entries, learn, proposals
 from factor_rotation.paper.broker import GuardError, check_order
-from test_paper_book import DAY, NEXT, Broker, Case, fill, frame, take
+from test_paper_book import DAY, NEXT, Broker, Case, fill, frame
 
 SUNDAY_NIGHT = datetime(2026, 11, 8, 20, 45, tzinfo=NY)     # the night before DAY, a Monday: the overnight session
 MORNING = datetime(2026, 11, 9, 11, 0, tzinfo=NY)           # 10:00 AM CT
@@ -552,32 +552,6 @@ class Scoring(Pass):
         self.prices.update({"AAA": 100.0, "HHH": 100.0, "SPY": 100.0})
         o = self.outcome("midday", MIDDAY, {"AAA": [94.0, 110.0], "HHH": [100.0, 100.0]})
         self.assertEqual((o["plan_status"], o["plan_bps"]), ("stopped", -600.0))
-
-
-class Restart(Case):
-    def test_it_refuses_while_a_trade_is_open_and_only_looks_without_execute(self):
-        from factor_rotation import portfolio
-        from factor_rotation.paper import restart
-
-        self.write("entries", DAY, {"trades": [take_trade("T1", DAY)]})
-        self.write("fills", DAY, {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)], "positions": {"AAA": 25, "HHH": -25}})
-        (self.root / "lessons.md").write_text("- turn longs after a downgrade: 0 for 6\n")
-        now = datetime(2026, 11, 9, 17, 0, tzinfo=NY)
-        p = restart.run(execute=True, now=now)
-        self.assertFalse(p["done"])
-        self.assertIn("swing trade T1 AAA is open", p["blockers"])
-        self.assertIn("the account held +25 AAA at the last sync (unknown)", p["blockers"])
-        self.write("exits", DAY, {"exits": [{"trade_id": "T1", "reason": "flatten"}]})
-        self.write("fills", NEXT, {"fills": [fill("T1", "AAA", "SLD", 25, n=2), fill("T1", "HHH", "BOT", 25, n=3)], "positions": {}})
-        self.assertFalse(restart.run(now=now)["done"])                       # a look
-        self.assertEqual((portfolio.capital("swing"), portfolio.running()), (900_000.0, ("swing",)))   # the default until book.json says
-        p = restart.run(execute=True, now=now)
-        self.assertTrue(p["done"])
-        self.assertTrue((self.root.parent / "archive" / "first-book-2026-11-09" / "paper" / "entries" / f"{DAY}.json").exists())
-        self.assertEqual(book.trades(), [])                                  # the record starts again
-        self.assertEqual((portfolio.capital("swing"), portfolio.running(), book.capital()), (1_000_000.0, ("swing",), 1_000_000.0))
-        self.assertIn("turn longs after a downgrade", (self.root / "lessons.md").read_text())
-        self.assertTrue(restart.run(execute=True, now=now)["already"])       # once
 
 
 class Heal(unittest.TestCase):

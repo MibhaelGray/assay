@@ -1,9 +1,9 @@
 """The 10% pause (PROJECT.md): when a paper book has lost 10% of its capital from its best value, it opens no new
 trades until someone has looked at what went wrong and resumed it by hand. Exits still go out.
 
-The drop is measured in dollars against the book's full capital (portfolio.CAPITAL): $90,000 for the swing book,
-$10,000 for the intraday book. It is a drop from the book's high-water mark: its best value at any session's close
-or now, and never less than its capital. So a book that is up and gives back 10% of its capital pauses too.
+The drop is measured in dollars against the book's full capital (portfolio.capital): $100,000 on the swing book's
+$1,000,000. It is a drop from the book's high-water mark: its best value at any session's close or now, and never
+less than its capital. So a book that is up and gives back 10% of its capital pauses too.
 
 A pause is a file, journal/paper/PAUSE-<book>, written the first time a check finds the drop and kept until
 `fr paper resume --book <book>`. Resuming starts the high-water mark again from the book's value at that moment

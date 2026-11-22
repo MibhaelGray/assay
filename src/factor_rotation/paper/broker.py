@@ -2,7 +2,7 @@
 
 Before any order goes out, every one of these must hold, or the run stops:
 1. FR_PAPER_PORT is a paper gateway port (4002 for IB Gateway, 7497 for TWS), never a live one (4001, 7496)
-   and never the collector's FR_IB_PORT.
+   and never FR_IB_PORT, the live gateway's.
 2. FR_PAPER_ACCOUNT is set and looks like a paper account (DU, optionally one letter, or DF, then digits).
 3. After connecting, every account the gateway manages is a paper account and FR_PAPER_ACCOUNT is one of them.
 4. FR_PAPER_SEND=1. Without it every job is a dry run that prints the orders it would send.
@@ -53,7 +53,7 @@ def check_settings(s: PaperSettings) -> None:
     if s.port in LIVE_PORTS or s.port not in PAPER_PORTS:
         raise GuardError(f"FR_PAPER_PORT={s.port} is not a paper port ({', '.join(map(str, sorted(PAPER_PORTS)))})")
     if s.port == settings().ib_port:
-        raise GuardError(f"FR_PAPER_PORT={s.port} is the collector's port; the paper gateway needs its own")
+        raise GuardError(f"FR_PAPER_PORT={s.port} is the live gateway's port; the paper gateway needs its own")
     if not PAPER_ACCOUNT.match(s.account):
         raise GuardError("FR_PAPER_ACCOUNT must be the paper account number (it starts with DU)")
 

@@ -427,10 +427,6 @@
   <!-- MARKET -->
   <section class="fr-view" id="portfolio" data-view="portfolio" hidden>
     <div class="fr-viewhead"><h2>Portfolio</h2>
-      <div class="fr-seg fr-pfbooks" role="group" aria-label="Book">
-        <button type="button" data-pf-book="swing" aria-pressed="true">Swing book</button>
-        <button type="button" data-pf-book="smallcap" aria-pressed="false">Small-cap book</button>
-      </div>
       <p data-draw="pf-asof" data-source="mkt_paper_account">—</p></div>
     <div class="fr-band fr-pfstrip" aria-label="Summary" data-draw="pf-summary" data-source="mkt_portfolio_accounts mkt_portfolio_pos"></div>
     <details class="fr-pfmore">
@@ -528,14 +524,9 @@
   <!-- BASKETS -->
   <section class="fr-view" id="baskets" data-view="baskets" hidden>
     <div class="fr-viewhead"><h2>Baskets</h2>
-      <div class="fr-seg" role="group" aria-label="Basket set">
-        <button type="button" data-bk-set="themed" aria-pressed="true">Themed</button>
-        <button type="button" data-bk-set="smallcap" aria-pressed="false">Small caps</button>
-      </div>
-      <p data-bk-about="themed">Snapshot <span data-draw="bk-time" data-source="mkt_basket">—</span>. Equal-weight stocks against the ETF nearest their exposure.</p>
-      <p data-bk-about="smallcap" hidden>The small-cap book's universe: about 425 US companies worth $250M to $1B, grouped by industry, each group in equal weight against IWM (the small-cap ETF).</p></div>
+      <p>Snapshot <span data-draw="bk-time" data-source="mkt_basket">—</span>. Equal-weight stocks against the ETF nearest their exposure.</p></div>
     <div class="fr-panel">
-      <div class="fr-phead"><h3 data-bk-title>Every basket</h3>
+      <div class="fr-phead"><h3>Every basket</h3>
         <div class="fr-bkctl">
           <div class="fr-seg" role="group" aria-label="Layout">
             <button type="button" data-bk-view="table" aria-pressed="true">Table</button>
@@ -731,10 +722,6 @@
   // ---- Calculations -------------------------------------------------------------------------------
   dash.calc('mkt_basket', { inputs: ['market'], title: 'Themed baskets', description: 'Each themed basket against its hedge: today’s move and, when every member has bars, its 5- and 20-day spread and z-score.',
     fn: (market) => market.filter((r) => r.section === 'basket').sort((a, b) => Math.abs(b.spread_today_pct ?? 0) - Math.abs(a.spread_today_pct ?? 0)) });
-  dash.calc('sc_basket', { inputs: ['market'], title: 'Small-cap baskets', description: 'The small-cap universe grouped by industry, each group in equal weight against IWM: today’s move and its 5- and 20-day spread and z-score.',
-    fn: (market) => market.filter((r) => r.section === 'sc_basket') });
-  dash.calc('sc_basket_member', { inputs: ['market'], title: 'Small-cap basket members', description: 'Each small cap in its industry basket: size, analysts, liquidity, today’s move and its 5- and 20-day moves.',
-    fn: (market) => market.filter((r) => r.section === 'sc_basket_member') });
   dash.calc('mkt_basket_member', { inputs: ['market'], title: 'Basket members', description: 'Each basket member: why it belongs, liquidity, today’s move and its 5- and 20-day moves.',
     fn: (market) => market.filter((r) => r.section === 'basket_member') });
   dash.calc('mkt_earnings', { inputs: ['market'], title: 'Earnings radar', description: 'Reports in the next ten sessions and the last five, with dates from Yahoo Finance and price reactions from daily bars.',
@@ -753,11 +740,6 @@
     fn: (market) => market.filter((r) => r.section === 'portfolio_pnl') });
   dash.calc('mkt_portfolio_accounts', { inputs: ['market'], title: 'Accounts', description: 'The paper account’s value, each book’s share of it (its capital plus its own profit and loss), and what no book accounts for.',
     fn: (market) => market.filter((r) => r.section === 'portfolio_accounts') });
-  [['sc_accounts', 'sc_portfolio_accounts'], ['sc_pos', 'sc_portfolio_position'], ['sc_pnl', 'sc_portfolio_pnl'], ['sc_book', 'sc_portfolio_book'], ['sc_paper', 'sc_paper']].forEach(([id, section]) =>
-    dash.calc(id, { inputs: ['market'], title: `Small-cap shadow book: ${section}`, description: 'The small-cap shadow run held as a $25,000 book against IWM, in the swing book’s shapes. Nothing is traded.',
-      fn: (market) => market.filter((r) => r.section === section) }));
-  dash.calc('mkt_smallcap', { inputs: ['market'], title: 'Small-cap shadow book', description: 'The small-cap shadow run: each take followed from its session’s open against IWM, and a summary. Nothing is traded.',
-    fn: (market) => market.filter((r) => r.section === 'smallcap_take' || r.section === 'smallcap_summary') });
   dash.calc('mkt_portfolio_book', { inputs: ['market'], title: 'Portfolio books', description: 'Each book’s fills, realized profit and loss, commissions and total.',
     fn: (market) => market.filter((r) => r.section === 'portfolio_book') });
   dash.calc('mkt_screen', { inputs: ['market'], title: 'Screen shortlist', description: 'The latest screen’s candidates: setup, direction, score, what triggered it and a one-line chart verdict.',
@@ -782,7 +764,7 @@
   const VIEWS = ['today', 'portfolio', 'market', 'baskets', 'earnings', 'paper', 'chart'];
   // Links from before the idea books were retired open the swing book.
   const ALIAS = { top: 'today', next: 'today', last: 'paper', ledger: 'paper', ideas: 'paper', record: 'paper', factors: 'market' };
-  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 }, basketView: 'table', basketPeriod: 'today', basketSet: 'themed' };
+  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 }, basketView: 'table', basketPeriod: 'today' };
   const setView = (v, { link = true, scroll = true } = {}) => {
     if (!VIEWS.includes(v)) v = 'today';
     ui.view = v;
@@ -841,7 +823,6 @@
   }, { passive: true });
   // Opens a basket's row on the Baskets view.
   const goBasket = (id) => {
-    ui.basketSet = String(id).startsWith('sc-') ? 'smallcap' : 'themed';
     if (typeof syncBasketControls === 'function') syncBasketControls();
     ui.openBaskets.add(id);
     setView('baskets', { scroll: false });
@@ -1178,11 +1159,8 @@
       .on('pointerleave', () => { tip.hide(); cross.style('visibility', 'hidden'); dot.style('visibility', 'hidden'); });
   };
   // ---- Portfolio: one summary strip, the P/L history, open positions by trade or by symbol, and what closed in the latest session.
-  const PF_BOOK = { all: 'Both books', swing: 'Swing', intraday: 'Intraday', smallcap: 'Small-cap' };
-  // The Small-cap tab draws the same panels from the small-cap shadow book's rows (smallcap/book.py).
-  const PF_SMALL = { mkt_portfolio_accounts: 'sc_accounts', mkt_portfolio_pos: 'sc_pos', mkt_portfolio_pnl: 'sc_pnl', mkt_portfolio_book: 'sc_book', mkt_paper: 'sc_paper' };
-  const pfSmall = () => pfUi.book === 'smallcap';
-  const pfData = (id) => okData(pfSmall() ? PF_SMALL[id] || id : id);
+  const PF_BOOK = { all: 'Both books', swing: 'Swing', intraday: 'Intraday' };
+  const pfData = (id) => okData(id);
   const PF_FRAME = { '1D': 'the day', '1W': 'the week', '1M': 'the month', MTD: 'the month to date', '3M': 'three months', YTD: 'the year to date', All: 'all time' };
   const pfUi = { book: 'swing', frame: isLocal ? '1D' : 'All', split: false, bars: {}, loading: {}, failed: {}, view: 'trade', filter: 'all', range: 'day', open: new Set(), closedOpen: new Set(),
     sort: { trade: { key: 'gross', dir: -1 }, symbol: { key: 'value', dir: -1 } } };
@@ -1246,7 +1224,7 @@
   const pfSync = () => {
     applyDesign();
     const press = (sel, key, want) => document.querySelectorAll(sel).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[key] === want)));
-    press('[data-pf-book]', 'pfBook', pfSmall() ? 'smallcap' : 'swing'); press('[data-pf-frame]', 'pfFrame', pfUi.frame);
+    press('[data-pf-frame]', 'pfFrame', pfUi.frame);
     press('[data-pf-filter]', 'pfFilter', pfUi.filter); press('[data-pf-view]', 'pfView', pfUi.view); press('[data-pf-range]', 'pfRange', pfUi.range);
     const split = document.querySelector('[data-pf-split]');
     if (split) { split.hidden = pfUi.book !== 'all'; split.setAttribute('aria-pressed', String(pfUi.split)); }
@@ -1263,7 +1241,7 @@
     pfSync();
     const key = pfUi.book;
     const split = pfUi.split && key === 'all';
-    const wantsBars = isLocal && !pfSmall() && (pfUi.frame === '1D' || pfUi.frame === '1W');
+    const wantsBars = isLocal && (pfUi.frame === '1D' || pfUi.frame === '1W');
     if (wantsBars) {
       const got = [key, ...(split ? ['swing', 'intraday'] : [])].map(pfNeed);
       if (!got.every(Boolean)) return say('Loading 15-minute prices…');
@@ -1302,14 +1280,12 @@
   const pfTable = () => { pfSync(); pfPart(['pf-count', 'pf-positions']); };
   const pfSetBook = (b) => { pfUi.book = b; pfRedraw(); };
   document.querySelectorAll('[data-pf-frame]').forEach((b) => b.addEventListener('click', () => { pfUi.frame = b.dataset.pfFrame; drawPf(); }));
-  document.querySelectorAll('[data-pf-book]').forEach((b) => b.addEventListener('click', () => pfSetBook(b.dataset.pfBook)));
   document.querySelector('[data-pf-split]')?.addEventListener('click', () => { pfUi.split = !pfUi.split; drawPf(); });
   document.querySelectorAll('[data-pf-filter]').forEach((b) => b.addEventListener('click', () => { pfUi.filter = b.dataset.pfFilter; pfTable(); }));
   document.querySelectorAll('[data-pf-view]').forEach((b) => b.addEventListener('click', () => { pfUi.view = b.dataset.pfView; pfTable(); }));
   document.querySelectorAll('[data-pf-range]').forEach((b) => b.addEventListener('click', () => { pfUi.range = b.dataset.pfRange; pfSync(); pfPart(['pf-closed-day', 'pf-closed']); }));
   const pfDraw = (name, fn) => dash.draw(name, (el) => { el.__pf = fn; fn(el); });
   pfDraw('pf-asof', (el) => {
-    if (pfSmall()) { el.textContent = 'Shadow run · nothing traded · daily prices from Yahoo against IWM'; return; }
     const a = paperAcct(); el.textContent = a && a.marks_at ? `IBKR paper account · prices as of ${whenEt(a.marks_at)}` : 'IBKR paper account';
   });
   // Long against short as one bar, with the dollars under it. `short` is a positive amount.
@@ -1376,19 +1352,18 @@
       ['Pauses below', (b) => b.paused ? 'Paused now' : b.pause_at == null ? '—' : `${pfUsd(b.pause_at)} (high ${pfUsd(b.peak)})`, '—'],
     ];
     const table = h('table', 'fr-table'); const head = h('tr');
-    const single = threePass() || pfSmall();
-    (single ? [['', null], [pfSmall() ? 'Small-cap book' : 'Swing book', 'num']] : [['', null], ['Swing', 'num'], ['Intraday', 'num'], ['Both books', 'num']]).forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
+    const single = threePass();
+    (single ? [['', null], ['Swing book', 'num']] : [['', null], ['Swing', 'num'], ['Intraday', 'num'], ['Both books', 'num']]).forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
     const thead = h('thead'); thead.append(head); const tbody = h('tbody');
     lines.forEach(([label, each, both, val, bothVal]) => {
       const tr = h('tr'); tr.append(h('td', null, label));
-      (single ? [pfSmall() ? 'smallcap' : 'swing'] : ['swing', 'intraday']).forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
+      (single ? ['swing'] : ['swing', 'intraday']).forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
       if (!single) tr.append(h('td', `num ${val ? tone(bothVal) : ''}`, both));
       tbody.append(tr);
     });
     table.append(thead, tbody);
     const notes = [`Money at work is each book’s long plus short exposure at cost, averaged over the time since its first fill. A book pauses when it falls 10% of its capital below its high, and is restarted by hand.`,
-      a.shadow ? 'The small-cap book is a shadow run: each take is held as if bought or sold at the open of its session at its planned size, against the same dollars of IWM (the small-cap ETF), and closed at its time limit or stop. No commissions or spreads; nothing is in the paper account.'
-        : `Unassigned ${pfUsd(a.unassigned)}: the rest of the account’s ${pfUsd(a.net_liquidation)}, which is what it held before the books began plus interest and borrow fees. A jump means something is off the books.`];
+      `Unassigned ${pfUsd(a.unassigned)}: the rest of the account’s ${pfUsd(a.net_liquidation)}, which is what it held before the books began plus interest and borrow fees. A jump means something is off the books.`];
     a.books.filter((b) => b.marked_at_close.length).forEach((b) => notes.push(`${PF_BOOK[b.book]}: ${b.marked_at_close.join(', ')} marked at the last close, not IBKR’s price.`));
     el.replaceChildren(table, ...notes.map((t) => h('p', 'fr-note', t)));
   });
@@ -1905,11 +1880,10 @@ dash.draw('movers', (el) => {
     return box;
   };
   const drawBaskets = (el) => {
-    const small = ui.basketSet === 'smallcap';
-    const d = ready(el, small ? 'sc_basket' : 'mkt_basket', true);
+    const d = ready(el, 'mkt_basket', true);
     if (!d) return;
-    if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', small ? 'No small-cap universe yet: run `fr smallcap universe`.' : 'No baskets in journal/reference/baskets.json yet.')); return; }
-    const members = okData(small ? 'sc_basket_member' : 'mkt_basket_member') || [];
+    if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', 'No baskets in journal/reference/baskets.json yet.')); return; }
+    const members = okData('mkt_basket_member') || [];
     if (ui.basketView === 'heat') { drawBasketHeat(el, d.data, members); return; }
     const { key, dir } = ui.basketSort;
     const rows = [...d.data].sort((a, b) => {
@@ -2049,22 +2023,18 @@ dash.draw('movers', (el) => {
     document.querySelectorAll('[data-bk-period]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bkPeriod === ui.basketPeriod)));
     document.querySelectorAll('[data-bk-periods]').forEach((g) => { g.hidden = ui.basketView !== 'heat'; });
     document.querySelectorAll('[data-bk-help]').forEach((p) => { p.hidden = p.dataset.bkHelp !== ui.basketView; });
-    document.querySelectorAll('[data-bk-set]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bkSet === ui.basketSet)));
-    document.querySelectorAll('[data-bk-about]').forEach((p) => { p.hidden = p.dataset.bkAbout !== ui.basketSet; });
-    const title = document.querySelector('[data-bk-title]'); if (title) title.textContent = ui.basketSet === 'smallcap' ? 'Every small-cap industry' : 'Every basket';
   };
   document.addEventListener('click', (ev) => {
-    const v = ev.target.closest('[data-bk-view]'); const per = ev.target.closest('[data-bk-period]'); const set = ev.target.closest('[data-bk-set]');
-    if (!v && !per && !set) return;
-    if (set) { ui.basketSet = set.dataset.bkSet; ui.openBaskets.clear(); }
+    const v = ev.target.closest('[data-bk-view]'); const per = ev.target.closest('[data-bk-period]');
+    if (!v && !per) return;
     if (v) ui.basketView = v.dataset.bkView;
     if (per) ui.basketPeriod = per.dataset.bkPeriod;
-    try { localStorage.setItem('fr-bk', JSON.stringify({ view: ui.basketView, period: ui.basketPeriod, set: ui.basketSet })); } catch (e) { /* storage off */ }
+    try { localStorage.setItem('fr-bk', JSON.stringify({ view: ui.basketView, period: ui.basketPeriod })); } catch (e) { /* storage off */ }
     syncBasketControls();
     const el = document.querySelector('[data-draw="basket-table"]');
     if (el) drawBaskets(el);
   });
-  try { const saved = JSON.parse(localStorage.getItem('fr-bk') || 'null'); if (saved) { ui.basketView = saved.view === 'heat' ? 'heat' : 'table'; ui.basketPeriod = HEAT[saved.period] ? saved.period : 'today'; ui.basketSet = saved.set === 'smallcap' ? 'smallcap' : 'themed'; } } catch (e) { /* storage off */ }
+  try { const saved = JSON.parse(localStorage.getItem('fr-bk') || 'null'); if (saved) { ui.basketView = saved.view === 'heat' ? 'heat' : 'table'; ui.basketPeriod = HEAT[saved.period] ? saved.period : 'today'; } } catch (e) { /* storage off */ }
   syncBasketControls();
   dash.draw('basket-table', drawBaskets);
 

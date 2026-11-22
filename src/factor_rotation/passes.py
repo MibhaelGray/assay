@@ -45,24 +45,6 @@ PASSES = {slot: {"prompt": f"swing-{'late' if slot.startswith('late') else slot}
     f"Bash(uv run fr paper postmortem {DRAFTS}/postmortem.json)", "Bash(uv run fr paper depth)",
     "Bash(uv run fr paper hedges:*)", "Bash(uv run fr paper status)"]}
           for slot in ("night", "late", "late2", "late3", "late4", "morning", "midday")}
-# The small-cap book's one pass a day, after the close (smallcap/__init__.py). A shadow run: it records verdicts
-# under journal/smallcap/ and has no command that reaches the paper account.
-# Three a day like the swing book's, regular hours only (the owner, 2026-11-20): morning and midday on the session so
-# far, entered at the live price; night after the close, entered at the next open.
-for _slot, _name in (("night", "smallcap"), ("morning", "smallcap-morning"), ("midday", "smallcap-midday")):
-    PASSES[_name] = {"prompt": "smallcap.md", "book": "smallcap", "slot": _slot, "allow": [
-        f"Bash(uv run fr smallcap screen --pass {_slot})", f"Bash(uv run fr smallcap record {DRAFTS}/{_name}.json)"]}
-SMALLCAP_SLOT = """This run is the small-cap book's **{slot}** pass. Wherever the text below says `<pass>`, use `{slot}`; the screen
-command is `uv run fr smallcap screen --pass {slot}`, the draft is `{drafts}/{name}.json` with `"pass": "{slot}"`, and the
-note is `<session>-smallcap-{slot}.md`.{timing}
-
-"""
-SMALLCAP_TIMING = {
-    "night": " It reads today's close, and its verdicts enter at the next session's open; record before then.",
-    "morning": (" It reads the session so far, regular hours only, and each verdict is entered at the live price the moment"
-                " you record, so record as soon as the research is in, and before 2:50 PM CT."),
-    "midday": (" It reads the session so far, regular hours only, and each verdict is entered at the live price the moment"
-               " you record, so record as soon as the research is in, and before 2:50 PM CT.")}
 HEADLESS = f"""
 
 Running as a background job, not in the Claude app (the owner's setup, 2026-11-16):
@@ -74,18 +56,6 @@ Running as a background job, not in the Claude app (the owner's setup, 2026-11-1
   or midday.json) and post-mortems as `{DRAFTS}/postmortem.json`. Those are the only paths the record commands accept.
 - The research note goes in `$FR_JOURNAL_DIR/research/<session>-<pass>.md`, and lessons in
   `$FR_JOURNAL_DIR/paper/lessons.md`; FR_JOURNAL_DIR is set for you. Commands not listed for this pass are refused.
-"""
-
-HEADLESS_SMALLCAP = f"""
-
-Running as a background job, not in the Claude app:
-- You are the judge, on Fable 5.2 at high effort. Start every research agent with the Agent tool's `model: "sonnet"`
-  and `effort: "medium"`, one name to an agent.
-- There is no IBKR connector here. Take market numbers from `uv run fr quotes` (for example
-  `uv run fr quotes SPY IWM QQQ ^VIX ^TNX CL=F`), Yahoo prices.
-- Write the draft at the path named at the top; it is the only path the record command accepts.
-- The research note goes in `$FR_JOURNAL_DIR/research/` under the name given at the top; FR_JOURNAL_DIR is set for you.
-  Commands not listed for this pass are refused.
 """
 
 # Put before the late pass's prompt when the session already has one.
@@ -123,8 +93,6 @@ def run(name: str, shadow: bool = False) -> dict:
         return _run(name, shadow)
     start = datetime.now(CT)
     label = "late" if name.startswith("late") else name
-    small = PASSES.get(name, {}).get("book") == "smallcap"
-    label = f"small-cap {PASSES[name]['slot']}" if small else label
     watch.send(f"{label.capitalize()} pass started", f"The {label} pass started at {start:%-I:%M %p} CT. It usually takes 15 to 90 minutes.")
     try:
         out = _run(name, shadow)
@@ -133,7 +101,7 @@ def run(name: str, shadow: bool = False) -> dict:
     took = round((datetime.now(CT) - start).total_seconds() / 60)
     if out.get("ok"):
         watch.send(f"{label.capitalize()} pass recorded", f"The {label} pass recorded after {took} minutes; "
-                   + ("it is a shadow run, so nothing is traded." if small else "its takes go to the order job now."))
+                   "its takes go to the order job now.")
     else:
         why = out.get("error") or "it ended without recording its verdicts"
         watch.send(f"{label.capitalize()} pass FAILED", f"The {label} pass that started at {start:%-I:%M %p} CT failed after {took} minutes: {why[:200]}. Log: data/pass-logs.")
@@ -153,20 +121,11 @@ def _run(name: str, shadow: bool = False) -> dict:
     exe, token = binary(), os.environ.get("FR_CLAUDE_TOKEN")
     if not exe or not token:
         return {"pass": name, "ok": False, "error": "Claude Code not found" if not exe else "FR_CLAUDE_TOKEN is not set in .env"}
-    small = spec.get("book") == "smallcap"
-    if small:
-        from .smallcap import screen as small_screen
-        try:
-            session_ = small_screen.sessions(now, spec["slot"])[1].isoformat()
-        except ValueError as e:
-            return {"pass": name, "ok": False, "error": f"not the time for a {name} pass: {e}"}
-        leaves = f"smallcap/verdicts/{small_screen.key(session_, spec['slot'])}.json"
-    else:
-        try:
-            session = proposals.pass_session(name, now)   # a pass leaves the proposals file of the session it is for
-        except ValueError as e:
-            return {"pass": name, "ok": False, "error": f"not the time for a {name} pass: {e}"}
-        leaves = f"paper/proposals/{session}.json"
+    try:
+        session = proposals.pass_session(name, now)   # a pass leaves the proposals file of the session it is for
+    except ValueError as e:
+        return {"pass": name, "ok": False, "error": f"not the time for a {name} pass: {e}"}
+    leaves = f"paper/proposals/{session}.json"
     root = _shadow_journal() if shadow else journal.JOURNAL
     before = (root / leaves).stat().st_mtime if (root / leaves).exists() else None
     DRAFTS.mkdir(parents=True, exist_ok=True)
@@ -175,13 +134,10 @@ def _run(name: str, shadow: bool = False) -> dict:
            "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL, "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
     writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)",   # "//" marks an absolute path
-              *([] if small else [f"Edit(/{root.resolve()}/paper/lessons.md)"])]
-    reading = [t for t in READING if "fr paper" not in t] if small else READING
+              f"Edit(/{root.resolve()}/paper/lessons.md)"]
     cmd = [exe, "-p", "--model", MODEL, "--effort", EFFORT, "--output-format", "json", "--permission-mode", "dontAsk",
-           "--allowedTools", *reading, *spec["allow"], *writes]
-    prompt = (PROMPTS / spec["prompt"]).read_text() + (HEADLESS_SMALLCAP if small else HEADLESS)
-    if small:
-        prompt = SMALLCAP_SLOT.format(slot=spec["slot"], name=name, drafts=DRAFTS, timing=SMALLCAP_TIMING[spec["slot"]]) + prompt
+           "--allowedTools", *READING, *spec["allow"], *writes]
+    prompt = (PROMPTS / spec["prompt"]).read_text() + HEADLESS
     if name in proposals.LATE[1:]:
         prompt = AGAIN.format(name=name) + prompt
     try:
@@ -190,14 +146,9 @@ def _run(name: str, shadow: bool = False) -> dict:
     except (OSError, subprocess.TimeoutExpired, ValueError) as e:
         return {"pass": name, "ok": False, "shadow": shadow, "error": repr(e)[:300]}
     after = (root / leaves).stat().st_mtime if (root / leaves).exists() else None
-    # A night with no small-cap candidates leaves no verdicts, and that is not a failure.
-    empty = False
-    if small:
-        shown = root / "smallcap" / "screens" / Path(leaves).name
-        empty = shown.exists() and shown.stat().st_mtime >= now.timestamp() and not json.loads(shown.read_text())["candidates"]
     out = {"pass": name, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
            "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
-           "ok": not reply.get("is_error") and (empty or (after is not None and after != before)), "recorded": str(root / leaves) if after and after != before else None,
+           "ok": not reply.get("is_error") and after is not None and after != before, "recorded": str(root / leaves) if after and after != before else None,
            "turns": reply.get("num_turns"), "agents": (reply.get("subagent_stats") or {}).get("spawned"),
            "refused": [f"{d.get('tool_name')}: {str(d.get('tool_input'))[:120]}" for d in reply.get("permission_denials", [])],
            "message": reply.get("result")}

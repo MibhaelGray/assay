@@ -1,17 +1,16 @@
-"""The research gate on the automatic book: one written verdict per candidate, and only the takes are traded.
+"""What a research pass records: one written verdict per candidate, and only the takes are traded.
 
     journal/paper/proposals/<session>.json
 
-`<session>` is the day the entries go out. The evening pass judges every candidate on the screen for that
-session: take or pass, a conviction from 1 to 5, and for a take the five steps of reasoning, what would prove
-it wrong, the legs and the plan (time limit and stop, inside the outer limits in rules.py). The pre-open pass
-then lets each take stand or stands it down, and may add verdicts of its own. Code copies the screen's numbers
-into each record, fills in the mechanical legs and plan where the pass gave none, and records a candidate the
-pass never got to as "not reviewed". So every candidate has a record, taken or not, and the ones passed on can
-be scored the same way as the ones taken (learn.py).
+`<session>` is the session the trades enter for. Each of the three daily passes (daily.py) judges every candidate
+on its live screen: take or pass, a conviction from 1 to 5, a rank, and for a take the five steps of reasoning, what
+would prove it wrong, the legs and the plan (time limit and stop, inside the outer limits in rules.py). Code copies
+the screen's numbers into each record and fills in the mechanical legs and plan for a pass, so the passes can be
+scored the same way as the takes (learn.py). This module holds the checks every verdict goes through
+(`_proposal`), the ranking rule, and which session a pass belongs to.
 
-The agent only writes this file, through `fr paper propose`. It never sizes a trade or sends an order: the
-9:15 AM entry job reads the takes and does that under the same guards as before.
+The pass only writes this file, through `fr paper propose`. It never sizes a trade or sends an order: the order
+job (entries.py) does that under the broker's guards.
 """
 
 import json
@@ -19,27 +18,14 @@ from datetime import date, datetime, time
 from pathlib import Path
 
 from .. import bars, earnings, journal
-from ..config import NY
 from ..universe import ETFS
 from . import rules
 
-PASSES = ("evening", "preopen")
 DECISIONS = ("take", "pass")
-CHECKS = ("stands", "stand_down")
-CUTOFF = time(9, 14)  # the entry job runs at 9:15 AM ET
 
 
 def root() -> Path:
     return journal.JOURNAL / "paper"
-
-
-def screen_for(session: date) -> dict | None:
-    """The screen whose next session is `session`."""
-    for p in sorted((journal.JOURNAL / "screens").glob("*.json"), reverse=True):
-        d = json.loads(p.read_text())
-        if d.get("next_session") == session.isoformat():
-            return d
-    return None
 
 
 def load(session: date) -> dict | None:
@@ -50,14 +36,6 @@ def load(session: date) -> dict | None:
 def every() -> list[dict]:
     """Every proposal ever recorded, oldest first."""
     return [p for path in sorted((root() / "proposals").glob("*.json")) for p in json.loads(path.read_text())["proposals"]]
-
-
-def next_entry_session(now: datetime) -> date:
-    """The session whose entries are still to go out: today before 9:14 AM ET on a trading day, else the next one."""
-    today = now.date()
-    if journal.is_trading_day(today) and now < datetime.combine(today, CUTOFF, NY):
-        return today
-    return journal.next_trading_day(today)
 
 
 # ---- The three daily passes (since the 2026-11-15 redesign) -------------------------------------------------
@@ -197,7 +175,7 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
             held = next((c for c in (screen or {}).get("in_book", []) if c["name"] == raw["candidate"]), None)
             if held:
                 raise ValueError(f"{who} was left out of the screen for {session}: {held['in_book']}. Leave it out of the draft; "
-                                 "the pre-close review handles names the book holds")
+                                 "every pass reviews the trades the book holds")
             raise ValueError(f"{who} is not a candidate on the screen for {session}. Record it as your own idea: "
                              "name, setup, direction, long and/or short")
         p = _from_screen(cands[raw["candidate"]][1], cands[raw["candidate"]][0], screen)
@@ -236,7 +214,7 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
             raise ValueError(f"{who}: give the legs (long and/or short); the screen has no tradable default for it")
         p["plan"] = _plan(raw.get("plan"), legs, who)
     p.update({"decision": raw["decision"], "conviction": c, "reason": raw["reason"].strip(), "reviewed": True,
-              "reasoning": None, "wrong_if": None, "hedge_why": None, "through_earnings": None, "preopen": None})
+              "reasoning": None, "wrong_if": None, "hedge_why": None, "through_earnings": None})
     if take:
         reasoning = raw.get("reasoning")
         if not isinstance(reasoning, dict) or any(not _text(reasoning.get(k)) for k in journal.REASONING):
@@ -257,96 +235,16 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
     return p
 
 
-def _ranks(raws: list[dict], kind: str) -> list[int | None]:
-    """The pass's ranking of the verdicts in one draft: 1 is the idea it believes in most. The evening pass ranks
-    every verdict, passes too, so each night gives a whole list to score against the ideas' plan results
-    (learn.rank_table) and not just a take or two. Another pass may rank its verdicts or leave all of them unranked."""
+def _ranks(raws: list[dict]) -> list[int]:
+    """The pass's ranking of the verdicts in one draft: 1 is the idea it believes in most. Every verdict is ranked,
+    passes too, so each pass gives a whole list to score against the ideas' plan results (learn.rank_table) and not
+    just a take or two."""
     given = [r.get("rank") for r in raws]
-    if kind != "evening" and all(g is None for g in given):
-        return given
     n = len(raws)
     if any(not isinstance(g, int) or isinstance(g, bool) for g in given) or sorted(given) != list(range(1, n + 1)):
         raise ValueError(f"rank every verdict in the draft from 1 (the idea you believe in most) to {n} (the least), passes and "
                          "own ideas too, with no ties and no gaps: the ranking is scored against each idea's plan result")
     return given
-
-
-def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[str]]:
-    """Add a pass's verdicts to the session's proposals. Returns the path, the file and notes for the pass.
-
-    draft: {"session": "2026-11-10", "pass": "evening" | "preopen", "summary": "...", "market": {...},
-            "proposals": [{"candidate": "ABNB", "rank": 1, "decision": "take", "conviction": 3, "reason": "...", ...}],
-            "checks": [{"id": "2026-11-10-P01", "decision": "stands" | "stand_down", "reason": "..."}]}
-    """
-    now = now or datetime.now(NY)
-    session = date.fromisoformat(draft["session"])
-    kind = draft.get("pass")
-    if kind not in PASSES:
-        raise ValueError(f"pass must be one of: {', '.join(PASSES)}")
-    if session != (expected := next_entry_session(now)):
-        raise ValueError(f"proposals are for the next entries, {expected}, not {session}: they must be in by 8:14 AM CT, "
-                         "before the 9:15 AM entry job")
-    if (root() / "plans" / f"{session}.json").exists():
-        raise ValueError(f"the entries for {session} have already gone out")
-    path = root() / "proposals" / f"{session}.json"
-    doc = load(session) or {"session": session.isoformat(), "screen": None, "passes": [], "proposals": []}
-    screen = screen_for(session)
-    cands = {c["name"]: (i, c) for i, c in enumerate(screen["candidates"], 1)} if screen else {}
-    if kind == "evening" and not screen:
-        raise FileNotFoundError(f"no screen with next session {session}; run `fr screen` on settled bars first")
-    have = {p["name"]: p for p in doc["proposals"]}
-    new, replaced, notes = [], 0, []
-    raws = draft.get("proposals", [])
-    ranks = _ranks(raws, kind)
-    ranked = []
-    for raw, rank in zip(raws, ranks):
-        p = {**_proposal(raw, session, screen, cands), "session": session.isoformat(), "pass": kind, "recorded_at": now.isoformat(),
-             "rank": rank, "ranked": len(raws) if rank else None}
-        ranked.append(p)
-        old = have.get(p["name"])
-        if p["name"] in {x["name"] for x in new} or (old and old["reviewed"]):
-            raise ValueError(f"{p['name']} already has a verdict for {session}; a verdict is not rewritten")
-        if old:  # recorded as not reviewed by an earlier pass: this is its first real verdict
-            doc["proposals"][doc["proposals"].index(old)] = {**p, "id": old["id"]}
-            replaced += 1
-        else:
-            new.append(p)
-    order = sorted((p for p in ranked if p["rank"]), key=lambda p: p["rank"])
-    for a, b in zip(order, order[1:]):  # the rank is the conviction, drawn finer: the two can't disagree
-        if b["conviction"] > a["conviction"]:
-            raise ValueError(f"{b['name']} is ranked {b['rank']} with conviction {b['conviction']}, below {a['name']} at rank "
-                             f"{a['rank']} with conviction {a['conviction']}: an idea with more conviction ranks higher")
-    if kind == "evening":
-        judged = set(have) | {p["name"] for p in new}
-        for name, (rank, c) in cands.items():
-            if name not in judged:
-                new.append({**_from_screen(c, rank, screen), "session": session.isoformat(), "pass": kind, "recorded_at": now.isoformat(),
-                            "decision": "pass", "conviction": None, "reason": "not reviewed", "reviewed": False, "reasoning": None,
-                            "wrong_if": None, "hedge_why": None, "through_earnings": None, "preopen": None, "stats": None,
-                            "rank": None, "ranked": None})
-                notes.append(f"{name} (screen #{rank}) had no verdict, so it is recorded as not reviewed")
-    for k, p in enumerate(new, len(doc["proposals"]) + 1):
-        p["id"] = f"{session}-P{k:02d}"
-    doc["proposals"] += new
-    by_id = {p["id"]: p for p in doc["proposals"]}
-    checks = draft.get("checks", [])
-    for chk in checks:
-        p = by_id.get(chk.get("id"))
-        if not p or p["decision"] != "take":
-            raise ValueError(f"check {chk.get('id')!r}: no take with that id for {session}")
-        if chk.get("decision") not in CHECKS or not _text(chk.get("reason")):
-            raise ValueError(f"check {chk['id']}: decision must be stands or stand_down, with a reason")
-        p["preopen"] = {"decision": chk["decision"], "reason": chk["reason"].strip(), "at": now.isoformat()}
-    if not new and not replaced and not checks:
-        raise ValueError("the draft has no proposals and no checks")
-    if kind == "preopen":
-        notes += [f"{p['id']} {p['name']} was not checked, so it stands" for p in doc["proposals"] if p["decision"] == "take" and not p["preopen"]]
-    doc["screen"] = screen["as_of"] if screen else doc["screen"]
-    doc["passes"].append({"pass": kind, "at": now.isoformat(), "summary": str(draft.get("summary", "")), "market": draft.get("market", {}),
-                          "proposals": len(new) + replaced, "checks": len(checks)})
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(doc, indent=1, default=journal._json_default) + "\n")
-    return path, doc, notes
 
 
 def reviews(session: date) -> dict[str, dict]:

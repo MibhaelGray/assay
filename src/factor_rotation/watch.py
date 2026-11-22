@@ -19,7 +19,6 @@ The same alert isn't sent again for REPEAT. Nothing here changes the book; it on
 import asyncio
 import json
 import os
-import re
 import subprocess
 import sys
 import urllib.request
@@ -35,9 +34,7 @@ PASS_LOGS = Path("data/pass-logs")
 LABEL = "com.factor-rotation."
 # The scheduled passes, New York time: (pass, start, which days). Night runs Sunday to Thursday; the other two on
 # trading days. Kept beside deploy/launchd/install.py, which starts them.
-PASSES = (("night", time(20, 30), "sun-thu"), ("morning", time(9, 45), "trading"), ("midday", time(13, 0), "trading"),
-          ("smallcap", time(17, 30), "trading"), ("smallcap-morning", time(10, 30), "trading"),
-          ("smallcap-midday", time(14, 0), "trading"))   # the small-cap book's shadow passes (smallcap/__init__.py)
+PASSES = (("night", time(20, 30), "sun-thu"), ("morning", time(9, 45), "trading"), ("midday", time(13, 0), "trading"))
 # IBKR's nightly reset drops every gateway for a while; a gateway that is down then is not news.
 RESET = (time(23, 30), time(1, 15))
 # Gateway messages that mean it is up but has lost IBKR's servers.

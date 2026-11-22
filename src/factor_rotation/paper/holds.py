@@ -9,7 +9,7 @@ Nothing new is stored. Every proposal, taken or passed, is already in journal/pa
 session, and its legs get daily bars for a month after (book.symbols_held), so the whole table is rebuilt from the
 journal and the bars each time, for every night back to the first.
 
-How an idea is scored, the same way as its plan result (journal._outcome): in at the first session's open, each
+How an idea is scored, the same way as its plan result (learn._mark_outcome): in at the first session's open, each
 side weighted evenly, the result at each later close in bp of one side, before costs. Twice over:
   - held: no stop, out at the close of session h.
   - with its stop: the idea's own stop checked at each close; once hit, that close is the result at every longer hold.

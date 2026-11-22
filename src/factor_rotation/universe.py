@@ -5,8 +5,8 @@ Constituent lists are a seed. Refresh them from issuer holdings files
 periodically; weights drift and index reconstitutions change the top names.
 
 Two tiers (widened 2026-11-12):
-- CORE_ETFS and CONSTITUENTS: the original 46 funds and 110 largest stocks. Option chains and the intraday
-  book's universe stay on these. The daily brief and the market regime use every fund but only these stocks.
+- CONSTITUENTS: the 110 largest stocks. The daily brief and the market regime use every fund but only these
+  stocks.
 - ETFS adds more industry funds, and INDEX_STOCKS (index_stocks.json) adds the rest of the S&P 500 and
   S&P 400 that trades at least $20M a day, and (since 2026-11-18) the big US-listed foreign companies neither
   index holds (foreign_stocks.json). The swing screen, the nightly bars and earnings dates, and the
@@ -54,7 +54,6 @@ FACTORS = ["MTUM", "QUAL", "USMV", "VLUE", "IWF", "IWD", "SPHB", "SPLV", "IJR"]
 
 CROSS_ASSET = ["TLT", "IEF", "HYG", "LQD", "GLD", "SLV", "USO", "UUP", "EFA", "EEM", "FXI", "IBIT"]
 
-CORE_ETFS = BROAD + SECTORS + CORE_INDUSTRIES + FACTORS + CROSS_ASSET
 ETFS = BROAD + SECTORS + INDUSTRIES + FACTORS + CROSS_ASSET
 
 CONSTITUENTS = [
@@ -148,23 +147,8 @@ LEVERAGED = [
 INDEXES = {"VIX": "CBOE", "VIX3M": "CBOE", "TNX": "CBOE"}
 
 # Daily bars only: the aggregate bond ETF for the pension rebalance estimate and the leveraged funds' own prices.
-# None of these are idea legs or option underlyings.
+# None of these are idea legs.
 BARS_ONLY = ["AGG"] + [f.symbol for f in LEVERAGED]
-
-
-# Single-stock option chains only for the largest names, the ones that move the index; the list is
-# roughly in market-cap order.
-OPTION_STOCKS = CONSTITUENTS[:30]
-
-# Index option underlyings: exchange, and the trading classes we pull. SPXW holds the dailies and weeklies
-# (settled at the close); SPX holds the traditional monthlies, settled on the morning's opening prints. Most
-# index dealer gamma sits here rather than in SPY. Not idea legs: an index can't be bought.
-OPTION_INDEXES = {"SPX": ("CBOE", ("SPXW", "SPX"))}
-AM_SETTLED_CLASSES = {"SPX"}
-
-
-def option_universe() -> list[str]:
-    return list(OPTION_INDEXES) + CORE_ETFS + OPTION_STOCKS
 
 
 def idea_universe() -> list[str]:

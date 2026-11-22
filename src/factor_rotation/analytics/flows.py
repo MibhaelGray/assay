@@ -1,25 +1,20 @@
 """Forced flows: trading that funds and dealers have to do whatever they think of the market.
 
-Everything here comes from IBKR data we already store (daily bars, option snapshots, the underlying
-snapshot's borrow ticks) plus the leveraged funds' net assets, pulled from IBKR into
+Everything here comes from the stored daily bars plus the leveraged funds' net assets, pulled from IBKR into
 journal/reference/leveraged_assets.json. Each number is a model estimate of a mechanical flow, not an
 observation of anyone's positions; the brief labels them that way.
 """
 
-import json
 from datetime import date, timedelta
 
 import numpy as np
 import pandas as pd
 from ..calendars import NYSE
 
-from .. import storage
 from ..universe import LEVERAGED
 
 TREND_ASSETS = ["SPY", "QQQ", "IWM", "EFA", "EEM", "TLT", "IEF", "GLD", "USO", "UUP"]
 TREND_LOOKBACKS = [20, 60, 120, 250]
-EXPIRY_UNDERLYINGS = ["SPX", "SPY", "QQQ", "IWM", "DIA", "SMH", "XLK", "NVDA", "TSLA", "AAPL", "MSFT", "AMZN", "META",
-                      "GOOGL", "AVGO"]
 VOL_TARGET = 0.10
 VOL_CAP = 2.0
 EWMA_LAMBDA = 0.94
@@ -83,28 +78,6 @@ def calendar(as_of: date) -> dict:
         "month_end": entry(month_end),
         "quarter_end": entry(quarter_end),
     }
-
-
-# ---- dealer gamma by expiry ---------------------------------------------------------------------------------
-
-def options_expiry(as_of: date, snapshot: str | None) -> list[dict]:
-    """For the index ETFs and the largest single names, how much gamma rolls off in each of the next expiries."""
-    if not snapshot:
-        return []
-    path = f"exposures/date={as_of}/{snapshot}.parquet"
-    if not storage.exists(path):
-        return []
-    df = storage.read(path)
-    if "expiry_profile" not in df:
-        return []
-    out = []
-    for row in df[df["underlying"].isin(EXPIRY_UNDERLYINGS)].itertuples():
-        profile = json.loads(row.expiry_profile) if isinstance(row.expiry_profile, str) else []
-        out.append({"underlying": row.underlying, "spot": _num(row.spot, 2), "gex_total": _num(row.gex_total, 0),
-                    "expiries": [{k: _num(v, 4) if isinstance(v, float) else v for k, v in e.items()}
-                                 for e in profile]})
-    order = {s: i for i, s in enumerate(EXPIRY_UNDERLYINGS)}
-    return sorted(out, key=lambda r: order[r["underlying"]])
 
 
 # ---- leveraged ETF rebalancing ------------------------------------------------------------------------------
@@ -250,51 +223,11 @@ def trend(bars: pd.DataFrame) -> list[dict]:
     return rows
 
 
-# ---- borrow -----------------------------------------------------------------------------------------------
-
-def _underlying_snapshot(day: date) -> pd.DataFrame:
-    files = storage.list_files(f"options_underlying/date={day}")
-    return storage.read(files[-1]) if files else pd.DataFrame()
-
-
-def borrow(bars: pd.DataFrame, as_of: date, lookback_sessions: int = 5, top: int = 15) -> dict:
-    """Shortable shares from the underlying snapshot (IBKR generic tick 236), against five sessions earlier and
-    against average daily volume. Names where borrow is tightening fastest come first."""
-    now = _underlying_snapshot(as_of)
-    if now.empty or "shortable_shares" not in now or now["shortable_shares"].notna().sum() == 0:
-        return {"note": "no borrow data in today's underlying snapshot", "names": []}
-    sessions = _sessions(as_of - timedelta(days=lookback_sessions * 2 + 10), as_of)
-    then = pd.DataFrame()
-    if len(sessions) > lookback_sessions:
-        then = _underlying_snapshot(sessions[-1 - lookback_sessions])
-    adv = _wide(bars, "volume").tail(20).mean()
-    df = now[["underlying", "shortable", "shortable_shares"]].dropna(subset=["shortable_shares"]).copy()
-    if not then.empty and "shortable_shares" in then:
-        df = df.merge(then[["underlying", "shortable_shares"]].rename(columns={"shortable_shares": "before"}),
-                      on="underlying", how="left")
-        df["change"] = df["shortable_shares"] / df["before"] - 1
-    else:
-        df["change"] = np.nan
-    df["shortable_vs_adv"] = df["shortable_shares"] / df["underlying"].map(adv)
-    df["hard_to_borrow"] = df["shortable"] <= 2.5
-    flagged = df[df["hard_to_borrow"] | (df["change"] <= -0.3) | (df["shortable_vs_adv"] < 0.5)]
-    flagged = flagged.sort_values(["change", "shortable_vs_adv"], na_position="last").head(top)
-    names = [{"symbol": r.underlying, "shortable_shares": _num(r.shortable_shares, 0),
-              "change": _num(r.change, 3), "shortable_vs_adv": _num(r.shortable_vs_adv, 3),
-              "hard_to_borrow": bool(r.hard_to_borrow)} for r in flagged.itertuples()]
-    return {"compared_with": sessions[-1 - lookback_sessions].isoformat() if not then.empty else None,
-            "covered": int(len(df)), "names": names,
-            "note": "change = shortable shares vs five sessions earlier; shortable_vs_adv = shortable shares over "
-                    "20-day average volume; hard_to_borrow = IBKR's shortable indicator at or below 2.5"}
-
-
-def build(bars: pd.DataFrame, as_of: date, snapshot: str | None, reference: dict | None) -> dict:
+def build(bars: pd.DataFrame, as_of: date, reference: dict | None) -> dict:
     return {
         "calendar": calendar(as_of),
-        "options_expiry": options_expiry(as_of, snapshot),
         "leveraged_etfs": leveraged(bars, as_of, reference),
         "pension_rebalance": pension(bars, as_of),
         "vol_control": vol_control(bars),
         "trend": trend(bars),
-        "borrow": borrow(bars, as_of),
     }

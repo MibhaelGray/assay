@@ -129,7 +129,7 @@ def measure(session_id: str | None = None, candidates: list[str] | None = None) 
             r["shared_with"] = max(r["shared_with"], len(a["names"]) - 1)
     if candidates is None:
         from . import daily   # one of the three daily passes judges its own live screen
-        screen = daily.screen_now() or proposals.screen_for(proposals.next_entry_session(datetime.now(NY)))
+        screen = daily.screen_now()
         candidates = [c["name"] for c in screen["candidates"]] if screen else []
     key = {n.lower(): n for n in names}
     for c in candidates:

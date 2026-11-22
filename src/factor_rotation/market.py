@@ -1,12 +1,9 @@
 """Rows for the dashboard's "Tonight's market" section, from the night's brief and our stored data.
 
 One JSON array; each row has a `section` saying what it is:
-  meta        one row: as_of, when the brief was built, the options snapshot
+  meta        one row: as_of and when the brief was built
   factor      one row per factor pair: returns, z-scores and RSI
   regime      the last 60 sessions: breadth, sector correlation, SPY realized vol, VIX, VIX3M, 10y yield
-  gamma       dealer gamma by strike for SPY and QQQ near spot, from the latest option snapshot
-  gamma_sum   one row per underlying: spot, total gamma, flip, walls, next-expiry share
-  expiry      each upcoming expiry's share of SPY and QQQ gamma
   calendar    expiries and period ends, in sessions from tonight
   leveraged   leveraged ETF rebalance per 1% move, by index
   volctl      one row: vol-control exposure and how a move tomorrow would change it
@@ -28,14 +25,11 @@ import numpy as np
 import pandas as pd
 
 from . import earnings, journal, storage
-from .analytics.compute import latest_snapshot
 from .bars import bars_path, load
 from .config import NY
 from .universe import INDEXES, SECTORS, idea_universe
 
 WORKER_WAIT = 30  # seconds before a stuck worker's calculation is redone in the server
-GAMMA_UNDERLYINGS = ["SPY", "QQQ"]
-GAMMA_BAND = 0.06
 REGIME_SESSIONS = 60
 
 
@@ -91,38 +85,6 @@ def _regime(as_of: date) -> list[dict]:
     return rows
 
 
-def _gamma(as_of: date, brief: dict) -> list[dict]:
-    snapshot = latest_snapshot(as_of.isoformat())
-    if not snapshot:
-        return []
-    summary_path = f"exposures/date={as_of}/{snapshot}.parquet"
-    summary = storage.read(summary_path) if storage.exists(summary_path) else pd.DataFrame()
-    rows = []
-    for u in GAMMA_UNDERLYINGS:
-        path = f"exposures_by_strike/date={as_of}/underlying={u}/{snapshot}.parquet"
-        s = summary[summary["underlying"] == u] if not summary.empty else summary
-        if s.empty or not storage.exists(path):
-            continue
-        s = s.iloc[0]
-        spot = float(s["spot"])
-        by = storage.read(path)
-        by = by[(by["strike"] / spot - 1).abs() <= GAMMA_BAND]
-        for r in by.itertuples():
-            rows.append({"section": "gamma", "underlying": u, "strike": _num(r.strike, 2),
-                         "gex_net": _num(r.gex_net, 0), "gex_c": _num(getattr(r, "gex_c", None), 0),
-                         "gex_p": _num(getattr(r, "gex_p", None), 0)})
-        profile = json.loads(s["expiry_profile"]) if isinstance(s.get("expiry_profile"), str) else []
-        rows.append({"section": "gamma_sum", "underlying": u, "spot": _num(spot, 2), "gex_total": _num(s["gex_total"], 0),
-                     "gex_0dte": _num(s["gex_0dte"], 0), "gamma_flip": _num(s["gamma_flip"], 2),
-                     "call_wall": _num(s["call_wall"], 2), "put_wall": _num(s["put_wall"], 2),
-                     "atm_iv_30d": _num(s["atm_iv_30d"]), "skew_25d": _num(s["skew_25d"]),
-                     "snapshot": snapshot})
-        for e in profile:
-            rows.append({"section": "expiry", "underlying": u, "expiry": e["expiry"], "dte": _num(e["dte"], 1),
-                         "gross_gex_share": _num(e["gross_gex_share"]), "gex": _num(e["gex"], 0)})
-    return rows
-
-
 def _flows(brief: dict) -> list[dict]:
     ff = brief.get("forced_flows") or {}
     rows = []
@@ -161,11 +123,10 @@ def _day_move(closes: pd.Series, stored: float | None) -> float | None:
     return (closes.iloc[-1] / closes.iloc[-2] - 1) * 100 if len(closes) > 1 else stored
 
 
-def _baskets(lib: dict | None = None, section: str = "basket") -> list[dict]:
-    """The basket watchlist. Daily-bar stats need every member's bars; until the collector has pulled
-    a name, its basket shows only the snapshot and says how many names are waiting. `lib` and `section` draw another
-    set of baskets the same way: the small-cap universe's, as `sc_basket` rows (_smallcap_baskets)."""
-    lib = basket_library() if lib is None else lib
+def _baskets() -> list[dict]:
+    """The basket watchlist. Daily-bar stats need every member's bars; until `fr bars` has pulled a name, its
+    basket shows only the snapshot and says how many names are waiting."""
+    lib = basket_library()
     rows = []
     for b in lib["baskets"]:
         symbols = [m["symbol"] for m in b["members"]]
@@ -179,7 +140,7 @@ def _baskets(lib: dict | None = None, section: str = "basket") -> list[dict]:
             s = m["symbol"]
             c = closes[s].dropna() if s in closes.columns else pd.Series(dtype=float)
             member_rows.append({
-                "section": f"{section}_member", "basket": b["id"], "symbol": s, "why": m.get("why", ""),
+                "section": "basket_member", "basket": b["id"], "symbol": s, "why": m.get("why", ""),
                 "avg_usd_volume_90d": m.get("avg_usd_volume_90d"), "change_pct": _num(_day_move(c, m.get("change_pct")), 2),
                 "ret_5d": _num(c.iloc[-1] / c.iloc[-6] - 1) if len(c) > 5 else None,
                 "ret_20d": _num(c.iloc[-1] / c.iloc[-21] - 1) if len(c) > 20 else None,
@@ -191,7 +152,7 @@ def _baskets(lib: dict | None = None, section: str = "basket") -> list[dict]:
         hedge_today = _day_move(hedge_close, b.get("hedge_change_pct"))
         pulled = storage.modified(bars_path(b["hedge"]))
         row = {
-            "section": section, "id": b["id"], "name": b["name"], "hedge": b["hedge"], "story": b.get("story", ""),
+            "section": "basket", "id": b["id"], "name": b["name"], "hedge": b["hedge"], "story": b.get("story", ""),
             "watch": b.get("watch", ""), "caution": b.get("caution", ""), "source": b.get("source", ""),
             "members": ", ".join(symbols), "n_members": len(symbols), "missing_bars": len(symbols) - len(have),
             "snapshot_at": pulled.astimezone(NY).isoformat() if pulled else lib.get("snapshot_at"),
@@ -309,29 +270,6 @@ def _portfolio() -> list[dict]:
         return []
 
 
-def _smallcap_baskets() -> list[dict]:
-    """The small-cap universe as baskets against IWM, for the Baskets view's Small caps tab (smallcap/baskets.py)."""
-    try:
-        from .smallcap import baskets
-
-        return _baskets(baskets.library(), "sc_basket")
-    except Exception as e:
-        logging.getLogger(__name__).warning("smallcap_baskets_failed error=%r", e)
-        return []
-
-
-def _smallcap() -> list[dict]:
-    """The small-cap shadow book for the Portfolio view's Small-cap tab (smallcap/book.py, score.py); a failure never costs
-    the page."""
-    try:
-        from .smallcap import book, score
-
-        return [*score.dashboard(), *book.rows(), *_smallcap_baskets()]
-    except Exception as e:
-        logging.getLogger(__name__).warning("smallcap_rows_failed error=%r", e)
-        return []
-
-
 def _unsaved_brief(day: date) -> dict:
     return journal.build_brief(day, write=False)
 
@@ -379,15 +317,14 @@ def build(as_of: date | None = None, workers=None) -> list[dict]:
     screen_job = _start(workers, _live_screen) if _screen_is_stale(newest) else None
     rows_first = [*_regime(as_of), *_baskets(), *_earnings(_latest_session()), *_paper()]
     brief = _finish(brief_job, _unsaved_brief, as_of) if live else _brief(as_of)
-    snapshot = latest_snapshot(as_of.isoformat())
     meta = {"section": "meta", "as_of": brief["as_of"], "built_at": brief["built_at"],
-            "bars_through": brief.get("bars_through"), "options_snapshot": snapshot,
+            "bars_through": brief.get("bars_through"),
             "next_session": journal.next_trading_day(as_of).isoformat(), **book.marks_info()}
     if started := _restart():   # the restarted book: one swing book, three passes a day (paper/restart.py)
         meta |= {"design": started.get("design"), "book_started": started.get("started"), "book_capital": started.get("capital")}
     pairs = _live_pairs(brief, as_of)
     meta["factor_live"] = pairs is not brief
-    return [meta, *_factors(pairs), *_gamma(as_of, brief), *_flows(brief), *_screen(newest, screen_job), *rows_first, *_routine(), *_portfolio(), *_smallcap()]
+    return [meta, *_factors(pairs), *_flows(brief), *_screen(newest, screen_job), *rows_first, *_routine(), *_portfolio()]
 
 
 def _restart() -> dict | None:

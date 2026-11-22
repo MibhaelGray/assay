@@ -30,7 +30,6 @@ CONVICTION_RISK = {3: 1.0, 4: 1.5, 5: 2.0}     # multiples of RISK
 MAX_SIDE = 0.06                                # of capital: the most on one side, however tight the stop
 MAX_ADV = 0.0025                               # of a leg's average daily dollar volume: never large for its stock
 MAX_SYMBOL_SHARE = 0.10                        # of capital: net exposure to one symbol, hedges across trades included
-MAX_NEW = 5                # takes opened per session, strongest conviction first
 MAX_OPEN = 60              # open trades
 MAX_GROSS = 900_000        # dollars, long plus short
 MAX_SYMBOL = 30_000        # dollars of net exposure to one symbol
@@ -207,24 +206,20 @@ def _hedge(longs: list[str], shorts: list[str]) -> str | None:
 
 
 def proposal_trades(proposals: list[dict], entry_date: str, prices: dict[str, float], held: set[str],
-                    start: int = 1, room: int = MAX_NEW, capital: float | None = None,
+                    start: int = 1, room: int | None = None, capital: float | None = None,
                     volumes: dict[str, float] | None = None) -> tuple[list[dict], list[dict]]:
-    """The research pass's takes as trades, strongest conviction first, up to MAX_NEW, each with the plan
-    the pass wrote. Skips a take stood down before the open, one whose stock, basket members or pair funds are
-    already in an open automatic trade or one taken today (`held` is those core symbols), and anything it
-    can't size. `start` numbers the ids after trades already made for the session (the early entries), and
-    `room` is how many of the session's MAX_NEW are left. With `capital` each take is sized by its risk
+    """The research pass's takes as trades, strongest conviction first, up to `room` of them (all, by default), each
+    with the plan the pass wrote. Skips a take whose stock, basket members or pair funds are already in an open trade
+    or one taken today (`held` is those core symbols), and anything it can't size. `start` numbers the ids after
+    trades already made for the session. With `capital` each take is sized by its risk
     (side_dollars, with `volumes` for the liquidity limit); without it every take gets the flat NOTIONAL.
     Returns (trades, skipped with reasons)."""
     trades, skipped, used = [], [], set(held)
     takes = [p for p in proposals if p["decision"] == "take"]
     # Strongest conviction first, then the pass's own ranking; a stable sort, so unranked takes keep the pass's order.
     for p in sorted(takes, key=lambda p: (-p["conviction"], p.get("rank") or 10**6)):
-        if (p.get("preopen") or {}).get("decision") == "stand_down":
-            skipped.append({"name": p["id"], "reason": f"stood down before the open: {p['preopen']['reason']}"})
-            continue
-        if len(trades) >= room:
-            skipped.append({"name": p["id"], "reason": f"the {MAX_NEW} takes with the most conviction came first"})
+        if room is not None and len(trades) >= room:
+            skipped.append({"name": p["id"], "reason": f"the {room} takes with the most conviction came first"})
             continue
         longs, shorts = p["long"], p["short"]
         hedge = _hedge(longs, shorts)

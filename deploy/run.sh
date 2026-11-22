@@ -2,10 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-# One IB job at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
-# use the paper gateway and have their own lock, so a long by-hand option pull can't make the 3:45 PM exits miss the
+# One job of a kind at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
+# use the paper gateway and have their own lock, so a long data job can't make the 3:45 PM exits miss the
 # market-on-close cutoff.
-case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; lab-*) lock=/tmp/fr-lab.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
+case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
 if [ -z "${FR_LOCKED:-}" ]; then
   export FR_LOCKED=1
   if command -v flock >/dev/null; then exec flock "$lock" "$0" "$@"; fi
@@ -19,7 +19,7 @@ caffeinate -i -w $$ &
 # FR_SCHEDULED and only looks: it sends no orders unless given --execute.
 export FR_SCHEDULED=1
 
-# Collector settings (FR_*) from .env; the gateway login in it is only for docker compose.
+# Settings (FR_*) from .env; the gateway login is in .env.paper, for docker compose only.
 if [ -f .env ]; then
   while IFS='=' read -r key value; do
     value="${value%\"}"; value="${value#\"}"
@@ -38,8 +38,6 @@ retry() {
 }
 
 case "$1" in
-  options-all)  exec uv run fr options --group all ;;
-  options-etfs) exec uv run fr options --group etfs ;;
   bars)         exec uv run fr bars ;;
   paper-close|paper-sync)
     # Nothing to do until the paper account is set up in .env (docs/operations.md).
@@ -65,18 +63,9 @@ case "$1" in
     # (install.py); Friday's run stops here.
     [ "$(TZ=America/New_York date +%u)" = 5 ] && exit 0
     exec uv run fr pass night ;;
-  pass-smallcap|pass-smallcap-morning|pass-smallcap-midday)
-    # The small-cap book's three passes, regular-hours prices only (smallcap/__init__.py). A shadow run: no orders.
-    uv run fr trading-day || exit 0
-    exec uv run fr pass "${1#pass-}" ;;
   pass-morning|pass-midday)
     uv run fr trading-day || exit 0
     exec uv run fr pass "${1#pass-}" ;;
-  lab-session)
-    # One unattended research session in the lab (docs/research-lab.md). No orders, no gateway. It gives way to a
-    # trading pass: if one is running, this run is skipped, so the two never draw on Claude's usage at once.
-    if command -v flock >/dev/null; then flock -n /tmp/fr-pass.lock true || exit 0; else lockf -s -t 0 /tmp/fr-pass.lock true || exit 0; fi
-    exec uv run fr lab session ;;
   keep-awake)
     # Hold off idle sleep until 9:40 AM New York time, so the order job and the night pass run all night.
     # A closed lid still sleeps the Mac, and so does a flat battery.
@@ -103,7 +92,7 @@ e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_secon
     uv run fr scan || echo "stock scan failed; run it by hand tonight" >&2
     uv run fr screen || echo "screen failed; run it by hand tonight" >&2
     written=()
-    for d in journal/briefs journal/scans journal/screens journal/paper journal/smallcap journal/archive journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
+    for d in journal/briefs journal/scans journal/screens journal/paper journal/research journal/archive journal/reference/earnings.json journal/reference/earnings_gaps.json; do [ -e "$d" ] && written+=("$d"); done
     git add -- "${written[@]}"
     git diff --cached --quiet -- "${written[@]}" ||
       git commit --quiet -m "Journal $(TZ=America/New_York date +%F): brief, screen and paper book" -- "${written[@]}"

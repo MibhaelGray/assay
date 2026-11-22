@@ -4,7 +4,6 @@ A stand-in for Yahoo and a temporary journal. No network.
     uv run python -m unittest discover -s tests
 """
 
-import json
 from datetime import datetime
 
 from factor_rotation.config import NY
@@ -25,7 +24,7 @@ class Side(Research):
 
     def night(self, direction="long"):
         screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n, "direction": direction} for n in NAMES]}
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         self.propose(verdict(plan=PLAN), *[{"candidate": n, "decision": "pass", "conviction": 2, "reason": "no story", "plan": PLAN} for n in NAMES[1:]])
 
     def yahoo(self, symbol, now):
@@ -47,16 +46,12 @@ class Side(Research):
         again = self.record()
         self.assertEqual((again["pulled"], again["have"], self.asked, len(side.load(DAY)["runs"])), ([], 4, NAMES, 1))
 
-    def test_a_name_yahoo_had_nothing_for_is_tried_again_and_nothing_is_pulled_after_the_open(self):
+    def test_a_name_yahoo_had_nothing_for_is_tried_again(self):
         self.night()
         del self.short["DDD"]
         self.assertEqual(self.record()["failed"], ["DDD"])
         self.short["DDD"] = 0.2
         self.assertEqual(self.record()["pulled"], ["DDD"])
-        (self.root / "side" / f"{DAY}.json").unlink()
-        opened = self.record(datetime(DAY.year, DAY.month, DAY.day, 9, 30, tzinfo=NY))
-        self.assertEqual(opened["pulled"], [])
-        self.assertIsNone(side.load(DAY))
 
     def test_a_fact_is_scored_against_how_the_stock_then_did_night_by_night(self):
         self.night()

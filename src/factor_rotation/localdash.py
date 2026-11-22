@@ -28,7 +28,7 @@ def _latest_brief() -> date | None:
 
 def _market_rows(as_of: date | None, workers=None) -> tuple[list[dict] | None, str]:
     """The market rows, from the latest stored bars unless a date is asked for, or None with the reason when they
-    can't be built here (no brief yet, or the option data lives on the collector's disk)."""
+    can't be built here (no brief yet, or no bars on this disk)."""
     if _latest_brief() is None:
         return None, "no brief in journal/briefs"
     try:

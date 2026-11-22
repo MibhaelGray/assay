@@ -89,23 +89,15 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
 Why three passes: the first book's four kinds of pass and seven order jobs were hard to follow, and a pass
 judging off the prior day's close was acting on old prices.
 
-## Beside the swing book
+## Only the swing book
 
-None of these trades, and none feeds a swing pass.
+The project is the swing book and its dashboard, and nothing else (the owner, 2026-11-22). New work has to serve
+the swing book to belong here.
 
-- **Small-cap book (shadow run since 2026-11-19).** The same research judge on thinly covered US companies,
-  $250M to $1B in market value, where the research should be worth most. Three passes a day in regular hours
-  (9:30 AM, 1:00 PM and 4:30 PM CT) record a verdict on every candidate; no orders go out and the trading side
-  is not built. Its capital for scoring is $25,000. First check about 2026-12-11. Design in
-  `docs/small-cap-book.md`.
-- **Research lab (started 2026-11-22).** Tests trading ideas held one to five sessions on history, against a bar
-  fixed before the first idea was run, and keeps a count of everything tried. It has its own price history,
-  places no orders and reads nothing from the trading record. Its unattended sessions are built but not
-  scheduled. Design in `docs/research-lab.md`.
-- **Side facts and hold periods.** `fr paper side` records Yahoo facts (short interest, estimate changes, ratings,
-  insider dealing) beside each night's verdicts, and `fr paper holds` scores every idea at holds of 1 to 10
-  sessions. Both are kept to be tested later, and the tests only work while no pass has seen them, so no pass
-  reads either.
+Two records are kept beside the swing book's verdicts, and no pass reads either: `fr paper side` records Yahoo
+facts (short interest, estimate changes, ratings, insider dealing) beside each night's verdicts, and
+`fr paper holds` scores every idea at holds of 1 to 10 sessions. Both are kept to be tested later, and the tests
+only work while no pass has seen them.
 
 ## History
 
@@ -114,12 +106,15 @@ None of these trades, and none feeds a swing pass.
   judged by Haiku, flat by the close). Both were closed at the restart, and the record began again from zero.
   Their files are kept in `journal/archive/first-book-2026-11-15/` as a closed "before" period, and the intraday
   book's code was removed.
+- **Removed on 2026-11-22**, to keep the project on the swing book: a small-cap shadow book ($250M to $1B
+  companies, verdicts recorded from 2026-11-19 with no trades), a research lab that tested ideas on history
+  (started that day), and the option-chain collector (last run 2026-11-05; the chains it stored are still in
+  `data/`). Their code and records are in git history before that date.
 
 ## Data
 
 Prices, volume and earnings dates come from Yahoo. Every order is priced from IBKR's own bid and ask on the
-paper gateway. The AI reads the web itself during each pass; there is no news sentiment score. The small-cap
-screen also reads SEC filings (EDGAR).
+paper gateway. The AI reads the web itself during each pass; there is no news sentiment score.
 
 If there is no real signal in the next few weeks, we start testing more data sources. Short interest is the
 first: it is already being recorded beside the verdicts (side facts, above) so it can be tested before any pass

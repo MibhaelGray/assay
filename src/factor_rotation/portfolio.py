@@ -25,12 +25,12 @@ from .config import NY
 from .paper import book
 
 # The book's capital when there is no journal/paper/book.json to say (a test, a scratch journal). The running
-# book's capital comes from book.json (`fr paper restart`: $1,000,000).
+# book's capital comes from book.json ($1,000,000 since the 2026-11-15 restart).
 CAPITAL = {"swing": 900_000.0}
 
 
 def restart() -> dict | None:
-    """journal/paper/book.json, written when the paper book was started again from zero (`fr paper restart`):
+    """journal/paper/book.json, written when the paper book was started again from zero on 2026-11-15:
     {"started", "design", "capital": {book: dollars}}. None for the first book."""
     path = book.ROOT / "book.json"   # book.ROOT, so a test or a scratch journal that moves the book moves this too
     return json.loads(path.read_text()) if path.exists() else None

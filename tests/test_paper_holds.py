@@ -3,7 +3,6 @@
     uv run python -m unittest discover -s tests
 """
 
-import json
 
 from factor_rotation.paper import holds, learn
 
@@ -18,7 +17,7 @@ CLOSES = {"AAA": [102.0, 104.0, 106.0], "BBB": [103.0, 101.0, 99.0], "CCC": [95.
 class Holds(Research):
     def night(self):
         screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n} for n in NAMES]}
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         self.propose(verdict(plan=PLAN), *[{"candidate": n, "decision": "pass", "conviction": 2, "reason": "no story", "plan": PLAN} for n in NAMES[1:]])
 
     def test_every_idea_is_scored_at_every_hold_it_has_reached_with_and_without_its_stop(self):
@@ -60,7 +59,7 @@ class Holds(Research):
 
     def test_the_pass_s_own_ideas_are_set_beside_the_screen_s(self):
         screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n} for n in NAMES[:3]]}
-        (self.root.parent / "screens" / "2026-11-06.json").write_text(json.dumps(screen))
+        self.write_screen(screen)
         own = verdict(candidate=None, name="DDD before its investor day", setup="catalyst", direction="long", long=["DDD"], short=["HHH"], plan=PLAN)
         self.propose(verdict(plan=PLAN), own, *[{"candidate": n, "decision": "pass", "conviction": 2, "reason": "no story", "plan": PLAN} for n in NAMES[1:3]])
         self.bars = frame(CLOSES)

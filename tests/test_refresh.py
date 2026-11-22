@@ -350,9 +350,8 @@ class NothingSaved(unittest.TestCase):
                 mock.patch.object(journal, "build_brief", return_value=brief) as built, \
                 mock.patch.object(screen, "build", return_value={"as_of": str(newest), "built_at": "t", "candidates": []}) as live, \
                 mock.patch.object(market, "_live_pairs", side_effect=lambda b, d: b), \
-                mock.patch.object(market, "latest_snapshot", return_value=None), \
                 mock.patch.object(market, "_factors", return_value=[]), mock.patch.object(market, "_regime", return_value=[]), \
-                mock.patch.object(market, "_gamma", return_value=[]), mock.patch.object(market, "_flows", return_value=[]), \
+                mock.patch.object(market, "_flows", return_value=[]), \
                 mock.patch.object(market, "_baskets", return_value=[]), mock.patch.object(market, "_earnings", return_value=[]), \
                 mock.patch.object(market, "_latest_session", return_value=newest), \
                 mock.patch.object(market, "_paper", return_value=[]):
@@ -385,8 +384,7 @@ class NothingSaved(unittest.TestCase):
         empty = pd.DataFrame({"date": pd.to_datetime([]), "symbol": []})
         with mock.patch.object(journal, "load", return_value=empty), \
                 mock.patch.object(journal, "symbol_technicals", return_value=pd.DataFrame({"symbol": []})), \
-                mock.patch.object(journal, "factor_pair_technicals", return_value=pd.DataFrame()), \
-                mock.patch.object(journal, "latest_snapshot", return_value=None):
+                mock.patch.object(journal, "factor_pair_technicals", return_value=pd.DataFrame()):
             journal.build_brief(date(2026, 11, 10), write=False)
             self.assertFalse((self.root / "briefs" / "2026-11-10.json").exists())
             journal.build_brief(date(2026, 11, 10))

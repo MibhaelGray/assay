@@ -8,36 +8,8 @@ from datetime import date, datetime
 from pathlib import Path
 
 from . import bars, drawdown, journal
-from .analytics.compute import compute_exposures, latest_snapshot
 from .config import NY
-from .ib import options
-from .universe import CORE_ETFS, OPTION_INDEXES, OPTION_STOCKS, bar_universe, option_universe
-
-
-def _universe(group: str, symbols: str | None) -> list[str]:
-    if symbols:
-        return [s.strip().upper() for s in symbols.split(",")]
-    return {"etfs": list(OPTION_INDEXES) + CORE_ETFS, "stocks": OPTION_STOCKS, "all": option_universe()}[group]
-
-
-def _smallcap(a) -> None:
-    """The small-cap book's jobs. A shadow run: none of them sends an order or touches the paper account."""
-    from .smallcap import record, score, screen, universe
-    if a.job == "universe":
-        return print(universe.summary(universe.build()))
-    if a.job == "screen":
-        try:
-            return print(screen.summary(screen.build(slot=a.slot)))
-        except ValueError as e:
-            sys.exit(f"no screen: {e}")
-    if a.job == "record":
-        if len(a.args) != 1:
-            sys.exit("usage: fr smallcap record <draft.json>")
-        try:
-            return print(record.summary(record.record(Path(a.args[0]))))
-        except ValueError as e:
-            sys.exit(f"not recorded: {e}")
-    print(score.report(score.measure()))
+from .universe import bar_universe
 
 
 def _today() -> date:
@@ -46,26 +18,17 @@ def _today() -> date:
 
 def main(argv: list[str] | None = None) -> None:
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s", stream=sys.stderr)
+    # ib_async logs every API error itself; the paper broker and gateway code report the ones that matter.
     logging.getLogger("ib_async").setLevel(logging.ERROR)
-    # ib_async logs every API error itself; session.py already logs the ones that matter, so this keeps
-    # thousands of "no security definition" lines for unlisted built options out of the job logs.
     logging.getLogger("ib_async.wrapper").setLevel(logging.CRITICAL)
     p = argparse.ArgumentParser(prog="fr")
     sub = p.add_subparsers(dest="cmd", required=True)
-
-    c = sub.add_parser("options", help="snapshot option chains, then compute exposures")
-    c.add_argument("--group", choices=["etfs", "stocks", "all"], default="all")
-    c.add_argument("--symbols", help="comma-separated override, e.g. SPY,QQQ")
 
     c = sub.add_parser("bars", help="pull daily adjusted bars")
     c.add_argument("--duration", default="5y")
     c.add_argument("--symbols")
     c.add_argument("--pending", action="store_true",
                    help="only names outside the standard universe: the paper book's legs and the basket watchlist")
-
-    c = sub.add_parser("exposures", help="recompute exposures for a stored snapshot")
-    c.add_argument("--date", default=None)
-    c.add_argument("--snapshot", default=None)
 
     c = sub.add_parser("brief", help="build the nightly brief from stored data")
     c.add_argument("--as-of", default=None)
@@ -92,30 +55,17 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--execute", action="store_true",
                    help="a job that sends orders only looks when it is run by hand: it prints what it would send "
                         "and sends nothing. This makes it count, as the scheduled job does")
-    c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume", "restart",
+    c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume",
                                    "propose", "postmortem", "learn", "hedges", "side", "holds", "depth"])
     c.add_argument("args", nargs="*", help="propose, postmortem: the draft JSON file; hedges: the symbols on one side; "
                                            "side: `report` to score the side facts instead of pulling them")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
-    c.add_argument("--carry", action="store_true", help="restart: go ahead although the first book still holds positions; they stay "
-                                                        "in the account outside the new book until closed from the archive")
     c.add_argument("--reason", default="", help="halt: why, kept in the HALT file")
-    c.add_argument("--book", choices=["swing", "intraday"],  # restart: see paper/restart.py
-                   help="resume: lift that book's 10%% pause (drawdown.py) instead of the HALT file")
+    c.add_argument("--book", choices=["swing"],
+                   help="resume: lift the book's 10%% pause (drawdown.py) instead of the HALT file")
     c = sub.add_parser("pass", help="run one of the swing book's research passes as a background job (see passes.py)")
-    c.add_argument("name", choices=["night", "late", "morning", "midday", "smallcap", "smallcap-morning", "smallcap-midday"])
+    c.add_argument("name", choices=["night", "late", "morning", "midday"])
     c.add_argument("--shadow", action="store_true", help="a trial run: work on a copy of the journal with orders off")
-    c = sub.add_parser("smallcap", help="the small-cap book's shadow run: universe, screen, record, score (smallcap/__init__.py)")
-    c.add_argument("job", choices=["universe", "screen", "record", "score"])
-    c.add_argument("args", nargs="*", help="record: the draft JSON file")
-    c.add_argument("--pass", dest="slot", choices=["morning", "midday", "night"], default="night",
-                   help="screen: morning and midday read the session so far, in regular hours; night reads the close")
-    c = sub.add_parser("lab", help="the research lab: test ideas held 1-5 sessions on history, with an honest count (lab/__init__.py)")
-    c.add_argument("job", choices=["pull", "build", "fetch", "ideas", "run", "board", "holdout", "show", "session"])
-    c.add_argument("args", nargs="*", help="run: idea ids, or 'new' for every idea not yet in the ledger; holdout: <idea> <variant>; show: <idea>; fetch: earnings or a file in lab/sources")
-    c.add_argument("--market", default="us")
-    c.add_argument("--fresh", action="store_true", help="pull: throw away the downloaded chunks and start again")
-    c.add_argument("--force", action="store_true", help="holdout: look although the rules say not to; the look is marked forced")
     c = sub.add_parser("watch", help="the watchdog: phone alerts when a pass, a job or the paper gateway breaks (watch.py)")
     c.add_argument("--test", action="store_true", help="send one test alert and stop")
     c.add_argument("--telegram-chats", action="store_true", help="list the chats that messaged the Telegram bot, to find FR_TELEGRAM_CHAT")
@@ -130,14 +80,7 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--force", action="store_true", help="push even if the page hasn't changed")
 
     a = p.parse_args(argv)
-    if a.cmd == "options":
-        if not journal.is_trading_day(_today()):
-            logging.info("market_closed date=%s", _today())
-            return
-        stats = asyncio.run(options.collect(_universe(a.group, a.symbols)))
-        compute_exposures(stats["date"], stats["snapshot_id"])
-        print(json.dumps(stats))
-    elif a.cmd == "bars":
+    if a.cmd == "bars":
         from .market import basket_library
         from .paper import book
         watch = [m["symbol"] for b in basket_library()["baskets"] for m in b["members"]]
@@ -150,16 +93,10 @@ def main(argv: list[str] | None = None) -> None:
             return
         symbols = [s.strip().upper() for s in a.symbols.split(",")] if a.symbols else bar_universe() + extra
         print(json.dumps(bars.collect(symbols + ([] if a.symbols else list(bars.INDEXES)), a.duration)))
-    elif a.cmd == "exposures":
-        day = a.date or _today().isoformat()
-        snapshot = a.snapshot or latest_snapshot(day)
-        df = compute_exposures(day, snapshot)
-        print(df.drop(columns=["top_unusual"], errors="ignore").to_string(index=False))
     elif a.cmd == "brief":
         as_of = date.fromisoformat(a.as_of) if a.as_of else _today()
         brief = journal.build_brief(as_of)
-        print(f"journal/briefs/{as_of}.json  pairs={len(brief['factor_pairs'])} options={len(brief['options'])} "
-              f"bars_through={brief['bars_through']} snapshot={brief['options_snapshot']}")
+        print(f"journal/briefs/{as_of}.json  pairs={len(brief['factor_pairs'])} bars_through={brief['bars_through']}")
     elif a.cmd == "watch":
         from . import watch
         if a.telegram_chats:
@@ -187,11 +124,6 @@ def main(argv: list[str] | None = None) -> None:
             print(f"  refused {r}")
         print(out.get("message") or "")
         sys.exit(0 if out["ok"] else 1)
-    elif a.cmd == "smallcap":
-        return _smallcap(a)
-    elif a.cmd == "lab":
-        from .lab import cli as lab_cli
-        lab_cli.main(a)
     elif a.cmd == "quotes":
         from . import quotes
         print(quotes.text(quotes.fetch(a.names)))
@@ -414,28 +346,6 @@ def _paper(a) -> None:
             print(f"  ! {w}")
         for r in book.rows():
             print(f"  {r['id']:<28} {r['state']:<8} {r['name'][:30]:<30} {r['bps'] if r['bps'] is not None else '-':>8} bp  {r['reason'] or ''}")
-    elif a.job == "restart":
-        # Archive the first book and start the three-pass book from zero (paper/restart.py). Looks unless --execute.
-        from .paper import restart
-        try:
-            p = restart.run(execute=a.execute, carry=a.carry)
-        except FileExistsError as e:
-            sys.exit(f"fr paper restart refused: {e}")
-        if p["already"]:
-            return print(f"already restarted {p['already']['started'][:16]}: {p['already']['design']}, ${p['already']['capital']['swing']:,.0f} in the swing book")
-        for src, dst in p["moves"]:
-            print(f"  {'moved' if p['done'] else 'would move'} {src} -> {dst}")
-        if p["blockers"] and not a.carry:
-            print("refused: the books aren't flat yet")
-            for b_ in p["blockers"]:
-                print(f"  ! {b_}")
-            sys.exit(1)
-        if p["legacy"]:
-            print(f"  carried outside the new book ({len(p['legacy']['positions'])} positions of {len(p['legacy']['trades'])} first-book trades): "
-                  + ", ".join(f"{s} {v:+g}" for s, v in p["legacy"]["positions"].items()))
-            print(f"  to close them: {p['legacy']['close']}")
-        print(f"the swing book starts again with ${restart.CAPITAL:,.0f}" if p["done"] else
-              f"a look: nothing moved. Add --execute to start the swing book again with ${restart.CAPITAL:,.0f}")
     elif a.job == "halt":
         book.HALT.parent.mkdir(parents=True, exist_ok=True)
         book.HALT.write_text((a.reason or "halted by hand") + "\n")
