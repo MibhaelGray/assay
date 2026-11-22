@@ -5,3 +5,6 @@ data/
 .env
 dashboard/local.html
 .env.paper
+market.json
+reports/
+research_notes/
