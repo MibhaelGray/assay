@@ -1,0 +1,894 @@
+{
+ "idea": {
+  "id": "turn_of_month",
+  "family": "calendar",
+  "title": "Hold the index only around the turn of the month",
+  "why": "Pay cheques, pension contributions and month-end rebalancing put money into shares in a few days around the month's end. Since Ariel (1987) and Lakonishok and Smidt (1988) most of the market's return has come in the last day of the month and the first three of the next. The trade is in the market four days in twenty-one, so the test is whether those days still earn more than the rest.",
+  "source": "Ariel 1987; Lakonishok and Smidt 1988; McConnell and Xu 2008",
+  "market": "us",
+  "universe": {
+   "funds": [
+    "SPY",
+    "IWM",
+    "QQQ"
+   ]
+  },
+  "base": {
+   "side": "long",
+   "select": "sign",
+   "hold": 1,
+   "entry": "close",
+   "max_w": 1.0,
+   "fund": "SPY",
+   "before": 1,
+   "after": 3
+  },
+  "variants": {
+   "spy_-1_+3": {},
+   "iwm_-1_+3": {
+    "fund": "IWM"
+   },
+   "qqq_-1_+3": {
+    "fund": "QQQ"
+   },
+   "spy_-3_+3": {
+    "before": 3
+   },
+   "spy_-1_+1": {
+    "after": 1
+   },
+   "spy_rest_of_month": {
+    "rest": true
+   }
+  }
+ },
+ "trials": [
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "spy_-1_+3",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "SPY",
+    "before": 1,
+    "after": 3
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-04",
+    "to": "2021-12-30",
+    "days": 3020,
+    "ret": 0.0358,
+    "vol": 0.0718,
+    "sharpe": 0.5,
+    "t": 1.76,
+    "sharpe_gross": 0.53,
+    "sharpe_2x_cost": 0.47,
+    "drawdown": -0.1389,
+    "good_years": 0.58,
+    "by_year": {
+     "2010": {
+      "ret": 0.1298,
+      "sharpe": 1.67
+     },
+     "2011": {
+      "ret": -0.0134,
+      "sharpe": -0.13
+     },
+     "2012": {
+      "ret": 0.0827,
+      "sharpe": 1.35
+     },
+     "2013": {
+      "ret": 0.041,
+      "sharpe": 0.81
+     },
+     "2014": {
+      "ret": -0.0142,
+      "sharpe": -0.29
+     },
+     "2015": {
+      "ret": -0.0205,
+      "sharpe": -0.3
+     },
+     "2016": {
+      "ret": -0.0116,
+      "sharpe": -0.21
+     },
+     "2017": {
+      "ret": 0.0438,
+      "sharpe": 1.5
+     },
+     "2018": {
+      "ret": -0.0154,
+      "sharpe": -0.2
+     },
+     "2019": {
+      "ret": 0.0313,
+      "sharpe": 0.42
+     },
+     "2020": {
+      "ret": 0.1548,
+      "sharpe": 1.34
+     },
+     "2021": {
+      "ret": 0.021,
+      "sharpe": 0.33
+     }
+    },
+    "beta": 0.179,
+    "sharpe_alpha": 0.13,
+    "bench_ret": 0.1536,
+    "turnover": 24.1,
+    "cost": 0.0024,
+    "bp_per_trade": 29.7,
+    "bp_per_trade_gross": 31.7,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": 0.031420803725161664,
+    "skew": -0.1,
+    "kurt": 30.03
+   },
+   "validation": {
+    "from": "2022-01-05",
+    "to": "2024-12-31",
+    "days": 751,
+    "ret": -0.0039,
+    "vol": 0.0791,
+    "sharpe": -0.05,
+    "t": -0.08,
+    "sharpe_gross": -0.02,
+    "sharpe_2x_cost": -0.08,
+    "drawdown": -0.0999,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0274,
+      "sharpe": -0.27
+     },
+     "2023": {
+      "ret": 0.064,
+      "sharpe": 1.09
+     },
+     "2024": {
+      "ret": -0.0481,
+      "sharpe": -0.7
+     }
+    },
+    "beta": 0.204,
+    "sharpe_alpha": -0.34,
+    "bench_ret": 0.0988,
+    "turnover": 24.5,
+    "cost": 0.0024,
+    "bp_per_trade": -3.2,
+    "bp_per_trade_gross": -1.2,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": -0.0030830217594649393,
+    "skew": -0.02,
+    "kurt": 19.69
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "iwm_-1_+3",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "IWM",
+    "before": 1,
+    "after": 3
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-04",
+    "to": "2021-12-30",
+    "days": 3020,
+    "ret": 0.017,
+    "vol": 0.0952,
+    "sharpe": 0.18,
+    "t": 0.62,
+    "sharpe_gross": 0.2,
+    "sharpe_2x_cost": 0.15,
+    "drawdown": -0.2513,
+    "good_years": 0.5,
+    "by_year": {
+     "2010": {
+      "ret": 0.1086,
+      "sharpe": 1.02
+     },
+     "2011": {
+      "ret": -0.019,
+      "sharpe": -0.13
+     },
+     "2012": {
+      "ret": 0.0867,
+      "sharpe": 1.02
+     },
+     "2013": {
+      "ret": 0.0335,
+      "sharpe": 0.47
+     },
+     "2014": {
+      "ret": -0.0375,
+      "sharpe": -0.52
+     },
+     "2015": {
+      "ret": -0.0358,
+      "sharpe": -0.47
+     },
+     "2016": {
+      "ret": -0.0146,
+      "sharpe": -0.19
+     },
+     "2017": {
+      "ret": -0.0312,
+      "sharpe": -0.53
+     },
+     "2018": {
+      "ret": -0.0071,
+      "sharpe": -0.08
+     },
+     "2019": {
+      "ret": 0.0269,
+      "sharpe": 0.32
+     },
+     "2020": {
+      "ret": 0.0271,
+      "sharpe": 0.2
+     },
+     "2021": {
+      "ret": 0.0665,
+      "sharpe": 0.66
+     }
+    },
+    "beta": 0.209,
+    "sharpe_alpha": -0.17,
+    "bench_ret": 0.1536,
+    "turnover": 24.1,
+    "cost": 0.0024,
+    "bp_per_trade": 14.1,
+    "bp_per_trade_gross": 16.1,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": 0.011257993189729741,
+    "skew": -0.14,
+    "kurt": 28.88
+   },
+   "validation": {
+    "from": "2022-01-05",
+    "to": "2024-12-31",
+    "days": 751,
+    "ret": -0.0494,
+    "vol": 0.1037,
+    "sharpe": -0.48,
+    "t": -0.78,
+    "sharpe_gross": -0.45,
+    "sharpe_2x_cost": -0.5,
+    "drawdown": -0.2278,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0283,
+      "sharpe": -0.25
+     },
+     "2023": {
+      "ret": 0.0749,
+      "sharpe": 0.77
+     },
+     "2024": {
+      "ret": -0.1939,
+      "sharpe": -2.03
+     }
+    },
+    "beta": 0.228,
+    "sharpe_alpha": -0.75,
+    "bench_ret": 0.0988,
+    "turnover": 24.5,
+    "cost": 0.0024,
+    "bp_per_trade": -40.4,
+    "bp_per_trade_gross": -38.4,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": -0.030034542944223194,
+    "skew": -0.15,
+    "kurt": 16.04
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "qqq_-1_+3",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "QQQ",
+    "before": 1,
+    "after": 3
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-04",
+    "to": "2021-12-30",
+    "days": 3020,
+    "ret": 0.0521,
+    "vol": 0.0843,
+    "sharpe": 0.62,
+    "t": 2.18,
+    "sharpe_gross": 0.65,
+    "sharpe_2x_cost": 0.59,
+    "drawdown": -0.1104,
+    "good_years": 0.67,
+    "by_year": {
+     "2010": {
+      "ret": 0.1094,
+      "sharpe": 1.33
+     },
+     "2011": {
+      "ret": 0.0369,
+      "sharpe": 0.37
+     },
+     "2012": {
+      "ret": 0.1017,
+      "sharpe": 1.41
+     },
+     "2013": {
+      "ret": 0.0927,
+      "sharpe": 1.56
+     },
+     "2014": {
+      "ret": -0.0108,
+      "sharpe": -0.2
+     },
+     "2015": {
+      "ret": -0.0223,
+      "sharpe": -0.3
+     },
+     "2016": {
+      "ret": -0.0478,
+      "sharpe": -0.72
+     },
+     "2017": {
+      "ret": 0.0497,
+      "sharpe": 1.25
+     },
+     "2018": {
+      "ret": 0.037,
+      "sharpe": 0.39
+     },
+     "2019": {
+      "ret": 0.0517,
+      "sharpe": 0.54
+     },
+     "2020": {
+      "ret": 0.2362,
+      "sharpe": 1.67
+     },
+     "2021": {
+      "ret": -0.0101,
+      "sharpe": -0.12
+     }
+    },
+    "beta": 0.195,
+    "sharpe_alpha": 0.29,
+    "bench_ret": 0.1536,
+    "turnover": 24.1,
+    "cost": 0.0024,
+    "bp_per_trade": 43.2,
+    "bp_per_trade_gross": 45.2,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": 0.038937625518015974,
+    "skew": 0.16,
+    "kurt": 26.62
+   },
+   "validation": {
+    "from": "2022-01-05",
+    "to": "2024-12-31",
+    "days": 751,
+    "ret": 0.004,
+    "vol": 0.1066,
+    "sharpe": 0.04,
+    "t": 0.06,
+    "sharpe_gross": 0.06,
+    "sharpe_2x_cost": 0.01,
+    "drawdown": -0.1274,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0345,
+      "sharpe": -0.26
+     },
+     "2023": {
+      "ret": 0.0852,
+      "sharpe": 1.08
+     },
+     "2024": {
+      "ret": -0.0389,
+      "sharpe": -0.41
+     }
+    },
+    "beta": 0.259,
+    "sharpe_alpha": -0.22,
+    "bench_ret": 0.0988,
+    "turnover": 24.5,
+    "cost": 0.0024,
+    "bp_per_trade": 3.2,
+    "bp_per_trade_gross": 5.2,
+    "names": 1.0,
+    "active": 0.19,
+    "daily_sharpe": 0.0023352422842568225,
+    "skew": -0.05,
+    "kurt": 18.27
+   },
+   "verdict": "weak",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "spy_-3_+3",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "SPY",
+    "before": 3,
+    "after": 3
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-04",
+    "to": "2021-12-28",
+    "days": 3018,
+    "ret": 0.0585,
+    "vol": 0.0867,
+    "sharpe": 0.68,
+    "t": 2.43,
+    "sharpe_gross": 0.7,
+    "sharpe_2x_cost": 0.65,
+    "drawdown": -0.1228,
+    "good_years": 0.75,
+    "by_year": {
+     "2010": {
+      "ret": 0.1307,
+      "sharpe": 1.35
+     },
+     "2011": {
+      "ret": 0.0942,
+      "sharpe": 0.78
+     },
+     "2012": {
+      "ret": 0.1079,
+      "sharpe": 1.53
+     },
+     "2013": {
+      "ret": 0.0905,
+      "sharpe": 1.6
+     },
+     "2014": {
+      "ret": 0.0122,
+      "sharpe": 0.23
+     },
+     "2015": {
+      "ret": -0.0026,
+      "sharpe": -0.03
+     },
+     "2016": {
+      "ret": 0.0213,
+      "sharpe": 0.32
+     },
+     "2017": {
+      "ret": 0.0677,
+      "sharpe": 1.88
+     },
+     "2018": {
+      "ret": -0.0171,
+      "sharpe": -0.19
+     },
+     "2019": {
+      "ret": 0.0598,
+      "sharpe": 0.76
+     },
+     "2020": {
+      "ret": 0.1421,
+      "sharpe": 0.98
+     },
+     "2021": {
+      "ret": -0.0061,
+      "sharpe": -0.07
+     }
+    },
+    "beta": 0.261,
+    "sharpe_alpha": 0.25,
+    "bench_ret": 0.1538,
+    "turnover": 24.1,
+    "cost": 0.0024,
+    "bp_per_trade": 48.5,
+    "bp_per_trade_gross": 50.5,
+    "names": 1.0,
+    "active": 0.29,
+    "daily_sharpe": 0.04252148167653848,
+    "skew": -0.19,
+    "kurt": 20.77
+   },
+   "validation": {
+    "from": "2022-01-05",
+    "to": "2024-12-31",
+    "days": 751,
+    "ret": 0.064,
+    "vol": 0.0965,
+    "sharpe": 0.66,
+    "t": 1.13,
+    "sharpe_gross": 0.69,
+    "sharpe_2x_cost": 0.64,
+    "drawdown": -0.104,
+    "good_years": 0.67,
+    "by_year": {
+     "2022": {
+      "ret": 0.1132,
+      "sharpe": 0.87
+     },
+     "2023": {
+      "ret": 0.1381,
+      "sharpe": 1.94
+     },
+     "2024": {
+      "ret": -0.0605,
+      "sharpe": -0.83
+     }
+    },
+    "beta": 0.303,
+    "sharpe_alpha": 0.42,
+    "bench_ret": 0.0988,
+    "turnover": 24.5,
+    "cost": 0.0024,
+    "bp_per_trade": 52.3,
+    "bp_per_trade_gross": 54.3,
+    "names": 1.0,
+    "active": 0.28,
+    "daily_sharpe": 0.04178942368071958,
+    "skew": 0.48,
+    "kurt": 12.26
+   },
+   "verdict": "weak",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "spy_-1_+1",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "SPY",
+    "before": 1,
+    "after": 1
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-28",
+    "to": "2021-12-30",
+    "days": 3003,
+    "ret": 0.0069,
+    "vol": 0.0519,
+    "sharpe": 0.13,
+    "t": 0.45,
+    "sharpe_gross": 0.18,
+    "sharpe_2x_cost": 0.09,
+    "drawdown": -0.1195,
+    "good_years": 0.58,
+    "by_year": {
+     "2010": {
+      "ret": 0.04,
+      "sharpe": 0.71
+     },
+     "2011": {
+      "ret": -0.0495,
+      "sharpe": -0.62
+     },
+     "2012": {
+      "ret": 0.0544,
+      "sharpe": 1.14
+     },
+     "2013": {
+      "ret": 0.0353,
+      "sharpe": 0.92
+     },
+     "2014": {
+      "ret": -0.0616,
+      "sharpe": -1.48
+     },
+     "2015": {
+      "ret": -0.0244,
+      "sharpe": -0.49
+     },
+     "2016": {
+      "ret": 0.0323,
+      "sharpe": 0.74
+     },
+     "2017": {
+      "ret": 0.0471,
+      "sharpe": 2.09
+     },
+     "2018": {
+      "ret": 0.0266,
+      "sharpe": 0.63
+     },
+     "2019": {
+      "ret": -0.0147,
+      "sharpe": -0.42
+     },
+     "2020": {
+      "ret": 0.015,
+      "sharpe": 0.19
+     },
+     "2021": {
+      "ret": -0.0176,
+      "sharpe": -0.35
+     }
+    },
+    "beta": 0.094,
+    "sharpe_alpha": -0.16,
+    "bench_ret": 0.157,
+    "turnover": 24.1,
+    "cost": 0.0024,
+    "bp_per_trade": 5.8,
+    "bp_per_trade_gross": 7.8,
+    "names": 1.0,
+    "active": 0.1,
+    "daily_sharpe": 0.008435028107347562,
+    "skew": 0.01,
+    "kurt": 59.89
+   },
+   "validation": {
+    "from": "2022-01-03",
+    "to": "2024-12-31",
+    "days": 753,
+    "ret": 0.0094,
+    "vol": 0.0533,
+    "sharpe": 0.18,
+    "t": 0.32,
+    "sharpe_gross": 0.22,
+    "sharpe_2x_cost": 0.13,
+    "drawdown": -0.0815,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0098,
+      "sharpe": -0.14
+     },
+     "2023": {
+      "ret": 0.0741,
+      "sharpe": 2.21
+     },
+     "2024": {
+      "ret": -0.0362,
+      "sharpe": -0.73
+     }
+    },
+    "beta": 0.093,
+    "sharpe_alpha": 0.0,
+    "bench_ret": 0.1004,
+    "turnover": 24.4,
+    "cost": 0.0024,
+    "bp_per_trade": 7.7,
+    "bp_per_trade_gross": 9.7,
+    "names": 1.0,
+    "active": 0.09,
+    "daily_sharpe": 0.011099600141847576,
+    "skew": -0.43,
+    "kurt": 47.05
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:06:17-06:00",
+   "idea": "turn_of_month",
+   "family": "calendar",
+   "variant": "spy_rest_of_month",
+   "market": "us",
+   "settings": {
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "close",
+    "max_w": 1.0,
+    "fund": "SPY",
+    "before": 1,
+    "after": 3,
+    "rest": true
+   },
+   "universe": {
+    "funds": [
+     "SPY",
+     "IWM",
+     "QQQ"
+    ]
+   },
+   "code": "fe104659fb",
+   "discovery": {
+    "from": "2010-01-06",
+    "to": "2021-12-30",
+    "days": 3018,
+    "ret": 0.113,
+    "vol": 0.1536,
+    "sharpe": 0.74,
+    "t": 2.75,
+    "sharpe_gross": 0.75,
+    "sharpe_2x_cost": 0.72,
+    "drawdown": -0.3698,
+    "good_years": 0.92,
+    "by_year": {
+     "2010": {
+      "ret": 0.0046,
+      "sharpe": 0.03
+     },
+     "2011": {
+      "ret": 0.0539,
+      "sharpe": 0.26
+     },
+     "2012": {
+      "ret": 0.0689,
+      "sharpe": 0.62
+     },
+     "2013": {
+      "ret": 0.2404,
+      "sharpe": 2.43
+     },
+     "2014": {
+      "ret": 0.142,
+      "sharpe": 1.41
+     },
+     "2015": {
+      "ret": 0.0398,
+      "sharpe": 0.29
+     },
+     "2016": {
+      "ret": 0.1286,
+      "sharpe": 1.09
+     },
+     "2017": {
+      "ret": 0.1502,
+      "sharpe": 2.46
+     },
+     "2018": {
+      "ret": -0.0217,
+      "sharpe": -0.14
+     },
+     "2019": {
+      "ret": 0.2436,
+      "sharpe": 2.41
+     },
+     "2020": {
+      "ret": 0.0651,
+      "sharpe": 0.21
+     },
+     "2021": {
+      "ret": 0.2378,
+      "sharpe": 2.11
+     }
+    },
+    "beta": 0.821,
+    "sharpe_alpha": -0.2,
+    "bench_ret": 0.1534,
+    "turnover": 24.0,
+    "cost": 0.0024,
+    "bp_per_trade": 94.0,
+    "bp_per_trade_gross": 96.0,
+    "names": 1.0,
+    "active": 0.81,
+    "daily_sharpe": 0.0463514418668097,
+    "skew": -0.73,
+    "kurt": 22.72
+   },
+   "validation": {
+    "from": "2022-01-05",
+    "to": "2024-12-30",
+    "days": 750,
+    "ret": 0.0979,
+    "vol": 0.1564,
+    "sharpe": 0.63,
+    "t": 1.06,
+    "sharpe_gross": 0.64,
+    "sharpe_2x_cost": 0.61,
+    "drawdown": -0.2569,
+    "good_years": 0.67,
+    "by_year": {
+     "2022": {
+      "ret": -0.1542,
+      "sharpe": -0.71
+     },
+     "2023": {
+      "ret": 0.1723,
+      "sharpe": 1.48
+     },
+     "2024": {
+      "ret": 0.2734,
+      "sharpe": 2.61
+     }
+    },
+    "beta": 0.797,
+    "sharpe_alpha": 0.26,
+    "bench_ret": 0.1002,
+    "turnover": 24.2,
+    "cost": 0.0024,
+    "bp_per_trade": 81.0,
+    "bp_per_trade_gross": 83.0,
+    "names": 1.0,
+    "active": 0.81,
+    "daily_sharpe": 0.03944341948306305,
+    "skew": -0.2,
+    "kurt": 6.28
+   },
+   "verdict": "weak",
+   "deflated": 0.0
+  }
+ ]
+}

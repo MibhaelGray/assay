@@ -1,0 +1,1423 @@
+{
+ "idea": {
+  "id": "rev_resid@jp",
+  "family": "reversal",
+  "title": "Buy the week's losers and short its winners, after taking out the market and the sector",
+  "why": "A stock pushed down by someone who needed to sell, with no news about the company, tends to come back once the selling stops; whoever takes the other side is paid for it. Taking out the market and sector move leaves the part most likely to be that kind of pressure. Known since Lehmann (1990) and Jegadeesh (1990); the open question is whether anything is left after costs in names liquid enough to trade.",
+  "source": "Lehmann 1990; Jegadeesh 1990; Da, Liu, Schaumburg 2014 (residual reversal)",
+  "market": "jp",
+  "universe": {
+   "min_price": 5,
+   "min_adv": 20000000.0,
+   "top": 1000
+  },
+  "base": {
+   "side": "ls",
+   "frac": 0.1,
+   "hold": 3,
+   "lookback": 5
+  },
+  "variants": {
+   "lb5_h3": {},
+   "lb5_h1": {
+    "hold": 1
+   },
+   "lb5_h5": {
+    "hold": 5
+   },
+   "lb1_h1": {
+    "lookback": 1,
+    "hold": 1
+   },
+   "lb3_h3": {
+    "lookback": 3
+   },
+   "lb10_h5": {
+    "lookback": 10,
+    "hold": 5
+   },
+   "lb5_h3_open_exit": {
+    "exit": "open"
+   },
+   "lb1_h1_at_close": {
+    "lookback": 1,
+    "hold": 1,
+    "entry": "close"
+   },
+   "mid_liquidity": {
+    "universe": {
+     "min_adv": 5000000.0,
+     "max_adv": 20000000.0,
+     "top": null
+    }
+   },
+   "top300": {
+    "universe": {
+     "top": 300
+    }
+   }
+  }
+ },
+ "trials": [
+  {
+   "at": "2026-11-22T01:20:43-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb5_h3",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 3,
+    "lookback": 5
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.1275,
+    "vol": 0.0528,
+    "sharpe": -2.42,
+    "t": -8.12,
+    "sharpe_gross": 0.66,
+    "sharpe_2x_cost": -5.48,
+    "drawdown": -0.7728,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.068,
+      "sharpe": -3.69
+     },
+     "2011": {
+      "ret": -0.0656,
+      "sharpe": -1.6
+     },
+     "2012": {
+      "ret": -0.0911,
+      "sharpe": -2.59
+     },
+     "2013": {
+      "ret": -0.0542,
+      "sharpe": -0.89
+     },
+     "2014": {
+      "ret": -0.1713,
+      "sharpe": -3.67
+     },
+     "2015": {
+      "ret": -0.1728,
+      "sharpe": -4.06
+     },
+     "2016": {
+      "ret": -0.1578,
+      "sharpe": -3.04
+     },
+     "2017": {
+      "ret": -0.1983,
+      "sharpe": -5.8
+     },
+     "2018": {
+      "ret": -0.1417,
+      "sharpe": -2.96
+     },
+     "2019": {
+      "ret": -0.0769,
+      "sharpe": -1.79
+     },
+     "2020": {
+      "ret": -0.1274,
+      "sharpe": -1.33
+     },
+     "2021": {
+      "ret": -0.1362,
+      "sharpe": -2.56
+     }
+    },
+    "beta": 0.008,
+    "sharpe_alpha": -2.42,
+    "bench_ret": 0.0315,
+    "turnover": 142.5,
+    "cost": 0.1625,
+    "bp_per_trade": -17.9,
+    "bp_per_trade_gross": 4.9,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.1521520338564198,
+    "skew": 0.82,
+    "kurt": 19.05
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.1188,
+    "vol": 0.0564,
+    "sharpe": -2.11,
+    "t": -3.53,
+    "sharpe_gross": 0.95,
+    "sharpe_2x_cost": -5.17,
+    "drawdown": -0.3158,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0691,
+      "sharpe": -1.2
+     },
+     "2023": {
+      "ret": -0.1356,
+      "sharpe": -3.13
+     },
+     "2024": {
+      "ret": -0.1419,
+      "sharpe": -2.29
+     }
+    },
+    "beta": 0.045,
+    "sharpe_alpha": -2.26,
+    "bench_ret": 0.1572,
+    "turnover": 153.6,
+    "cost": 0.1725,
+    "bp_per_trade": -15.5,
+    "bp_per_trade_gross": 7.0,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.13272420963969636,
+    "skew": 0.08,
+    "kurt": 4.71
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:44-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb5_h1",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 1,
+    "lookback": 5
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.4111,
+    "vol": 0.0567,
+    "sharpe": -7.25,
+    "t": -24.03,
+    "sharpe_gross": 1.18,
+    "sharpe_2x_cost": -15.49,
+    "drawdown": -0.9912,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.2027,
+      "sharpe": -9.74
+     },
+     "2011": {
+      "ret": -0.2877,
+      "sharpe": -7.09
+     },
+     "2012": {
+      "ret": -0.2786,
+      "sharpe": -7.63
+     },
+     "2013": {
+      "ret": -0.3385,
+      "sharpe": -4.87
+     },
+     "2014": {
+      "ret": -0.4334,
+      "sharpe": -8.53
+     },
+     "2015": {
+      "ret": -0.5623,
+      "sharpe": -11.88
+     },
+     "2016": {
+      "ret": -0.4345,
+      "sharpe": -7.6
+     },
+     "2017": {
+      "ret": -0.5723,
+      "sharpe": -15.35
+     },
+     "2018": {
+      "ret": -0.4425,
+      "sharpe": -8.59
+     },
+     "2019": {
+      "ret": -0.3472,
+      "sharpe": -7.9
+     },
+     "2020": {
+      "ret": -0.4036,
+      "sharpe": -4.05
+     },
+     "2021": {
+      "ret": -0.4096,
+      "sharpe": -7.17
+     }
+    },
+    "beta": 0.004,
+    "sharpe_alpha": -7.25,
+    "bench_ret": 0.0315,
+    "turnover": 427.8,
+    "cost": 0.4776,
+    "bp_per_trade": -19.2,
+    "bp_per_trade_gross": 3.1,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.45639760648320654,
+    "skew": 0.69,
+    "kurt": 20.74
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.4427,
+    "vol": 0.0588,
+    "sharpe": -7.52,
+    "t": -13.11,
+    "sharpe_gross": 1.09,
+    "sharpe_2x_cost": -16.06,
+    "drawdown": -0.7281,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.3741,
+      "sharpe": -6.64
+     },
+     "2023": {
+      "ret": -0.4495,
+      "sharpe": -9.36
+     },
+     "2024": {
+      "ret": -0.4676,
+      "sharpe": -7.1
+     }
+    },
+    "beta": 0.031,
+    "sharpe_alpha": -7.64,
+    "bench_ret": 0.1572,
+    "turnover": 461.0,
+    "cost": 0.5065,
+    "bp_per_trade": -19.2,
+    "bp_per_trade_gross": 2.8,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.4738804453621906,
+    "skew": -0.1,
+    "kurt": 5.57
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:44-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb5_h5",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 5,
+    "lookback": 5
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.0721,
+    "vol": 0.0483,
+    "sharpe": -1.49,
+    "t": -5.29,
+    "sharpe_gross": 0.57,
+    "sharpe_2x_cost": -3.55,
+    "drawdown": -0.5697,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.0454,
+      "sharpe": -2.87
+     },
+     "2011": {
+      "ret": -0.0392,
+      "sharpe": -1.01
+     },
+     "2012": {
+      "ret": -0.0556,
+      "sharpe": -1.74
+     },
+     "2013": {
+      "ret": -0.0172,
+      "sharpe": -0.3
+     },
+     "2014": {
+      "ret": -0.1392,
+      "sharpe": -3.24
+     },
+     "2015": {
+      "ret": -0.0878,
+      "sharpe": -2.26
+     },
+     "2016": {
+      "ret": -0.0708,
+      "sharpe": -1.52
+     },
+     "2017": {
+      "ret": -0.1061,
+      "sharpe": -3.26
+     },
+     "2018": {
+      "ret": -0.1065,
+      "sharpe": -2.47
+     },
+     "2019": {
+      "ret": -0.0196,
+      "sharpe": -0.49
+     },
+     "2020": {
+      "ret": -0.0584,
+      "sharpe": -0.67
+     },
+     "2021": {
+      "ret": -0.0803,
+      "sharpe": -1.61
+     }
+    },
+    "beta": 0.008,
+    "sharpe_alpha": -1.5,
+    "bench_ret": 0.0315,
+    "turnover": 85.5,
+    "cost": 0.0995,
+    "bp_per_trade": -16.9,
+    "bp_per_trade_gross": 6.4,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.09393395376413476,
+    "skew": 0.8,
+    "kurt": 17.62
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.0557,
+    "vol": 0.0545,
+    "sharpe": -1.02,
+    "t": -1.71,
+    "sharpe_gross": 0.92,
+    "sharpe_2x_cost": -2.96,
+    "drawdown": -0.1891,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0191,
+      "sharpe": -0.35
+     },
+     "2023": {
+      "ret": -0.0709,
+      "sharpe": -1.76
+     },
+     "2024": {
+      "ret": -0.0723,
+      "sharpe": -1.17
+     }
+    },
+    "beta": 0.049,
+    "sharpe_alpha": -1.18,
+    "bench_ret": 0.1572,
+    "turnover": 92.2,
+    "cost": 0.1056,
+    "bp_per_trade": -12.1,
+    "bp_per_trade_gross": 10.8,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.06437328411665601,
+    "skew": 0.05,
+    "kurt": 5.55
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:45-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb1_h1",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 1,
+    "lookback": 1
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-05",
+    "to": "2021-12-30",
+    "days": 2893,
+    "ret": -0.373,
+    "vol": 0.0537,
+    "sharpe": -6.95,
+    "t": -24.14,
+    "sharpe_gross": 1.95,
+    "sharpe_2x_cost": -15.68,
+    "drawdown": -0.9865,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.235,
+      "sharpe": -10.59
+     },
+     "2011": {
+      "ret": -0.3283,
+      "sharpe": -8.59
+     },
+     "2012": {
+      "ret": -0.2531,
+      "sharpe": -8.17
+     },
+     "2013": {
+      "ret": -0.2562,
+      "sharpe": -3.93
+     },
+     "2014": {
+      "ret": -0.2968,
+      "sharpe": -6.12
+     },
+     "2015": {
+      "ret": -0.5179,
+      "sharpe": -12.35
+     },
+     "2016": {
+      "ret": -0.3739,
+      "sharpe": -6.91
+     },
+     "2017": {
+      "ret": -0.4045,
+      "sharpe": -9.52
+     },
+     "2018": {
+      "ret": -0.4492,
+      "sharpe": -9.0
+     },
+     "2019": {
+      "ret": -0.3664,
+      "sharpe": -8.03
+     },
+     "2020": {
+      "ret": -0.3959,
+      "sharpe": -4.26
+     },
+     "2021": {
+      "ret": -0.4046,
+      "sharpe": -7.77
+     }
+    },
+    "beta": -0.001,
+    "sharpe_alpha": -6.95,
+    "bench_ret": 0.0312,
+    "turnover": 427.7,
+    "cost": 0.4775,
+    "bp_per_trade": -17.4,
+    "bp_per_trade_gross": 4.9,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.4377221059807605,
+    "skew": 0.04,
+    "kurt": 11.21
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.4778,
+    "vol": 0.0568,
+    "sharpe": -8.4,
+    "t": -14.08,
+    "sharpe_gross": 0.49,
+    "sharpe_2x_cost": -17.23,
+    "drawdown": -0.7533,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.4732,
+      "sharpe": -9.45
+     },
+     "2023": {
+      "ret": -0.4628,
+      "sharpe": -10.08
+     },
+     "2024": {
+      "ret": -0.4575,
+      "sharpe": -6.77
+     }
+    },
+    "beta": 0.03,
+    "sharpe_alpha": -8.53,
+    "bench_ret": 0.1572,
+    "turnover": 461.0,
+    "cost": 0.5057,
+    "bp_per_trade": -20.7,
+    "bp_per_trade_gross": 1.2,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.529434461430641,
+    "skew": -0.04,
+    "kurt": 10.13
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:46-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb3_h3",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 3,
+    "lookback": 3
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-07",
+    "to": "2021-12-30",
+    "days": 2891,
+    "ret": -0.1194,
+    "vol": 0.0503,
+    "sharpe": -2.37,
+    "t": -7.65,
+    "sharpe_gross": 0.86,
+    "sharpe_2x_cost": -5.6,
+    "drawdown": -0.7514,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.0755,
+      "sharpe": -4.22
+     },
+     "2011": {
+      "ret": -0.0789,
+      "sharpe": -2.13
+     },
+     "2012": {
+      "ret": -0.0822,
+      "sharpe": -2.61
+     },
+     "2013": {
+      "ret": -0.0398,
+      "sharpe": -0.7
+     },
+     "2014": {
+      "ret": -0.1745,
+      "sharpe": -3.81
+     },
+     "2015": {
+      "ret": -0.1537,
+      "sharpe": -4.11
+     },
+     "2016": {
+      "ret": -0.1232,
+      "sharpe": -2.34
+     },
+     "2017": {
+      "ret": -0.1867,
+      "sharpe": -5.71
+     },
+     "2018": {
+      "ret": -0.0857,
+      "sharpe": -1.92
+     },
+     "2019": {
+      "ret": -0.1044,
+      "sharpe": -2.4
+     },
+     "2020": {
+      "ret": -0.0804,
+      "sharpe": -0.87
+     },
+     "2021": {
+      "ret": -0.1848,
+      "sharpe": -3.79
+     }
+    },
+    "beta": 0.007,
+    "sharpe_alpha": -2.38,
+    "bench_ret": 0.0311,
+    "turnover": 142.5,
+    "cost": 0.1625,
+    "bp_per_trade": -16.8,
+    "bp_per_trade_gross": 6.0,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.14959463363412887,
+    "skew": 1.16,
+    "kurt": 20.2
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.119,
+    "vol": 0.0515,
+    "sharpe": -2.31,
+    "t": -3.96,
+    "sharpe_gross": 1.03,
+    "sharpe_2x_cost": -5.65,
+    "drawdown": -0.3028,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0899,
+      "sharpe": -1.64
+     },
+     "2023": {
+      "ret": -0.1463,
+      "sharpe": -3.74
+     },
+     "2024": {
+      "ret": -0.1109,
+      "sharpe": -2.02
+     }
+    },
+    "beta": 0.031,
+    "sharpe_alpha": -2.42,
+    "bench_ret": 0.1572,
+    "turnover": 153.6,
+    "cost": 0.1723,
+    "bp_per_trade": -15.5,
+    "bp_per_trade_gross": 6.9,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.14541285146646163,
+    "skew": 0.04,
+    "kurt": 5.38
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:46-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb10_h5",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 5,
+    "lookback": 10
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-16",
+    "to": "2021-12-30",
+    "days": 2884,
+    "ret": -0.0936,
+    "vol": 0.0544,
+    "sharpe": -1.72,
+    "t": -6.12,
+    "sharpe_gross": 0.11,
+    "sharpe_2x_cost": -3.55,
+    "drawdown": -0.6632,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.0321,
+      "sharpe": -1.76
+     },
+     "2011": {
+      "ret": -0.1006,
+      "sharpe": -2.19
+     },
+     "2012": {
+      "ret": -0.0637,
+      "sharpe": -1.68
+     },
+     "2013": {
+      "ret": -0.0669,
+      "sharpe": -1.09
+     },
+     "2014": {
+      "ret": -0.133,
+      "sharpe": -2.59
+     },
+     "2015": {
+      "ret": -0.1358,
+      "sharpe": -3.07
+     },
+     "2016": {
+      "ret": -0.0439,
+      "sharpe": -0.74
+     },
+     "2017": {
+      "ret": -0.1164,
+      "sharpe": -3.29
+     },
+     "2018": {
+      "ret": -0.1289,
+      "sharpe": -2.88
+     },
+     "2019": {
+      "ret": -0.0321,
+      "sharpe": -0.72
+     },
+     "2020": {
+      "ret": -0.0899,
+      "sharpe": -0.98
+     },
+     "2021": {
+      "ret": -0.1281,
+      "sharpe": -2.21
+     }
+    },
+    "beta": 0.01,
+    "sharpe_alpha": -1.73,
+    "bench_ret": 0.0304,
+    "turnover": 85.5,
+    "cost": 0.0996,
+    "bp_per_trade": -21.9,
+    "bp_per_trade_gross": 1.4,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.10842457877052188,
+    "skew": 0.74,
+    "kurt": 15.42
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.09,
+    "vol": 0.0631,
+    "sharpe": -1.43,
+    "t": -2.44,
+    "sharpe_gross": 0.25,
+    "sharpe_2x_cost": -3.1,
+    "drawdown": -0.2578,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0623,
+      "sharpe": -1.02
+     },
+     "2023": {
+      "ret": -0.0537,
+      "sharpe": -1.16
+     },
+     "2024": {
+      "ret": -0.1464,
+      "sharpe": -1.99
+     }
+    },
+    "beta": 0.054,
+    "sharpe_alpha": -1.58,
+    "bench_ret": 0.1572,
+    "turnover": 92.2,
+    "cost": 0.1057,
+    "bp_per_trade": -19.5,
+    "bp_per_trade_gross": 3.4,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.08980421339274383,
+    "skew": -0.06,
+    "kurt": 5.64
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:47-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb5_h3_open_exit",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 3,
+    "lookback": 5,
+    "exit": "open"
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.0749,
+    "vol": 0.0572,
+    "sharpe": -1.31,
+    "t": -4.33,
+    "sharpe_gross": 0.77,
+    "sharpe_2x_cost": -3.38,
+    "drawdown": -0.5857,
+    "good_years": 0.08,
+    "by_year": {
+     "2010": {
+      "ret": -0.0485,
+      "sharpe": -2.48
+     },
+     "2011": {
+      "ret": -0.0264,
+      "sharpe": -0.57
+     },
+     "2012": {
+      "ret": -0.053,
+      "sharpe": -1.39
+     },
+     "2013": {
+      "ret": 0.0226,
+      "sharpe": 0.34
+     },
+     "2014": {
+      "ret": -0.1245,
+      "sharpe": -2.48
+     },
+     "2015": {
+      "ret": -0.0998,
+      "sharpe": -2.18
+     },
+     "2016": {
+      "ret": -0.0874,
+      "sharpe": -1.54
+     },
+     "2017": {
+      "ret": -0.114,
+      "sharpe": -3.0
+     },
+     "2018": {
+      "ret": -0.0926,
+      "sharpe": -1.79
+     },
+     "2019": {
+      "ret": -0.0491,
+      "sharpe": -1.03
+     },
+     "2020": {
+      "ret": -0.0775,
+      "sharpe": -0.75
+     },
+     "2021": {
+      "ret": -0.1085,
+      "sharpe": -1.91
+     }
+    },
+    "beta": 0.009,
+    "sharpe_alpha": -1.32,
+    "bench_ret": 0.0315,
+    "turnover": 101.9,
+    "cost": 0.119,
+    "bp_per_trade": -14.7,
+    "bp_per_trade_gross": 8.7,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.08242739133033293,
+    "skew": 0.78,
+    "kurt": 17.06
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.0654,
+    "vol": 0.063,
+    "sharpe": -1.04,
+    "t": -1.72,
+    "sharpe_gross": 0.96,
+    "sharpe_2x_cost": -3.03,
+    "drawdown": -0.2097,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0189,
+      "sharpe": -0.3
+     },
+     "2023": {
+      "ret": -0.094,
+      "sharpe": -2.0
+     },
+     "2024": {
+      "ret": -0.0781,
+      "sharpe": -1.11
+     }
+    },
+    "beta": 0.061,
+    "sharpe_alpha": -1.21,
+    "bench_ret": 0.1572,
+    "turnover": 109.3,
+    "cost": 0.1258,
+    "bp_per_trade": -12.0,
+    "bp_per_trade_gross": 11.0,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.0653976245092669,
+    "skew": 0.16,
+    "kurt": 5.13
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:48-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "lb1_h1_at_close",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 1,
+    "lookback": 1,
+    "entry": "close"
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-02",
+    "to": "2021-12-30",
+    "days": 2894,
+    "ret": -0.3936,
+    "vol": 0.0636,
+    "sharpe": -6.19,
+    "t": -21.47,
+    "sharpe_gross": 0.4,
+    "sharpe_2x_cost": -12.91,
+    "drawdown": -0.9894,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.1574,
+      "sharpe": -6.44
+     },
+     "2011": {
+      "ret": -0.2984,
+      "sharpe": -5.89
+     },
+     "2012": {
+      "ret": -0.2354,
+      "sharpe": -5.86
+     },
+     "2013": {
+      "ret": -0.3895,
+      "sharpe": -5.21
+     },
+     "2014": {
+      "ret": -0.4074,
+      "sharpe": -7.64
+     },
+     "2015": {
+      "ret": -0.442,
+      "sharpe": -8.61
+     },
+     "2016": {
+      "ret": -0.4385,
+      "sharpe": -6.57
+     },
+     "2017": {
+      "ret": -0.5015,
+      "sharpe": -10.81
+     },
+     "2018": {
+      "ret": -0.5054,
+      "sharpe": -8.36
+     },
+     "2019": {
+      "ret": -0.3496,
+      "sharpe": -6.41
+     },
+     "2020": {
+      "ret": -0.4816,
+      "sharpe": -4.43
+     },
+     "2021": {
+      "ret": -0.3137,
+      "sharpe": -4.98
+     }
+    },
+    "beta": 0.004,
+    "sharpe_alpha": -6.19,
+    "bench_ret": 0.0316,
+    "turnover": 372.5,
+    "cost": 0.4197,
+    "bp_per_trade": -21.1,
+    "bp_per_trade_gross": 1.4,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.3896481099171771,
+    "skew": 0.27,
+    "kurt": 12.59
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.4071,
+    "vol": 0.0688,
+    "sharpe": -5.92,
+    "t": -9.71,
+    "sharpe_gross": 0.52,
+    "sharpe_2x_cost": -12.55,
+    "drawdown": -0.6974,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.3745,
+      "sharpe": -5.85
+     },
+     "2023": {
+      "ret": -0.4016,
+      "sharpe": -7.61
+     },
+     "2024": {
+      "ret": -0.4112,
+      "sharpe": -5.08
+     }
+    },
+    "beta": 0.063,
+    "sharpe_alpha": -6.15,
+    "bench_ret": 0.1572,
+    "turnover": 400.5,
+    "cost": 0.4433,
+    "bp_per_trade": -20.3,
+    "bp_per_trade_gross": 1.8,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.3727380053536892,
+    "skew": 0.52,
+    "kurt": 8.5
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:48-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "mid_liquidity",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 3,
+    "lookback": 5,
+    "universe": {
+     "min_adv": 5000000.0,
+     "max_adv": 20000000.0,
+     "top": null
+    }
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.2677,
+    "vol": 0.0544,
+    "sharpe": -4.92,
+    "t": -16.38,
+    "sharpe_gross": 0.57,
+    "sharpe_2x_cost": -10.4,
+    "drawdown": -0.9546,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.1635,
+      "sharpe": -7.42
+     },
+     "2011": {
+      "ret": -0.1787,
+      "sharpe": -4.38
+     },
+     "2012": {
+      "ret": -0.2352,
+      "sharpe": -5.46
+     },
+     "2013": {
+      "ret": -0.1502,
+      "sharpe": -2.46
+     },
+     "2014": {
+      "ret": -0.3316,
+      "sharpe": -7.38
+     },
+     "2015": {
+      "ret": -0.3133,
+      "sharpe": -6.82
+     },
+     "2016": {
+      "ret": -0.2545,
+      "sharpe": -4.64
+     },
+     "2017": {
+      "ret": -0.3445,
+      "sharpe": -9.61
+     },
+     "2018": {
+      "ret": -0.2755,
+      "sharpe": -5.8
+     },
+     "2019": {
+      "ret": -0.3103,
+      "sharpe": -7.13
+     },
+     "2020": {
+      "ret": -0.245,
+      "sharpe": -2.49
+     },
+     "2021": {
+      "ret": -0.267,
+      "sharpe": -5.08
+     }
+    },
+    "beta": 0.012,
+    "sharpe_alpha": -4.94,
+    "bench_ret": 0.0315,
+    "turnover": 157.8,
+    "cost": 0.2987,
+    "bp_per_trade": -33.9,
+    "bp_per_trade_gross": 3.9,
+    "names": 46.0,
+    "active": 1.0,
+    "daily_sharpe": -0.31020208661913823,
+    "skew": 1.09,
+    "kurt": 22.17
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.3101,
+    "vol": 0.0535,
+    "sharpe": -5.8,
+    "t": -10.06,
+    "sharpe_gross": 0.15,
+    "sharpe_2x_cost": -11.74,
+    "drawdown": -0.5987,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.2898,
+      "sharpe": -4.75
+     },
+     "2023": {
+      "ret": -0.2768,
+      "sharpe": -6.23
+     },
+     "2024": {
+      "ret": -0.3379,
+      "sharpe": -6.87
+     }
+    },
+    "beta": 0.054,
+    "sharpe_alpha": -6.06,
+    "bench_ret": 0.1572,
+    "turnover": 168.0,
+    "cost": 0.3179,
+    "bp_per_trade": -36.9,
+    "bp_per_trade_gross": 0.9,
+    "names": 50.2,
+    "active": 1.0,
+    "daily_sharpe": -0.36533897160056766,
+    "skew": 0.04,
+    "kurt": 4.31
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T01:20:49-06:00",
+   "idea": "rev_resid@jp",
+   "family": "reversal",
+   "variant": "top300",
+   "market": "jp",
+   "settings": {
+    "side": "ls",
+    "frac": 0.1,
+    "hold": 3,
+    "lookback": 5,
+    "universe": {
+     "top": 300
+    }
+   },
+   "universe": {
+    "min_price": 5,
+    "min_adv": 20000000.0,
+    "top": 1000
+   },
+   "code": "ed2f969caf",
+   "discovery": {
+    "from": "2010-04-09",
+    "to": "2021-12-30",
+    "days": 2889,
+    "ret": -0.1275,
+    "vol": 0.0528,
+    "sharpe": -2.42,
+    "t": -8.12,
+    "sharpe_gross": 0.66,
+    "sharpe_2x_cost": -5.48,
+    "drawdown": -0.7728,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.068,
+      "sharpe": -3.69
+     },
+     "2011": {
+      "ret": -0.0656,
+      "sharpe": -1.6
+     },
+     "2012": {
+      "ret": -0.0911,
+      "sharpe": -2.59
+     },
+     "2013": {
+      "ret": -0.0542,
+      "sharpe": -0.89
+     },
+     "2014": {
+      "ret": -0.1713,
+      "sharpe": -3.67
+     },
+     "2015": {
+      "ret": -0.1728,
+      "sharpe": -4.06
+     },
+     "2016": {
+      "ret": -0.1578,
+      "sharpe": -3.04
+     },
+     "2017": {
+      "ret": -0.1983,
+      "sharpe": -5.8
+     },
+     "2018": {
+      "ret": -0.1417,
+      "sharpe": -2.96
+     },
+     "2019": {
+      "ret": -0.0769,
+      "sharpe": -1.79
+     },
+     "2020": {
+      "ret": -0.1274,
+      "sharpe": -1.33
+     },
+     "2021": {
+      "ret": -0.1362,
+      "sharpe": -2.56
+     }
+    },
+    "beta": 0.008,
+    "sharpe_alpha": -2.42,
+    "bench_ret": 0.0315,
+    "turnover": 142.5,
+    "cost": 0.1625,
+    "bp_per_trade": -17.9,
+    "bp_per_trade_gross": 4.9,
+    "names": 34.6,
+    "active": 1.0,
+    "daily_sharpe": -0.1521520338564198,
+    "skew": 0.82,
+    "kurt": 19.05
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.1188,
+    "vol": 0.0564,
+    "sharpe": -2.11,
+    "t": -3.53,
+    "sharpe_gross": 0.95,
+    "sharpe_2x_cost": -5.17,
+    "drawdown": -0.3158,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0691,
+      "sharpe": -1.2
+     },
+     "2023": {
+      "ret": -0.1356,
+      "sharpe": -3.13
+     },
+     "2024": {
+      "ret": -0.1419,
+      "sharpe": -2.29
+     }
+    },
+    "beta": 0.045,
+    "sharpe_alpha": -2.26,
+    "bench_ret": 0.1572,
+    "turnover": 153.6,
+    "cost": 0.1725,
+    "bp_per_trade": -15.5,
+    "bp_per_trade_gross": 7.0,
+    "names": 37.5,
+    "active": 1.0,
+    "daily_sharpe": -0.13272420963969636,
+    "skew": 0.08,
+    "kurt": 4.71
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  }
+ ]
+}

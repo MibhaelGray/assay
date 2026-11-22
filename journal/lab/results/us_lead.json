@@ -1,0 +1,896 @@
+{
+ "idea": {
+  "id": "us_lead",
+  "family": "cross-market",
+  "title": "Asian and Australian markets from their open to their close, in the direction New York moved overnight",
+  "why": "Tokyo, Hong Kong, Seoul, Taipei and Sydney open a few hours after New York closes. The opening gap prices most of the US move, but local investors who trade through the day (and foreign money that arrives during it) may keep adjusting, so the rest of the session could continue the US move. This is a question about how fast local prices absorb overnight US news. Entry is at the local open, after the US close is known, and exit at the local close. In Korea and Taiwan the short days stand for an index future (no ETF shorting). Run per market as us_lead@hk and so on; every market gets the same variants.",
+  "source": "Lead-lag between US and Asian markets: Eun and Shim 1989; Becker, Finnerty and Gupta 1990",
+  "market": "jp",
+  "universe": {},
+  "base": {
+   "universe": {
+    "funds": "bench"
+   },
+   "side": "ls",
+   "select": "sign",
+   "hold": 1,
+   "entry": "open",
+   "exit": "close",
+   "min_names": 1,
+   "max_w": 1.0,
+   "cut": 0.0,
+   "level": "market"
+  },
+  "variants": {
+   "market_all": {},
+   "market_big_1pct": {
+    "cut": 0.01
+   },
+   "market_big_2pct": {
+    "cut": 0.02
+   },
+   "market_long_only_up": {
+    "side": "long"
+   },
+   "stocks_beta": {
+    "level": "stock",
+    "select": "rank",
+    "frac": 0.1,
+    "min_names": 20,
+    "max_w": 0.05,
+    "universe": {
+     "min_price": 1,
+     "min_adv": 10000000.0,
+     "top": 500
+    }
+   },
+   "stocks_beta_big_1pct": {
+    "level": "stock",
+    "select": "rank",
+    "frac": 0.1,
+    "min_names": 20,
+    "max_w": 0.05,
+    "cut": 0.01,
+    "universe": {
+     "min_price": 1,
+     "min_adv": 10000000.0,
+     "top": 500
+    }
+   }
+  }
+ },
+ "trials": [
+  {
+   "at": "2026-11-22T11:51:45-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "market_all",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "funds": "bench"
+    },
+    "side": "ls",
+    "select": "sign",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 1,
+    "max_w": 1.0,
+    "cut": 0.0,
+    "level": "market"
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-01-06",
+    "to": "2021-12-30",
+    "days": 2953,
+    "ret": -0.2355,
+    "vol": 0.0644,
+    "sharpe": -3.66,
+    "t": -12.22,
+    "sharpe_gross": -1.02,
+    "sharpe_2x_cost": -6.28,
+    "drawdown": -0.9395,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.1915,
+      "sharpe": -3.45
+     },
+     "2011": {
+      "ret": -0.2368,
+      "sharpe": -3.82
+     },
+     "2012": {
+      "ret": -0.274,
+      "sharpe": -5.07
+     },
+     "2013": {
+      "ret": -0.2387,
+      "sharpe": -2.75
+     },
+     "2014": {
+      "ret": -0.1905,
+      "sharpe": -3.3
+     },
+     "2015": {
+      "ret": -0.2753,
+      "sharpe": -4.31
+     },
+     "2016": {
+      "ret": -0.2055,
+      "sharpe": -2.27
+     },
+     "2017": {
+      "ret": -0.2483,
+      "sharpe": -6.81
+     },
+     "2018": {
+      "ret": -0.2312,
+      "sharpe": -4.18
+     },
+     "2019": {
+      "ret": -0.1898,
+      "sharpe": -4.62
+     },
+     "2020": {
+      "ret": -0.2244,
+      "sharpe": -2.97
+     },
+     "2021": {
+      "ret": -0.2536,
+      "sharpe": -4.89
+     }
+    },
+    "beta": 0.004,
+    "sharpe_alpha": -3.66,
+    "bench_ret": 0.0377,
+    "turnover": 242.6,
+    "cost": 0.1698,
+    "bp_per_trade": -19.4,
+    "bp_per_trade_gross": -5.4,
+    "names": 1.0,
+    "active": 0.96,
+    "daily_sharpe": -0.23029253284279017,
+    "skew": -0.49,
+    "kurt": 11.33
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.1867,
+    "vol": 0.0578,
+    "sharpe": -3.23,
+    "t": -5.3,
+    "sharpe_gross": -0.29,
+    "sharpe_2x_cost": -6.16,
+    "drawdown": -0.4337,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.1226,
+      "sharpe": -2.37
+     },
+     "2023": {
+      "ret": -0.2131,
+      "sharpe": -4.44
+     },
+     "2024": {
+      "ret": -0.2088,
+      "sharpe": -3.12
+     }
+    },
+    "beta": -0.028,
+    "sharpe_alpha": -3.17,
+    "bench_ret": 0.1572,
+    "turnover": 242.7,
+    "cost": 0.1699,
+    "bp_per_trade": -15.4,
+    "bp_per_trade_gross": -1.4,
+    "names": 1.0,
+    "active": 0.96,
+    "daily_sharpe": -0.20352835877193745,
+    "skew": 0.89,
+    "kurt": 9.32
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T11:51:45-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "market_big_1pct",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "funds": "bench"
+    },
+    "side": "ls",
+    "select": "sign",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 1,
+    "max_w": 1.0,
+    "cut": 0.01,
+    "level": "market"
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-01-18",
+    "to": "2021-12-28",
+    "days": 2944,
+    "ret": -0.0714,
+    "vol": 0.0394,
+    "sharpe": -1.82,
+    "t": -5.94,
+    "sharpe_gross": -0.85,
+    "sharpe_2x_cost": -2.71,
+    "drawdown": -0.576,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.0562,
+      "sharpe": -1.85
+     },
+     "2011": {
+      "ret": -0.1125,
+      "sharpe": -2.39
+     },
+     "2012": {
+      "ret": -0.0467,
+      "sharpe": -2.37
+     },
+     "2013": {
+      "ret": -0.0454,
+      "sharpe": -1.14
+     },
+     "2014": {
+      "ret": -0.0364,
+      "sharpe": -1.43
+     },
+     "2015": {
+      "ret": -0.0882,
+      "sharpe": -2.12
+     },
+     "2016": {
+      "ret": -0.0647,
+      "sharpe": -1.16
+     },
+     "2017": {
+      "ret": -0.0062,
+      "sharpe": -0.8
+     },
+     "2018": {
+      "ret": -0.072,
+      "sharpe": -1.96
+     },
+     "2019": {
+      "ret": -0.0601,
+      "sharpe": -2.48
+     },
+     "2020": {
+      "ret": -0.1959,
+      "sharpe": -3.12
+     },
+     "2021": {
+      "ret": -0.0504,
+      "sharpe": -1.61
+     }
+    },
+    "beta": 0.001,
+    "sharpe_alpha": -1.82,
+    "bench_ret": 0.0344,
+    "turnover": 55.1,
+    "cost": 0.0386,
+    "bp_per_trade": -25.9,
+    "bp_per_trade_gross": -11.9,
+    "names": 1.0,
+    "active": 0.22,
+    "daily_sharpe": -0.1143527296984416,
+    "skew": -3.71,
+    "kurt": 48.24
+   },
+   "validation": {
+    "from": "2022-01-06",
+    "to": "2024-12-30",
+    "days": 733,
+    "ret": -0.0414,
+    "vol": 0.0344,
+    "sharpe": -1.2,
+    "t": -1.94,
+    "sharpe_gross": 0.32,
+    "sharpe_2x_cost": -2.66,
+    "drawdown": -0.1485,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0959,
+      "sharpe": -2.77
+     },
+     "2023": {
+      "ret": -0.0378,
+      "sharpe": -1.74
+     },
+     "2024": {
+      "ret": 0.0133,
+      "sharpe": 0.33
+     }
+    },
+    "beta": -0.023,
+    "sharpe_alpha": -1.11,
+    "bench_ret": 0.1491,
+    "turnover": 74.9,
+    "cost": 0.0525,
+    "bp_per_trade": -11.0,
+    "bp_per_trade_gross": 3.0,
+    "names": 1.0,
+    "active": 0.3,
+    "daily_sharpe": -0.07589742133777136,
+    "skew": 2.17,
+    "kurt": 40.0
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T11:51:45-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "market_big_2pct",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "funds": "bench"
+    },
+    "side": "ls",
+    "select": "sign",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 1,
+    "max_w": 1.0,
+    "cut": 0.02,
+    "level": "market"
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-01-25",
+    "to": "2021-12-08",
+    "days": 2925,
+    "ret": -0.0237,
+    "vol": 0.0227,
+    "sharpe": -1.04,
+    "t": -3.37,
+    "sharpe_gross": -0.64,
+    "sharpe_2x_cost": -1.41,
+    "drawdown": -0.2393,
+    "good_years": 0.25,
+    "by_year": {
+     "2010": {
+      "ret": -0.0334,
+      "sharpe": -1.86
+     },
+     "2011": {
+      "ret": -0.0575,
+      "sharpe": -2.21
+     },
+     "2012": {
+      "ret": -0.0111,
+      "sharpe": -1.44
+     },
+     "2013": {
+      "ret": -0.0244,
+      "sharpe": -1.29
+     },
+     "2014": {
+      "ret": 0.0023,
+      "sharpe": 0.26
+     },
+     "2015": {
+      "ret": 0.0302,
+      "sharpe": 1.31
+     },
+     "2016": {
+      "ret": 0.0029,
+      "sharpe": 0.17
+     },
+     "2017": {
+      "ret": 0.0,
+      "sharpe": 0.0
+     },
+     "2018": {
+      "ret": -0.0142,
+      "sharpe": -0.76
+     },
+     "2019": {
+      "ret": -0.0352,
+      "sharpe": -1.91
+     },
+     "2020": {
+      "ret": -0.1225,
+      "sharpe": -2.43
+     },
+     "2021": {
+      "ret": -0.0119,
+      "sharpe": -0.87
+     }
+    },
+    "beta": 0.001,
+    "sharpe_alpha": -1.04,
+    "bench_ret": 0.0367,
+    "turnover": 13.5,
+    "cost": 0.0095,
+    "bp_per_trade": -35.0,
+    "bp_per_trade_gross": -21.0,
+    "names": 1.0,
+    "active": 0.05,
+    "daily_sharpe": -0.0655791006779712,
+    "skew": -5.04,
+    "kurt": 98.09
+   },
+   "validation": {
+    "from": "2022-01-31",
+    "to": "2024-12-19",
+    "days": 710,
+    "ret": -0.0076,
+    "vol": 0.016,
+    "sharpe": -0.48,
+    "t": -0.81,
+    "sharpe_gross": 0.33,
+    "sharpe_2x_cost": -1.24,
+    "drawdown": -0.0313,
+    "good_years": 0.33,
+    "by_year": {
+     "2022": {
+      "ret": -0.0216,
+      "sharpe": -1.05
+     },
+     "2023": {
+      "ret": -0.0024,
+      "sharpe": -0.61
+     },
+     "2024": {
+      "ret": 0.0025,
+      "sharpe": 0.17
+     }
+    },
+    "beta": 0.011,
+    "sharpe_alpha": -0.6,
+    "bench_ret": 0.1735,
+    "turnover": 18.5,
+    "cost": 0.0129,
+    "bp_per_trade": -8.3,
+    "bp_per_trade_gross": 5.7,
+    "names": 1.0,
+    "active": 0.07,
+    "daily_sharpe": -0.02996966495326337,
+    "skew": 0.17,
+    "kurt": 41.43
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T11:51:45-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "market_long_only_up",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "funds": "bench"
+    },
+    "side": "long",
+    "select": "sign",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 1,
+    "max_w": 1.0,
+    "cut": 0.0,
+    "level": "market"
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-01-06",
+    "to": "2021-12-30",
+    "days": 2953,
+    "ret": -0.2748,
+    "vol": 0.094,
+    "sharpe": -2.92,
+    "t": -10.14,
+    "sharpe_gross": -0.9,
+    "sharpe_2x_cost": -4.82,
+    "drawdown": -0.9629,
+    "good_years": 0.0,
+    "by_year": {
+     "2010": {
+      "ret": -0.2875,
+      "sharpe": -3.71
+     },
+     "2011": {
+      "ret": -0.2641,
+      "sharpe": -3.39
+     },
+     "2012": {
+      "ret": -0.3145,
+      "sharpe": -3.69
+     },
+     "2013": {
+      "ret": -0.2849,
+      "sharpe": -2.4
+     },
+     "2014": {
+      "ret": -0.2428,
+      "sharpe": -2.75
+     },
+     "2015": {
+      "ret": -0.2192,
+      "sharpe": -2.57
+     },
+     "2016": {
+      "ret": -0.2789,
+      "sharpe": -1.86
+     },
+     "2017": {
+      "ret": -0.2728,
+      "sharpe": -4.77
+     },
+     "2018": {
+      "ret": -0.2864,
+      "sharpe": -3.52
+     },
+     "2019": {
+      "ret": -0.1782,
+      "sharpe": -3.1
+     },
+     "2020": {
+      "ret": -0.2444,
+      "sharpe": -2.39
+     },
+     "2021": {
+      "ret": -0.3464,
+      "sharpe": -4.27
+     }
+    },
+    "beta": 0.069,
+    "sharpe_alpha": -3.04,
+    "bench_ret": 0.0377,
+    "turnover": 272.7,
+    "cost": 0.1909,
+    "bp_per_trade": -20.2,
+    "bp_per_trade_gross": -6.2,
+    "names": 1.0,
+    "active": 0.54,
+    "daily_sharpe": -0.1840683834380366,
+    "skew": -1.85,
+    "kurt": 22.7
+   },
+   "validation": {
+    "from": "2022-01-12",
+    "to": "2024-12-27",
+    "days": 729,
+    "ret": -0.181,
+    "vol": 0.0763,
+    "sharpe": -2.37,
+    "t": -4.1,
+    "sharpe_gross": 0.0,
+    "sharpe_2x_cost": -4.6,
+    "drawdown": -0.4263,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.0686,
+      "sharpe": -1.11
+     },
+     "2023": {
+      "ret": -0.2103,
+      "sharpe": -3.0
+     },
+     "2024": {
+      "ret": -0.2445,
+      "sharpe": -2.82
+     }
+    },
+    "beta": 0.155,
+    "sharpe_alpha": -2.91,
+    "bench_ret": 0.1614,
+    "turnover": 258.6,
+    "cost": 0.181,
+    "bp_per_trade": -14.0,
+    "bp_per_trade_gross": 0.0,
+    "names": 1.0,
+    "active": 0.51,
+    "daily_sharpe": -0.1493607135373117,
+    "skew": 0.54,
+    "kurt": 14.78
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T11:51:46-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "stocks_beta",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "min_price": 1,
+     "min_adv": 10000000.0,
+     "top": 500
+    },
+    "side": "ls",
+    "select": "rank",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 20,
+    "max_w": 0.05,
+    "cut": 0.0,
+    "level": "stock",
+    "frac": 0.1
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-11-10",
+    "to": "2021-12-30",
+    "days": 2747,
+    "ret": -0.5321,
+    "vol": 0.0731,
+    "sharpe": -7.28,
+    "t": -24.2,
+    "sharpe_gross": 2.03,
+    "sharpe_2x_cost": -16.3,
+    "drawdown": -0.9971,
+    "good_years": 0.0,
+    "by_year": {
+     "2011": {
+      "ret": -0.4511,
+      "sharpe": -6.78
+     },
+     "2012": {
+      "ret": -0.4415,
+      "sharpe": -6.07
+     },
+     "2013": {
+      "ret": -0.5504,
+      "sharpe": -6.4
+     },
+     "2014": {
+      "ret": -0.5295,
+      "sharpe": -7.13
+     },
+     "2015": {
+      "ret": -0.6146,
+      "sharpe": -12.33
+     },
+     "2016": {
+      "ret": -0.5345,
+      "sharpe": -6.59
+     },
+     "2017": {
+      "ret": -0.6297,
+      "sharpe": -12.03
+     },
+     "2018": {
+      "ret": -0.5538,
+      "sharpe": -8.39
+     },
+     "2019": {
+      "ret": -0.5767,
+      "sharpe": -10.53
+     },
+     "2020": {
+      "ret": -0.3987,
+      "sharpe": -4.04
+     },
+     "2021": {
+      "ret": -0.4178,
+      "sharpe": -5.85
+     }
+    },
+    "beta": 0.006,
+    "sharpe_alpha": -7.28,
+    "bench_ret": 0.0477,
+    "turnover": 486.6,
+    "cost": 0.68,
+    "bp_per_trade": -21.9,
+    "bp_per_trade_gross": 6.1,
+    "names": 63.9,
+    "active": 0.97,
+    "daily_sharpe": -0.4583674742452726,
+    "skew": 0.21,
+    "kurt": 4.78
+   },
+   "validation": {
+    "from": "2022-01-04",
+    "to": "2024-12-30",
+    "days": 735,
+    "ret": -0.5944,
+    "vol": 0.0576,
+    "sharpe": -10.31,
+    "t": -17.42,
+    "sharpe_gross": 0.92,
+    "sharpe_2x_cost": -20.99,
+    "drawdown": -0.8248,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.5806,
+      "sharpe": -8.86
+     },
+     "2023": {
+      "ret": -0.5692,
+      "sharpe": -11.71
+     },
+     "2024": {
+      "ret": -0.5837,
+      "sharpe": -11.07
+     }
+    },
+    "beta": 0.013,
+    "sharpe_alpha": -10.35,
+    "bench_ret": 0.1572,
+    "turnover": 486.2,
+    "cost": 0.6471,
+    "bp_per_trade": -24.5,
+    "bp_per_trade_gross": 2.2,
+    "names": 66.3,
+    "active": 0.96,
+    "daily_sharpe": -0.6495016578630939,
+    "skew": -0.09,
+    "kurt": 3.5
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  },
+  {
+   "at": "2026-11-22T11:51:46-06:00",
+   "idea": "us_lead",
+   "family": "cross-market",
+   "variant": "stocks_beta_big_1pct",
+   "market": "jp",
+   "settings": {
+    "universe": {
+     "min_price": 1,
+     "min_adv": 10000000.0,
+     "top": 500
+    },
+    "side": "ls",
+    "select": "rank",
+    "hold": 1,
+    "entry": "open",
+    "exit": "close",
+    "min_names": 20,
+    "max_w": 0.05,
+    "cut": 0.01,
+    "level": "stock",
+    "frac": 0.1
+   },
+   "universe": {},
+   "code": "c2492b9c3f",
+   "discovery": {
+    "from": "2010-11-15",
+    "to": "2021-12-28",
+    "days": 2742,
+    "ret": -0.0514,
+    "vol": 0.0392,
+    "sharpe": -1.31,
+    "t": -4.28,
+    "sharpe_gross": 2.4,
+    "sharpe_2x_cost": -4.37,
+    "drawdown": -0.4316,
+    "good_years": 0.09,
+    "by_year": {
+     "2011": {
+      "ret": -0.0156,
+      "sharpe": -0.35
+     },
+     "2012": {
+      "ret": -0.0773,
+      "sharpe": -2.1
+     },
+     "2013": {
+      "ret": 0.0228,
+      "sharpe": 0.6
+     },
+     "2014": {
+      "ret": -0.0237,
+      "sharpe": -0.75
+     },
+     "2015": {
+      "ret": -0.1323,
+      "sharpe": -4.91
+     },
+     "2016": {
+      "ret": -0.0722,
+      "sharpe": -2.39
+     },
+     "2017": {
+      "ret": -0.0185,
+      "sharpe": -1.97
+     },
+     "2018": {
+      "ret": -0.0498,
+      "sharpe": -1.25
+     },
+     "2019": {
+      "ret": -0.0453,
+      "sharpe": -2.08
+     },
+     "2020": {
+      "ret": -0.1099,
+      "sharpe": -1.54
+     },
+     "2021": {
+      "ret": -0.0185,
+      "sharpe": -0.48
+     }
+    },
+    "beta": 0.001,
+    "sharpe_alpha": -1.31,
+    "bench_ret": 0.0472,
+    "turnover": 107.0,
+    "cost": 0.1486,
+    "bp_per_trade": -9.6,
+    "bp_per_trade_gross": 18.2,
+    "names": 64.7,
+    "active": 0.21,
+    "daily_sharpe": -0.0825120010686103,
+    "skew": -0.3,
+    "kurt": 18.2
+   },
+   "validation": {
+    "from": "2022-01-06",
+    "to": "2024-12-30",
+    "days": 733,
+    "ret": -0.1824,
+    "vol": 0.0389,
+    "sharpe": -4.69,
+    "t": -7.95,
+    "sharpe_gross": 0.5,
+    "sharpe_2x_cost": -7.53,
+    "drawdown": -0.4151,
+    "good_years": 0.0,
+    "by_year": {
+     "2022": {
+      "ret": -0.2554,
+      "sharpe": -5.24
+     },
+     "2023": {
+      "ret": -0.171,
+      "sharpe": -5.49
+     },
+     "2024": {
+      "ret": -0.104,
+      "sharpe": -3.53
+     }
+    },
+    "beta": 0.013,
+    "sharpe_alpha": -4.75,
+    "bench_ret": 0.1491,
+    "turnover": 149.9,
+    "cost": 0.1997,
+    "bp_per_trade": -24.3,
+    "bp_per_trade_gross": 2.3,
+    "names": 65.0,
+    "active": 0.3,
+    "daily_sharpe": -0.29540893369999754,
+    "skew": -2.04,
+    "kurt": 10.07
+   },
+   "verdict": "dead",
+   "deflated": 0.0
+  }
+ ]
+}
