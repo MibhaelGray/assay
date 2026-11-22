@@ -60,7 +60,8 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
   is noted, not relaunched (2026-11-19). Nobody tells an agent what to read or the judge how to weigh it. What is
   fixed is the setup and what gets recorded and scored.
 - **Every verdict is recorded before the trade and scored afterwards**, taken or passed, so the passes are the
-  control group. Every verdict is scored from the prices at the moment its pass recorded, and every pass's
+  control group. Every verdict is scored from the prices at the moment its pass recorded, its stop replayed on the same
+  ten-minute checks the book makes (from stored 5-minute bars, since 2026-11-22), and every pass's
   ranking is scored.
 - **Trades go out as soon as the pass records.** Every take of the pass (since 2026-11-16; the best 1 to 3 before
   that), strongest conviction first until the book's capital is in use, as orders that hit IBKR's own bid or ask.
@@ -79,7 +80,7 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
   rule is in shares of the book, so it sizes a $15,000 account the same way. Takes and passes are still scored
   per trade, in percent, so the main test doesn't depend on size.
 - **Holds stay 1 to 10 sessions.** A trade entered during the day counts its time limit from the next session.
-  Stops are checked by code every two minutes from 8:30 AM to 2:40 PM CT, and a trade past its stop exits at once
+  Stops are checked by code every ten minutes from 8:40 AM to 2:40 PM CT (every two minutes from 2026-11-18 to 11-22), and a trade past its stop exits at once
   at the bid or ask (since 2026-11-18). Time limits, and a stop exit that couldn't get a quote, leave at the
   2:45 PM CT close. On a half day (12:00 PM CT close, such as the day after Thanksgiving) everything moves three
   hours earlier: entries and stop checks stop at 11:40 AM CT, the close job runs at 11:45 AM CT, and there is no

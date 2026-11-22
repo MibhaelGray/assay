@@ -255,6 +255,49 @@ def collect(symbols: list[str], period: str = "5y") -> dict:
     return stats
 
 
+def intraday_path(symbol: str) -> str:
+    return f"bars_5m/symbol={symbol.replace(' ', '_')}.parquet"
+
+
+def collect_intraday(symbols: list[str], days: int = 5) -> dict:
+    """Pull the last `days` sessions of 5-minute regular-session bars (Yahoo keeps about 60 days) and merge them
+    into each symbol's stored file. Kept so every verdict's stop can be replayed on the same 10-minute checks the
+    order job makes (learn._mark_outcome). Columns: `at` (the bar's start, UTC) and `close`."""
+    import yfinance as yf
+    failed = []
+    for i in range(0, len(symbols), CHUNK):
+        chunk = symbols[i:i + CHUNK]
+        tickers = {_ticker(s): s for s in chunk}
+        with _yahoo:
+            data = yf.download(list(tickers), period=f"{min(days, 59)}d", interval="5m", prepost=False, auto_adjust=False,
+                               group_by="ticker", threads=PULL_THREADS, progress=False)
+        for ticker, symbol in tickers.items():
+            close = data[ticker]["Close"].dropna() if ticker in data.columns.get_level_values(0) else pd.Series(dtype=float)
+            if close.empty:
+                failed.append(symbol)
+                continue
+            idx = pd.DatetimeIndex(close.index)
+            idx = idx.tz_localize("UTC") if idx.tz is None else idx.tz_convert("UTC")
+            new = pd.DataFrame({"at": idx, "close": close.to_numpy(float)})
+            old = _read(intraday_path(symbol))
+            if old is not None and not old.empty:
+                new = pd.concat([old[~old["at"].isin(new["at"])], new], ignore_index=True)
+            _store(new.sort_values("at").reset_index(drop=True), intraday_path(symbol))
+    stats = {"symbols": len(symbols), "failed": failed}
+    log.info("intraday_done symbols=%d failed=%d", len(symbols), len(failed))
+    return stats
+
+
+def load_intraday(symbols: list[str]) -> dict[str, pd.Series]:
+    """symbol -> stored 5-minute closes, indexed by each bar's start in New York time."""
+    out = {}
+    for s in symbols:
+        df = _read(intraday_path(s))
+        if df is not None and not df.empty:
+            out[s] = pd.Series(df["close"].to_numpy(float), index=pd.DatetimeIndex(df["at"]).tz_convert(NY))
+    return out
+
+
 def intraday_closes(symbols: list[str], sessions: int = 5) -> dict[str, pd.Series]:
     """Closes of the last `sessions` sessions' 15-minute regular-session bars from Yahoo, indexed by each bar's
     start in New York time. Nothing is stored."""

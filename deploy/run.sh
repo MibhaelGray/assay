@@ -96,6 +96,8 @@ e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_secon
     # Names outside the standard universe (basket members, the paper book's legs): their daily bars, in case
     # the 4:30 PM pull ran before a proposal that holds them was recorded.
     uv run fr bars --pending || echo "bars for names outside the universe failed; carrying on" >&2
+    # 5-minute bars for every verdict still being scored, so its stop is replayed as the order job checks it.
+    uv run fr bars --intraday 5 || echo "5-minute bars failed; tomorrow's pull covers today" >&2
     uv run fr earnings || echo "earnings dates failed; keeping the last pull" >&2
     uv run fr brief
     uv run fr gaps || echo "earnings gap table failed; keeping the last one" >&2

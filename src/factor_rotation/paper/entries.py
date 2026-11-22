@@ -64,7 +64,7 @@ LIMIT_SLIP = 0.005                # how far past the bid or ask the limit sits, 
 PREMARKET_END = time(9, 10)       # New York: the last pre-market order, good until GOOD_TILL so it never meets the open
 GOOD_TILL = "09:25:00"
 SETTLE = 3                        # seconds after sending before the fills are pulled
-STOP_EVERY = timedelta(minutes=2)  # how often the regular session checks open trades against their stops
+STOP_EVERY = timedelta(minutes=10)  # how often the regular session checks open trades against their stops (2 minutes until 2026-11-22)
 STOP_SLACK = timedelta(seconds=15) # launchd's minute is not exact; a check due in a few seconds counts as due
 
 

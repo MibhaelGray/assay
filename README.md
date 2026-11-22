@@ -16,7 +16,7 @@ Everything runs on one Mac through launchd (times Central, trading days):
 | 8:45 AM | morning pass | judges the pre-market and first minutes of trading |
 | 12:00 PM | midday pass | judges the morning's trading, reviews open trades |
 | every minute | `fr paper enter` | sends a recorded pass's takes and exits to the paper account |
-| every 2 min, 8:30 AM-2:40 PM | `fr paper enter` | stops: a trade past its stop exits at once, hitting the bid or ask |
+| every 10 min, 8:40 AM-2:40 PM | `fr paper enter` | stops: a trade past its stop exits at once, hitting the bid or ask |
 | 2:45 PM | `fr paper close` | time limits, and any stop exit not sent during the day, into the closing auction |
 | 3:20 PM | `fr paper sync` | fills, positions and account value |
 | every 5 minutes | `fr watch` | phone alert (ntfy app and Telegram) when a job fails, a pass doesn't record, quotes are refused (including by an IBKR login open on your phone) or the gateway is down |

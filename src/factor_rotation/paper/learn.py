@@ -10,7 +10,7 @@ with what its original plan would have made. `brief()` puts all of it on one pag
 """
 
 import json
-from datetime import date, datetime
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from statistics import mean, median
 
@@ -31,6 +31,12 @@ SMALL = 30                    # below this many results a group's average is an 
 MIN_RANKED = 4                # a night's ranking is scored once this many of its ranked ideas have finished
 RANK_NIGHTS = 20              # about how many scored nights a ranking needs before its average means something
 LESSONS = "lessons.md"
+# Every verdict's stop is replayed on the order job's own checks (entries.STOP_EVERY, every 10 minutes in regular
+# hours, until 20 minutes before the close) from stored 5-minute bars, and again at each close: the owner,
+# 2026-11-22, so takes and passes are scored the way the book actually trades. A day whose 5-minute bars haven't
+# been pulled waits INTRADAY_WAIT calendar days, then is checked at its close only.
+INTRADAY_FROM = date(2026, 11, 16)    # the restart: verdicts before it are scored on closes
+INTRADAY_WAIT = 5
 
 
 def _text(v) -> bool:
@@ -94,7 +100,53 @@ def _verdict(p: dict) -> str:
     return p["decision"] if p.get("reviewed", True) else "not reviewed"
 
 
-def _mark_outcome(p: dict, px: pd.DataFrame) -> dict | None:
+def intraday_symbols(today: date | None = None) -> list[str]:
+    """The legs of every verdict whose plan may still need 5-minute bars: recorded since the restart, within
+    the last 60 days. `fr bars --intraday` pulls them."""
+    today = today or date.today()
+    since = max(INTRADAY_FROM, today - timedelta(days=60)).isoformat()
+    return sorted({s for p in proposals.every() if p["session"] >= since for s in [*p["long"], *p["short"]]})
+
+
+def _checks(day: date, after: datetime | None = None) -> list[datetime]:
+    """The order job's stop checks on `day`, New York time: every STOP_EVERY from 10 minutes after the open to
+    20 minutes before the close (entries.entry_end), and only after `after` (when the pass was acted on)."""
+    from . import entries
+    step = entries.STOP_EVERY
+    t, end = datetime.combine(day, time(9, 30), NY) + step, datetime.combine(day, entries.entry_end(day), NY)
+    out = []
+    while t <= end:
+        if after is None or t > after:
+            out.append(t)
+        t += step
+    return out
+
+
+def _intraday_hit(day: date, legs: list[str], w: dict, entry: dict, pct: float, ix: dict, after: datetime | None,
+                  today: date) -> tuple[str, tuple[datetime, float] | None]:
+    """Replay a spread stop on `day`'s checks. ("hit", (when, return)) at the first check past it, ("clear", None)
+    if none was, ("wait", None) while the day's 5-minute bars aren't stored yet, ("none", None) once they aren't
+    coming. A check's price is the close of the last 5-minute bar that finished by then."""
+    close = datetime.combine(day, journal.close_time(day), NY)
+    open_ = datetime.combine(day, time(9, 30), NY)
+    series = {}
+    for s in legs:
+        x = ix.get(s)
+        x = x[(x.index >= open_) & (x.index < close)] if x is not None else None
+        if x is None or x.empty or x.index[-1] < close - timedelta(minutes=5):
+            return ("none", None) if (today - day).days > INTRADAY_WAIT else ("wait", None)
+        series[s] = x
+    for t in _checks(day, after):
+        seen = {s: x[x.index <= t - timedelta(minutes=5)] for s, x in series.items()}
+        if any(v.empty for v in seen.values()):
+            continue
+        ret = sum(w[s] * (seen[s].iloc[-1] / entry[s] - 1) for s in legs)
+        if ret * 100 <= pct:
+            return "hit", (t, ret)
+    return "clear", None
+
+
+def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date | None = None) -> dict | None:
     """The plan result of a verdict from one of the three daily passes: from each leg's price when the order job
     first acted on the pass (entries marks: the same moment for a take and a pass) to the close where its stop
     is hit or its time limit ends, before costs. A morning or midday verdict is already partway through its
@@ -116,10 +168,26 @@ def _mark_outcome(p: dict, px: pd.DataFrame) -> dict | None:
     close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in px[px["symbol"].isin([*legs, "SPY"])].groupby("symbol")}
     w = journal._weights({"long": p["long"] or None, "short": p["short"] or None})
     stop = p["plan"].get("stop") or {}
-    path, status, note = [], "open", ""
+    replay = ix is not None and "spread_pct" in stop and session >= INTRADAY_FROM
+    today = today or date.today()
+    at = datetime.fromisoformat(m["at"]).astimezone(NY) if m.get("at") else None
+    path, status, note, intraday = [], "open", "", "replayed" if replay else None
     for d in days:
         if any(s not in close or d not in close[s].index for s in [*legs, "SPY"]) or not journal._bars_settled(d):
             break
+        if replay:
+            how, hit = _intraday_hit(d, legs, w, entry, stop["spread_pct"], ix, at if d == session else None, today)
+            if how == "wait":
+                break
+            if how == "none":
+                intraday = "closes only on some days: no 5-minute bars"
+            if hit:
+                when, ret = hit
+                path.append((d, ret, close["SPY"][d] / entry["SPY"] - 1))
+                status = "stopped"
+                note = (f"Stopped at {when.astimezone(CT):%-I:%M %p} CT on {d}: down {abs(ret) * 100:.1f}% "
+                        f"at a 10-minute check, past the {abs(stop['spread_pct']):g}% stop")
+                break
         ret = sum(w[s] * (close[s][d] / entry[s] - 1) for s in legs)
         path.append((d, ret, close["SPY"][d] / entry["SPY"] - 1))
         hits = [f"{r['symbol']} closed at {close[r['symbol']][d]:,.2f} ({journal.rule_text(r)})"
@@ -135,7 +203,7 @@ def _mark_outcome(p: dict, px: pd.DataFrame) -> dict | None:
         return {"status": "open", "note": "its first close hasn't settled"}
     d, ret, spy = path[-1]
     rets = [x[1] for x in path]
-    return {"status": status, "note": note, "exit_date": d.isoformat(), "sessions": len(path), "horizon_days": horizon,
+    return {"status": status, "note": note, "exit_date": d.isoformat(), "sessions": len(path), "horizon_days": horizon, "intraday": intraday,
             "bps": round(ret * 1e4, 1), "spy_bps": round(spy * 1e4, 1), "best_bps": round(max(rets) * 1e4, 1),
             "worst_bps": round(min(rets) * 1e4, 1), "hit": bool(ret > 0)}
 
@@ -150,11 +218,12 @@ def outcomes() -> list[dict]:
     tags = postmortems()
     symbols = sorted({s for p in props for s in [*p["long"], *p["short"]]} | {"SPY"})
     px = bars.load(symbols)
+    ix = bars.load_intraday([s for s in symbols if s in set(intraday_symbols())])
     out = []
     for p in props:
         plan = None
         if p["plan"] and (p["long"] or p["short"]) and not px.empty:
-            plan = _mark_outcome(p, px)
+            plan = _mark_outcome(p, px, ix)
         done = bool(plan) and plan["status"] in ("time", "stopped")
         r = paper.get(p["id"])
         reason = (r or {}).get("reason") or ""

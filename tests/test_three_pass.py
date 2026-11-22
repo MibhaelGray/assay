@@ -623,3 +623,37 @@ class HalfDayTests(unittest.TestCase):
         from factor_rotation import watch
         self.assertFalse(watch._pass_days("full", date(2026, 11, 27), lambda d: True))
         self.assertTrue(watch._pass_days("full", date(2026, 11, 25), lambda d: True))
+
+
+class IntradayStopReplayTests(unittest.TestCase):
+    """Every verdict's stop is replayed on the order job's 10-minute checks from 5-minute bars (the owner, 2026-11-22)."""
+
+    def _bars(self, day, prices):
+        idx = pd.date_range(datetime.combine(day, datetime.min.time()).replace(hour=9, minute=30), periods=len(prices), freq="5min", tz=NY)
+        return pd.Series(prices, index=idx)
+
+    def test_checks_every_ten_minutes_until_twenty_before_close(self):
+        from factor_rotation.paper import learn
+        c = learn._checks(date(2026, 11, 20))
+        self.assertEqual((c[0].hour, c[0].minute), (9, 40))
+        self.assertEqual((c[-1].hour, c[-1].minute), (15, 40))
+        h = learn._checks(date(2026, 11, 27))
+        self.assertEqual((h[-1].hour, h[-1].minute), (12, 40))
+
+    def test_dip_past_stop_is_caught_even_if_it_recovers(self):
+        from factor_rotation.paper import learn
+        day = date(2026, 11, 20)
+        prices = [100.0] * 78
+        prices[3] = 93.0        # the 9:45 bar, finished by the 9:50 check
+        ix = {"AAA": self._bars(day, prices)}
+        how, hit = learn._intraday_hit(day, ["AAA"], {"AAA": 1.0}, {"AAA": 100.0}, -6.0, ix, None, date(2026, 11, 22))
+        self.assertEqual(how, "hit")
+        self.assertEqual((hit[0].hour, hit[0].minute), (9, 50))
+        self.assertAlmostEqual(hit[1], -0.07)
+
+    def test_missing_bars_wait_then_fall_back(self):
+        from factor_rotation.paper import learn
+        day = date(2026, 11, 20)
+        args = (day, ["AAA"], {"AAA": 1.0}, {"AAA": 100.0}, -6.0, {}, None)
+        self.assertEqual(learn._intraday_hit(*args, date(2026, 11, 22))[0], "wait")
+        self.assertEqual(learn._intraday_hit(*args, date(2026, 12, 5))[0], "none")

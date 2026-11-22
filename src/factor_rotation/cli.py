@@ -42,6 +42,9 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--symbols")
     c.add_argument("--pending", action="store_true",
                    help="only names outside the standard universe: the paper book's legs and the basket watchlist")
+    c.add_argument("--intraday", type=int, metavar="DAYS", default=None,
+                   help="5-minute bars of the last DAYS sessions (at most 59) for every verdict still being scored, "
+                        "so its stop is replayed on the order job's 10-minute checks")
 
     c = sub.add_parser("brief", help="build the nightly brief from stored data")
     c.add_argument("--as-of", default=None)
@@ -101,6 +104,10 @@ def main(argv: list[str] | None = None) -> None:
         from .paper import book
         watch = [m["symbol"] for b in basket_library()["baskets"] for m in b["members"]]
         extra = sorted({s for s in [*watch, *book.symbols_held()] if s not in set(bar_universe())})
+        if a.intraday:
+            from .paper import learn
+            print(json.dumps(bars.collect_intraday(learn.intraday_symbols(), a.intraday)))
+            return
         if a.pending:
             if not extra:
                 print(json.dumps({"symbols": 0, "failed": []}))
