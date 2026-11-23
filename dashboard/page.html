@@ -221,6 +221,10 @@
   .fr-chbar form { display: flex; gap: var(--cds-gap-xs); }
   .fr-chbar input[type=text] { font: inherit; font-size: var(--cds-font-size-body); width: 9rem; color: var(--color-fg); background: var(--color-panel); border: 1px solid var(--fr-line); border-radius: 6px; padding: .3rem .5rem; text-transform: uppercase; }
   .fr-chbar label { display: inline-flex; align-items: center; gap: var(--cds-gap-xs); color: var(--fr-muted); }
+  .fr-subtabs { display: flex; gap: .25rem; margin: 0 0 .9rem; border-bottom: 1px solid var(--fr-line); overflow-x: auto; scrollbar-width: none; }
+  .fr-subtabs button { background: none; border: 0; padding: .45rem .8rem; color: var(--fr-muted); cursor: pointer; white-space: nowrap; font-weight: var(--cds-font-weight-medium); }
+  .fr-subtabs button:hover { color: var(--color-fg); }
+  .fr-subtabs button[aria-current=page] { color: var(--color-fg); box-shadow: inset 0 -2px 0 var(--color-fg); }
   .fr-seg { display: inline-flex; border: 1px solid var(--fr-line); border-radius: 6px; padding: 2px; }
   .fr-seg button { background: none; border: 0; border-radius: 4px; padding: .15rem .55rem; cursor: pointer; color: var(--fr-muted); font-size: var(--cds-font-size-caption); }
   .fr-seg button[aria-pressed=true] { background: var(--color-fg); color: var(--color-bg); }
@@ -428,6 +432,10 @@
   <section class="fr-view" id="portfolio" data-view="portfolio" hidden>
     <div class="fr-viewhead"><h2>Portfolio</h2>
       <p data-draw="pf-asof" data-source="mkt_paper_account">—</p></div>
+    <nav class="fr-subtabs" aria-label="Book">
+      <button type="button" data-pf-book="swing">$1M swing book</button>
+      <button type="button" data-pf-book="small">$25k swing book</button>
+    </nav>
     <div class="fr-band fr-pfstrip" aria-label="Summary" data-draw="pf-summary" data-source="mkt_portfolio_accounts mkt_portfolio_pos"></div>
     <details class="fr-pfmore">
       <summary>Returns, money at work and pause levels</summary>
@@ -1228,6 +1236,7 @@
     applyDesign();
     const press = (sel, key, want) => document.querySelectorAll(sel).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset[key] === want)));
     press('[data-pf-frame]', 'pfFrame', pfUi.frame);
+    document.querySelectorAll('[data-pf-book]').forEach((b) => { if (b.dataset.pfBook === pfUi.book) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     press('[data-pf-filter]', 'pfFilter', pfUi.filter); press('[data-pf-view]', 'pfView', pfUi.view); press('[data-pf-range]', 'pfRange', pfUi.range);
     const split = document.querySelector('[data-pf-split]');
     if (split) { split.hidden = pfUi.book !== 'all'; split.setAttribute('aria-pressed', String(pfUi.split)); }
@@ -1282,7 +1291,8 @@
   const pfPart = (names) => names.forEach((n) => { const e = document.querySelector(`[data-draw=${n}]`); if (e && e.__pf) e.__pf(e); });
   const pfRedraw = () => { drawPf(); pfPart(PF_PARTS); };
   const pfTable = () => { pfSync(); pfPart(['pf-count', 'pf-positions']); };
-  const pfSetBook = (b) => { pfUi.book = b; pfRedraw(); };
+  const pfSetBook = (b) => { pfUi.book = b; pfSync(); pfRedraw(); };
+  document.querySelectorAll('[data-pf-book]').forEach((b) => b.addEventListener('click', () => pfSetBook(b.dataset.pfBook)));
   document.querySelectorAll('[data-pf-frame]').forEach((b) => b.addEventListener('click', () => { pfUi.frame = b.dataset.pfFrame; drawPf(); }));
   document.querySelector('[data-pf-split]')?.addEventListener('click', () => { pfUi.split = !pfUi.split; drawPf(); });
   document.querySelectorAll('[data-pf-filter]').forEach((b) => b.addEventListener('click', () => { pfUi.filter = b.dataset.pfFilter; pfTable(); }));
@@ -1310,26 +1320,21 @@
     };
     const one = a.books.find((b) => b.book === pfUi.book);
     const scope = one || a;
+    const hist = one ? pfHistory(one.book) : [];   // a zero on the session before the book's first fill, then its sessions
+    const since = one ? (hist[1] || hist[0] || {}).date || (one.book === 'swing' ? a.start_session : null) : a.start_session;
     const today = a.day_session === nyNow().date ? 'Today' : a.day_session ? day(a.day_session, '%a %b %-d') : 'Today';
     const pos = pfRows('mkt_portfolio_pos');
     const unreal = one ? one.open : d3.sum(a.books, (b) => b.open); const real = one ? one.realized : d3.sum(a.books, (b) => b.realized);
     const longs = d3.sum(pos.filter((r) => r.side === 'long'), (r) => r.value); const shorts = -d3.sum(pos.filter((r) => r.side === 'short'), (r) => r.value);
-    const books = (a.books.length < 2 ? [] : a.books).map((b) => {
-      const c = cell('button', `${PF_BOOK[b.book]} book`, pfUsd(b.value), '', `${fmtPnl(b.pnl)} · ${pfPct(b.return_pct)}`, b.paused ? chip('Paused', 'is-bad') : null);
-      c.type = 'button'; c.setAttribute('aria-pressed', String(pfUi.book === b.book));
-      c.title = pfUi.book === b.book ? 'Show both books' : `Show only the ${b.book} book`;
-      c.addEventListener('click', () => pfSetBook(pfUi.book === b.book ? 'all' : b.book));
-      return c;
-    });
     el.replaceChildren(
       a.shadow ? cell('div', 'Shadow book', pfUsd(a.capital + a.pnl), '', `Not traded · ${fmtUsd(a.capital)} planned`, a.waiting ? `${a.waiting} take${a.waiting === 1 ? '' : 's'} waiting for the open` : null)
+        : one ? cell('div', 'Book value', pfUsd(one.value), '', `${fmtUsd(one.capital)} capital`, `Paper account ${pfUsd(a.net_liquidation)}${a.pulled_at ? `, IBKR ${whenEt(a.pulled_at)}` : ''}`, one.paused ? chip('Paused', 'is-bad') : null)
         : cell('div', 'Paper account', pfUsd(a.net_liquidation), '', a.pulled_at ? `IBKR, ${whenEt(a.pulled_at)}` : 'Not synced yet'),
       cell('div', 'Profit', fmtPnl(scope.pnl), tone(scope.pnl),
-        one ? `${PF_BOOK[one.book]} book · ${pfPct(one.return_pct)} on its ${fmtUsd(one.capital)}` : `Both books · ${pfPct(a.account_pct)} of the account`, a.start_session ? `Since ${day(a.start_session, '%b %-d')}` : null),
+        one ? `${PF_BOOK[one.book]} book · ${pfPct(one.return_pct)} on its ${fmtUsd(one.capital)}` : `Both books · ${pfPct(a.account_pct)} of the account`, since ? `Since ${day(since, '%b %-d')}` : null),
       cell('div', 'Unrealized', fmtPnl(unreal), tone(unreal), `${pos.length} open position${pos.length === 1 ? '' : 's'}`, 'Before commissions'),
       cell('div', 'Realized', fmtPnl(real), tone(real), 'Closed trades', 'Before commissions'),
       cell('div', today, fmtPnl(scope.day_pnl), tone(scope.day_pnl), 'Since the last close'),
-      ...books,
       cell('div', 'Net exposure', pos.length ? fmtUsd(longs - shorts) : '—', '', pos.length ? pfExpo(longs, shorts) : 'Nothing held'));
   });
   pfDraw('pf-details', (el) => {
