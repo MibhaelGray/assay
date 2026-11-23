@@ -1,0 +1,37 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-17-S01",
+   "proposal_id": "2026-11-17-P01",
+   "name": "RCAT",
+   "setup": "live_move",
+   "bps": 2134.1,
+   "tag": "right_reason",
+   "what_happened": "Red Cat fell about 32% on 11-17 to about 2.38 and kept falling to 1.79 by the 11-20 close, against 2.61 after-hours when the pass judged it. What came inside the window was what the take expected: broker target cuts (HC Wainwright to $10 from $20, Needham to $5 from $15) and no good news with a date. None of the wrong_if events happened: no funded Ukraine order, no US award of $25M or more, no change to the Steyr bid; no share sale was announced either.",
+   "lesson": "A stock down 26% after-hours on a withdrawn revenue target had not finished falling: when the reason to own it is gone and the only dated events are target cuts and a likely share sale, the first reaction is not the whole move, even with a quarter of the float short. With CTVA (a guide cut, kept falling) that is two; INTU on 11-20 is the counter-case on entry (see its post-mortem). Not yet a standing lesson.",
+   "at": "2026-11-22T20:39:12.089825-05:00"
+  },
+  {
+   "trade_id": "2026-11-17-S07",
+   "proposal_id": "2026-11-17-P73",
+   "name": "BILL",
+   "setup": "relative_strength",
+   "bps": -279.4,
+   "tag": "thesis_broke",
+   "what_happened": "The deal came, as the FT said it would: on 11-19 after the close TPG and Corpay agreed to take BILL private at $63.25 in cash (8-K and press release). But the take was bought near 63.2 on the reasoning that a 9% pop left room to an agreed price in the mid-to-high 60s. The agreed price was the rumor-day price, so the stock settled into a merger spread near 61.5-61.7 below the entry and the trade lost 279 bp on a deal that happened.",
+   "lesson": "When a credible outlet says a buyer is nearing an agreement, the first-day pop already sits at about the deal price: buying after the pop pays full price and keeps only the break risk. Take a reported deal only when the stock is still well below a reported or knowable price. One trade; not yet a standing lesson (it weighed on tonight's ZS verdict).",
+   "at": "2026-11-22T20:39:12.089825-05:00"
+  },
+  {
+   "trade_id": "2026-11-20-S03",
+   "proposal_id": "2026-11-20-P03",
+   "name": "INTU",
+   "setup": "live_move",
+   "bps": -646.5,
+   "tag": "noise",
+   "what_happened": "The reasoning held: Intuit closed 11-20 at 270.44, down 12.8% on the day, below where it traded after-hours when the pass judged it (279.74), with the Credit Karma cut and the lower revenue guide as the story. The short still lost 646 bp because it entered overnight near the after-hours low and the first half hour of regular trading ran more than 6% above the entry, past the stop, at 8:57 AM CT, before the stock fell again. No wrong_if event happened (no upgrades, no larger buyback, no restored outlook were found).",
+   "lesson": "An outright short entered overnight after a 10% after-hours drop sits at the bottom of the next morning's opening range: a 6% stop is inside one opening swing for a stock that has just moved 2 ATR. Either take it with a stop sized to the opening range (and so fewer dollars), or wait for the morning pass to enter after the open. One trade; not yet a standing lesson.",
+   "at": "2026-11-22T20:39:12.089825-05:00"
+  }
+ ]
+}

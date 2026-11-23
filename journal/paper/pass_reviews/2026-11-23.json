@@ -1,0 +1,119 @@
+{
+ "session": "2026-11-23",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-22T20:43:07.692741-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 11-17 call kept the FY2027 guide ($6.15-6.35) and the long-term targets, added no charge (about $500M of cash to finish the two legacy projects, easing by mid-year), and no downgrades were found; last session Monday."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No guidance cut found at Sherwin-Williams, PPG or Ecolab, and crude has not jumped (Brent 89.51, down on the month); the FT report that renewed Iran strikes are being weighed is the thing to watch on its last session."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No published book value or buyback from AGNC, and a 12-9 hike is still priced at 90% or more with Cook and Waller hawkish."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nike said fiscal 2028 EPS will decline modestly, no broker upgraded after the investor day (Barclays and JPMorgan only moved targets), and no buyback was announced."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "exit",
+     "thesis": "broken",
+     "reason": "The scandal escalated instead of fading behind the print: California's attorney general served Nvidia an investigative subpoena after the close on 11-19 (Newsquawk; CNBC and Motley Fool wraps of 11-20) and Reuters reported on 11-20 that SEC staff are examining its accounting, a step past the disclosure probe the WSJ reported on 11-17; Nvidia fell 14% against SMH's 10.6%. That is the wrong_if in substance (a subpoena naming Nvidia and an SEC inquiry), though the SEC has confirmed nothing and the subpoena is a state one, not DOJ."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year guide on 11-19 and called Q4 off to a good start; Target's November sales were reported in line and no downgrades were found."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "The hike is still priced near-certain and no governor has talked of a pause, but the 10-year closed Friday at 4.91%, a hair above the 4.9% line in the wrong_if, and gold futures are +2.9% tonight; if the 10-year trades under 4.9% on Monday the morning pass should exit."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Ross reported Q3 comps +8% against a 6-7% guide on 11-19 and held its holiday comp guide; no TJX downgrades found; last session Monday."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Disney kept the double-digit FY2027 EPS guide, the $2.00 dividend and the buyback; no downgrades and no weak Avengers tracking reports were found."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 3-2-1 crack spread was 42.49 on 11-17, under $50; no product-export shutdown or broker upgrades found; the EIA report on 11-25 and the Iran strike talk are the tests."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM itself warned Q4 realized prices could be considerably lower than Q3; no upgrades found, and Chinese lithium futures bounced in the week to 11-19 by an amount not reported (unverified against the 10% line)."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No buyback step-up, no upgrades, and Ananta is still dated 1-15-2027; the Hong Kong line's 11-20 close could not be found, so that test is unverified."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Quebecor has not withdrawn (on 11-19 it attacked a Bell-TELUS combination), BCE said no comment on reported preliminary talks, and a meeting with Peladeau was reportedly offered for 11-23."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No confirmed approach or talks from Clorox or a major outlet, no upgrades, no raised guide; recent targets ($86-94) sit well under the price."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrades, no word that the Spotify renewal has broken down and no lowered outlook were found; coverage since the print was thin, so this rests on absence of news."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "On Friday, with SMH -10.6%, Accenture closed +1.2% at 221.17: the rotation out of chips held on its hardest test. Monday is the reverse test in the wrong_if (a chip rebound of 3% or more with ACN, CTSH and IBM all lower)."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety, label or supply action on Orzeyful or Mimrylo, guidance unchanged, and the 12-11 Capital Markets Day still stands."
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No upgrades, buyback, insider purchases or financing change were found since entry; the check could not find coverage of the Murphy deal at all, so this rests on the take's own sources."
+    }
+   ]
+  }
+ ]
+}

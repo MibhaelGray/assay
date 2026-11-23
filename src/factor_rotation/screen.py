@@ -33,6 +33,13 @@ from .universe import BARS_ONLY, BROAD, ETFS, FACTOR_PAIRS, INDUSTRIES, SECTORS,
 MIN_DOLLAR_VOLUME = 20e6
 OVERNIGHT_CLIENT = 93   # the night screen's spread check: its own gateway connection, apart from the order job's
 OVERNIGHT_ROUNDS = 6    # times the shortlist is refilled after dropping names that can't trade overnight
+SWEEP_CLIENT = 94       # the overnight sweep's own gateway connection
+# The overnight sweep (the owner, 2026-11-22): once IBKR's overnight session is open, the night screen quotes the
+# whole universe there, so weekend or late news the after-hours prices never saw can still put a name on the list.
+# A price counts only with a real overnight trade and a spread inside MAX_CROSS_SPREAD; most names have neither on
+# a quiet night (196 of 1,113 did on 2026-11-22). A name whose overnight move, net of SPY's, is OVERNIGHT_MOVE_ATR
+# of its ATRs from the last close is an overnight mover. Every sweep is kept beside the screen, mover or not.
+OVERNIGHT_MOVE_ATR = 1.5
 TOP = 40   # 20 until 2026-11-16: more verdicts a pass, so the ranking test speaks sooner (the owner)
 MORE = 15
 HEAVY_VOLUME = 1.5
@@ -42,7 +49,7 @@ WEIGHTS = {
     "earnings_gap_held": 3.0, "earnings_gap_faded": 2.6, "relative_strength": 2.5, "relative_weakness": 2.5,
     "basket_breakout": 2.2, "basket_breakdown": 2.2, "breakout": 2.1, "breakdown": 2.1, "turn": 2.0,
     "reclaim_200": 2.0, "lost_200": 2.0, "basket_big_move": 1.8, "factor_turn": 1.6,
-    "stretched": 1.0, "basket_stretched": 1.0, "factor_stretched": 1.0, "live_move": 2.4,
+    "stretched": 1.0, "basket_stretched": 1.0, "factor_stretched": 1.0, "live_move": 2.4, "overnight_move": 2.4,
 }
 # The live screen. A name is "moving now" when its latest price is LIVE_MOVE_ATR of its daily ATRs from the last
 # regular close. Outside regular hours Yahoo gives no volume, so the move has to come with steady trading: a
@@ -310,10 +317,22 @@ def _verdict(f: dict) -> tuple[str, dict]:
                      "live_move_atr": x["move_atr"], "live_bars": x["bars"]})
         if x["phase"] != "regular":
             parts.insert(0, _live_text(x))
+    if o := f.get("overnight"):
+        nums.update({"overnight_price": o["price"], "overnight_move": o["move"], "overnight_move_atr": o["move_atr"],
+                     "overnight_vs_spy_atr": o["rel_atr"], "overnight_volume": o["volume"], "overnight_spread": o["spread"],
+                     "overnight_at": o["at"]})
+        parts.insert(0, _overnight_text(o))
     if f.get("partial"):
         nums["session_minutes"] = f["partial"]["minutes"]
         parts.insert(0, f"today so far, {f['partial']['minutes']} minutes into the session, with volume projected to a full day")
     return "; ".join(parts), journal._records(pd.DataFrame([nums]))[0]
+
+
+def _overnight_text(o: dict) -> str:
+    """One name's overnight trading at IBKR, in words."""
+    return (f"overnight at {live.clock(o['at'])}: {o['price']:,.2f}, {_pct(o['move'])} from the last regular close "
+            f"({o['move_atr']:+.1f} ATR; {o['rel_atr']:+.1f} ATR net of SPY's {_pct(o['spy_move'])}), "
+            f"{o['volume']:,.0f} shares traded, spread {o['spread']:.2%}")
 
 
 def _live_text(x: dict) -> str:
@@ -481,6 +500,9 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
         add("stretched", 1, f["dist20_atr"] / 3, f"stretched down: RSI {f['rsi']:.0f}, {f['dist20_atr']:+.1f} ATR from the 20-day, no turn yet")
     elif f["rsi"] >= 75 or f["dist20_atr"] >= 3:
         add("stretched", -1, f["dist20_atr"] / 3, f"stretched up: RSI {f['rsi']:.0f}, {f['dist20_atr']:+.1f} ATR from the 20-day, no turn yet")
+    # Moving overnight (the night screen, once IBKR's overnight session is open), net of SPY's own overnight move.
+    if (o := f.get("overnight")) and abs(o["rel_atr"]) >= OVERNIGHT_MOVE_ATR:
+        add("overnight_move", 1 if o["rel_atr"] > 0 else -1, o["rel_atr"], _overnight_text(o))
     # Moving now (the live screen only): outside regular hours on steady trading, or today on heavy volume.
     if x := f.get("live"):
         news = f"; {x['reported']}" if x.get("reported") else ""
@@ -604,6 +626,39 @@ def _gateway_overnight(symbols: list[str]) -> tuple[dict, dict]:
         return {}, {s: f"the gateway couldn't be asked ({type(e).__name__})" for s in symbols}
 
 
+def _gateway_sweep(symbols: list[str]) -> dict:
+    """{"at", "quotes": symbol -> bid, ask, last, volume} from IBKR's overnight venue; {"why"} when it can't be had."""
+    import asyncio
+
+    from .paper.gateway import IBMarket
+
+    async def ask():
+        async with IBMarket(client_id=SWEEP_CLIENT) as m:
+            return await m.sweep(symbols)
+    try:
+        return {"at": datetime.now(NY).isoformat(timespec="seconds"), "quotes": asyncio.run(ask())}
+    except Exception as e:  # noqa: BLE001 - no sweep means no overnight movers, said in the screen
+        return {"why": f"the gateway couldn't be asked ({type(e).__name__})"}
+
+
+def _usable(q: dict | None) -> float | None:
+    """The spread of an overnight quote that counts: a real overnight trade and a spread inside the cross limit."""
+    from .paper import rules
+    if not q or not q.get("last") or not q.get("volume") or not q.get("bid") or not q.get("ask"):
+        return None
+    sp = rules.spread_pct((q["bid"], q["ask"]))
+    return sp if sp is not None and sp <= rules.MAX_CROSS_SPREAD else None
+
+
+def _overnight_of(q: dict | None, close: float, atrp: float, spy_move: float, at: str) -> dict | None:
+    """One name's usable overnight price against its last regular close, or None."""
+    if (sp := _usable(q)) is None or not close or not atrp:
+        return None
+    move = q["last"] / close - 1
+    return {"at": at, "price": q["last"], "move": move, "move_atr": move / atrp, "spy_move": spy_move,
+            "rel_atr": (move - spy_move) / atrp, "volume": q["volume"], "spread": sp}
+
+
 class OvernightCheck:
     """Called with each shortlist; returns the candidates to drop, {name: why}. `books` stands in for the gateway:
     a function from symbols to (books, missing), as _gateway_overnight."""
@@ -674,9 +729,11 @@ def _pct_or_none(x: float | None) -> str | None:
     return None if x is None else f"{x:.2%}"
 
 
-def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None, books=None) -> dict:
-    """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull and
-    `books` for the night screen's overnight quotes (OvernightCheck)."""
+def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None, books=None,
+               sweep=None) -> dict:
+    """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull,
+    `books` for the night screen's overnight quotes (OvernightCheck) and `sweep` for the overnight sweep
+    (a function from symbols to what _gateway_sweep returns)."""
     from .paper import proposals
 
     if slot not in SLOTS:
@@ -689,7 +746,15 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
         raise RuntimeError("no live prices from Yahoo (SPY is missing), so there is no live screen")
     frame, snaps, partial = _with_live(bars.load(names), snaps)
     check = (OvernightCheck(books) if slot == "night" else None)
-    payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check})
+    swept = None
+    if slot not in ("morning", "midday"):
+        from .paper import entries
+        if entries.venue(now) == "overnight":
+            swept = (sweep or _gateway_sweep)(names)
+    payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check,
+                           "sweep": swept})
+    if swept and swept.get("quotes"):
+        payload["_sweep_quotes"] = swept
     spy = snaps["SPY"]
     payload.update({"session": session.isoformat(), "slot": slot, "live": True, "phase": spy["phase"], "prices_at": spy["at"],
                     "session_minutes": (spy.get("regular") or {}).get("minutes") if spy["phase"] == "regular" else None,
@@ -705,11 +770,15 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     frame = frame[frame["date"] <= as_of_ts]
     days = _Days(as_of)
     snaps, partial = (live_["snaps"], live_["partial"]) if live_ else ({}, {})
+    swept = (live_ or {}).get("sweep")
+    quotes = (swept or {}).get("quotes") or {}
     after_close = bool(live_) and snaps["SPY"]["phase"] == "post"
     reports = earnings.load().get("names", {})
     close = frame.pivot_table(index="date", columns="symbol", values="close").sort_index()
     rets = close.pct_change()
     spy_ret1 = float(rets["SPY"].iloc[-1])
+    spy_q = quotes.get("SPY")
+    spy_overnight = spy_q["last"] / float(close["SPY"].iloc[-1]) - 1 if _usable(spy_q) is not None else 0.0
     r60 = rets.iloc[-60:]
 
     found, feats, held_back = [], {}, []
@@ -722,6 +791,8 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         if live_:
             f["partial"] = partial.get(sym)
             f["live"] = _live_of(sym, f, snaps.get(sym), reports)
+            if quotes:
+                f["overnight"] = _overnight_of(quotes.get(sym), f["close"], f["atr_pct"], spy_overnight, swept["at"])
         feats[sym] = f
         is_etf = sym in ETFS
         if not is_etf and f["usd_volume"] < MIN_DOLLAR_VOLUME:
@@ -837,7 +908,22 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         "calendar_ahead": events,
         "regime": _regime_notes(as_of),
         **({"overnight": check.report(dropped)} if check else {}),
+        **({"overnight_sweep": _sweep_report(swept, feats, spy_overnight)} if swept is not None else {}),
     }
+
+
+def _sweep_report(swept: dict, feats: dict[str, dict], spy_move: float) -> dict:
+    """What the overnight sweep saw, for the screen and the record: how many names had a usable price, and the
+    largest moves net of SPY, movers or not."""
+    if not swept.get("quotes"):
+        return {"swept": False, "why": swept.get("why") or "the gateway sent nothing"}
+    usable = {s: f["overnight"] for s, f in feats.items() if f.get("overnight")}
+    top = sorted(usable.items(), key=lambda kv: -abs(kv[1]["rel_atr"]))[:25]
+    return {"swept": True, "at": swept["at"], "quoted": len(swept["quotes"]), "usable": len(usable),
+            "spy_move": round(spy_move, 5), "threshold_atr": OVERNIGHT_MOVE_ATR,
+            "movers": [s for s, o in usable.items() if abs(o["rel_atr"]) >= OVERNIGHT_MOVE_ATR],
+            "largest": [{"symbol": s, "move": round(o["move"], 5), "rel_atr": round(o["rel_atr"], 2), "volume": o["volume"],
+                         "spread": round(o["spread"], 5)} for s, o in top]}
 
 
 def _regime_notes(as_of: date) -> list[str]:
@@ -876,6 +962,8 @@ def write_live(slot: str, now: datetime | None = None) -> tuple[str, dict]:
     payload = build_live(slot, now)
     path = live_path(payload["session"], slot)
     path.parent.mkdir(parents=True, exist_ok=True)
+    if raw := payload.pop("_sweep_quotes", None):   # every quote the sweep saw, beside the screen
+        path.with_name(path.stem + "-overnight.json").write_text(json.dumps(raw) + "\n")
     path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
     return str(path), payload
 
@@ -904,5 +992,12 @@ def summary(payload: dict) -> str:
                   for c in payload["candidates"] if c.get("overnight_hedge") and not c["overnight_hedge"]["tradeable"]]
     if wide_hedge:
         lines.append("Default hedge too wide overnight, choose another or none: " + ", ".join(wide_hedge))
+    if (s := payload.get("overnight_sweep")) and not s["swept"]:
+        lines.append(f"Overnight sweep not run: {s['why']}")
+    elif s:
+        big = ", ".join(f"{x['symbol']} {_pct(x['move'])} ({x['rel_atr']:+.1f} ATR net)" for x in s["largest"][:8])
+        lines.append(f"Overnight sweep at {live.clock(s['at'])}: {s['usable']} of {s['quoted']} names traded overnight inside a 2% "
+                     f"spread; SPY {_pct(s['spy_move'])} from its close; {len(s['movers'])} movers past {s['threshold_atr']:g} ATR "
+                     f"net of SPY. Largest: {big}")
     lines += payload["regime"]
     return "\n".join(lines)

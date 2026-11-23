@@ -335,7 +335,8 @@ def _restart() -> dict | None:
 
 def _pass_screen() -> list[dict]:
     """The restarted book's shortlist: the newest live screen a pass was given, as saved."""
-    found = [json.loads(p.read_text()) for p in sorted((journal.JOURNAL / "screens" / "live").glob("*.json"))[-6:]]
+    found = [json.loads(p.read_text()) for p in sorted((journal.JOURNAL / "screens" / "live").glob("*.json"))
+             if not p.stem.endswith("-overnight")][-6:]   # the overnight sweep's quotes sit beside the screens
     if not found:
         return []
     s = max(found, key=lambda x: x["built_at"])

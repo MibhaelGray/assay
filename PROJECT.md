@@ -72,6 +72,10 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
 - **No order without IBKR's quote, in regular hours too.** A trade with any leg over a 2% spread, or overnight
   with no overnight market at all, is passed on and never retried (the owner, 2026-11-18). Only a gateway fault
   (no quote while the gateway is down or refused) waits and is tried again every 15 minutes until 2:40 PM CT.
+- **The night pass sees overnight prices** (since 2026-11-22). Its screen quotes the whole universe on IBKR's
+  overnight venue, and a name that has moved 1.5 ATR or more net of SPY, on a real overnight trade inside a 2%
+  spread, is a candidate, so news from the weekend or late evening reaches the list. Every sweep is kept beside the
+  screen.
 - **The night pass researches only what can trade overnight.** Its screen drops candidates whose own legs are
   over 2% wide on IBKR's overnight venue, or have no overnight market, and fills the list from the next names.
 - **Every trade risks the same share of the book** (set 2026-11-16). A trade's size is its risk budget over its

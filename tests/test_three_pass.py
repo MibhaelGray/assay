@@ -112,6 +112,29 @@ class LiveScreen(unittest.TestCase):
         quiet["live"] = screen._live_of("TEST", quiet, snap, {})
         self.assertNotIn("live_move", [h["setup"] for h in self.hits(quiet)])
 
+    def overnight(self, last, volume=5000.0, bid=None, ask=None, spy_move=0.0):
+        f = screen._features(daily_bars())
+        q = {"bid": bid or last * 0.999, "ask": ask or last * 1.001, "last": last, "volume": volume}
+        f["overnight"] = screen._overnight_of(q, f["close"], f["atr_pct"], spy_move, "2026-11-22T21:10:00-05:00")
+        return f
+
+    def test_an_overnight_move_net_of_spy_is_a_candidate(self):
+        base = screen._features(daily_bars())
+        f = self.overnight(base["close"] * (1 + 3 * base["atr_pct"]))
+        hit = next(h for h in self.hits(f) if h["setup"] == "overnight_move")
+        self.assertEqual(hit["direction"], "long")
+        self.assertIn("overnight at 8:10 PM CT", hit["why"])
+        self.assertIn("net of SPY", hit["why"])
+        # The same move on a night SPY made all of it is the market, not the name.
+        g = self.overnight(base["close"] * (1 + 3 * base["atr_pct"]), spy_move=3 * base["atr_pct"])
+        self.assertNotIn("overnight_move", [h["setup"] for h in self.hits(g)])
+
+    def test_an_overnight_quote_with_no_trade_or_a_wide_spread_does_not_count(self):
+        base = screen._features(daily_bars())
+        px = base["close"] * (1 + 3 * base["atr_pct"])
+        self.assertIsNone(self.overnight(px, volume=0)["overnight"])
+        self.assertIsNone(self.overnight(px, bid=px * 0.97, ask=px * 1.03)["overnight"])
+
     def test_a_name_judged_lately_comes_back_only_if_it_has_moved(self):
         was = {"session": "2026-11-09", "pass": "night", "decision": "pass", "setup": "turn", "direction": "long", "price": 100.0, "atr_pct": 0.02}
         cand = lambda price: {"name": "TEST", "kind": "stock", "setup": "turn", "direction": "long", "numbers": {"price": price}}  # noqa: E731

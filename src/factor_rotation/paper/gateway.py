@@ -92,6 +92,22 @@ class IBMarket:
         return out
 
 
+    async def sweep(self, symbols: list[str], wait: float = 4.0) -> dict[str, dict]:
+        """symbol -> its overnight bid, ask, last trade and volume so far, for every name IBKR has a contract for.
+        One look per batch, no retries: the night screen's overnight sweep (screen.py)."""
+        contracts = await self._contracts(symbols, overnight=True)
+        out = {}
+        items = list(contracts.items())
+        for i in range(0, len(items), SNAPSHOT_BATCH):
+            tickers = [(s, self.ib.reqMktData(c, "", False, False)) for s, c in items[i:i + SNAPSHOT_BATCH]]
+            await asyncio.sleep(wait)
+            for s, t in tickers:
+                out[s] = {k: (float(v) if v is not None and np.isfinite(v) and v > 0 else None)
+                          for k, v in (("bid", t.bid), ("ask", t.ask), ("last", t.last), ("volume", t.volume))}
+                self.ib.cancelMktData(t.contract)
+        return out
+
+
 QUOTE_WAITS = 16            # of 0.5 s: how long one request waits for its quote
 QUOTE_RETRY_WAIT = 5        # seconds before asking again for the names still without a bid and ask
 QUOTE_NOISE = {2104, 2106, 2107, 2108, 2119, 2158, 300, 10167}   # farm status lines, notices, the cancel of a refused request

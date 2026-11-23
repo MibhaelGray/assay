@@ -1,0 +1,330 @@
+{
+ "session": "2026-11-23",
+ "handled": [
+  "night"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-23-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-23-P04",
+   "proposal_id": "2026-11-23-P04",
+   "conviction": 3,
+   "name": "ZS",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "Bloomberg reports CrowdStrike, about seven times Zscaler's size, is in talks to buy it; the 16% pop comes off a close that was down 24% in a month, so 226 is still well under any price a founder-led board would take, and a market bounce cushions the fall-back if the talks die.",
+   "wrong_if": "CrowdStrike, Zscaler or Jay Chaudhry denies the talks; or Bloomberg, Reuters, the WSJ or the FT reports they have ended or stalled; or a deal is announced worth about $230 a share or less at CrowdStrike's price that day, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "ZS",
+     "side": "long",
+     "shares": 82,
+     "ref_price": 226.65
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-23",
+   "lead": "ZS"
+  },
+  {
+   "id": "2026-11-23-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-23-P01",
+   "proposal_id": "2026-11-23-P01",
+   "conviction": 3,
+   "name": "XLK/XLU",
+   "setup": "factor_stretched",
+   "direction": "long",
+   "why": "Friday's 6.5% drop in tech against utilities was forced selling with credit calm and yields falling, and Sunday night shows the first bid across every asset in a week: a two-session relief bounce in the most-sold sector, closed before Wednesday's PCE.",
+   "wrong_if": "On Monday 11-23 the bounce fails in the cash session, with the Nasdaq Composite closing lower on the day; or the SEC or DOJ confirms a formal investigation of Nvidia or Nvidia says a filing will be late; or Williams or a Fed governor backs a 50 bp hike for 12-9, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 2,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLK",
+     "side": "long",
+     "shares": 164,
+     "ref_price": 151.843
+    },
+    {
+     "symbol": "XLU",
+     "side": "short",
+     "shares": 583,
+     "ref_price": 42.81
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-23",
+   "lead": "XLU"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-22T20:43:24-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "AA": 33.578,
+    "ADI": 352.25,
+    "AMAT": 312.66,
+    "ARKK": 65.5,
+    "ARM": 156.6698,
+    "ASML": 1291.5,
+    "AVAV": 89.6528,
+    "B": 31.87,
+    "BE": 145.55,
+    "BILI": 10.7,
+    "COPX": 57.01,
+    "CRCL": 48.95,
+    "CRDO": 103.9175,
+    "CTVA": 8.0781,
+    "FAST": 50.92,
+    "FUTU": 82.8,
+    "FXI": 31.31,
+    "GDX": 69.47,
+    "GLD": 324.48,
+    "HIMS": 15.12,
+    "HL": 10.755,
+    "IBIT": 33.35,
+    "IGV": 92.4,
+    "INFQ": 6.524,
+    "IWM": 258.67,
+    "KLAC": 130.3456,
+    "KTOS": 27.8034,
+    "LI": 10.53,
+    "LRCX": 189.0993,
+    "NIO": 2.4799,
+    "PAAS": 31.21,
+    "PLTR": 145.5788,
+    "POET": 3.54,
+    "QBTS": 6.7338,
+    "RSP": 209.85,
+    "SMH": 410.6499,
+    "SOXX": 126.4995,
+    "SPY": 697.49,
+    "STLA": 3.3985,
+    "TAN": 34.35,
+    "TXN": 270.75,
+    "URA": 27.07,
+    "XAR": 205.7,
+    "XBI": 140.99,
+    "XLI": 158.0,
+    "XLK": 151.843,
+    "XLU": 42.81,
+    "XME": 82.21,
+    "XSD": 380.0,
+    "ZS": 226.65
+   }
+  }
+ },
+ "exits": [],
+ "runs": [
+  {
+   "at": "2026-11-22T20:43:24-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-23-S01",
+    "2026-11-23-S02"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S01",
+     "symbol": "ZS",
+     "action": "BUY",
+     "shares": 82,
+     "kind": "LMT",
+     "limit": 231.14,
+     "venue": "overnight",
+     "ref_price": 229.99,
+     "priced_on": "gateway bid/ask",
+     "bid": 226.5,
+     "ask": 229.99,
+     "spread_pct": 1.529,
+     "order_id": 66,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.52,
+     "venue": "overnight",
+     "ref_price": 42.73,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.73,
+     "ask": 42.98,
+     "spread_pct": 0.583,
+     "order_id": 68,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 68: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S01: BUY 82 ZS went in with a message from the gateway: Warning 2109, reqId 66: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 68: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "takes": {
+    "night": 2
+   },
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-22T20:45:45-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S01",
+     "symbol": "ZS",
+     "action": "BUY",
+     "shares": 32,
+     "kind": "LMT",
+     "limit": 231.14,
+     "venue": "overnight",
+     "ref_price": 229.99,
+     "priced_on": "gateway bid/ask",
+     "bid": 226.5,
+     "ask": 229.99,
+     "spread_pct": 1.529,
+     "order_id": 73,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 73: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.52,
+     "venue": "overnight",
+     "ref_price": 42.73,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.73,
+     "ask": 42.98,
+     "spread_pct": 0.583,
+     "order_id": 75,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 75: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S01: BUY 32 ZS went in with a message from the gateway: Warning 2109, reqId 73: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 75: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T21:01:07-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.52,
+     "venue": "overnight",
+     "ref_price": 42.73,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.73,
+     "ask": 42.99,
+     "spread_pct": 0.607,
+     "order_id": 80,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 80: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 80: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T21:16:28-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.53,
+     "venue": "overnight",
+     "ref_price": 42.74,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.74,
+     "ask": 43.01,
+     "spread_pct": 0.63,
+     "order_id": 85,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 85: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 85: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  }
+ ],
+ "last_attempt": "2026-11-22T21:16:28-05:00"
+}
