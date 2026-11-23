@@ -282,6 +282,21 @@ class Overnight(unittest.TestCase):
         chk(top)                       # asked again: nothing new to quote
         self.assertEqual(len(asked), 1)
 
+    def test_a_leg_that_is_quoted_but_not_trading_is_dropped_and_a_quiet_hedge_is_flagged(self):
+        """XLU on 2026-11-22: a 0.6% spread all evening on 209 shares, and nothing filled in 12 tries."""
+        q = lambda last, volume: {"bid": last * 0.999, "ask": last * 1.001, "last": last, "volume": volume}  # noqa: E731
+        sweep = {"at": "2026-11-22T20:35:00-05:00", "quotes": {"AAA": q(100.0, 5000.0), "BBB": q(43.0, 209.0), "CCC": q(50.0, 9000.0),
+                                                               "XLK": q(200.0, 5000.0), "XLU": {"bid": 42.74, "ask": 43.01, "last": None, "volume": 209.0}}}
+        books = {"SPY": (599.9, 600.1), "AAA": (99.9, 100.1), "BBB": (42.9, 43.1), "CCC": (49.9, 50.1), "XLK": (199.9, 200.1), "XLU": (42.74, 43.01)}
+        chk = screen.OvernightCheck(lambda symbols: ({s: books[s] for s in [*symbols, "SPY"] if s in books}, {}), sweep)
+        top = [{**cand("AAA", "turn", 3), "hedge": "XLK"}, {**cand("BBB", "turn", 2), "hedge": "XLK"}, {**cand("CCC", "turn", 1), "hedge": "XLU"}]
+        drop = chk(top)
+        self.assertEqual(set(drop), {"BBB"})
+        self.assertIn("BBB has traded only $8,987 overnight", drop["BBB"]["why"])
+        self.assertTrue(top[0]["overnight_hedge"]["tradeable"])
+        xlu = top[2]["overnight_hedge"]
+        self.assertEqual((xlu["symbol"], xlu["trading"], xlu["tradeable"]), ("XLU", False, False))
+
     def test_a_gateway_fault_drops_nothing_and_says_so(self):
         refused = {"AAA": "the live IBKR login is in use somewhere else (IBKR error 10197)"}
         chk, _ = self.check({"SPY": (599.9, 600.1), "SPY_HEDGE": (1, 1)}, refused)

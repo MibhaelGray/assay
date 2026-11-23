@@ -19,6 +19,7 @@ the screen says so.
 """
 
 import json
+import time
 from datetime import date, datetime
 
 import numpy as np
@@ -40,6 +41,12 @@ SWEEP_CLIENT = 94       # the overnight sweep's own gateway connection
 # a quiet night (196 of 1,113 did on 2026-11-22). A name whose overnight move, net of SPY's, is OVERNIGHT_MOVE_ATR
 # of its ATRs from the last close is an overnight mover. Every sweep is kept beside the screen, mover or not.
 OVERNIGHT_MOVE_ATR = 1.5
+# A leg has to be trading overnight, not just quoted (the owner, 2026-11-22): the paper account fills against real
+# prints, and XLU showed a 0.6% spread all evening on 209 shares and filled nothing in 12 tries. A name counts as
+# trading with a usable price (above) and this many dollars traded on the overnight venue so far.
+MIN_OVERNIGHT_DOLLARS = 25_000
+GATEWAY_RETRY_WAIT = 20  # seconds before the night screen asks the gateway a second time
+HEDGES_SHOWN = 30       # funds trading overnight that the night screen lists for the judge to hedge with
 TOP = 25   # 40 from 2026-11-16 to 11-22 (20 before): at 40, most names came back thinly researched, so fewer are
            # judged and each is researched properly (the owner, 2026-11-22)
 MORE = 15
@@ -619,10 +626,13 @@ def _gateway_overnight(symbols: list[str]) -> tuple[dict, dict]:
         async with IBMarket(client_id=OVERNIGHT_CLIENT) as m:
             await m.quotes(sorted({*symbols, CANARY}), overnight=True, tries=2, need_books=True)
             return m.books, m.missing
-    try:
-        return asyncio.run(ask())
-    except Exception as e:  # noqa: BLE001 - no check means nothing dropped, said in the screen
-        return {}, {s: f"the gateway couldn't be asked ({type(e).__name__})" for s in symbols}
+    for attempt in (1, 2):   # one more try after a pause: on 2026-11-20 a timeout left a night's screen unchecked
+        try:
+            return asyncio.run(ask())
+        except Exception as e:  # noqa: BLE001 - no check means nothing dropped, said in the screen
+            if attempt == 2:
+                return {}, {s: f"the gateway couldn't be asked ({type(e).__name__})" for s in symbols}
+            time.sleep(GATEWAY_RETRY_WAIT)
 
 
 def _gateway_sweep(symbols: list[str]) -> dict:
@@ -634,10 +644,13 @@ def _gateway_sweep(symbols: list[str]) -> dict:
     async def ask():
         async with IBMarket(client_id=SWEEP_CLIENT) as m:
             return await m.sweep(symbols)
-    try:
-        return {"at": datetime.now(NY).isoformat(timespec="seconds"), "quotes": asyncio.run(ask())}
-    except Exception as e:  # noqa: BLE001 - no sweep means no overnight movers, said in the screen
-        return {"why": f"the gateway couldn't be asked ({type(e).__name__})"}
+    for attempt in (1, 2):
+        try:
+            return {"at": datetime.now(NY).isoformat(timespec="seconds"), "quotes": asyncio.run(ask())}
+        except Exception as e:  # noqa: BLE001 - no sweep means no overnight movers, said in the screen
+            if attempt == 2:
+                return {"why": f"the gateway couldn't be asked ({type(e).__name__})"}
+            time.sleep(GATEWAY_RETRY_WAIT)
 
 
 def _usable(q: dict | None) -> float | None:
@@ -647,6 +660,19 @@ def _usable(q: dict | None) -> float | None:
         return None
     sp = rules.spread_pct((q["bid"], q["ask"]))
     return sp if sp is not None and sp <= rules.MAX_CROSS_SPREAD else None
+
+
+def _trading(q: dict | None) -> bool:
+    """Whether a name is really trading overnight: a usable price and MIN_OVERNIGHT_DOLLARS traded so far."""
+    return _usable(q) is not None and q["last"] * q["volume"] >= MIN_OVERNIGHT_DOLLARS
+
+
+def _quiet_text(symbol: str, q: dict | None) -> str:
+    if not q or not q.get("volume") or not q.get("last"):
+        return f"{symbol} hasn't traded overnight"
+    if q["last"] * q["volume"] >= MIN_OVERNIGHT_DOLLARS:   # traded enough, but its quote was wide when the sweep looked
+        return f"{symbol}'s overnight quote was over 2% wide a few minutes earlier"
+    return f"{symbol} has traded only ${q['last'] * q['volume']:,.0f} overnight"
 
 
 def _overnight_of(q: dict | None, close: float, atrp: float, spy_move: float, at: str) -> dict | None:
@@ -662,8 +688,9 @@ class OvernightCheck:
     """Called with each shortlist; returns the candidates to drop, {name: why}. `books` stands in for the gateway:
     a function from symbols to (books, missing), as _gateway_overnight."""
 
-    def __init__(self, books=None):
+    def __init__(self, books=None, sweep: dict | None = None):
         self.ask = books or _gateway_overnight
+        self.swept = (sweep or {}).get("quotes")   # None when there was no sweep: then only spreads are checked
         self.books: dict = {}
         self.missing: dict = {}
         self.unchecked: str | None = None
@@ -684,6 +711,10 @@ class OvernightCheck:
     def spread(self, symbol: str) -> float | None:
         from .paper import rules
         return rules.spread_pct(self.books.get(symbol))
+
+    def trading(self, symbol: str) -> bool:
+        """Whether the sweep saw the name really trading overnight. True when there was no sweep to say."""
+        return self.swept is None or _trading(self.swept.get(symbol))
 
     def __call__(self, top: list[dict]) -> dict[str, dict]:
         from .paper import rules
@@ -706,16 +737,18 @@ class OvernightCheck:
             own, hedge = legs[c["name"]]
             wide = {x: v for x in own if (v := self.spread(x)) is not None and v > rules.MAX_CROSS_SPREAD}
             none = [x for x in own if x in self.missing and no_market(self.missing[x])]
-            if wide or none:
-                why = [f"{x} {v:.1%} wide" for x, v in wide.items()] + [f"{x} has no overnight bid and ask" for x in none]
+            quiet = [x for x in own if x not in wide and x not in none and not self.trading(x)]
+            if wide or none or quiet:
+                why = [f"{x} {v:.1%} wide" for x, v in wide.items()] + [f"{x} has no overnight bid and ask" for x in none] + \
+                    [_quiet_text(x, self.swept.get(x)) for x in quiet]
                 drop[c["name"]] = {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "direction": c["direction"],
                                    "why": "; ".join(why)}
                 continue
             c["overnight"] = {x: _pct_or_none(self.spread(x)) for x in own}
             if hedge:
                 hs = self.spread(hedge)
-                c["overnight_hedge"] = {"symbol": hedge, "spread": _pct_or_none(hs),
-                                        "tradeable": hs is not None and hs <= rules.MAX_CROSS_SPREAD}
+                c["overnight_hedge"] = {"symbol": hedge, "spread": _pct_or_none(hs), "trading": self.trading(hedge),
+                                        "tradeable": hs is not None and hs <= rules.MAX_CROSS_SPREAD and self.trading(hedge)}
         return drop
 
     def report(self, dropped: dict[str, dict]) -> dict:
@@ -744,12 +777,12 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
     if "SPY" not in snaps:
         raise RuntimeError("no live prices from Yahoo (SPY is missing), so there is no live screen")
     frame, snaps, partial = _with_live(bars.load(names), snaps)
-    check = (OvernightCheck(books) if slot == "night" else None)
     swept = None
     if slot not in ("morning", "midday"):
         from .paper import entries
         if entries.venue(now) == "overnight":
             swept = (sweep or _gateway_sweep)(names)
+    check = (OvernightCheck(books, swept) if slot == "night" else None)
     payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check,
                            "sweep": swept})
     if swept and swept.get("quotes"):
@@ -918,7 +951,10 @@ def _sweep_report(swept: dict, feats: dict[str, dict], spy_move: float) -> dict:
         return {"swept": False, "why": swept.get("why") or "the gateway sent nothing"}
     usable = {s: f["overnight"] for s, f in feats.items() if f.get("overnight")}
     top = sorted(usable.items(), key=lambda kv: -abs(kv[1]["rel_atr"]))[:25]
+    funds = sorted(((s, q) for s, q in swept["quotes"].items() if s in ETFS and _trading(q)), key=lambda x: -x[1]["last"] * x[1]["volume"])
     return {"swept": True, "at": swept["at"], "quoted": len(swept["quotes"]), "usable": len(usable),
+            "trading": sum(_trading(q) for q in swept["quotes"].values()),
+            "hedges": [{"symbol": s, "spread": round(_usable(q), 5), "dollars": round(q["last"] * q["volume"])} for s, q in funds[:HEDGES_SHOWN]],
             "spy_move": round(spy_move, 5), "threshold_atr": OVERNIGHT_MOVE_ATR,
             "movers": [s for s, o in usable.items() if abs(o["rel_atr"]) >= OVERNIGHT_MOVE_ATR],
             "largest": [{"symbol": s, "move": round(o["move"], 5), "rel_atr": round(o["rel_atr"], 2), "volume": o["volume"],
@@ -986,11 +1022,12 @@ def summary(payload: dict) -> str:
     if (o := payload.get("overnight")) and not o["checked"]:
         lines.append(o["why"].capitalize())
     elif o and o["dropped"]:
-        lines.append("Left out, can't trade overnight inside a 2% spread: " + ", ".join(f"{d['name']} ({d['why']})" for d in o["dropped"]))
-    wide_hedge = [f"{c['name']} (hedge {c['overnight_hedge']['symbol']} {c['overnight_hedge']['spread'] or 'no quote'})"
+        lines.append("Left out, can't trade overnight (over a 2% spread, or not trading): " + ", ".join(f"{d['name']} ({d['why']})" for d in o["dropped"]))
+    wide_hedge = [f"{c['name']} (hedge {c['overnight_hedge']['symbol']} {c['overnight_hedge']['spread'] or 'no quote'}"
+                  f"{'' if c['overnight_hedge'].get('trading', True) else ', not trading'})"
                   for c in payload["candidates"] if c.get("overnight_hedge") and not c["overnight_hedge"]["tradeable"]]
     if wide_hedge:
-        lines.append("Default hedge too wide overnight, choose another or none: " + ", ".join(wide_hedge))
+        lines.append("Default hedge too wide or not trading overnight, choose another or none: " + ", ".join(wide_hedge))
     if (s := payload.get("overnight_sweep")) and not s["swept"]:
         lines.append(f"Overnight sweep not run: {s['why']}")
     elif s:
@@ -998,5 +1035,8 @@ def summary(payload: dict) -> str:
         lines.append(f"Overnight sweep at {live.clock(s['at'])}: {s['usable']} of {s['quoted']} names traded overnight inside a 2% "
                      f"spread; SPY {_pct(s['spy_move'])} from its close; {len(s['movers'])} movers past {s['threshold_atr']:g} ATR "
                      f"net of SPY. Largest: {big}")
+        if s.get("hedges"):
+            lines.append("Funds trading overnight right now, most traded first (a hedge outside this list is unlikely to fill "
+                         "tonight): " + ", ".join(h["symbol"] for h in s["hedges"]))
     lines += payload["regime"]
     return "\n".join(lines)

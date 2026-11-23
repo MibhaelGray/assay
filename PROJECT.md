@@ -78,7 +78,9 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
   overnight venue, and a name that has moved 1.5 ATR or more net of SPY, on a real overnight trade inside a 2%
   spread, is a candidate, so news from the weekend or late evening reaches the list. Every sweep is kept beside the
   screen.
-- **The night pass researches only what can trade overnight.** Its screen drops candidates whose own legs are
+- **The night pass researches only what can trade overnight.** A leg has to be really trading there, not just
+  quoted (at least $25,000 traded overnight so far, since 2026-11-22), and the screen shows the judge which funds
+  are trading so it can pick a hedge that will fill. Its screen drops candidates whose own legs are
   over 2% wide on IBKR's overnight venue, or have no overnight market, and fills the list from the next names.
 - **Every trade risks the same share of the book** (set 2026-11-16). A trade's size is its risk budget over its
   stop: 0.15% of the book at conviction 3, one and a half times that at 4 and twice at 5. A typical trade
