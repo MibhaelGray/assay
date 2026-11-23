@@ -240,6 +240,16 @@ def _keep_depth(session: str) -> None:
         print(f"  note: research depth not kept ({type(e).__name__}: {e})")
 
 
+def _keep_reports(session: str, kind: str) -> None:
+    """Every research agent's report, kept for the record (paper/depth.py); it never stops a pass recording."""
+    try:
+        from .paper import depth
+        if path := depth.keep_reports(date.fromisoformat(session), kind):
+            print(f"  research reports kept in {path}")
+    except Exception as e:  # noqa: BLE001
+        print(f"  note: research reports not kept ({type(e).__name__}: {e})")
+
+
 def _research(a) -> None:
     """The research pass's commands. They only read and write the journal; none of them reaches the gateway."""
     from .paper import learn, proposals
@@ -265,6 +275,7 @@ def _research(a) -> None:
                 for n in notes:
                     print(f"  note: {n}")
                 _keep_depth(doc["session"])
+                _keep_reports(doc["session"], d["pass"])
                 return
             sys.exit(f'fr paper propose refused: the draft needs "pass": one of {", ".join(proposals.NEW_PASSES)}')
         elif a.job == "postmortem":

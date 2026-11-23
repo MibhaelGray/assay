@@ -17,6 +17,8 @@ DAY = date(2026, 11, 9)       # a Monday
 NEXT = date(2026, 11, 10)
 
 
+PASS_CASE = {"case_for": "a move", "case_against": "no story", "why_not": "nothing behind it"}
+
 class Broker:
     """Records what it is asked to send. `fill` decides which sent orders fill (default: all, at 100)."""
 
@@ -263,6 +265,7 @@ class Research(Case):
                          for c in screen_["candidates"] if c["name"] not in judged]
         if not any("rank" in v for v in verdicts):
             verdicts = [{**v, "rank": i} for i, v in enumerate(verdicts, 1)]
+        verdicts = [{**v, "pass_case": PASS_CASE} if v.get("decision") == "pass" and "pass_case" not in v else v for v in verdicts]
         out = daily.record({"session": DAY.isoformat(), "pass": "night", "proposals": verdicts}, SUNDAY_EVENING)
         legs = {s for p in out[1]["proposals"] for s in [*p["long"], *p["short"]]} | {"SPY"}
         state = entries.load(DAY) or entries._blank(DAY)
@@ -582,3 +585,13 @@ class SwingFillsOnly(unittest.TestCase):
             self.assertEqual([x["symbol"] for x in book._book_fills()], ["MU"])
 
 
+
+
+class PassCaseTests(Research):
+    def test_a_pass_needs_its_short_case(self):
+        with self.assertRaises(ValueError) as e:
+            self.propose(verdict(), {"candidate": "BBB", "decision": "pass", "conviction": 2, "reason": "no story", "pass_case": {"case_for": "x"}})
+        self.assertIn("pass_case", str(e.exception))
+        _, doc, _ = self.propose(verdict())
+        p = next(p for p in doc["proposals"] if p["decision"] == "pass")
+        self.assertEqual(p["pass_case"], PASS_CASE)

@@ -85,6 +85,8 @@ def _text(v) -> bool:
     return isinstance(v, str) and bool(v.strip())
 
 
+PASS_CASE = ("case_for", "case_against", "why_not")   # a pass's short case (since 2026-11-22)
+
 def _side(v, who: str, side: str) -> list[str]:
     names = [v] if isinstance(v, str) else list(v or [])
     if any(not isinstance(s, str) or not journal.SYMBOL.match(s) for s in names) or len(set(names)) != len(names):
@@ -229,8 +231,15 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
                              "time limit, or give through_earnings saying why the trade holds through the report")
         p.update({"reasoning": {k: reasoning[k].strip() for k in journal.REASONING}, "wrong_if": raw["wrong_if"].strip(),
                   "hedge_why": (raw.get("hedge_why") or "").strip() or None, "through_earnings": (raw.get("through_earnings") or "").strip() or None})
-    elif isinstance(raw.get("reasoning"), dict):
-        p["reasoning"] = {k: str(v).strip() for k, v in raw["reasoning"].items() if k in journal.REASONING and _text(v)}
+    else:
+        # Every pass keeps a short case, for the record (the owner, 2026-11-22): the best case for it, the case
+        # against, and why it didn't make the cut. No pass reads them; they are kept for later study.
+        case = raw.get("pass_case")
+        if not isinstance(case, dict) or any(not _text(case.get(k)) for k in PASS_CASE):
+            raise ValueError(f"{who}: a pass needs pass_case with each of: {', '.join(PASS_CASE)} (a sentence or two each)")
+        p["pass_case"] = {k: case[k].strip() for k in PASS_CASE}
+        if isinstance(raw.get("reasoning"), dict):
+            p["reasoning"] = {k: str(v).strip() for k, v in raw["reasoning"].items() if k in journal.REASONING and _text(v)}
     p["stats"] = pair_stats(p["long"], p["short"])
     return p
 

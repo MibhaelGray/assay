@@ -60,7 +60,8 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
   is noted, not relaunched (2026-11-19). Nobody tells an agent what to read or the judge how to weigh it. What is
   fixed is the setup and what gets recorded and scored.
 - **Every verdict is recorded before the trade and scored afterwards**, taken or passed, so the passes are the
-  control group. Every verdict is scored from the prices at the moment its pass recorded, its stop replayed on the same
+  control group. A take keeps the judge's full case, a pass a short one (for it, against it, why not), and every
+  research agent's report is kept in `journal/research/agents/` (since 2026-11-22, for the record; no pass reads them). Every verdict is scored from the prices at the moment its pass recorded, its stop replayed on the same
   ten-minute checks the book makes (from stored 5-minute bars, since 2026-11-22), and every pass's
   ranking is scored.
 - **Trades go out as soon as the pass records.** Every take of the pass (since 2026-11-16; the best 1 to 3 before

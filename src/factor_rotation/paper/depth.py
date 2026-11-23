@@ -186,3 +186,42 @@ def keep(session: date, m: dict | None = None) -> Path | None:
     doc["passes"] = [p for p in doc["passes"] if p["session_id"] != m["session_id"]] + [{"at": datetime.now(NY).isoformat(timespec="seconds"), **m}]
     path.write_text(json.dumps(doc, indent=1) + "\n")
     return path
+
+
+def reports(session_id: str) -> list[dict]:
+    """Each of the pass's agents: the names it researched, its brief, its model and the report it handed back
+    (its last message), oldest first."""
+    out = []
+    for path in sorted((folder() / session_id / "subagents").glob("agent-*.jsonl"), key=lambda p: p.stat().st_mtime):
+        prompt, last, model, started = None, None, None, None
+        for x in _lines(path):
+            m = x.get("message") or {}
+            if x.get("type") == "user" and prompt is None:
+                prompt, started = _text(m.get("content")), x.get("timestamp")
+            if x.get("type") == "assistant":
+                text = _text(m.get("content")).strip()
+                if text:
+                    last = text
+                if m.get("model") and not m["model"].startswith("<"):
+                    model = m["model"]
+        found = NAMES_LINE.search("\n".join((prompt or "").splitlines()[:5]))
+        out.append({"names": [n.strip() for n in found.group(1).split(",") if n.strip()] if found else [],
+                    "model": model, "started": started, "brief": prompt, "report": last})
+    return out
+
+
+def keep_reports(session: date, kind: str, session_id: str | None = None) -> Path | None:
+    """Keep every research agent's report beside the pass's verdicts (the owner, 2026-11-22: for the record; no
+    pass reads them). journal/research/agents/<session>-<pass>.json; a second pass of the same kind adds to it."""
+    session_id = session_id or os.environ.get("CLAUDE_CODE_SESSION_ID")
+    if not session_id or not (folder() / session_id / "subagents").exists():
+        return None
+    agents = reports(session_id)
+    if not agents:
+        return None
+    path = proposals.root().parent / "research" / "agents" / f"{session}-{kind}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    doc = json.loads(path.read_text()) if path.exists() else {"session": session.isoformat(), "pass": kind, "runs": []}
+    doc["runs"] = [r for r in doc["runs"] if r["session_id"] != session_id] + [{"session_id": session_id, "agents": agents}]
+    path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    return path

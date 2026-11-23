@@ -174,6 +174,8 @@ def verdict(name, rank, decision="take", conviction=3, **kw):
     if decision == "take":
         v = {"reasoning": {k: "x" for k in ("what_changed", "story", "chart", "coming", "case_against")}, "wrong_if": "it gives the move back",
              "hedge_why": "its sector", "plan": {"horizon_days": 3, "stop": {"spread_pct": -5}}, **v}
+    else:
+        v = {"pass_case": {"case_for": "a move", "case_against": "no story", "why_not": "nothing behind it"}, **v}
     return v
 
 
