@@ -163,7 +163,7 @@ def _book_names(sessions: list[date], as_of: date) -> dict[str, str]:
     recent = {d.isoformat() for d in [d for d in sessions if d <= as_of][-RECENT_EXIT:]}
     out = {}
     for t in book.trades():
-        if t["state"] == "unfilled":
+        if t["state"] == "unfilled" or book.book_of(t) != book.MAIN:   # the small book holds the same names
             continue
         if t["state"] != "closed":
             why = f"the book holds it ({t['id']})"

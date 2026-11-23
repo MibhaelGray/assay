@@ -453,7 +453,7 @@
     <div class="fr-panel">
       <div class="fr-phead"><h3>Positions<button type="button" class="fr-help" data-tip="By trade: one row per open trade; click a row for its legs, plan and reasoning. Long and Short go by the idea’s direction, so a hedged short counts as short. By symbol: one row per symbol a book holds. Today is the change since the last close, or since the fill for a position opened today. Click a column to sort and a ticker to chart it." aria-label="About this table">?</button></h3>
         <div class="fr-pfctl">
-          <span class="fr-sub" data-draw="pf-count" data-source="mkt_portfolio_pos mkt_paper">—</span>
+          <span class="fr-sub" data-draw="pf-count" data-source="mkt_portfolio_pos mkt_paper_all">—</span>
           <div class="fr-seg" role="group" aria-label="Show">
             <button type="button" data-pf-filter="all" aria-pressed="true">All</button>
             <button type="button" data-pf-filter="long" aria-pressed="false">Long</button>
@@ -466,19 +466,19 @@
             <button type="button" data-pf-view="symbol" aria-pressed="false">By symbol</button>
           </div>
         </div></div>
-      <div class="fr-tablewrap" data-draw="pf-positions" data-source="mkt_portfolio_pos mkt_paper"></div>
+      <div class="fr-tablewrap" data-draw="pf-positions" data-source="mkt_portfolio_pos mkt_paper_all"></div>
     </div>
     <div class="fr-panel">
       <div class="fr-phead"><h3>Closed trades<button type="button" class="fr-help" data-tip="Every trade that has finished, after commissions, newest first. Click a swing trade for its legs, plan and reasoning. Fills vs model is the paper result minus the same shares scored on daily bars from the first open to the last close, so it shows what real fills cost." aria-label="About this list">?</button></h3>
         <div class="fr-pfctl">
-          <span class="fr-sub" data-draw="pf-closed-day" data-source="mkt_portfolio_accounts mkt_paper">—</span>
+          <span class="fr-sub" data-draw="pf-closed-day" data-source="mkt_portfolio_accounts mkt_paper_all">—</span>
           <div class="fr-seg" role="group" aria-label="Range">
             <button type="button" data-pf-range="day" aria-pressed="true">Latest session</button>
             <button type="button" data-pf-range="week" aria-pressed="false">Week</button>
             <button type="button" data-pf-range="all" aria-pressed="false">All</button>
           </div>
         </div></div>
-      <div class="fr-tablewrap" data-draw="pf-closed" data-source="mkt_portfolio_accounts mkt_paper"></div>
+      <div class="fr-tablewrap" data-draw="pf-closed" data-source="mkt_portfolio_accounts mkt_paper_all"></div>
     </div>
   </section>
 
@@ -727,6 +727,8 @@
   dash.calc('mkt_earnings', { inputs: ['market'], title: 'Earnings radar', description: 'Reports in the next ten sessions and the last five, with dates from Yahoo Finance and price reactions from daily bars.',
     fn: (market) => market.filter((r) => r.section === 'earnings') });
   dash.calc('mkt_paper', { inputs: ['market'], title: 'Paper trades', description: 'Every paper trade on the IBKR paper account: plan, state, result after commissions and the difference from the daily-bar model.',
+    fn: (market) => market.filter((r) => r.section === 'paper' && (r.book || 'swing') === 'swing').sort((a, b) => b.entry_date.localeCompare(a.entry_date) || a.id.localeCompare(b.id)) });
+  dash.calc('mkt_paper_all', { inputs: ['market'], title: 'Paper trades, every book', description: 'Every paper trade of every book: the $1M swing book and the $25k book that trades the same verdicts at its own size.',
     fn: (market) => market.filter((r) => r.section === 'paper').sort((a, b) => b.entry_date.localeCompare(a.entry_date) || a.id.localeCompare(b.id)) });
   dash.calc('mkt_paper_proposals', { inputs: ['market'], title: 'Research verdicts', description: 'Every candidate the research pass judged for the swing book: take or pass, conviction, reasoning, and the result of its own plan on daily bars.',
     fn: (market) => market.filter((r) => r.section === 'paper_proposal').sort((a, b) => b.session.localeCompare(a.session) || (a.rank || 1e6) - (b.rank || 1e6) || a.id.localeCompare(b.id)) });
@@ -1159,7 +1161,7 @@
       .on('pointerleave', () => { tip.hide(); cross.style('visibility', 'hidden'); dot.style('visibility', 'hidden'); });
   };
   // ---- Portfolio: one summary strip, the P/L history, open positions by trade or by symbol, and what closed in the latest session.
-  const PF_BOOK = { all: 'Both books', swing: 'Swing', intraday: 'Intraday' };
+  const PF_BOOK = { all: 'Both books', swing: '$1M swing', small: '$25k swing', intraday: 'Intraday' };
   const pfData = (id) => okData(id);
   const PF_FRAME = { '1D': 'the day', '1W': 'the week', '1M': 'the month', MTD: 'the month to date', '3M': 'three months', YTD: 'the year to date', All: 'all time' };
   const pfUi = { book: 'swing', frame: isLocal ? '1D' : 'All', split: false, bars: {}, loading: {}, failed: {}, view: 'trade', filter: 'all', range: 'day', open: new Set(), closedOpen: new Set(),
@@ -1167,7 +1169,8 @@
   const pfUsd = (v) => v == null ? '—' : `${v < 0 ? '−' : ''}$${d3.format(',.0f')(Math.abs(v))}`;
   const pfPct = (v) => v == null ? '—' : `${signed(v, '.2f')}%`;
   const pfAcct = () => (pfData('mkt_portfolio_accounts') || [])[0] || null;
-  const pfRows = (id) => (pfData(id) || []).filter((r) => pfUi.book === 'all' || r.book === pfUi.book);
+  const pfRows = (id) => (pfData(id) || []).filter((r) => pfUi.book === 'all' || (r.book || 'swing') === pfUi.book);
+  const pfBooks = () => ((pfAcct() || {}).books || []).map((b) => b.book);
   const pfHistory = (book) => (pfData('mkt_portfolio_pnl') || []).filter((r) => r.book === (book || pfUi.book));
   const pfClose = (date) => Date.parse(`${date}T21:00:00Z`);
   // Where a daily time frame starts in the history.
@@ -1243,11 +1246,12 @@
     const split = pfUi.split && key === 'all';
     const wantsBars = isLocal && (pfUi.frame === '1D' || pfUi.frame === '1W');
     if (wantsBars) {
-      const got = [key, ...(split ? ['swing', 'intraday'] : [])].map(pfNeed);
+      const parts = split ? pfBooks() : [];
+      const got = [key, ...parts].map(pfNeed);
       if (!got.every(Boolean)) return say('Loading 15-minute prices…');
     }
     const loaded = (k) => pfUi.bars[k] && !pfUi.failed[k];
-    const usingBars = wantsBars && loaded(key) && pfUi.bars[key].points.length > 0 && (!split || (loaded('swing') && loaded('intraday')));
+    const usingBars = wantsBars && loaded(key) && pfUi.bars[key].points.length > 0 && (!split || pfBooks().every(loaded));
     const pts = usingBars ? pfBars(rows, pfUi.frame) : pfDaily(rows, pfUi.frame);
     if (pts.length < 2) return say('Not enough history for this time frame yet.');
     const change = pts[pts.length - 1].v;
@@ -1260,7 +1264,7 @@
     notes.push(usingBars ? '15-minute prices from Yahoo' : 'daily closes');
     if (usingBars && pfUi.bars[key].missing.length) notes.push(`no bars for ${pfUi.bars[key].missing.join(', ')}, marked at the last fill`);
     subEl.textContent = notes.join(' · ');
-    const extra = !split ? [] : ['swing', 'intraday'].map((b, i) => {
+    const extra = !split ? [] : pfBooks().map((b, i) => {
       const tot = pfTotals(b, usingBars); const base = pfAt(tot, pts[0].ts + 60000);
       return { name: PF_BOOK[b], color: dash.colors[i + 1] || 'var(--fr-muted)', values: pts.map((p) => pfAt(tot, p.ts + 60000) - base) };
     });
@@ -1310,7 +1314,7 @@
     const pos = pfRows('mkt_portfolio_pos');
     const unreal = one ? one.open : d3.sum(a.books, (b) => b.open); const real = one ? one.realized : d3.sum(a.books, (b) => b.realized);
     const longs = d3.sum(pos.filter((r) => r.side === 'long'), (r) => r.value); const shorts = -d3.sum(pos.filter((r) => r.side === 'short'), (r) => r.value);
-    const books = (threePass() ? [] : a.books).map((b) => {
+    const books = (a.books.length < 2 ? [] : a.books).map((b) => {
       const c = cell('button', `${PF_BOOK[b.book]} book`, pfUsd(b.value), '', `${fmtPnl(b.pnl)} · ${pfPct(b.return_pct)}`, b.paused ? chip('Paused', 'is-bad') : null);
       c.type = 'button'; c.setAttribute('aria-pressed', String(pfUi.book === b.book));
       c.title = pfUi.book === b.book ? 'Show both books' : `Show only the ${b.book} book`;
@@ -1352,12 +1356,12 @@
       ['Pauses below', (b) => b.paused ? 'Paused now' : b.pause_at == null ? '—' : `${pfUsd(b.pause_at)} (high ${pfUsd(b.peak)})`, '—'],
     ];
     const table = h('table', 'fr-table'); const head = h('tr');
-    const single = threePass();
-    (single ? [['', null], ['Swing book', 'num']] : [['', null], ['Swing', 'num'], ['Intraday', 'num'], ['Both books', 'num']]).forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
+    const single = a.books.length < 2;
+    [['', null], ...a.books.map((b) => [single ? 'Swing book' : PF_BOOK[b.book] || b.book, 'num']), ...(single ? [] : [['Both books', 'num']])].forEach(([t, c]) => { const th = h('th', c, t); th.scope = 'col'; head.append(th); });
     const thead = h('thead'); thead.append(head); const tbody = h('tbody');
     lines.forEach(([label, each, both, val, bothVal]) => {
       const tr = h('tr'); tr.append(h('td', null, label));
-      (single ? ['swing'] : ['swing', 'intraday']).forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
+      a.books.map((b) => b.book).forEach((k) => tr.append(h('td', `num ${val && by[k] ? tone(val(by[k])) : ''}`, by[k] ? each(by[k]) : '—')));
       if (!single) tr.append(h('td', `num ${val ? tone(bothVal) : ''}`, both));
       tbody.append(tr);
     });
@@ -1371,7 +1375,7 @@
   const pfTrades = () => {
     const out = [];
     const sides = (legs) => { const long = d3.sum(legs.filter((l) => l.side === 'long'), (l) => l.value); const short = -d3.sum(legs.filter((l) => l.side === 'short'), (l) => l.value); return { long, short, gross: long + short }; };
-    (pfData('mkt_paper') || []).filter((r) => isLive(r) && (r.leg_detail || []).length).forEach((r) => {
+    pfRows('mkt_paper_all').filter((r) => isLive(r) && (r.leg_detail || []).length).forEach((r) => {
       out.push({ id: r.id, book: r.book || 'swing', title: pairTitle(r), name: r.name, sub: human(r.setup), conviction: r.conviction, session: r.session_number, horizon: r.horizon_days, held: r.horizon_days ? r.session_number / r.horizon_days : 0, direction: r.direction,
         legs: r.leg_detail, ...sides(r.leg_detail), day_pnl: r.day_pnl, pnl: r.pnl, bps: r.bps, room: r.stop_room_pct, row: r });
     });
@@ -1401,7 +1405,7 @@
   const pfOpenVerdict = (r) => { paperUi.open.add(r.proposal_id); setView('paper'); drawPaperTables(); pfScrollTo(`[data-view=paper] tr[data-trade="${r.proposal_id}"]`); };
   // A swing trade, opened where Portfolio lists it: among the open trades, or in the closed history.
   const pfShowTrade = (r) => {
-    pfUi.book = 'all';
+    pfUi.book = r.book || 'swing';
     const live = isLive(r);
     if (live) { pfUi.view = 'trade'; pfUi.filter = 'all'; pfUi.open.add(r.id); } else {
       pfUi.closedOpen.add(r.id);
@@ -1514,7 +1518,7 @@
   // Finished trades, newest first.
   const pfClosed = () => {
     const all = [];
-    (pfData('mkt_paper') || []).filter((r) => r.state === 'closed' && r.exit_date && r.pnl != null).forEach((r) => {
+    pfRows('mkt_paper_all').filter((r) => r.state === 'closed' && r.exit_date && r.pnl != null).forEach((r) => {
       all.push({ id: r.id, book: r.book || 'swing', date: r.exit_date, title: pairTitle(r), sub: r.conviction ? `${human(r.setup)} · conviction ${r.conviction} of 5` : human(r.setup),
         reason: isBroken(r) ? `One side never filled. ${r.reason || ''}` : r.reason, pnl: r.pnl, bps: r.bps, slip: r.slippage_bps, row: r });
     });

@@ -32,7 +32,8 @@ One paper book of $1,000,000 on an IBKR paper account, live since the night of 2
 - Each trade is sized by its risk: it loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5. A typical trade is 3% of the book a side; none is over 6%. The rules are in the `swing-pass` skill and `paper/rules.py`.
 - A trade's hardest-to-fill leg is ordered first; its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own.
 - Every order needs the paper gateway's own bid and ask. Inside a 2% spread an order hits the bid or the ask, and whatever doesn't fill at once is cancelled, so nothing is left resting. If any leg's spread is over 2% when the trade is due, the trade is passed on: it never enters (since 2026-11-18, trades fill at once or not at all). Overnight, a leg with no overnight market is passed on the same way, and the night screen drops names over a 2% overnight spread before the pass researches them. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
-- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing`. `fr paper halt` stops new entries by hand.
+- A $25,000 book (`small`) trades the same takes as the $1,000,000 swing book, sized on its own capital; the dashboard's Portfolio view switches between them.
+- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing` (or `small`). `fr paper halt` stops new entries by hand.
 
 ## Safety
 

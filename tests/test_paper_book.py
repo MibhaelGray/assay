@@ -324,7 +324,8 @@ class Proposals(Research):
         self.assertEqual(size(3, -5, volumes={"AAA": 8_000_000.0})[0], 20_000)                  # 0.25% of $8M a day
         # A basket side splits its dollars, so two $8M names carry twice what one does; a $15,000 account scales down.
         self.assertEqual(rules.side_dollars(3, -5, 1_000_000, ["AAA", "BBB"], ["HHH"], {"AAA": 8e6, "BBB": 8e6})[0], 30_000)
-        self.assertEqual(rules.side_dollars(3, -5, 15_000, ["AAA"], ["HHH"])[0], 400)
+        self.assertEqual(rules.side_dollars(3, -5, 15_000, ["AAA"], ["HHH"])[0], 450)   # to the dollar on a small book
+        self.assertEqual(rules.side_dollars(3, -5, 25_000, ["AAA"], ["HHH"])[0], 750)
 
     def test_the_leg_hardest_to_fill_leads_and_the_others_only_follow_its_fills(self):
         t = {"legs": [{"symbol": "ARKK", "side": "long", "shares": 139, "ref_price": 72.0},

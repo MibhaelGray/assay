@@ -91,6 +91,42 @@ def entry_end(day: date) -> time:
     return (datetime.combine(day, journal.close_time(day)) - ENTRY_GAP).time()
 
 
+def books_running() -> tuple[str, ...]:
+    """The books that trade, the swing book first."""
+    from .. import portfolio
+    return tuple(sorted(portfolio.running(), key=lambda b: b != book.MAIN))
+
+
+def make_trades(which: str, kind: str, takes: list[dict], session: date, state: dict, others: list[dict], volumes, record: dict,
+                blocked_why: str | None) -> list[dict]:
+    """One book's trades from a pass's takes: sized by their risk on that book's capital (rules.side_dollars), inside
+    that book's caps, and added to the session's state. `others` are the trades already open or waiting, in any book."""
+    if not takes:
+        return []
+    if blocked_why:
+        record["skipped"] += [{"name": p["id"], "reason": blocked_why, "pass": kind, "book": which} for p in takes]
+        return []
+    cap = book.capital(which)
+    same = [t for t in others if book.book_of(t) == which]
+    used = {x for t in same for x in rules.core_symbols(t)}
+    traded = (volumes or dollar_volumes)(sorted({s for p in takes for s in [*p["long"], *p["short"]]}))
+    letter = book.ID_LETTER[which]
+    start = sum(book.book_of(t) == which for t in state["trades"]) + 1
+    made, skipped = rules.proposal_trades(takes, session.isoformat(), state["marks"][kind]["prices"], used, start=start,
+                                          room=PASS_MAX_NEW or len(takes), capital=cap, volumes=traded)
+    for t in made:   # S or M, not the first book's A: the gateway still reports that book's fills under its ids
+        t["id"] = t["id"].replace(f"{session.isoformat()}-A", f"{session.isoformat()}-{letter}", 1)
+        if which != book.MAIN:
+            t["book"] = which
+    kept, capped = rules.apply_caps(made, same, max_gross=cap, max_symbol=cap * rules.MAX_SYMBOL_SHARE)
+    for t in kept:
+        t.update({"pass": kind, "first_session": first_session(kind, session).isoformat(), "lead": rules.lead_leg(t, traded)})
+    state["trades"] += kept
+    record["new"] += [t["id"] for t in kept]
+    record["skipped"] += [{**x, "pass": kind, **({"book": which} if which != book.MAIN else {})} for x in [*skipped, *capped]]
+    return kept
+
+
 def entered(trade: dict) -> dict[str, int]:
     """symbol -> shares of each leg filled on entry so far, from the stored fills."""
     fills = book._fills_by_ref()
@@ -149,11 +185,13 @@ def marks(session: date | str, kind: str) -> dict | None:
     return (doc or {}).get("marks", {}).get(kind)
 
 
-def waiting(session: date) -> list[dict]:
-    """The session's trades still trying to enter: not stood down, and with shares left to fill."""
+def waiting(session: date, which: str | None = None) -> list[dict]:
+    """The session's trades still trying to enter: not stood down, and with shares left to fill. One book's, or both."""
     out = []
     for t in (load(session) or {}).get("trades", []):
         got = entered(t)
+        if which is not None and book.book_of(t) != which:
+            continue
         if not t.get("stood_down") and any(leg["shares"] > got[leg["symbol"]] for leg in t["legs"]):
             out.append({**t, "filled": got})
     return out
@@ -333,31 +371,17 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     active = [t for t in state["trades"] if not t.get("stood_down")]
 
     # 3. The new passes' takes become trades, sized now by their risk (rules.side_dollars), inside the caps.
-    blocked_why = (f"halted: {book.HALT.read_text().strip() or 'journal/paper/HALT exists'}" if book.HALT.exists()
-                   else (why := drawdown.paused("swing")) and f"paused: {why}")
+    halted = f"halted: {book.HALT.read_text().strip() or 'journal/paper/HALT exists'}" if book.HALT.exists() else None
+    blocked_why = halted or ((why := drawdown.paused(book.MAIN)) and f"paused: {why}")   # the swing book's, for the phone note
     mine = {t["id"] for t in state["trades"]}
     held = [t for t in book.open_trades() if t["id"] not in mine]
     for kind in fresh_passes:
         takes = [p for p in doc["proposals"] if p.get("pass") == kind and p["decision"] == "take"]
         record.setdefault("takes", {})[kind] = len(takes)
-        if takes and blocked_why:
-            record["skipped"] += [{"name": p["id"], "reason": blocked_why, "pass": kind} for p in takes]
-        elif takes:
-            used = {x for t in [*held, *active] for x in rules.core_symbols(t)}
-            traded = (volumes or dollar_volumes)(sorted({s for p in takes for s in [*p["long"], *p["short"]]}))
-            made, skipped = rules.proposal_trades(takes, session.isoformat(), state["marks"][kind]["prices"], used,
-                                                  start=len(state["trades"]) + 1, room=PASS_MAX_NEW or len(takes),
-                                                  capital=book.capital(), volumes=traded)
-            for t in made:   # S, not the first book's A: the gateway still reports that book's fills under its ids
-                t["id"] = t["id"].replace(f"{session.isoformat()}-A", f"{session.isoformat()}-S", 1)
-            kept, capped = rules.apply_caps(made, [*held, *active], max_gross=book.capital(),
-                                            max_symbol=book.capital() * rules.MAX_SYMBOL_SHARE)
-            for t in kept:
-                t.update({"pass": kind, "first_session": first_session(kind, session).isoformat(), "lead": rules.lead_leg(t, traded)})
-            state["trades"] += kept
-            active += kept
-            record["new"] += [t["id"] for t in kept]
-            record["skipped"] += [{**x, "pass": kind} for x in [*skipped, *capped]]
+        for which in books_running():   # every book trades the same takes, each sized on its own capital and inside its own limits
+            made = make_trades(which, kind, takes, session, state, [*held, *active], volumes, record,
+                               halted or ((w := drawdown.paused(which)) and f"paused: {w}"))
+            active += made
         state["handled"].append(kind)
 
     left = left_of(active)
@@ -490,7 +514,7 @@ def traded_note(kind: str, record: dict, state: dict, where: str | None, blocked
     title = f"{label.capitalize()} pass traded"
     if not takes:
         return title, f"The {label} pass took no trades."
-    mine = [t for t in state["trades"] if t.get("pass") == kind and t["id"] in record["new"]]
+    mine = [t for t in state["trades"] if t.get("pass") == kind and t["id"] in record["new"] and book.book_of(t) == book.MAIN]
     full = part = passed = waiting = 0
     for t in mine:
         got = entered(t)
@@ -502,7 +526,7 @@ def traded_note(kind: str, record: dict, state: dict, where: str | None, blocked
             part += 1
         else:
             waiting += 1
-    skipped = sum(1 for x in record["skipped"] if x.get("pass") == kind)
+    skipped = sum(1 for x in record["skipped"] if x.get("pass") == kind and not x.get("book"))
     bits = [f"{full} in"]
     if part:
         bits.append(f"{part} partly in (the rest follows within minutes)")

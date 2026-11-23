@@ -47,8 +47,10 @@ def running() -> tuple[str, ...]:
 
 
 def fills(which: str = "swing") -> list[dict]:
-    """A book's fills, oldest first. One book runs, so every name ("swing", "all") is the swing book's."""
-    return book._book_fills() if book.ROOT.exists() else []
+    """A book's fills, oldest first; "all" is every running book's together."""
+    if not book.ROOT.exists():
+        return []
+    return book._book_fills(None if which == "all" else which)
 
 
 def _held(fs: list[dict]) -> dict[str, dict]:
@@ -117,7 +119,7 @@ def positions() -> list[dict]:
         for t in book.trades():
             if t["state"] != "closed":
                 for leg in t["held"]:
-                    names.setdefault(("swing", leg["symbol"]), []).append(t["name"])
+                    names.setdefault((book.book_of(t), leg["symbol"]), []).append(t["name"])
     out = []
     for b, held in by_book.items():
         for s, p in held.items():

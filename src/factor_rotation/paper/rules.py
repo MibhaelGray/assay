@@ -136,7 +136,8 @@ def side_dollars(conviction: int, stop_pct: float, capital: float, longs: list[s
     """Dollars for each side of a take, and how they were set. `stop_pct` is the plan's stop (a loss, so its
     sign doesn't matter); `volumes` is each leg's average daily dollar volume, where known. The size is the
     smallest of: the risk budget over the stop, MAX_SIDE of capital, and MAX_ADV of the thinnest leg's volume
-    (a basket side splits its dollars, so each member counts for its share). Rounded down to $100."""
+    (a basket side splits its dollars, so each member counts for its share). Rounded down to $100 on a $1,000,000
+    book and in proportion on a smaller one ($1 on $25,000), so a small book's sizes aren't rounded away."""
     risk = capital * RISK * CONVICTION_RISK[max(min(conviction, 5), 3)]
     limits = {"risk": risk / (abs(stop_pct) / 100), "side cap": capital * MAX_SIDE}
     for side in (longs, shorts):
@@ -144,7 +145,8 @@ def side_dollars(conviction: int, stop_pct: float, capital: float, longs: list[s
             if v := (volumes or {}).get(s):
                 limits[f"liquidity: {s}"] = MAX_ADV * v * len(side)
     by = min(limits, key=limits.get)
-    return math.floor(limits[by] / 100) * 100, {"risk_dollars": round(risk), "stop_pct": -abs(stop_pct), "limited_by": by}
+    step = 100 if capital >= 250_000 else max(1, 10 ** math.floor(math.log10(capital)) // 10_000)
+    return math.floor(limits[by] / step) * step, {"risk_dollars": round(risk), "stop_pct": -abs(stop_pct), "limited_by": by}
 
 
 # Entering a trade with more than one leg (the owner, 2026-11-16, after the night the ARKK hedge of a Red Cat short

@@ -64,7 +64,7 @@ def record_postmortems(draft: dict, now: datetime | None = None) -> Path:
                              "what_happened": "...", "lesson": "..."}]}
     """
     now = now or datetime.now(NY)
-    closed = {r["id"]: r for r in book.rows() if r["state"] == "closed"}
+    closed = {r["id"]: r for r in book.rows(book.MAIN) if r["state"] == "closed"}
     have = postmortems()
     new = []
     for m in draft.get("postmortems", []):
@@ -91,7 +91,7 @@ def record_postmortems(draft: dict, now: datetime | None = None) -> Path:
 
 def needs_postmortem() -> list[dict]:
     have = postmortems()
-    return [r for r in book.rows() if r["state"] == "closed" and r["id"] not in have
+    return [r for r in book.rows(book.MAIN) if r["state"] == "closed" and r["id"] not in have
             and not (r["reason"] or "").startswith("broken")]
 
 
@@ -214,7 +214,7 @@ def outcomes() -> list[dict]:
     props = proposals.every()
     if not props:
         return []
-    paper = {r["proposal_id"]: r for r in book.rows() if r.get("proposal_id")}
+    paper = {r["proposal_id"]: r for r in book.rows(book.MAIN) if r.get("proposal_id")}
     tags = postmortems()
     symbols = sorted({s for p in props for s in [*p["long"], *p["short"]]} | {"SPY"})
     px = bars.load(symbols)
@@ -360,7 +360,7 @@ def brief() -> str:
         lines += ["", "Latest post-mortems"] + [f"  {m['trade_id']} {m['name']} ({m['setup']}, {m['bps']:+.0f} bp, {m['tag']}): {m['lesson']}" for m in recent]
     if waiting := needs_postmortem():
         lines += ["", "Closed trades with no post-mortem yet"] + [f"  {r['id']} {r['name']} ({r['setup']}): {r['bps']:+.0f} bp, {r['reason']}" for r in waiting]
-    open_auto = [r for r in book.rows() if r["state"] in ("open", "planned")]
+    open_auto = [r for r in book.rows(book.MAIN) if r["state"] in ("open", "planned")]
     if open_auto:
         lines += ["", "Open trades"]
         for r in open_auto:
@@ -369,7 +369,7 @@ def brief() -> str:
                          + (f", {r['stop_room_pct']:+.1f}% from its stop" if r["stop_room_pct"] is not None else "")
                          + (f". Wrong if: {r['wrong_if']}" if r.get("wrong_if") else ""))
     from . import entries
-    if still := entries.waiting(entries.entry_session(datetime.now(NY))):
+    if still := entries.waiting(entries.entry_session(datetime.now(NY)), book.MAIN):
         lines += ["", "Takes still waiting to enter (review each: hold keeps trying, exit stands it down)"]
         for w in still:
             got = ", ".join(f"{s} {n}/{next(leg['shares'] for leg in w['legs'] if leg['symbol'] == s)}" for s, n in w["filled"].items())

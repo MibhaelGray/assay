@@ -48,8 +48,8 @@ def screen_now(now: datetime | None = None) -> dict | None:
 def to_review(session: date) -> dict[str, dict]:
     """Every trade a pass for `session` must decide on, by id: the open ones, and the session's takes still
     trying to enter (`waiting` True, with `filled` shares by symbol)."""
-    out = {t["id"]: {**t, "waiting": False} for t in book.open_trades()}
-    for t in entries.waiting(session):
+    out = {t["id"]: {**t, "waiting": False} for t in book.open_trades(book.MAIN)}
+    for t in entries.waiting(session, book.MAIN):
         out[t["id"]] = {**out.get(t["id"], t), "waiting": True, "filled": t["filled"]}
     return out
 

@@ -263,4 +263,8 @@ def reviews(session: date) -> dict[str, dict]:
     out = {}
     for p in json.loads(path.read_text())["passes"] if path.exists() else []:
         out.update({r["trade_id"]: {**r, "pass": p["pass"]} for r in p["reviews"]})
+    from . import book   # the passes review the swing book's trades; the small book's twin of each gets the same decision
+    for small, main in book.twins().items():
+        if main in out and small not in out:
+            out[small] = {**out[main], "trade_id": small}
     return out

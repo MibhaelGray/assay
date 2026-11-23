@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> None:
                                            "side: `report` to score the side facts instead of pulling them")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
     c.add_argument("--reason", default="", help="halt: why, kept in the HALT file")
-    c.add_argument("--book", choices=["swing"],
+    c.add_argument("--book", choices=["swing", "small"],
                    help="resume: lift the book's 10%% pause (drawdown.py) instead of the HALT file")
     c = sub.add_parser("pass", help="run one of the swing book's research passes as a background job (see passes.py)")
     c.add_argument("name", choices=["night", "late", "morning", "midday"])

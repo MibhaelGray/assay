@@ -140,6 +140,26 @@ def _avg(fills: list[dict]) -> tuple[int, float | None, float]:
     return int(round(shares)), px, sum(f.get("commission") or 0 for f in fills)
 
 
+# Two books trade the same verdicts on the one paper account (the owner, 2026-11-22): the swing book ($1,000,000)
+# and the small book ($25,000), every rule the same and every size scaled to the book's capital. A trade says
+# which with "book": "small"; anything else is the swing book's (its trades say "dynamic", from the first design).
+# A small trade's id has M where the swing book's has S (2026-11-23-M01), so fills are told apart by their order ref.
+MAIN, SMALL = "swing", "small"
+ID_LETTER = {MAIN: "S", SMALL: "M"}
+
+
+def book_of(t: dict) -> str:
+    return SMALL if t.get("book") == SMALL else MAIN
+
+
+def twins() -> dict[str, str]:
+    """A small-book trade's id -> the swing book's trade from the same verdict, where there is one. The passes
+    review the swing book's trades; each decision is carried to its twin (proposals.reviews)."""
+    ts = recorded()
+    main = {t["proposal_id"]: t["id"] for t in ts if book_of(t) == MAIN and t.get("proposal_id")}
+    return {t["id"]: main[t["proposal_id"]] for t in ts if book_of(t) == SMALL and t.get("proposal_id") in main}
+
+
 def recorded() -> list[dict]:
     """Every trade that has had an order sent for it, oldest first. The order job writes a trade down before its
     first order goes out (entries.py), so it is in the book from then on. A take stood down before anything
@@ -191,8 +211,9 @@ def trades() -> list[dict]:
     return out
 
 
-def open_trades() -> list[dict]:
-    return [t for t in trades() if t["state"] == "open"]
+def open_trades(which: str | None = None) -> list[dict]:
+    """Open trades, of one book or (None) of both."""
+    return [t for t in trades() if t["state"] == "open" and (which is None or book_of(t) == which)]
 
 
 def _first(t: dict) -> date:
@@ -201,10 +222,10 @@ def _first(t: dict) -> date:
     return date.fromisoformat(t.get("first_session") or t["entry_date"])
 
 
-def capital() -> float:
-    """The swing book's capital, which is also the most it may hold, long plus short."""
+def capital(which: str = MAIN) -> float:
+    """A book's capital, which is also the most it may hold, long plus short."""
     from .. import portfolio
-    return portfolio.capital("swing")
+    return portfolio.capital(which)
 
 
 def _session(t: dict, today: date) -> int:
@@ -371,9 +392,9 @@ def alerts() -> list[str]:
 
 
 # ---- Results ----------------------------------------------------------------------------------------------
-def rows() -> list[dict]:
-    """One row per trade for the dashboard and the report."""
-    ts = trades()
+def rows(which: str | None = None) -> list[dict]:
+    """One row per trade for the dashboard and the report: one book's, or (None) both."""
+    ts = [t for t in trades() if which is None or book_of(t) == which]
     symbols = sorted({leg["symbol"] for t in ts for leg in t["legs"]})
     px = bars.load(symbols) if symbols else pd.DataFrame()
     bar = {(r.symbol, r.date.date()): r for r in px.itertuples()} if not px.empty else {}
@@ -420,7 +441,7 @@ def rows() -> list[dict]:
                     model = None
         n = t["notional"]
         out.append({
-            "id": t["id"], "book": t["book"], "name": t["name"], "setup": t["setup"], "direction": t["direction"],
+            "id": t["id"], "book": book_of(t), "name": t["name"], "setup": t["setup"], "direction": t["direction"],
             "entry_date": t["entry_date"], "exit_date": (t["exit"] or {}).get("session"), "state": t["state"],
             "horizon_days": t["horizon_days"], "stop": journal.stop_text(t) or "—", "reason": (t["exit"] or {}).get("reason"),
             "legs": ", ".join(f"{'+' if l['side'] == 'long' else '−'}{l['shares']} {l['symbol']}" for l in t["legs"]),
@@ -438,11 +459,11 @@ def rows() -> list[dict]:
 
 
 # ---- Profit and loss over time ------------------------------------------------------------------------------
-def _book_fills() -> list[dict]:
+def _book_fills(which: str | None = None) -> list[dict]:
     """Every fill on one of the book's orders with its session and time, oldest first. The intraday book's fills
     (trade ids I-... and X-...) can land in the same fills files when a pull runs; they are its own book's."""
     out = []
-    mine = {t["id"] for t in recorded()}   # a pull also brings back fills on orders that aren't this book's:
+    mine = {t["id"] for t in recorded() if which is None or book_of(t) == which}   # a pull also brings back fills on orders that aren't this book's:
     for (trade_id, _), fs in _fills_by_ref().items():   # the first book's, after the restart, and the other way round
         if trade_id.startswith(("I-", "X-")) or trade_id not in mine:
             continue
@@ -470,7 +491,7 @@ def pnl_by_session(fills: list[dict] | None = None) -> list[dict]:
     """The book's running profit and loss after commissions at each session's close, starting from a zero on
     the session before its first fill. `final` is False until that session's bars have been pulled after the close.
     `fills` replaces the swing book's own (portfolio.py passes the intraday book's, or both)."""
-    fills = _book_fills() if fills is None else fills
+    fills = _book_fills(MAIN) if fills is None else fills
     if not fills:
         return []
     px = bars.load(sorted({"SPY", *(f["symbol"] for f in fills)}))
@@ -500,7 +521,7 @@ def pnl_by_session(fills: list[dict] | None = None) -> list[dict]:
 def pnl_intraday(sessions: int = 5, fills: list[dict] | None = None) -> dict:
     """The book's running profit and loss at the end of each 15-minute bar of the last `sessions` sessions, from
     Yahoo and not stored. `missing` lists held names Yahoo gave no bars for; they are marked at their last fill."""
-    fills = _book_fills() if fills is None else fills
+    fills = _book_fills(MAIN) if fills is None else fills
     if not fills:
         return {"points": [], "missing": []}
     symbols = {f["symbol"] for f in fills}
@@ -551,7 +572,7 @@ def symbols_held() -> set[str]:
 
 
 def summary_text() -> str:
-    rs = rows()
+    rs = rows(MAIN)
     if not rs:
         return "No paper trades yet."
     g = pd.DataFrame(rs)
