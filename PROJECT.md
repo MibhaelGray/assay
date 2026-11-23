@@ -31,7 +31,7 @@ whose answer matters whichever way it comes out, and something to build and lear
   - *Main test:* the trades the research takes beat the ones it passes on, with under a 5% chance the gap is luck.
   - *Second test:* the book's return after costs is reliably above zero and above the S&P's over the same days.
   - *Early test (added 2026-11-13):* every pass ranks every candidate it judges, best to worst, and the
-    better-ranked ones go on to do better. It uses every verdict (about forty a pass since 2026-11-16), not only
+    better-ranked ones go on to do better. It uses every verdict (up to 25 a pass since 2026-11-22; about forty from 11-16), not only
     the takes, so it can speak in a few weeks. It is an early read on the research's judgment, not a substitute
     for the main test.
   - The test and the bar are fixed in advance and checked on a schedule (weekly), not whenever it looks good.
@@ -51,13 +51,14 @@ $1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the cl
   the regular session, never the prior close. A research agent studies each shortlisted name. The judge gives
   every candidate a verdict, a conviction and a rank, adds up to three ideas of its own, and reviews every open
   trade. A second night pass (`late`) can be run by hand for names the night pass did not judge.
-- **Each pass judges up to 40 candidates** (since 2026-11-16; 20 before). 40 is the limit, and it is always
-  reached when 40 names pass the screen; every one gets a verdict and a rank.
+- **Each pass judges up to 25 candidates** (since 2026-11-22; 40 from 11-16, 20 before), and no kind of setup
+  gets more than 6 of them, so the list can be shorter. At 40, a third of all verdicts went to stretched names the
+  judge took once in 161, and most names came back thinly researched. Every candidate gets a verdict and a rank.
 - **One judge, the same every time.** The passes run as background jobs outside the Claude app, so the models are
   pinned: the judge is Fable 5.2 at high effort, and each research agent is Sonnet 5.5 at medium effort.
 - **Research stays focused, and is left to its own judgment.** One agent a name with the same bare brief every
   time, about 8 searches and 5 pages read each, checked by `fr paper depth` before the pass judges; a thin name
-  is noted, not relaunched (2026-11-19). Nobody tells an agent what to read or the judge how to weigh it. What is
+  gets one more agent, once (2026-11-22, now that a pass has 25 names; from 11-19 a thin name was only noted). Nobody tells an agent what to read or the judge how to weigh it. What is
   fixed is the setup and what gets recorded and scored.
 - **Every verdict is recorded before the trade and scored afterwards**, taken or passed, so the passes are the
   control group. A take keeps the judge's full case, a pass a short one (for it, against it, why not), and every

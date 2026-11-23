@@ -37,7 +37,8 @@ AGENT_MODEL, AGENT_EFFORT = "claude-sonnet-5-5", "medium"   # its research agent
 MAX_NAMES = 2          # names to one agent; one is the rule, two when they share a story
 # The owner, 2026-11-19: research doesn't need to go as deep. The floors were 15 and 10 from 2026-11-16 (6 and 4
 # before), and a pass relaunched an agent for every name under them, about two agents a name and most of a 5-hour
-# usage limit a pass. Now a name under the floors is only noted; nothing is relaunched.
+# usage limit a pass, so from 11-19 a name under the floors was only noted. Since 2026-11-22 a pass has 25 names,
+# not 40, and a thin name gets one more agent, once.
 MIN_SEARCHES = 8       # web searches a name, over its agents
 MIN_READS = 5          # pages opened and read a name, over its agents (the first four nights averaged two)
 NAMES_LINE = re.compile(r"^\s*NAMES:\s*(.+?)\s*$", re.M)

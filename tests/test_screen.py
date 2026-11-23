@@ -209,15 +209,16 @@ class Shortlist(unittest.TestCase):
         n = screen.TOP
         ranked = [cand(f"T{i}", "turn", 3 - i / 1000) for i in range(n)] + [cand(f"S{i}", "stretched", 1 - i / 1000) for i in range(n)]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
-        self.assertEqual(len(top), n)
-        self.assertEqual(sum(c["setup"] == "stretched" for c in top), screen.MAX_PER_SETUP)   # the weaker setup keeps its seats
-        self.assertEqual(sum(c["setup"] == "turn" for c in top), n - screen.MAX_PER_SETUP)    # the cap's empty slots are filled
-        self.assertEqual(rest[0]["name"], f"T{n - screen.MAX_PER_SETUP}")
+        # The cap is hard: each setup gets its share and the slots left over stay empty.
+        self.assertEqual(len(top), 2 * screen.MAX_PER_SETUP)
+        self.assertEqual(sum(c["setup"] == "stretched" for c in top), screen.MAX_PER_SETUP)
+        self.assertEqual(sum(c["setup"] == "turn" for c in top), screen.MAX_PER_SETUP)
+        self.assertEqual(rest[0]["name"], f"T{screen.MAX_PER_SETUP}")
 
-    def test_the_list_is_full_whenever_enough_names_pass(self):
-        ranked = [cand(f"T{i}", "turn", 3 - i / 100) for i in range(12)] + [cand(f"S{i}", "stretched", 1 - i / 100) for i in range(3)]
+    def test_the_stretched_setups_share_one_cap(self):
+        ranked = [cand(f"S{i}", s, 1 - i / 100) for i, s in enumerate(["stretched", "basket_stretched", "factor_stretched"] * 4)]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
-        self.assertEqual(([c["name"] for c in top], rest), ([c["name"] for c in ranked], []))   # 15 pass, 15 are judged, in rank order
+        self.assertEqual((len(top), len(rest)), (screen.MAX_PER_SETUP, 12 - screen.MAX_PER_SETUP))
 
     def test_the_list_stops_at_its_limit(self):
         ranked = [cand(f"N{i}", s, 3 - i / 100) for i, s in enumerate(s for s in list(screen.WEIGHTS) for _ in range(3))]

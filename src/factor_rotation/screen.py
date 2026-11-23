@@ -40,7 +40,8 @@ SWEEP_CLIENT = 94       # the overnight sweep's own gateway connection
 # a quiet night (196 of 1,113 did on 2026-11-22). A name whose overnight move, net of SPY's, is OVERNIGHT_MOVE_ATR
 # of its ATRs from the last close is an overnight mover. Every sweep is kept beside the screen, mover or not.
 OVERNIGHT_MOVE_ATR = 1.5
-TOP = 40   # 20 until 2026-11-16: more verdicts a pass, so the ranking test speaks sooner (the owner)
+TOP = 25   # 40 from 2026-11-16 to 11-22 (20 before): at 40, most names came back thinly researched, so fewer are
+           # judged and each is researched properly (the owner, 2026-11-22)
 MORE = 15
 HEAVY_VOLUME = 1.5
 # How much each setup counts when ranking, before its strength (0-1) is added. Earnings and relative strength
@@ -84,16 +85,18 @@ BASE_SETUPS = {"breakout", "breakdown"}
 # The shortlist is TOP slots, and each should hold a different idea.
 # - A name the paper book holds, or closed within RECENT_EXIT sessions, isn't a candidate: an earnings setup
 #   re-lists the same name for three nights. Fresh signals on those names go to `in_book` for the pre-close review.
-# - No setup takes more than MAX_PER_SETUP slots while other setups have names to give, so one kind of day (a
-#   market-wide turn, a heavy earnings week) can't crowd the others out. The list is still always full when it can
-#   be (the owner, 2026-11-16): slots the cap leaves empty go to the best of what it cut, so if TOP names pass
-#   the screen, TOP are judged.
+# - No kind of setup takes more than MAX_PER_SETUP slots, so one kind of day (a market-wide selloff, a heavy
+#   earnings week) can't fill the list. The cap is hard (the owner, 2026-11-22): from 11-16 the slots it left
+#   empty were refilled from what it cut, and a third of all verdicts went to stretched names the judge took once
+#   in 161. So the list can be shorter than TOP. The three stretched setups share one cap (FAMILY).
 # - Funds that gave the same signal and move together (TWIN_CORR over 60 sessions) are one idea: the best-ranked
 #   stays and names the others in `moved_with`.
 # - A stock's default hedge is the market, sector or industry fund it has moved with most over 60 sessions,
 #   unless its basket's own hedge is within KEEP_BASKET_WITHIN of that. Under MIN_HEDGE_CORR nothing hedges
 #   it: SPY stays as the default and `hedge_fit.weak` says so. A fund is always set against SPY.
-MAX_PER_SETUP = 10   # a quarter of the list, as 5 was of 20
+MAX_PER_SETUP = 6    # about a quarter of the list, as 10 was of 40 and 5 of 20
+FAMILY = {"basket_stretched": "stretched", "factor_stretched": "stretched", "basket_breakdown": "breakdown",
+          "basket_breakout": "breakout"}   # setups that are one kind of idea and share a cap
 RECENT_EXIT = 3
 TWIN_CORR = 0.9
 MIN_HEDGE_CORR = 0.4
@@ -219,16 +222,12 @@ def _shortlist(ranked: list[dict], r60: pd.DataFrame, in_book: dict[str, str], j
             c["why"] += f"; {', '.join(c['moved_with'])} gave the same signal and move with it"
     top, rest, used = [], [], {}
     for c in kept:
-        if len(top) < TOP and used.get(c["setup"], 0) < MAX_PER_SETUP:
+        kind = FAMILY.get(c["setup"], c["setup"])
+        if len(top) < TOP and used.get(kind, 0) < MAX_PER_SETUP:
             top.append(c)
-            used[c["setup"]] = used.get(c["setup"], 0) + 1
+            used[kind] = used.get(kind, 0) + 1
         else:
             rest.append(c)
-    if len(top) < TOP and rest:   # the cap left slots empty: fill them, and keep the whole list in rank order
-        fill = rest[:TOP - len(top)]
-        rest = rest[len(fill):]
-        order = {id(c): i for i, c in enumerate(kept)}
-        top = sorted(top + fill, key=lambda c: order[id(c)])
     return top, rest, held
 
 
