@@ -65,6 +65,8 @@ PREMARKET_END = time(9, 10)       # New York: the last pre-market order, good un
 GOOD_TILL = "09:25:00"
 SETTLE = 3                        # seconds after sending before the fills are pulled
 STOP_EVERY = timedelta(minutes=10)  # how often the regular session checks open trades against their stops (2 minutes until 2026-11-22)
+NO_FILL_TRIES = 3                 # tries that hit the bid or ask and filled nothing before a trade is passed on (the owner,
+                                  # 2026-11-22: a quote with nothing behind it, as XLU's was overnight, isn't chased)
 STOP_SLACK = timedelta(seconds=15) # launchd's minute is not exact; a check due in a few seconds counts as due
 
 
@@ -454,6 +456,20 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                     if record["cancelled_unfilled"]:
                         await asyncio.sleep(1)
                         await book._pull(b, session)
+                    # A quote that never fills isn't chased: a trade whose orders hit the bid or ask NO_FILL_TRIES
+                    # times with nothing filled is passed on, like one whose spread was too wide. A trade that is
+                    # part of the way in keeps going, so it is never left half built.
+                    tried = {o["trade_id"] for o in record["orders"]} & set(committed)
+                    for t in active:
+                        if t["id"] not in tried or any(entered(t).values()):
+                            continue
+                        t["empty_tries"] = t.get("empty_tries", 0) + 1
+                        if t["empty_tries"] >= NO_FILL_TRIES:
+                            t["stood_down"] = (f"passed: no fill in {NO_FILL_TRIES} tries at the bid or ask "
+                                               f"({t['lead']} quoted, but nothing traded against it)")
+                            record["passed"].append(t["id"])
+                            record["warnings"].append(f"{t['id']} {t['name']}: {NO_FILL_TRIES} tries hit the quote and nothing filled, "
+                                                      "so the trade is passed on.")
     elif left and not where:
         record["warnings"].append(f"{len({t['id'] for t, _, _ in left})} trade(s) are waiting to enter; no session is trading at "
                                   f"{now.astimezone(CT):%-I:%M %p} CT.")

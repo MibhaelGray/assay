@@ -78,7 +78,8 @@
    "hedge": null,
    "pass": "night",
    "first_session": "2026-11-23",
-   "lead": "XLU"
+   "lead": "XLU",
+   "stood_down": "stood down by hand: the owner said to stop trying for a fill (2026-11-22, 10:23 PM CT); XLU had no overnight fills in 12 tries"
   }
  ],
  "marks": {
@@ -324,7 +325,287 @@
     "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 85: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
    ],
    "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T21:31:50-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.41,
+     "venue": "overnight",
+     "ref_price": 42.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.62,
+     "ask": 43.01,
+     "spread_pct": 0.911,
+     "order_id": 90,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 90: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 90: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T21:47:11-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.41,
+     "venue": "overnight",
+     "ref_price": 42.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.62,
+     "ask": 43.01,
+     "spread_pct": 0.911,
+     "order_id": 95,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 95: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 95: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T22:02:31-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.41,
+     "venue": "overnight",
+     "ref_price": 42.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.62,
+     "ask": 43.01,
+     "spread_pct": 0.911,
+     "order_id": 100,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 100: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 100: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T22:17:53-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.41,
+     "venue": "overnight",
+     "ref_price": 42.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.62,
+     "ask": 43.01,
+     "spread_pct": 0.911,
+     "order_id": 105,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 105: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 105: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T22:33:16-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.45,
+     "venue": "overnight",
+     "ref_price": 42.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.66,
+     "ask": 43.01,
+     "spread_pct": 0.817,
+     "order_id": 110,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 110: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 110: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T22:48:39-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.46,
+     "venue": "overnight",
+     "ref_price": 42.67,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.67,
+     "ask": 43.01,
+     "spread_pct": 0.794,
+     "order_id": 115,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 115: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 115: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T23:04:03-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.48,
+     "venue": "overnight",
+     "ref_price": 42.69,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.69,
+     "ask": 43.01,
+     "spread_pct": 0.747,
+     "order_id": 120,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 120: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 120: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-22T23:19:26-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S02",
+     "symbol": "XLU",
+     "action": "SELL",
+     "shares": 583,
+     "kind": "LMT",
+     "limit": 42.53,
+     "venue": "overnight",
+     "ref_price": 42.74,
+     "priced_on": "gateway bid/ask",
+     "bid": 42.74,
+     "ask": 43.01,
+     "spread_pct": 0.63,
+     "order_id": 125,
+     "status": "Submitted",
+     "note": "Warning 2109, reqId 125: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 125: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "cancelled_unfilled": 1
   }
  ],
- "last_attempt": "2026-11-22T21:16:28-05:00"
+ "last_attempt": "2026-11-22T23:19:26-05:00"
 }

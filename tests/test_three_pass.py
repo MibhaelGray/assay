@@ -400,6 +400,20 @@ class Enter(Pass):
         t = entries.load(DAY)["trades"][0]
         self.assertEqual((t["pass"], t["first_session"], t["name"]), ("late2", DAY.isoformat(), "BBB"))
 
+    def test_a_trade_that_never_fills_is_passed_on_after_three_tries(self):
+        self.night_take(verdict("AAA", 1))
+        b = Slow({"AAA": 0})                                                # the quote is there; nothing fills against it
+        self.enter(SUNDAY_NIGHT, b)
+        self.enter(SUNDAY_NIGHT.replace(hour=21, minute=0), b)
+        self.assertIsNone(entries.load(DAY)["trades"][0].get("stood_down"))
+        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=15), b)
+        t = entries.load(DAY)["trades"][0]
+        self.assertIn("no fill in 3 tries", t["stood_down"])
+        self.assertEqual(r["passed"], [t["id"]])
+        sent = len(b.sent)
+        self.enter(SUNDAY_NIGHT.replace(hour=21, minute=30), b)             # and it is not tried again
+        self.assertEqual(len(b.sent), sent)
+
     def test_the_hedge_is_never_ordered_while_the_lead_has_not_filled(self):
         self.night_take(verdict("AAA", 1))
         b = Slow({"AAA": 0})

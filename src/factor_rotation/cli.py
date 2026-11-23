@@ -85,6 +85,10 @@ def main(argv: list[str] | None = None) -> None:
     c = sub.add_parser("pass", help="run one of the swing book's research passes as a background job (see passes.py)")
     c.add_argument("name", choices=["night", "late", "morning", "midday"])
     c.add_argument("--shadow", action="store_true", help="a trial run: work on a copy of the journal with orders off")
+    c = sub.add_parser("x", help="posts from the accounts the owner follows on X, read by a plain script (xfeed.py)")
+    c.add_argument("job", choices=["login", "pull"])
+    c.add_argument("--hours", type=float, default=None, help="pull: read this far back instead of to the last stored post")
+    c.add_argument("--show", action="store_true", help="pull: run Chrome in a window you can watch")
     c = sub.add_parser("watch", help="the watchdog: phone alerts when a pass, a job or the paper gateway breaks (watch.py)")
     c.add_argument("--test", action="store_true", help="send one test alert and stop")
     c.add_argument("--telegram-chats", action="store_true", help="list the chats that messaged the Telegram bot, to find FR_TELEGRAM_CHAT")
@@ -120,6 +124,14 @@ def main(argv: list[str] | None = None) -> None:
         as_of = date.fromisoformat(a.as_of) if a.as_of else _today()
         brief = journal.build_brief(as_of)
         print(f"journal/briefs/{as_of}.json  pairs={len(brief['factor_pairs'])} bars_through={brief['bars_through']}")
+    elif a.cmd == "x":
+        from . import xfeed
+        if a.job == "login":
+            xfeed.login()
+        else:
+            r = xfeed.pull(headless=False if a.show else None, hours=a.hours)
+            print(json.dumps(r))
+            sys.exit(0 if r["ok"] else 1)
     elif a.cmd == "watch":
         from . import watch
         if a.telegram_chats:
