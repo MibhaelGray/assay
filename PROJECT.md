@@ -117,7 +117,8 @@ two can leave at different times. The takes-against-passes record is still the s
 whole shares, minimum commissions and small orders do to the same decisions.
 
 Two records are kept beside the swing book's verdicts, and no pass reads either: `fr paper side` records Yahoo
-facts (short interest, estimate changes, ratings, insider dealing) beside each night's verdicts, and
+facts (short interest, estimate changes, ratings, insider dealing) and, since 2026-11-23, IBKR's fee to borrow
+each stock and the shares it has to lend, beside each night's verdicts, and
 `fr paper holds` scores every idea at holds of 1 to 10 sessions. Both are kept to be tested later, and the tests
 only work while no pass has seen them.
 

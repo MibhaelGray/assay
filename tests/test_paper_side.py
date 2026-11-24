@@ -21,6 +21,7 @@ class Side(Research):
         super().setUp()
         self.asked = []
         self.short = {"AAA": 0.02, "BBB": 0.05, "CCC": 0.10, "DDD": 0.20}
+        self.loan = {}          # IBKR's stock-loan rows; None: the file can't be read
 
     def night(self, direction="long"):
         screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n, "direction": direction} for n in NAMES]}
@@ -32,8 +33,13 @@ class Side(Research):
         value = self.short.get(symbol)
         return {"at": now.isoformat(), "facts": {"short_pct_float": value} if value is not None else {}, "raw": {}}
 
+    def ibkr(self):
+        if self.loan is None:
+            raise OSError("no route to host")
+        return {"as_of": "2026.11.08 19:20:44", "host": "test", "rows": self.loan}
+
     def record(self, now=LATER, **kw):
-        return side.record(now, puller=self.yahoo, pause=0, **kw)
+        return side.record(now, puller=self.yahoo, pause=0, borrower=self.ibkr, **kw)
 
     def test_each_idea_s_stock_is_pulled_once_and_its_hedge_never(self):
         self.assertIn("no verdicts recorded", self.record()["note"])
@@ -52,6 +58,31 @@ class Side(Research):
         self.assertEqual(self.record()["failed"], ["DDD"])
         self.short["DDD"] = 0.2
         self.assertEqual(self.record()["pulled"], ["DDD"])
+
+    def test_borrow_cost_is_recorded_beside_yahoo_s_facts(self):
+        self.night()
+        del self.short["DDD"]
+        self.loan = {"AAA": {"fee": 0.26, "rebate": 3.6, "shares": 4200000}, "DDD": {"fee": 31.5, "rebate": -27.6, "shares": 2000},
+                     "HHH": {"fee": 1.3, "rebate": 2.5, "shares": 10_000_000, "capped": True}}
+        self.record()
+        got = side.load(DAY)["symbols"]
+        self.assertEqual(got["AAA"]["facts"], {"short_pct_float": 0.02, "borrow_fee": 0.26, "borrow_shares": 4200000.0})
+        self.assertEqual(got["AAA"]["raw"]["borrow"]["as_of"], "2026.11.08 19:20:44")
+        self.assertEqual(got["BBB"]["facts"], {"short_pct_float": 0.05})          # a name IBKR doesn't list
+        self.assertEqual(got["DDD"]["facts"], {})                                # Yahoo had nothing: tried again, borrow and all
+        self.assertNotIn("HHH", got)                                             # the hedge is still left out
+        self.short["DDD"] = 0.2
+        self.assertEqual(self.record()["pulled"], ["DDD"])
+        self.assertEqual(side.load(DAY)["symbols"]["DDD"]["facts"]["borrow_fee"], 31.5)
+
+    def test_a_night_ibkr_s_file_can_t_be_read_still_records_yahoo_s_facts(self):
+        self.night()
+        self.loan = None
+        out = self.record()
+        self.assertEqual((out["pulled"], out["failed"]), (NAMES, []))
+        self.assertIn("no route to host", out["borrow_error"])
+        self.assertIn("no route to host", side.load(DAY)["runs"][0]["borrow_error"])
+        self.assertEqual(side.load(DAY)["symbols"]["CCC"]["facts"], {"short_pct_float": 0.10})
 
     def test_a_fact_is_scored_against_how_the_stock_then_did_night_by_night(self):
         self.night()
@@ -78,5 +109,5 @@ class Side(Research):
         self.record()
         self.bars = frame({"AAA": [103.0, 106.0], "BBB": [102.0, 104.0], "CCC": [99.0, 98.0], "DDD": [99.0, 97.0], "HHH": [100.0, 100.0]})
         brief = learn.brief().lower()
-        for word in ("side fact", "short_pct", "short interest", "insider"):
+        for word in ("side fact", "short_pct", "short interest", "insider", "borrow"):
             self.assertNotIn(word, brief)

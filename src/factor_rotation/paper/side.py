@@ -4,8 +4,10 @@ The question (2026-11-14): would more data help the swing book? Adding it to the
 process while the ranking is still being scored, and nobody knows yet which data matters. So the facts are
 recorded on the side and tested later: after the evening pass has recorded its verdicts, `fr paper side` pulls,
 for every stock an idea is about, what Yahoo says about its short interest, its analysts' estimates, ratings
-and targets, and its insiders' dealing, and writes them to journal/paper/side/<session>.json. Once the ideas'
-plans finish, `fr paper side report` shows whether any fact told the winners from the losers.
+and targets, and its insiders' dealing, and writes them to journal/paper/side/<session>.json. Since 2026-11-23 it
+adds what IBKR charges to borrow the stock and how many shares it has to lend (borrow.py, one public file, no
+gateway). Once the ideas' plans finish, `fr paper side report` shows whether any fact told the winners from the
+losers.
 
 Rules that keep the test clean:
   - No pass reads journal/paper/side or runs `fr paper side`, and the record isn't in `fr paper learn` or on the
@@ -50,6 +52,8 @@ FACTS = {
     "insider_net_pct_6m": "insiders' net buying over 6 months, as a share of their holding",
     "insider_buys_6m": "insider purchases, 6 months",
     "insider_sales_6m": "insider sales, 6 months",
+    "borrow_fee": "IBKR's fee to borrow the stock, percent a year",
+    "borrow_shares": "shares IBKR has to lend (it stops counting at 10 million)",
 }
 
 
@@ -152,8 +156,20 @@ def pull(symbol: str, now: datetime) -> dict:
     return {**out, "errors": errors} if errors else out
 
 
-def record(now: datetime | None = None, puller=pull, dry: bool = False, pause: float = PAUSE) -> dict:
-    """Pull the facts for the next session's ideas that don't have them yet. Returns what the run did."""
+def _loan(borrower) -> dict:
+    """IBKR's stock-loan file for this run, or why it couldn't be read: a failure costs only the borrow facts."""
+    from .. import borrow
+
+    try:
+        return (borrower or borrow.fetch)()
+    except Exception as e:  # noqa: BLE001 - the Yahoo facts are still worth recording without it
+        log.warning("borrow_file_failed %s", e)
+        return {"rows": {}, "error": f"{type(e).__name__}: {e}"[:300]}
+
+
+def record(now: datetime | None = None, puller=pull, dry: bool = False, pause: float = PAUSE, borrower=None) -> dict:
+    """Pull the facts for the next session's ideas that don't have them yet. Returns what the run did.
+    `borrower` stands in for borrow.fetch (the tests' stand-in for IBKR's file)."""
     from . import entries
 
     now = now or datetime.now(NY)
@@ -171,14 +187,21 @@ def record(now: datetime | None = None, puller=pull, dry: bool = False, pause: f
     out["have"] = len(want) - len(todo)
     if dry:
         return {**out, "note": f"a look: {len(todo)} names to pull", "todo": todo}
+    loan = _loan(borrower) if todo else {}
+    if loan.get("error"):
+        out["borrow_error"] = loan["error"]
     for i, s in enumerate(todo):
         if i:
             clock.sleep(pause)
         got = puller(s, now)
+        # Only beside Yahoo's facts: a name Yahoo had nothing for is tried again, and gets its borrow figures then.
+        if got.get("facts") and (row := (loan.get("rows") or {}).get(s)):
+            got["facts"].update({"borrow_fee": row["fee"], "borrow_shares": float(row["shares"])})
+            got.setdefault("raw", {})["borrow"] = {**row, "as_of": loan.get("as_of")}
         doc["symbols"][s] = got
         (out["pulled"] if got.get("facts") else out["failed"]).append(s)
     if todo:
-        doc["runs"].append({k: out[k] for k in ("at", "pulled", "failed")})
+        doc["runs"].append({k: out[k] for k in ("at", "pulled", "failed", "borrow_error") if k in out})
         path(session).parent.mkdir(parents=True, exist_ok=True)
         path(session).write_text(json.dumps(doc, indent=1) + "\n")
     return out
