@@ -69,8 +69,9 @@
   .fr-link { background: none; border: 0; padding: 0; cursor: pointer; font-size: var(--cds-font-size-caption); color: var(--fr-muted); text-decoration: underline; text-decoration-color: var(--fr-line); text-underline-offset: 3px; white-space: nowrap; }
   .fr-link:hover { color: var(--color-fg); text-decoration-color: currentColor; }
   .fr-cols { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: var(--cds-gap-lg); align-items: start; }
-  .fr-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-lg); align-items: start; }
+  .fr-grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--cds-gap-lg); align-items: start; }
   @media (max-width: 960px) { .fr-cols { grid-template-columns: minmax(0, 1fr); } }
+  @media (max-width: 760px) { .fr-grid2 { grid-template-columns: minmax(0, 1fr); } }
 
   /* Stat band: cells share hairlines; each has a label, value, change and a 60-session line. */
   .fr-band { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr)); gap: 1px; background: var(--fr-line); border: 1px solid var(--fr-line); border-radius: var(--cds-radius); overflow: hidden; }
@@ -311,9 +312,9 @@
     --font-anthropic-serif: var(--font-anthropic-sans);
     --fr-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
     --cds-radius: 3px;
-    --color-fg: #e4e8ee; --color-fg-muted: #7d8899; --color-bg: #07090c; --color-panel: #0e1217; --color-border-line: #1d242e;
+    --color-fg: #e4e8ee; --color-fg-muted: #8b96a8; --color-bg: #07090c; --color-panel: #0e1217; --color-border-line: #1d242e;
     --color-ok: #22c55e; --color-bad: #ef4444; --color-warn: #f5a524;
-    --cds-border: #1d242e; --cds-text-secondary: #7d8899; --cds-surface-popover: #141a22; --cds-shadow-popover: 0 8px 24px rgba(0,0,0,.6);
+    --cds-border: #1d242e; --cds-text-secondary: #8b96a8; --cds-surface-popover: #141a22; --cds-shadow-popover: 0 8px 24px rgba(0,0,0,.6);
     --cds-chart-axis: #5f6b7c; --cds-chart-grid: #161c24; --cds-chart-muted: #2e3744; --cds-chart-reference: #5f6b7c;
     --cds-chart-status-critical: #ef4444;
     --fr-accent: #f5a524;
@@ -323,11 +324,11 @@
   .fr { font-size: .8125rem; gap: 1rem; }
   .fr-view { gap: .75rem; }
 
-  /* Figures in a monospaced face, like a quote screen. */
-  .fr-val, .fr table td, .fr-num { font-family: var(--fr-mono); font-variant-numeric: tabular-nums; }
-  .fr table td:first-child, .fr table td b { font-family: var(--font-anthropic-sans); }
+  /* Figures in a monospaced face, like a quote screen; keep prose table cells in sans. */
+  .fr table td { font-family: var(--font-anthropic-sans); }
+  .fr-val, .fr-num, .fr-amt, .fr table td.num { font-family: var(--fr-mono); font-variant-numeric: tabular-nums; }
   .fr-val { font-size: 1.35rem; font-weight: 500; letter-spacing: -.02em; }
-  .fr-sub { font-size: .6875rem; }
+  .fr-sub { font-size: .75rem; }
 
   /* Top bar. */
   .fr-bar { background: var(--color-panel); border-bottom: 1px solid var(--fr-line); padding-block: .45rem;
@@ -346,7 +347,7 @@
   /* Headings: compact and uppercase, like panel titles in a terminal. */
   .fr-viewhead h2 { font-family: var(--font-anthropic-sans); font-weight: 700; font-size: 1rem; letter-spacing: .06em; text-transform: uppercase; }
   .fr-phead h3 { font-size: .75rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
-  .fr-label { font-size: .625rem; letter-spacing: .09em; font-weight: 600; }
+  .fr-label { font-size: .6875rem; letter-spacing: .08em; font-weight: 600; }
 
   /* Panels: flat, tight, hairline borders. */
   .fr-panel { border-radius: var(--cds-radius); padding: .8rem .9rem; gap: .65rem; box-shadow: none; }
@@ -355,11 +356,51 @@
   /* Stat band: hairlines drawn by the cells, so a short last row leaves panel color, not a grey block. */
   .fr-band { gap: 0; background: var(--color-panel); border-radius: var(--cds-radius); }
   .fr-band > .fr-stat { box-shadow: 1px 0 0 var(--fr-line), 0 1px 0 var(--fr-line); padding: .6rem .8rem; }
+  .fr-pulse-wrap { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--cds-gap-md); align-items: stretch; }
+  .fr-pulse-wrap > .fr-band { height: 100%; }
+  .fr-band.is-macro { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .fr-band.is-indices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .fr-band.is-book { grid-template-columns: repeat(2, minmax(0, 1fr)); border-color: color-mix(in srgb, var(--fr-accent) 42%, var(--fr-line)); box-shadow: inset 0 2px 0 var(--fr-accent); }
+  .fr-market-top { display: grid; gap: var(--cds-gap-sm); }
+  .fr-idx-px { font-family: var(--fr-mono); font-size: .75rem; color: var(--fr-muted); font-variant-numeric: tabular-nums; }
+  .fr-idx-sym { margin-left: .4rem; font-size: .6875rem; letter-spacing: .04em; color: var(--fr-muted); }
+  @media (max-width: 960px) {
+    .fr-pulse-wrap { grid-template-columns: minmax(0, 1fr); }
+    .fr-band.is-macro { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 640px) {
+    .fr-band.is-indices { grid-template-columns: minmax(0, 1fr); }
+  }
 
   /* Tables: dense rows, quiet headers, a row highlight. */
-  .fr table th { font-size: .625rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 600; color: var(--fr-muted); }
+  .fr table th { font-size: .6875rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 600; color: var(--fr-muted); }
   .fr table td { padding-block: .35rem; }
   .fr table tbody tr:hover td { background: rgba(245, 165, 36, .05); }
+
+  /* Today cockpit rows, expandable Screen shortlist, Swing research & Baskets filters, Heat map tooltip. */
+  .fr-result { padding: .38rem 0; grid-template-columns: minmax(0, 1fr) minmax(3.5rem, 6.5rem) 4.75rem; }
+  .fr-result-head { display: flex; flex-wrap: wrap; align-items: center; gap: .2rem .45rem; }
+  .fr-result-head .fr-legs { width: auto; font-size: .8125rem; }
+  .fr-result-sub { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; color: var(--fr-muted); font-size: .75rem; margin-top: 2px; line-height: 1.35; }
+  .fr-mid-toggle { width: 100%; border: 0; border-bottom: 1px solid var(--fr-line); background: color-mix(in srgb, var(--color-fg) 3%, transparent); color: var(--fr-muted); font-size: .75rem; padding: .38rem .5rem; text-align: center; cursor: pointer; font-family: var(--font-anthropic-sans); }
+  .fr-mid-toggle:hover { color: var(--color-fg); background: color-mix(in srgb, var(--color-fg) 7%, transparent); }
+  .fr-sc-why { color: var(--fr-muted); font-size: .75rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; max-width: 34rem; }
+  .fr-sc-snap { font-family: var(--fr-mono); font-size: .72rem; color: var(--fr-muted); white-space: nowrap; }
+  .fr-sc-list { margin: .2rem 0 0; padding-left: 1.05rem; display: grid; gap: 3px; font-size: .75rem; color: var(--color-fg); line-height: 1.45; }
+  .fr-sc-list li::marker { color: var(--fr-muted); }
+  .fr-ctlrow { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem .65rem; }
+  .fr-search, .fr-select { font-family: var(--font-anthropic-sans); font-size: .75rem; color: var(--color-fg); background: var(--color-bg); border: 1px solid var(--fr-line); border-radius: 3px; padding: .24rem .5rem; min-width: 0; line-height: 1.35; }
+  .fr-search { width: 11.5rem; }
+  .fr-search::placeholder { color: var(--fr-muted); }
+  .fr-search:focus, .fr-select:focus { outline: none; border-color: var(--fr-accent); }
+  .fr-select { cursor: pointer; max-width: 14rem; }
+  .fr-passrow td { padding: .6rem 0 .35rem !important; font-weight: 600; font-size: .75rem; color: var(--color-fg); border-bottom: 1px solid var(--color-fg); background: color-mix(in srgb, var(--color-fg) 3%, transparent); }
+  .fr-passrow td span.fr-sub { font-weight: 400; margin-left: .6rem; }
+  .fr-morebar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-top: .55rem; }
+  .fr-treetip { max-width: 21rem; white-space: normal; line-height: 1.4; z-index: 10; }
+  .fr-treetip .fr-tt-head { display: flex; justify-content: space-between; gap: .75rem; font-weight: 600; }
+  .fr-treetip .fr-tt-meta { color: var(--fr-muted); font-size: .72rem; }
+  .fr-treetip .fr-tt-why { color: var(--color-fg); font-size: .72rem; margin-top: 2px; }
 </style>
 
 <div class="fr" id="top">
@@ -385,7 +426,7 @@
 
   <!-- TODAY: the cockpit -->
   <section class="fr-view" id="today" data-view="today">
-    <div class="fr-band" aria-label="Market pulse" data-draw="pulse" data-source="mkt_regime mkt_paper mkt_paper_proposals"></div>
+    <div class="fr-pulse-wrap" aria-label="Market pulse and swing book" data-draw="pulse" data-source="mkt_regime mkt_paper mkt_paper_proposals"></div>
 
     <div class="fr-cols">
       <div class="fr-panel">
@@ -405,7 +446,7 @@
 
     <div class="fr-panel">
       <div class="fr-phead"><h3>Screen shortlist</h3><span class="fr-sub" data-draw="screen-time" data-source="mkt_screen">—</span>
-        <p>Where the next research pass looks: every name, basket and factor pair checked against the setups, best first. The screen only points; the pass decides.</p></div>
+        <p>Where the next research pass looks, best first. Click any row for full overnight pricing, levels, and hedge correlation. The screen only points; the pass decides.</p></div>
       <div class="fr-tablewrap" data-draw="screen-list" data-source="mkt_screen"></div>
     </div>
 
@@ -492,23 +533,26 @@
 
   <section class="fr-view" id="market" data-view="market" hidden>
     <div class="fr-viewhead"><h2>Market</h2><p>Data through <span data-draw="mkt-asof" data-source="mkt_meta">—</span>. Flow figures are model estimates of trading that has to happen, not anyone's positions.</p></div>
-    <div class="fr-band" aria-label="Regime">
-      <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">Breadth</p><span data-draw="regime-chip" data-metric="pct_above_50" data-source="mkt_regime"></span></div>
-        <div class="fr-val" data-draw="regime-val" data-metric="pct_above_50" data-source="mkt_regime">—</div>
-        <p class="fr-sub">Our ETFs and stocks above their 50-day average</p>
-        <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="pct_above_50" data-source="mkt_regime"></div></div>
-      <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">Sector correlation</p><span data-draw="regime-chip" data-metric="sector_corr_20d" data-source="mkt_regime"></span></div>
-        <div class="fr-val" data-draw="regime-val" data-metric="sector_corr_20d" data-source="mkt_regime">—</div>
-        <p class="fr-sub">20-day average between sectors. Low means rotation; high means one macro trade</p>
-        <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="sector_corr_20d" data-source="mkt_regime"></div></div>
-      <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">VIX / VIX3M</p><span data-draw="regime-chip" data-metric="vix_ratio" data-source="mkt_regime"></span></div>
-        <div class="fr-val" data-draw="regime-val" data-metric="vix_ratio" data-source="mkt_regime">—</div>
-        <p class="fr-sub">Near-term against 3-month implied vol. Above 1 is near-term fear</p>
-        <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="vix_ratio" data-source="mkt_regime"></div></div>
-      <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">10-year yield</p></div>
-        <div class="fr-val" data-draw="regime-val" data-metric="ten_year" data-source="mkt_regime">—</div>
-        <p class="fr-sub">The rate most of the market discounts against</p>
-        <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="ten_year" data-source="mkt_regime"></div></div>
+    <div class="fr-market-top">
+      <div class="fr-band is-indices" aria-label="Major indices" data-draw="market-indices" data-source="mkt_regime"></div>
+      <div class="fr-band is-macro" aria-label="Regime">
+        <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">Breadth</p><span data-draw="regime-chip" data-metric="pct_above_50" data-source="mkt_regime"></span></div>
+          <div class="fr-val" data-draw="regime-val" data-metric="pct_above_50" data-source="mkt_regime">—</div>
+          <p class="fr-sub">Our ETFs and stocks above their 50-day average</p>
+          <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="pct_above_50" data-source="mkt_regime"></div></div>
+        <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">Sector correlation</p><span data-draw="regime-chip" data-metric="sector_corr_20d" data-source="mkt_regime"></span></div>
+          <div class="fr-val" data-draw="regime-val" data-metric="sector_corr_20d" data-source="mkt_regime">—</div>
+          <p class="fr-sub">20-day average between sectors. Low means rotation; high means one macro trade</p>
+          <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="sector_corr_20d" data-source="mkt_regime"></div></div>
+        <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">VIX / VIX3M</p><span data-draw="regime-chip" data-metric="vix_ratio" data-source="mkt_regime"></span></div>
+          <div class="fr-val" data-draw="regime-val" data-metric="vix_ratio" data-source="mkt_regime">—</div>
+          <p class="fr-sub">Near-term against 3-month implied vol. Above 1 is near-term fear</p>
+          <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="vix_ratio" data-source="mkt_regime"></div></div>
+        <div class="fr-stat"><div class="fr-stattop"><p class="fr-label">10-year yield</p></div>
+          <div class="fr-val" data-draw="regime-val" data-metric="ten_year" data-source="mkt_regime">—</div>
+          <p class="fr-sub">The rate most of the market discounts against</p>
+          <div class="fr-spark is-tall" data-draw="regime-spark" data-metric="ten_year" data-source="mkt_regime"></div></div>
+      </div>
     </div>
 
     <div class="fr-panel" id="factors">
@@ -545,6 +589,7 @@
             <button type="button" data-bk-period="5d" aria-pressed="false">5-day</button>
             <button type="button" data-bk-period="20d" aria-pressed="false">20-day</button>
           </div>
+          <input type="search" class="fr-search" data-bk-search placeholder="Filter basket or ticker…" aria-label="Filter baskets">
         </div>
         <p data-bk-help="table">Click a column to sort, and a basket for its story and members. Spreads are basket minus hedge; z is the spread's distance from its 50-day average.</p>
         <p data-bk-help="heat" hidden>Every basket and member on one map. Each block is a basket, with its spread against its hedge in the corner; each tile is a member, sized by how much trades in it each day and coloured by its own move. Click a basket's name for its story and members.</p>
@@ -586,8 +631,18 @@
       <div class="fr-band" aria-label="All ideas so far" data-draw="paper-live" data-source="mkt_paper_proposals mkt_paper_rank"></div>
     </div>
     <div class="fr-panel">
-      <div class="fr-phead"><h3>Research verdicts</h3><span class="fr-sub" data-draw="paper-verdict-sum" data-source="mkt_paper_proposals">—</span>
-        <p>Every candidate a pass judged for the swing book, newest first, each pass in its own ranking. "Plan result" scores each one's own plan from the prices when its pass recorded to its stop or time limit, before costs, whether or not it was taken. Settled averages wait until a plan's time limit has passed so early stop-outs don't count ahead of surviving peers.</p></div>
+      <div class="fr-phead"><h3>Research verdicts</h3>
+        <div class="fr-ctlrow">
+          <span class="fr-sub" data-draw="paper-verdict-sum" data-source="mkt_paper_proposals">—</span>
+          <div class="fr-seg" role="group" aria-label="Verdict filter">
+            <button type="button" data-pr-verdict="all" aria-pressed="true">All</button>
+            <button type="button" data-pr-verdict="take" aria-pressed="false">Taken</button>
+            <button type="button" data-pr-verdict="pass" aria-pressed="false">Passed</button>
+          </div>
+          <select class="fr-select" data-pr-pass aria-label="Pass filter"><option value="all">All passes</option></select>
+          <input type="search" class="fr-search" data-pr-search placeholder="Filter ticker or setup…" aria-label="Filter verdicts">
+        </div>
+        <p>Grouped by pass, newest first, in each pass's own ranking. Click any row for full reasoning and hedge fit. "Plan result" scores each one's own plan from the prices when its pass recorded to its stop or time limit, before costs.</p></div>
       <div class="fr-tablewrap" data-draw="paper-verdicts" data-source="mkt_paper_proposals"></div>
     </div>
     <details class="fr-method"><summary>How the swing book works</summary>
@@ -686,6 +741,7 @@
 
   // A small line with its last point marked; used for regime history.
   const spark = (el, pts, fmt, color) => {
+    if (el.offsetParent === null) return;
     el.replaceChildren();
     if (pts.length < 2) return;
     const W = Math.max(120, el.clientWidth || 200);
@@ -705,6 +761,7 @@
 
   // Horizontal bars from one row each: label on the left, value text on the right, shared scale.
   const hbars = (el, items, { diverging = false, fmt = String, color = () => dash.colors[0], tipLines = null } = {}) => {
+    if (el.offsetParent === null) return;
     el.replaceChildren();
     if (!items.length) { el.append(h('p', 'fr-empty', 'Nothing to show for this session.')); return; }
     const W = Math.max(260, el.clientWidth || 420);
@@ -779,7 +836,7 @@
   const VIEWS = ['today', 'portfolio', 'market', 'baskets', 'earnings', 'paper', 'chart'];
   // Links from before the idea books were retired open the swing book.
   const ALIAS = { top: 'today', next: 'today', last: 'paper', ledger: 'paper', ideas: 'paper', record: 'paper', factors: 'market' };
-  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 }, basketView: 'table', basketPeriod: 'today' };
+  const ui = { view: 'today', openBaskets: new Set(), basketSort: { key: 'spread_today_pct', dir: -1 }, basketView: 'table', basketPeriod: 'today', basketQuery: '', todayOpenAll: false };
   const setView = (v, { link = true, scroll = true } = {}) => {
     if (!VIEWS.includes(v)) v = 'today';
     ui.view = v;
@@ -787,8 +844,8 @@
     document.querySelectorAll('.fr-tabs [data-view-to]').forEach((b) => { if (b.dataset.viewTo === v) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     if (link) { try { dash.setLink(v); } catch (e) { /* the link is a convenience */ } }
     if (scroll) window.scrollTo({ top: 0 });
-    // Charts measure their box, so draw again now that the view is visible.
-    window.dispatchEvent(new Event('resize'));
+    // Draw on the next frame so charts and bars measure the visible box with zero flash.
+    requestAnimationFrame(() => { if (typeof dash.redraw === 'function') dash.redraw(); else window.dispatchEvent(new Event('resize')); });
     if (v === 'chart') loadChartNames().catch(() => {});
   };
   document.addEventListener('click', (ev) => {
@@ -815,17 +872,7 @@
     }
     return false;
   };
-  const swipe = { dx: 0, last: 0, done: 0 };
-  window.addEventListener('wheel', (ev) => {
-    if (Math.abs(ev.deltaX) <= Math.abs(ev.deltaY) * 1.5 || ev.ctrlKey) return;
-    if (scrollsSideways(ev.target)) return;
-    ev.preventDefault();   // keeps the browser from taking the swipe as Back or Forward
-    const now = performance.now();
-    if (now - swipe.done < 700) return;           // one view per swipe: ignore the gesture's momentum
-    if (now - swipe.last > 250) swipe.dx = 0;     // a pause starts a new gesture
-    swipe.last = now; swipe.dx += ev.deltaX;
-    if (Math.abs(swipe.dx) > 140) { swipeTo(swipe.dx > 0 ? 1 : -1); swipe.dx = 0; swipe.done = now; }
-  }, { passive: false });
+  // Desktop trackpad horizontal wheel is left to native browser scrolling/history; mobile touch swipe is kept below.
   let touch = null;
   window.addEventListener('touchstart', (ev) => {
     touch = ev.touches.length === 1 && !scrollsSideways(ev.target) ? { x: ev.touches[0].clientX, y: ev.touches[0].clientY, t: performance.now() } : null;
@@ -838,6 +885,8 @@
   }, { passive: true });
   // Opens a basket's row on the Baskets view.
   const goBasket = (id) => {
+    ui.basketQuery = '';
+    const inp = document.querySelector('[data-bk-search]'); if (inp) inp.value = '';
     if (typeof syncBasketControls === 'function') syncBasketControls();
     ui.openBaskets.add(id);
     setView('baskets', { scroll: false });
@@ -889,28 +938,31 @@
     const reg = okData('mkt_regime');
     const paper = okData('mkt_paper') || [];
     const done = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null && r.plan_mature !== false);
-    const cells = [];
-    if (reg) cells.push(regimeTile(reg, 'pct_above_50', 'Breadth'), regimeTile(reg, 'sector_corr_20d', 'Sector correlation'), regimeTile(reg, 'vix_ratio', 'VIX / VIX3M'), regimeTile(reg, 'ten_year', '10-year'));
-    else cells.push(Object.assign(h('div', 'fr-stat'), { textContent: 'Market data failed to load' }));
+    const macroBand = h('div', 'fr-band is-macro');
+    macroBand.setAttribute('aria-label', 'Market pulse');
+    if (reg) macroBand.append(regimeTile(reg, 'pct_above_50', 'Breadth'), regimeTile(reg, 'sector_corr_20d', 'Sector correlation'), regimeTile(reg, 'vix_ratio', 'VIX / VIX3M'), regimeTile(reg, 'ten_year', '10-year'));
+    else macroBand.append(Object.assign(h('div', 'fr-stat'), { textContent: 'Market data failed to load' }));
+    const bookBand = h('div', 'fr-band is-book');
+    bookBand.setAttribute('aria-label', 'Swing book summary');
     if (paper.length) {
       const filled = paper.filter((r) => r.pnl != null);
       const total = filled.length ? d3.sum(filled, (r) => r.pnl) : null;
       const c = h('div', 'fr-stat');
       c.append(h('p', 'fr-label', 'Swing book'), h('div', `fr-val ${tone(total)}`, fmtPnl(total)),
-        h('p', 'fr-sub', `${paper.filter(isLive).length} open · ${paper.filter((r) => r.state === 'closed').length} closed · after commissions`));
-      cells.push(c);
+        h('p', 'fr-sub', `${paper.filter(isLive).length} open · ${paper.filter((r) => r.state === 'closed').length} closed · net`));
+      bookBand.append(c);
     }
     {
       // Whether the research adds anything to the screen: the plans it took against the plans it didn't.
       const takes = done.filter((r) => r.verdict === 'take'); const rest = done.filter((r) => r.verdict !== 'take');
-      const avg = (rs) => rs.length ? `${fmtBp(d3.mean(rs, (r) => r.plan_bps))} over ${rs.length}` : 'none finished';
+      const avg = (rs) => rs.length ? `${fmtBp(d3.mean(rs, (r) => r.plan_bps))} (${rs.length})` : 'none';
       const edge = takes.length && rest.length ? d3.mean(takes, (r) => r.plan_bps) - d3.mean(rest, (r) => r.plan_bps) : null;
       const c = h('div', 'fr-stat');
-      c.append(h('p', 'fr-label', 'Takes against passes'), h('div', `fr-val ${tone(edge)}`, fmtBp(edge)),
-        h('p', 'fr-sub', done.length ? `Taken ${avg(takes)} · not taken ${avg(rest)}` : 'No proposal has finished its plan yet'));
-      cells.push(c);
+      c.append(h('p', 'fr-label', 'Takes vs passes'), h('div', `fr-val ${tone(edge)}`, fmtBp(edge)),
+        h('p', 'fr-sub', done.length ? `Taken ${avg(takes)} · pass ${avg(rest)}` : 'No plan settled yet'));
+      bookBand.append(c);
     }
-    el.replaceChildren(...cells);
+    el.replaceChildren(macroBand, bookBand);
   });
 
   // What needs attention, built from the market rows. Three levels: act or decide today, watch, context.
@@ -1005,32 +1057,94 @@
     el.textContent = `${from}${rows[0].live ? ' · not saved; the research pass reads the 6:00 PM CT screen' : ''} · ${rows.length} candidates`;
   });
   let screenAll = false;
+  const screenOpen = new Set();
+  const cleanWhy = (text) => {
+    if (!text) return '—';
+    const parts = String(text).split('; ').map((s) => s.trim()).filter(Boolean);
+    const out = [];
+    const seenSig = new Set();
+    for (const part of parts) {
+      const m = /^(.+?)\s+gave the same signal and move with it$/i.exec(part);
+      if (m) {
+        const syms = [...new Set(m[1].split(/,\s*/).map((s) => s.trim()).filter(Boolean))];
+        const key = syms.join(', ');
+        if (!seenSig.has(key)) { seenSig.add(key); out.push(`Also signaled: ${key}`); }
+      } else {
+        out.push(part);
+      }
+    }
+    return out.join(' · ');
+  };
+  const chartSnap = (text) => {
+    if (!text) return '—';
+    const bits = [];
+    const ov = /overnight at [^:]+:\s*[\d.,]+,\s*([+-]?\d+\.\d+%)/i.exec(text);
+    const atr = /([+-]?\d+\.\d+ ATR) from the 20-day/i.exec(text);
+    const rsi = /RSI (\d+)/i.exec(text);
+    const tr = /\(trend (up|down|mixed)\)/i.exec(text);
+    const corr = /correlation ([+-]?\d+\.\d+)/i.exec(text);
+    const zf = /z ([+-]?\d+\.\d+) vs 50-day/i.exec(text);
+    if (zf) bits.push(`z ${zf[1]}`);
+    if (rsi) bits.push(`RSI ${rsi[1]}`);
+    if (atr) bits.push(atr[1].replace('-', '−'));
+    if (tr) bits.push(tr[1]);
+    if (corr) bits.push(`r ${corr[1].replace('-', '−')}`);
+    if (!bits.length && ov) bits.push(`ON ${ov[1]}`);
+    return bits.length ? bits.join(' · ') : (text.length > 42 ? `${text.slice(0, 39)}…` : text);
+  };
+  const screenDetail = (r, colSpan) => {
+    const box = h('div', 'fr-open');
+    box.append(block('What triggered it', cleanWhy(r.why), true));
+    if (r.chart) {
+      const wrap = h('div', 'fr-wide');
+      wrap.append(h('p', 'fr-label', 'Chart & levels'));
+      const ul = h('ul', 'fr-sc-list');
+      String(r.chart).split(/;\s+/).filter(Boolean).forEach((clause) => {
+        const clean = clause.charAt(0).toUpperCase() + clause.slice(1);
+        ul.append(h('li', null, clean));
+      });
+      wrap.append(ul);
+      box.append(wrap);
+    }
+    const dt = h('tr', 'fr-detail'); const td = h('td'); td.colSpan = colSpan; td.append(box); dt.append(td);
+    return dt;
+  };
   const drawScreen = (el) => {
     const d = ready(el, 'mkt_screen', true);
     if (!d) return;
     if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', 'No screen yet. Run uv run fr screen after the close.')); return; }
-    const rows = screenAll ? d.data : d.data.slice(0, 10);
+    const rows = screenAll ? d.data : d.data.slice(0, 8);
     const table = h('table', 'fr-table');
     const head = h('tr');
-    [['Name'], ['Setup'], ['Side', 'fr-hide-narrow'], ['What triggered it'], ['Chart', 'fr-hide-narrow']].forEach(([t, c]) => { const th = h('th', c || null, t); th.scope = 'col'; head.append(th); });
+    const cols = [['Candidate'], ['Setup'], ['Side', 'fr-hide-narrow'], ['Trigger'], ['Snapshot', 'num fr-hide-narrow']];
+    cols.forEach(([t, c]) => { const th = h('th', c || null, t); th.scope = 'col'; head.append(th); });
     const thead = h('thead'); thead.append(head);
     const tbody = h('tbody');
     rows.forEach((r) => {
-      const tr = h('tr');
-      const name = h('td');
-      if (r.kind === 'basket') { const b = h('button', 'fr-sym', r.name); b.type = 'button'; b.addEventListener('click', () => goBasket(r.basket_id)); name.append(b); }
+      const key = `${r.rank}:${r.name}`;
+      const open = screenOpen.has(key);
+      const tr = h('tr', `is-row${open ? ' is-open' : ''}`);
+      tr.tabIndex = 0; tr.setAttribute('aria-expanded', String(open));
+      const name = h('td', 'fr-nw');
+      name.append(h('span', 'fr-caret', open ? '▾' : '▸'));
+      if (r.kind === 'basket') { const b = h('button', 'fr-sym', r.name); b.type = 'button'; b.addEventListener('click', (ev) => { ev.stopPropagation(); goBasket(r.basket_id); }); name.append(b); }
       else if (r.kind === 'factor') name.append(h('b', null, r.name));
       else name.append(symBtn(r.name));
       if (r.hedge && r.kind !== 'factor') name.append(h('small', 'fr-muted', ` vs ${r.hedge}`));
-      const setup = h('td'); setup.append(chip(human(r.setup), r.setup.startsWith('earnings') ? 'is-fg' : null));
-      tr.append(name, setup, h('td', `fr-hide-narrow ${r.direction === 'long' ? 'fr-pos' : 'fr-neg'}`, human(r.direction)),
-        h('td', 'why', r.why), h('td', 'why fr-hide-narrow', r.chart));
+      const setup = h('td', 'fr-nw'); setup.append(chip(human(r.setup), r.setup.startsWith('earnings') ? 'is-fg' : null));
+      const trigTd = h('td'); const trig = h('div', 'fr-sc-why', cleanWhy(r.why)); trigTd.append(trig);
+      const snapTd = h('td', 'num fr-hide-narrow fr-sc-snap', chartSnap(r.chart));
+      tr.append(name, setup, h('td', `fr-hide-narrow fr-nw ${r.direction === 'long' ? 'fr-pos' : 'fr-neg'}`, human(r.direction)), trigTd, snapTd);
+      const flip = () => { if (open) screenOpen.delete(key); else screenOpen.add(key); drawScreen(el); };
+      tr.addEventListener('click', (ev) => { if (!ev.target.closest('[data-chart], button')) flip(); });
+      tr.addEventListener('keydown', (ev) => { if (ev.target === tr && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); flip(); } });
       tbody.append(tr);
+      if (open) tbody.append(screenDetail(r, cols.length));
     });
     table.append(thead, tbody);
     const out = [table];
-    if (d.data.length > 10) {
-      const more = h('button', 'fr-link', screenAll ? 'Show the top 10' : `Show all ${d.data.length}`);
+    if (d.data.length > 8) {
+      const more = h('button', 'fr-link', screenAll ? 'Show top 8' : `Show all ${d.data.length} candidates`);
       more.type = 'button';
       more.style.marginTop = 'var(--cds-pad-sm)';
       more.addEventListener('click', () => { screenAll = !screenAll; drawScreen(el); });
@@ -1354,11 +1468,11 @@
     const a = paperAcct(); el.textContent = a && a.marks_at ? `IBKR paper account · prices as of ${whenEt(a.marks_at)}` : 'IBKR paper account';
   });
   // Long against short as one bar, with the dollars under it. `short` is a positive amount.
-  const pfExpo = (long, short) => {
+  const pfExpo = (long, short, note) => {
     const wrap = h('div'); const bar = h('div', 'fr-expo');
     [['long', long], ['short', short]].forEach(([cls, v]) => { if (v > 0) { const i = h('i', cls); i.style.flex = `${v} 1 0px`; bar.append(i); } });
     bar.setAttribute('role', 'img'); bar.setAttribute('aria-label', `Long ${fmtUsd(long)}, short ${fmtUsd(short)}`);
-    wrap.append(bar, h('span', 'fr-expocap', `Long ${fmtUsd(long)} · short ${fmtUsd(short)}`));
+    wrap.append(bar, h('span', 'fr-expocap', `Long ${fmtUsd(long)} · short ${fmtUsd(short)}${note ? ` · ${note}` : ''}`));
     return wrap;
   };
   pfDraw('pf-summary', (el) => {
@@ -1386,7 +1500,7 @@
       cell('div', 'Unrealized', fmtPnl(unreal), tone(unreal), `${pos.length} open position${pos.length === 1 ? '' : 's'}`, 'Before commissions'),
       cell('div', 'Realized', fmtPnl(real), tone(real), 'Closed trades', 'Before commissions'),
       cell('div', today, fmtPnl(scope.day_pnl), tone(scope.day_pnl), 'Since the last close'),
-      cell('div', 'Net exposure', pos.length ? fmtUsd(longs - shorts) : '—', '', pos.length ? pfExpo(longs, shorts) : 'Nothing held'));
+      cell('div', 'Net exposure', pos.length ? fmtUsd(longs - shorts) : '—', '', pos.length ? pfExpo(longs, shorts, 'net by symbol') : 'Nothing held'));
   });
   pfDraw('pf-details', (el) => {
     const a = pfAcct();
@@ -1458,7 +1572,11 @@
   };
   const pfScrollTo = (sel) => setTimeout(() => { const row = document.querySelector(sel); if (row) row.scrollIntoView({ block: 'center' }); }, 250);
   // A trade's research verdict, opened on the Swing research page.
-  const pfOpenVerdict = (r) => { paperUi.open.add(r.proposal_id); setView('paper'); drawPaperTables(); pfScrollTo(`[data-view=paper] tr[data-trade="${r.proposal_id}"]`); };
+  const pfOpenVerdict = (r) => {
+    paperUi.verdict = 'all'; paperUi.passKey = 'all'; paperUi.query = ''; paperUi.showAll = true;
+    const inp = document.querySelector('[data-pr-search]'); if (inp) inp.value = '';
+    paperUi.open.add(r.proposal_id); setView('paper'); drawPaperTables(); pfScrollTo(`[data-view=paper] tr[data-trade="${r.proposal_id}"]`);
+  };
   // A swing trade, opened where Portfolio lists it: among the open trades, or in the closed history.
   const pfShowTrade = (r) => {
     pfUi.book = r.book || 'swing';
@@ -1523,7 +1641,7 @@
       tbody.append(tr);
       if (open) tbody.append(pfTradeDetail(t, PF_TRADE_COLS.length));
     });
-    const foot = h('tr', 'day'); const expo = h('td', 'fr-expocell'); expo.append(pfExpo(d3.sum(trades, (t) => t.long), d3.sum(trades, (t) => t.short)));
+    const foot = h('tr', 'day'); const expo = h('td', 'fr-expocell'); expo.append(pfExpo(d3.sum(trades, (t) => t.long), d3.sum(trades, (t) => t.short), 'gross across trades'));
     const dayPnl = d3.sum(trades, (t) => t.day_pnl); const pnl = d3.sum(trades, (t) => t.pnl);
     foot.append(h('td', null, `${trades.length} trade${trades.length === 1 ? '' : 's'}`), h('td'), expo, h('td', `num ${tone(dayPnl)}`, fmtPnl(dayPnl)), h('td', `num ${tone(pnl)}`, fmtPnl(pnl)), h('td'), h('td'));
     tbody.append(foot);
@@ -1625,7 +1743,7 @@
     tbody.append(foot);
     table.append(thead, tbody); el.replaceChildren(table);
   });
-  const paperUi = { open: new Set() };
+  const paperUi = { open: new Set(), verdict: 'all', passKey: 'all', query: '', showAll: false };
   const paperDetail = (r, colSpan) => {
     const box = h('div', 'fr-open');
     if ((r.leg_detail || []).length) {
@@ -1680,28 +1798,108 @@
     });
     table.append(thead, tbody); el.replaceChildren(table);
   };
+  const PASS_ORDER = { night: 1, late: 2, late2: 3, late3: 4, late4: 5, morning: 6, midday: 7 };
+  const passKeyOf = (r) => `${r.session}|${r.pass || ''}`;
+  const passLabelOf = (r) => `${day(r.session, '%a %b %-d')}${PASS_NAME[r.pass] ? ` · ${PASS_NAME[r.pass]}` : ''}`;
+  const groupPasses = (rows) => {
+    const map = new Map();
+    rows.forEach((r) => {
+      const k = passKeyOf(r);
+      if (!map.has(k)) map.set(k, { key: k, session: r.session, pass: r.pass || '', label: passLabelOf(r), rec: r.recorded_at || '', rows: [] });
+      const g = map.get(k);
+      if (r.recorded_at && r.recorded_at > g.rec) g.rec = r.recorded_at;
+      g.rows.push(r);
+    });
+    const groups = [...map.values()].sort((a, b) => (b.rec || '').localeCompare(a.rec || '') || b.session.localeCompare(a.session) || (PASS_ORDER[b.pass] || 0) - (PASS_ORDER[a.pass] || 0));
+    groups.forEach((g) => g.rows.sort((a, b) => (a.rank || 1e6) - (b.rank || 1e6) || a.id.localeCompare(b.id)));
+    return groups;
+  };
+  const syncVerdictControls = (groups) => {
+    document.querySelectorAll('[data-pr-verdict]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.prVerdict === paperUi.verdict)));
+    const sel = document.querySelector('[data-pr-pass]');
+    if (sel && groups) {
+      const want = paperUi.passKey;
+      const opts = [Object.assign(document.createElement('option'), { value: 'all', textContent: `All passes (${groups.length})` }),
+        ...groups.map((g) => Object.assign(document.createElement('option'), { value: g.key, textContent: `${g.label} (${g.rows.length})` }))];
+      sel.replaceChildren(...opts);
+      sel.value = groups.some((g) => g.key === want) ? want : 'all';
+    }
+  };
   const drawVerdicts = (el) => {
     const d = ready(el, 'mkt_paper_proposals', true);
     if (!d) return;
     if (!d.data.length) { el.replaceChildren(h('p', 'fr-empty', threePass() ? `No research verdicts yet. ${PASS_TIMES}, and the swing book takes nothing without them.` : 'No research verdicts yet. The evening pass records them for the next open, and the swing book takes nothing without them.')); return; }
-    paperTable(el, [['For'], ['Candidate'], ['Verdict'], ['Rank', 'num fr-hide-narrow'], ['Conviction', 'num fr-hide-narrow'], ['Plan result', 'num']], d.data, (tr, r, open) => {
-      const tg = h('button', 'fr-toggle', r.name); tg.type = 'button'; tg.setAttribute('aria-expanded', String(open)); tg.append(h('small', null, `${human(r.setup)} · ${r.legs || human(r.direction)}`));
-      const name = h('td'); name.append(tg);
-      const v = VERDICT[r.verdict] || [human(r.verdict), 'is-fg'];
-      const vTd = h('td'); vTd.append(chip(v[0], v[1]));
-      const live = r.plan_bps == null && r.plan_so_far_bps != null;
-      tr.append(twoLine('fr-num', day(r.session, '%a %b %-d'), PASS_NAME[r.pass] || null), name, vTd, h('td', 'num fr-hide-narrow', r.rank ? `${r.rank} of ${r.ranked}` : '—'), h('td', 'num fr-hide-narrow', r.conviction == null ? '—' : `${r.conviction} of 5`),
-        twoLine(`num fr-amt ${tone(r.plan_bps ?? r.plan_so_far_bps)}`, fmtBp(r.plan_bps ?? r.plan_so_far_bps), live ? 'so far' : r.paper_bps != null ? `paper ${fmtBp(r.paper_bps)}` : null));
-    }, (r, n) => {
-      const dt = verdictDetail(r, n);
-      const trade = (okData('mkt_paper') || []).find((x) => x.proposal_id === r.id && x.pnl != null);
-      if (trade) {
-        const go = h('div', 'fr-wide'); const b = h('button', 'fr-link', isLive(trade) ? 'See this trade on Portfolio' : 'See how this trade closed on Portfolio'); b.type = 'button';
-        b.addEventListener('click', () => pfShowTrade(trade)); go.append(b); dt.querySelector('.fr-open').append(go);
-      }
-      return dt;
+    const allGroups = groupPasses(d.data);
+    syncVerdictControls(allGroups);
+    const q = paperUi.query.trim().toLowerCase();
+    const filteredGroups = allGroups.map((g) => {
+      if (paperUi.passKey !== 'all' && g.key !== paperUi.passKey) return null;
+      const rows = g.rows.filter((r) => {
+        if (paperUi.verdict === 'take' && r.verdict !== 'take') return false;
+        if (paperUi.verdict === 'pass' && r.verdict === 'take') return false;
+        if (q && !`${r.name} ${r.setup || ''} ${r.legs || ''} ${r.reason || ''}`.toLowerCase().includes(q)) return false;
+        return true;
+      });
+      return rows.length ? { ...g, rows, total: g.rows.length, takes: g.rows.filter((r) => r.verdict === 'take').length } : null;
+    }).filter(Boolean);
+    const totalShownRows = filteredGroups.reduce((t, g) => t + g.rows.length, 0);
+    if (!totalShownRows) { el.replaceChildren(h('p', 'fr-empty', 'No verdicts match this filter.')); return; }
+    const isFiltered = paperUi.verdict !== 'all' || paperUi.passKey !== 'all' || Boolean(q);
+    const limitGroups = (!paperUi.showAll && !isFiltered) ? 3 : filteredGroups.length;
+    const shownGroups = filteredGroups.slice(0, limitGroups);
+    const hiddenGroups = filteredGroups.length - shownGroups.length;
+    const hiddenRows = filteredGroups.slice(limitGroups).reduce((t, g) => t + g.rows.length, 0);
+    const cols = [['Rank', 'num'], ['Candidate'], ['Verdict'], ['Conviction', 'num fr-hide-narrow'], ['Plan result', 'num']];
+    const table = h('table', 'fr-table'); const hr = h('tr');
+    cols.forEach(([t, c]) => { const th = h('th', c || null, t); th.scope = 'col'; hr.append(th); });
+    const thead = h('thead'); thead.append(hr); const tbody = h('tbody');
+    shownGroups.forEach((g) => {
+      const gh = h('tr', 'fr-passrow'); const gtd = h('td'); gtd.colSpan = cols.length;
+      gtd.append(g.label, h('span', 'fr-sub', `${g.takes} taken of ${g.total} judged${g.rec ? ` · recorded ${whenEt(g.rec)}` : ''}`));
+      gh.append(gtd); tbody.append(gh);
+      g.rows.forEach((r) => {
+        const open = paperUi.open.has(r.id);
+        const tr = h('tr', `is-row${open ? ' is-open' : ''}`);
+        tr.dataset.trade = r.id;
+        const tg = h('button', 'fr-toggle', r.name); tg.type = 'button'; tg.setAttribute('aria-expanded', String(open)); tg.append(h('small', null, `${human(r.setup)} · ${r.legs || human(r.direction)}`));
+        const name = h('td'); name.append(tg);
+        const v = VERDICT[r.verdict] || [human(r.verdict), 'is-fg'];
+        const vTd = h('td'); vTd.append(chip(v[0], v[1]));
+        const live = r.plan_bps == null && r.plan_so_far_bps != null;
+        tr.append(
+          h('td', 'num fr-muted', r.rank ? `${r.rank}/${r.ranked}` : '—'),
+          name, vTd,
+          h('td', 'num fr-hide-narrow', r.conviction == null ? '—' : `${r.conviction}/5`),
+          twoLine(`num fr-amt ${tone(r.plan_bps ?? r.plan_so_far_bps)}`, fmtBp(r.plan_bps ?? r.plan_so_far_bps), live ? 'so far' : r.paper_bps != null ? `paper ${fmtBp(r.paper_bps)}` : null)
+        );
+        tr.addEventListener('click', () => { if (open) paperUi.open.delete(r.id); else paperUi.open.add(r.id); drawPaperTables(); });
+        tbody.append(tr);
+        if (open) {
+          const dt = verdictDetail(r, cols.length);
+          const trade = (okData('mkt_paper') || []).find((x) => x.proposal_id === r.id && x.pnl != null);
+          if (trade) {
+            const go = h('div', 'fr-wide'); const b = h('button', 'fr-link', isLive(trade) ? 'See this trade on Portfolio' : 'See how this trade closed on Portfolio'); b.type = 'button';
+            b.addEventListener('click', () => pfShowTrade(trade)); go.append(b); dt.querySelector('.fr-open').append(go);
+          }
+          tbody.append(dt);
+        }
+      });
     });
+    table.append(thead, tbody);
+    const out = [table];
+    if (hiddenGroups > 0 || (paperUi.showAll && !isFiltered && filteredGroups.length > 3)) {
+      const bar = h('div', 'fr-morebar');
+      const btn = h('button', 'fr-link', hiddenGroups > 0 ? `Show ${hiddenGroups} older pass${hiddenGroups === 1 ? '' : 'es'} (${hiddenRows} more verdicts)` : 'Show latest 3 passes');
+      btn.type = 'button';
+      btn.addEventListener('click', () => { paperUi.showAll = !paperUi.showAll; drawVerdicts(el); });
+      bar.append(btn, h('span', 'fr-sub', `Showing ${shownGroups.length} of ${filteredGroups.length} passes`));
+      out.push(bar);
+    }
+    el.replaceChildren(...out);
   };
+  document.querySelectorAll('[data-pr-verdict]').forEach((b) => b.addEventListener('click', () => { paperUi.verdict = b.dataset.prVerdict; drawPaperTables(); }));
+  document.querySelector('[data-pr-pass]')?.addEventListener('change', (ev) => { paperUi.passKey = ev.target.value; drawPaperTables(); });
+  document.querySelector('[data-pr-search]')?.addEventListener('input', (ev) => { paperUi.query = ev.target.value; drawPaperTables(); });
   dash.draw('paper-verdict-sum', (el) => {
     const rows = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null && r.plan_mature !== false);
     const avg = (v) => { const rs = rows.filter((r) => (r.verdict === 'take') === v); return rs.length ? `${fmtBp(d3.mean(rs, (r) => r.plan_bps))} over ${rs.length}` : 'none settled'; };
@@ -1726,7 +1924,7 @@
     card.append(top, more);
     return card;
   };
-  dash.draw('today-book', (el) => {
+  const drawTodayBook = (el) => {
     const d = ready(el, 'mkt_paper', true);
     if (!d) return;
     const now = nyNow();
@@ -1756,36 +1954,58 @@
       head.append(h('b', null, `Next open · ${day(session, '%A, %B %-d')}`), h('span', 'fr-sub', `${takes.length} taken of ${judged.length} judged`));
       out.push(head, ...(takes.length ? takes.map(takeCard) : [h('p', 'fr-empty', 'The research pass judged the shortlist and took none of it.')]));
     }
-    const rowsOf = (title, sub, rows, kicker) => {
+    const rowsOf = (title, sub, rows, kicker, { compact = false, collapseMid = false } = {}) => {
       const list = h('div', 'fr-sublist');
       const hd = h('div', 'fr-subhead');
       hd.append(h('b', null, title), h('span', 'fr-sub', sub));
       list.append(hd);
       const mx = Math.max(1, ...rows.filter((r) => r.bps != null).map((r) => Math.abs(r.bps)));
-      rows.forEach((r) => {
+      const makeRow = (r) => {
         const row = h('button', 'fr-result');
         row.type = 'button';
-        row.title = 'Open on Portfolio';
+        const kText = kicker(r);
+        row.title = compact && kText ? `${pairTitle(r)} — ${kText}` : 'Open on Portfolio';
         const who = h('div');
-        who.append(h('span', 'fr-legs', pairTitle(r)), h('span', 'fr-kicker', ` ${kicker(r)}`));
-        if (r.conviction) { const cv = pips(r.conviction); cv.style.marginLeft = '.5rem'; cv.style.verticalAlign = 'middle'; who.append(cv); }
+        const top = h('div', 'fr-result-head');
+        top.append(h('span', 'fr-legs', pairTitle(r)));
+        if (r.conviction) top.append(pips(r.conviction));
+        who.append(top);
+        if (kText) who.append(h('div', 'fr-result-sub', kText));
         row.append(who, r.bps == null ? h('span') : zbar(r.bps, mx), h('span', `fr-amt ${tone(r.bps)}`, fmtBp(r.bps)));
         row.addEventListener('click', () => pfShowTrade(r));
-        list.append(row);
-      });
+        return row;
+      };
+      if (collapseMid && !ui.todayOpenAll && rows.length > 8) {
+        rows.slice(0, 4).forEach((r) => list.append(makeRow(r)));
+        const mid = rows.length - 8;
+        const btn = h('button', 'fr-mid-toggle', `Show ${mid} middle open trades (all ${rows.length})`);
+        btn.type = 'button';
+        btn.addEventListener('click', () => { ui.todayOpenAll = true; drawTodayBook(el); });
+        list.append(btn);
+        rows.slice(-4).forEach((r) => list.append(makeRow(r)));
+      } else {
+        rows.forEach((r) => list.append(makeRow(r)));
+        if (collapseMid && ui.todayOpenAll && rows.length > 8) {
+          const btn = h('button', 'fr-mid-toggle', 'Show top 4 & bottom 4 only');
+          btn.type = 'button';
+          btn.addEventListener('click', () => { ui.todayOpenAll = false; drawTodayBook(el); });
+          list.append(btn);
+        }
+      }
       return list;
     };
     const live = d.data.filter(isLive).sort((a, b) => (a.bps == null) - (b.bps == null) || b.bps - a.bps);
     if (live.length) {
-      out.push(rowsOf('Open trades', 'After commissions, at the latest prices', live, (r) => [
+      out.push(rowsOf(`Open trades (${live.length})`, 'After commissions, latest prices', live, (r) => [
         r.session_number ? `day ${r.session_number} of ${r.horizon_days}` : 'not started',
-        isBroken(r) ? 'one side missing' : r.stop_room_pct != null && r.stop_room_pct <= 0 ? 'past its stop' : r.stop_pct ? `stop −${d3.format('.1f')(Math.abs(r.stop_pct))}%` : null].filter(Boolean).join(' · ')));
+        isBroken(r) ? 'one side missing' : r.stop_room_pct != null && r.stop_room_pct <= 0 ? 'past its stop' : r.stop_pct ? `stop −${d3.format('.1f')(Math.abs(r.stop_pct))}%` : null].filter(Boolean).join(' · '), { collapseMid: true }));
     }
     const lastExit = d.data.filter((r) => !isLive(r) && r.exit_date).reduce((m, r) => (r.exit_date > m ? r.exit_date : m), '');
     const closed = d.data.filter((r) => !isLive(r) && r.exit_date === lastExit && lastExit).sort((a, b) => (b.bps ?? 0) - (a.bps ?? 0));
-    if (closed.length) out.push(rowsOf(`Closed · ${day(lastExit, '%A, %B %-d')}`, 'After commissions', closed, (r) => r.reason || ''));
+    if (closed.length) out.push(rowsOf(`Closed · ${day(lastExit, '%a %b %-d')}`, 'After commissions', closed, (r) => r.reason || '', { compact: true }));
     el.replaceChildren(...out);
-  });
+  };
+  dash.draw('today-book', drawTodayBook);
 
   
 dash.draw('movers', (el) => {
@@ -1808,15 +2028,66 @@ dash.draw('movers', (el) => {
     el.replaceChildren(...topRows.map(line), ...(topRows.length && botRows.length ? [h('div', 'fr-gap')] : []), ...botRows.map(line));
   });
 
-  dash.draw('soon', (el) => {
+  let soonAll = false;
+  const drawSoon = (el) => {
     const d = ready(el, 'mkt_earnings', true);
     if (!d) return;
     const rows = d.data.filter((r) => r.kind === 'upcoming' && (r.tonight || (r.sessions_away != null && r.sessions_away <= 3)));
     if (!rows.length) { el.replaceChildren(h('p', 'fr-empty', 'No reports in the next three sessions.')); return; }
-    el.replaceChildren(earningsTable(rows, true));
-  });
+    const shown = soonAll ? rows : rows.slice(0, 10);
+    const out = [earningsTable(shown, true)];
+    if (rows.length > 10) {
+      const more = h('button', 'fr-link', soonAll ? 'Show next 10' : `Show all ${rows.length} in next 3 sessions`);
+      more.type = 'button';
+      more.style.marginTop = 'var(--cds-pad-sm)';
+      more.addEventListener('click', () => { soonAll = !soonAll; drawSoon(el); });
+      out.push(more);
+    }
+    el.replaceChildren(...out);
+  };
+  dash.draw('soon', drawSoon);
 
   // ---- Market -------------------------------------------------------------------------------------
+  const MARKET_INDICES = [
+    { key: 'spy', symbol: 'SPY', name: 'S&P 500' },
+    { key: 'qqq', symbol: 'QQQ', name: 'Nasdaq-100' },
+    { key: 'iwm', symbol: 'IWM', name: 'Russell 2000' },
+  ];
+  dash.draw('market-indices', (el) => {
+    const d = ready(el, 'mkt_regime', true);
+    if (!d) return;
+    const rows = d.data;
+    const pxFmt = (v) => `$${d3.format(',.2f')(v)}`;
+    const cells = MARKET_INDICES.map(({ key, symbol, name }) => {
+      const pts = rows.filter((r) => r[key] != null).map((r) => ({ t: new Date(`${r.date}T00:00:00Z`), date: r.date, v: r[key] }));
+      const cell = h('div', 'fr-stat');
+      const top = h('div', 'fr-stattop');
+      const title = h('p', 'fr-label');
+      title.append(name);
+      const symEl = isLocal ? symBtn(symbol) : h('span', null, symbol);
+      symEl.classList.add('fr-idx-sym');
+      title.append(symEl);
+      const now = pts[pts.length - 1];
+      const prev = pts[pts.length - 2];
+      const ago5 = pts[pts.length - 6];
+      const ago20 = pts[pts.length - 21];
+      const ret = (a, b) => (a && b && b.v) ? (a.v / b.v - 1) * 100 : null;
+      const r1 = ret(now, prev);
+      const r5 = ret(now, ago5);
+      const r20 = ret(now, ago20);
+      top.append(title, h('span', 'fr-idx-px', now ? pxFmt(now.v) : '—'));
+      const val = h('div', `fr-val ${tone(r1)}`, r1 == null ? '—' : pc(r1, '.2f'));
+      const subBits = [];
+      if (r5 != null) subBits.push(`5-day ${pc(r5)}`);
+      if (r20 != null) subBits.push(`20-day ${pc(r20)}`);
+      const sub = h('p', 'fr-sub', subBits.length ? subBits.join(' · ') : 'Last 60 sessions');
+      const sp = h('div', 'fr-spark is-tall');
+      cell.append(top, val, sub, sp);
+      requestAnimationFrame(() => spark(sp, pts, pxFmt, dash.colors[0]));
+      return cell;
+    });
+    el.replaceChildren(...cells);
+  });
   const lastRegime = () => { const r = okData('mkt_regime'); return r && r.length ? r[r.length - 1] : null; };
   dash.draw('regime-val', (el) => {
     const d = ready(el, 'mkt_regime');
@@ -1946,7 +2217,15 @@ dash.draw('movers', (el) => {
     const members = okData('mkt_basket_member') || [];
     if (ui.basketView === 'heat') { drawBasketHeat(el, d.data, members); return; }
     const { key, dir } = ui.basketSort;
-    const rows = [...d.data].sort((a, b) => {
+    const bq = (ui.basketQuery || '').trim().toLowerCase();
+    const matchBasket = (b) => {
+      if (!bq) return true;
+      if (`${b.name} ${b.hedge}`.toLowerCase().includes(bq)) return true;
+      return members.some((m) => m.basket === b.id && `${m.symbol} ${m.why || ''}`.toLowerCase().includes(bq));
+    };
+    const filtered = d.data.filter(matchBasket);
+    if (!filtered.length) { el.replaceChildren(h('p', 'fr-empty', `No baskets match “${ui.basketQuery}”.`)); return; }
+    const rows = [...filtered].sort((a, b) => {
       const x = a[key]; const y = b[key];
       if (x == null && y == null) return 0;
       if (x == null) return 1;
@@ -2038,17 +2317,38 @@ dash.draw('movers', (el) => {
     });
     const tree = h('div', 'fr-tree');
     tree.style.height = `${H}px`;
-    const blocks = rows.map((b) => {
+    const ttip = h('div', 'fr-tip fr-treetip');
+    ttip.hidden = true;
+    const showTip = (ev, nodes) => {
+      ttip.replaceChildren(...nodes);
+      ttip.hidden = false;
+      const rect = tree.getBoundingClientRect();
+      const px = ev.clientX - rect.left; const py = ev.clientY - rect.top;
+      const left = Math.max(4, Math.min(tree.clientWidth - ttip.offsetWidth - 4, px + 14));
+      const top = py - ttip.offsetHeight - 10 >= 4 ? py - ttip.offsetHeight - 10 : Math.min(tree.clientHeight - ttip.offsetHeight - 4, py + 14);
+      ttip.style.left = `${left}px`; ttip.style.top = `${top}px`;
+    };
+    const hideTip = () => { ttip.hidden = true; };
+    const bq = (ui.basketQuery || '').trim().toLowerCase();
+    const keepRows = !bq ? rows : rows.filter((b) => `${b.name} ${b.hedge}`.toLowerCase().includes(bq) || members.some((m) => m.basket === b.id && `${m.symbol} ${m.why || ''}`.toLowerCase().includes(bq)));
+    const blocks = keepRows.map((b) => {
       const ms = members.filter((m) => m.basket === b.id);
       return { b, ms, v: ms.reduce((t, m) => t + size(m), 0) };
     }).filter((z) => z.v > 0);
+    if (!blocks.length) { el.replaceChildren(h('p', 'fr-empty', `No baskets match “${ui.basketQuery}”.`)); return; }
     const GAP = 3; const HEAD = 18;
     squarify(blocks, 0, 0, W, H).forEach(({ b, ms, x, y, w, h: bh }) => {
       const box = h('div', 'fr-treebk');
       Object.assign(box.style, { left: `${x + GAP / 2}px`, top: `${y + GAP / 2}px`, width: `${w - GAP}px`, height: `${bh - GAP}px` });
       const head = h('button', 'fr-treehead');
       head.type = 'button';
-      head.title = `${b.name}: ${b.n_members} names, ${ui.basketPeriod === 'today' ? pts(P.basket(b)) : pc(P.basket(b))} vs ${b.hedge}. Click for its story and members.`;
+      head.addEventListener('pointermove', (ev) => {
+        const bv = P.basket(b);
+        const top = h('div', 'fr-tt-head');
+        top.append(h('span', null, b.name), h('span', tone(bv), ui.basketPeriod === 'today' ? pts(bv) : pc(bv)));
+        showTip(ev, [top, h('div', 'fr-tt-meta', `${b.n_members} names · spread vs ${b.hedge} (${P.label})`), h('div', 'fr-tt-meta', 'Click to open story & members')]);
+      });
+      head.addEventListener('pointerleave', hideTip);
       const bv = P.basket(b);
       head.append(h('b', null, b.name));
       if (w >= 120) head.append(h('span', tone(bv), ui.basketPeriod === 'today' ? (w < 170 ? (bv == null ? '—' : signed(bv, '.1f')) : pts(bv)) : pc(bv)));
@@ -2061,7 +2361,15 @@ dash.draw('movers', (el) => {
         if (isLocal) { c.type = 'button'; c.dataset.chart = m.symbol; }
         Object.assign(c.style, { left: `${2 + mx + 1}px`, top: `${HEAD + 2 + my + 1}px`, width: `${Math.max(0, mw - 2)}px`, height: `${Math.max(0, mh - 2)}px` });
         c.style.setProperty('--hc', heatColour(v, P.cap));
-        c.title = `${m.symbol} ${pc(v)}${m.why ? ` — ${m.why}` : ''}`;
+        c.addEventListener('pointermove', (ev) => {
+          const top = h('div', 'fr-tt-head');
+          top.append(h('span', null, `${m.symbol} · ${b.name}`), h('span', tone(v), pc(v)));
+          const meta = `${P.label} move · avg vol ${m.avg_usd_volume_90d ? fmtUsd(m.avg_usd_volume_90d) : '—'} · basket ${ui.basketPeriod === 'today' ? pts(P.basket(b)) : pc(P.basket(b))} vs ${b.hedge}`;
+          const nodes = [top, h('div', 'fr-tt-meta', meta)];
+          if (m.why) nodes.push(h('div', 'fr-tt-why', m.why));
+          showTip(ev, nodes);
+        });
+        c.addEventListener('pointerleave', hideTip);
         const fs = Math.max(9, Math.min(24, mw / (m.symbol.length * 0.68 + 0.8), mh / 2.4));
         if (mw >= 22 && mh >= 12) {
           const sym = h('b', null, m.symbol); sym.style.fontSize = `${fs}px`; c.append(sym);
@@ -2071,6 +2379,7 @@ dash.draw('movers', (el) => {
       });
       tree.append(box);
     });
+    tree.append(ttip);
     el.replaceChildren(legend, tree);
   };
   let heatResize = 0;
@@ -2095,6 +2404,11 @@ dash.draw('movers', (el) => {
     if (el) drawBaskets(el);
   });
   try { const saved = JSON.parse(localStorage.getItem('fr-bk') || 'null'); if (saved) { ui.basketView = saved.view === 'heat' ? 'heat' : 'table'; ui.basketPeriod = HEAT[saved.period] ? saved.period : 'today'; } } catch (e) { /* storage off */ }
+  document.querySelector('[data-bk-search]')?.addEventListener('input', (ev) => {
+    ui.basketQuery = ev.target.value;
+    const el = document.querySelector('[data-draw="basket-table"]');
+    if (el) drawBaskets(el);
+  });
   syncBasketControls();
   dash.draw('basket-table', drawBaskets);
 

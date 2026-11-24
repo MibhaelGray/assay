@@ -78,10 +78,12 @@ def _regime(as_of: date) -> list[dict]:
     rows = []
     for d in idx:
         get = lambda s: index_close.at[d, s] if s in index_close and d in index_close.index else None  # noqa: E731
+        px = lambda s: _num(close.at[d, s], 2) if s in close and d in close.index else None  # noqa: E731
         tnx = get("TNX")
         rows.append({"section": "regime", "date": d.strftime("%Y-%m-%d"), "pct_above_50": _num(breadth.get(d)),
                      "sector_corr_20d": _num(corr[d]), "spy_rv20": _num(rv.get(d)), "vix": _num(get("VIX"), 2),
-                     "vix3m": _num(get("VIX3M"), 2), "ten_year": _num(tnx / 10 if tnx is not None else None, 3)})
+                     "vix3m": _num(get("VIX3M"), 2), "ten_year": _num(tnx / 10 if tnx is not None else None, 3),
+                     "spy": px("SPY"), "qqq": px("QQQ"), "iwm": px("IWM")})
     return rows
 
 

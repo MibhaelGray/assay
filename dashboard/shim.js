@@ -51,6 +51,7 @@
     data,
     onData(cb) { listeners.push(cb); },
     setLink(id) { history.replaceState(null, '', `#${id}`); },
+    redraw() { render(); },
     colors: ['#3b6fb6', '#d07a2a', '#3f9a6b', '#b8475c', '#7a5bb5', '#2b98a6', '#9c8a3a', '#6b7280'],
   };
 
