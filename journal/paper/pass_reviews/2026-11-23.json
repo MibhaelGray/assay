@@ -114,6 +114,234 @@
      "reason": "No upgrades, buyback, insider purchases or financing change were found since entry; the check could not find coverage of the Murphy deal at all, so this rests on the take's own sources."
     }
    ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-23T09:53:47.182266-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; it closes on its time limit today. FY27 EPS was guided above estimates and the margin target reaffirmed on 11-16; no new charge or downgrade found."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; it closes on its time limit today. No guidance cut found at Sherwin-Williams, PPG or Ecolab, and crude is down 2%, not up 8%."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "CME FedWatch has a 12-9 hike at about 96% (CNBC, 4:15 AM CT today), far above the 75% line; no new AGNC book value or buyback found."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nike said fiscal 2028 EPS declines modestly and named no buyback; no upgrades found since the investor day."
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "Nvidia's board reinstated Huang as CEO (8-K dated 11-22, release 11-23) and the stock is +31% against SMH +14% at 8:50 AM CT: the discount the trade was for has narrowed in one morning, with one session left, the board's probe still open and the 10-Q due 12-4."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year guide on 11-19 and Target said November is in line and accelerating; no downgrades found."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "None of its wrong-if events has happened (FedWatch about 96%, no Fed pause talk, 10-year 4.96%, above 4.9%), but gold is +4.4% and GDX +6% this morning after Bessent warned the Fed against over-tightening and Bloomberg reported swaps no longer fully price the hike; the stop and Tuesday's time limit stand."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; it closes on its time limit today. Ross reported comps of about +8% on 11-19 and kept its holiday guide; no TJX slowdown or second downgrade found."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No Disney news since 11-18: no downgrades, no change to the guide, dividend or buyback, no weak Avengers tracking found."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last crack-spread reading found was $42.49 (11-17), under $50; weekend ship attacks and a claimed strike on a Saudi refinery have not shut product exports, and refiners are down against XLE this morning."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM itself said on 11-17 that Q4 prices could be substantially lower than Q3; no upgrades found. Chinese lithium futures could not be checked."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No buyback step-up, special dividend, upgrade or launch news found for NetEase since the print."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nothing newer than 11-19 found: no Quebecor withdrawal, no TELUS rejection ending the review, no BCE denial, no regulator statement. It is -2.9% this morning with no news found, which is not a reason to exit."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No report of an approach, no upgrades or targets above $110, and no guide raise found for Clorox since 11-19."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrades, no Spotify renewal breakdown and no change to the fiscal 2027 outlook found."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SMH is up 14% this morning, the day its rotation test names; ACN is +1.2%, CTSH +0.1% and IBM +3.2%, so the test is not failing so far and is decided at the close. No AI-lab launch, downgrade or guide trim found."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety action, launch delay, guidance change or downgrade found for Takeda; the 12-11 Capital Markets Day stands."
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "MasTec is +12.7% this morning against PAVE +3.8% (Quanta +5.8%), which looks like the AI-buildout bounce and puts the trade through its stop; no upgrade, buyback or financing change could be verified, so there is no named reason to exit and the stop check will close it."
+    },
+    {
+     "trade_id": "2026-11-23-S01",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "The deal was announced this morning (CrowdStrike 8-K, 11-23): all stock, 1.135 CrowdStrike shares per Zscaler share, about $240 at CrowdStrike's 8:50 AM CT price of 211.63 against Zscaler at 232.88. The event the trade waited for has happened; what is left is a 3% spread on a deal closing next year and exposure to CrowdStrike's own fall."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-23T13:07:40.314046-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; no further charge, guide cut or downgrade found since the 11-17 call. AECOM +1.7% against RSP +2.6% today; it closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-17-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; crude is down 2.8%, no jump of 8% since 11-17 and no guidance cut found at Sherwin-Williams, PPG or Ecolab. Flat against XLB today."
+    },
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No book value update or buyback found; a 12-9 hike is priced at about 92-96%, well above 75%. AGNC +1.9% against TLT +0.2% today is the tape."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Post-investor-day notes cut estimates (Needham FY28 EPS to $1.22, Cantor target to $33); Nike guides FY28 EPS modestly down; no buyback."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Walmart raised its full-year guide on 11-19 and called the holiday quarter off to a good start; brokers raised Target targets, no downgrade found."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event: a 12-9 hike is still priced above 90%, the 10-year is 4.94% (the line is 4.9%), and Governor Cook said waiting risks falling behind. But GDX is +6.7% and gold +3.9% today as odds of a half-point hike ease; the 10-year is close to the line."
+    },
+    {
+     "trade_id": "2026-11-18-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; Ross reported comps +8% and raised its full-year EPS, no TJX downgrade found (Barclays trimmed its target, stayed Overweight). TJX is flat against XRT +1.4% today; it closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "One downgrade today (Phillip Securities, Buy to Accumulate, target $130), short of the two the wrong-if names; guide and buyback unchanged, and fan trackers report strong Avengers presales. Disney +1.4% against XLC +3.3% today."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 3-2-1 crack was about $42.5 at last reading (RBN, 11-17), under $50; no broker upgrades found; refiners are slightly behind XLE today. The EIA report on 11-25 is the next test."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM said Q4 realized prices could be substantially lower than Q3; no upgrades found, and SQM, Albemarle and the lithium fund made 12-month lows on 11-20. SQM +3.2% against SPY +4.7% today."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The Hong Kong line fell about 19% on 11-20 against the ADR's 11%, so that test passed; no buyback step-up, upgrade or launch change found. NetEase +2.8% against FXI +1.3% today."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event found: Quebecor's proposal stands, TELUS's special committee is reviewing it, and BCE is reported to have held talks. But TELUS is -4.5% today with no news found, far more than US carriers (-1%), and Quebecor publicly attacked a BCE-TELUS combination on 11-19."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No approach or talks confirmed by Clorox or a major outlet; targets found are $86-99, none above $110; no guide raise."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Brokers raised targets after the print (Guggenheim $38, Bernstein $40, JPMorgan $43); nothing on Spotify talks or the outlook."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "The rotation test is live: SMH is +14.9% and Accenture is -0.1%, but Cognizant (+0.4%) and IBM (+4.3%) are up, so at midday it has not happened; it is decided at the close. No lab launch, downgrade or guide change found. An outright long that is flat on a +4.7% day is the rotation into IT services pausing."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety action, launch delay, guidance change or downgrade found; the 12-11 Capital Markets Day is still listed."
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No denial, sale, financing or rescue investor reported; Canadian Solar is -7.9% at 5.54 while TAN is +5.1%."
+    }
+   ]
   }
  ]
 }

@@ -1,0 +1,2054 @@
+{
+ "as_of": "2026-11-23",
+ "built_at": "2026-11-23T09:45:52-05:00",
+ "bars_settled": false,
+ "next_session": "2026-11-24",
+ "screened": 1240,
+ "hits_by_setup": {
+  "earnings_gap_held": 4,
+  "earnings_gap_faded": 3,
+  "relative_weakness": 3,
+  "live_move": 9,
+  "turn": 15,
+  "basket_breakdown": 1,
+  "breakdown": 2,
+  "basket_big_move": 7,
+  "factor_turn": 9,
+  "stretched": 41,
+  "basket_stretched": 8
+ },
+ "spy_ret_1d": 0.04117,
+ "candidates": [
+  {
+   "name": "UGI",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "strength": 1.87,
+   "why": "reported 2026-11-18 after close, reacted 2 sessions ago: gap -3.5% (-1.9 ATR), day -7.8%, -6.5% against XLU, volume 4.4x, EPS surprise +81%; trading in the bottom third and still below the middle of that day's range (35.89)",
+   "adjust": {},
+   "hedge": "XLU",
+   "hedge_fit": {
+    "corr_60d": 0.44,
+    "beta_60d": 0.66,
+    "chosen": "its basket's hedge",
+    "weak": false
+   },
+   "baskets": [
+    "Gas utilities"
+   ],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -1.9 ATR from the 20-day, RSI 38; volume 0.1x; daily ranges of the 10 sessions before today 1.40x the 50 before; resistance 36.06 (200-day, +0.7%); support 34.47 (20-day low, -3.7%); ATR 0.92 (2.6%); hedge XLU: correlation +0.44, beta 0.66",
+   "numbers": {
+    "close": 35.81,
+    "ret_1d": 0.00845,
+    "ret_5d": -0.05415,
+    "ret_20d": -0.08438,
+    "atr": 0.92307,
+    "atr_pct": 0.02578,
+    "rsi": 37.81376,
+    "dist20_atr": -1.92239,
+    "vol_ratio": 0.13559,
+    "sma50": 37.4652,
+    "sma200": 36.06181,
+    "hi52": 40.08192,
+    "lo52": 30.9999,
+    "usd_volume": 50212820.25089,
+    "tightness": 1.39587,
+    "trend": "mixed",
+    "sma50_change_20d": -0.00029,
+    "price": 35.81,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.00845,
+    "live_move_atr": 0.31847,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-03",
+    "when": "after_close",
+    "sessions_away": 49
+   },
+   "also": [
+    "earnings_gap_faded (short)"
+   ],
+   "score": 3.311
+  },
+  {
+   "name": "VOD",
+   "kind": "stock",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "strength": 3.36,
+   "why": "-3.7% (-1.6 ATR) on a day SPY rose +4.1%",
+   "adjust": {},
+   "hedge": "SPY",
+   "hedge_fit": {
+    "corr_60d": 0.09,
+    "beta_60d": 0.13,
+    "chosen": "no fund moves with it (best KIE +0.35); SPY by default",
+    "weak": true
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -4.7 ATR from the 20-day, RSI 24; volume 2.6x; daily ranges of the 10 sessions before today 0.97x the 50 before; resistance 14.01 (20-day low, +3.8%); support 11.16 (52-week low, -17.3%); ATR 0.34 (2.5%); hedge SPY: correlation +0.09, beta 0.13; it barely moves with the hedge, so this is close to an outright position",
+   "numbers": {
+    "close": 13.5,
+    "ret_1d": -0.03709,
+    "ret_5d": -0.10212,
+    "ret_20d": -0.12442,
+    "atr": 0.34165,
+    "atr_pct": 0.02531,
+    "rsi": 23.59425,
+    "dist20_atr": -4.67262,
+    "vol_ratio": 2.63458,
+    "sma50": 15.67654,
+    "sma200": 15.07353,
+    "hi52": 17.39235,
+    "lo52": 11.16266,
+    "usd_volume": 58358893.70437,
+    "tightness": 0.97054,
+    "trend": "mixed",
+    "sma50_change_20d": -0.02604,
+    "price": 13.5,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": -0.03709,
+    "live_move_atr": -1.59316,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": null,
+   "also": [
+    "breakdown (short)",
+    "stretched (long)"
+   ],
+   "score": 3.06
+  },
+  {
+   "name": "IBN",
+   "kind": "stock",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "strength": 3.24,
+   "why": "-2.4% (-1.2 ATR) on a day SPY rose +4.1%",
+   "adjust": {},
+   "hedge": "SPY",
+   "hedge_fit": {
+    "corr_60d": -0.16,
+    "beta_60d": -0.2,
+    "chosen": "no fund moves with it (best ITB +0.39); SPY by default",
+    "weak": true
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +2.5 ATR from the 20-day, RSI 69; volume 2.1x; daily ranges of the 10 sessions before today 1.01x the 50 before; resistance 36.19 (20-day high, +4.6%); support 30.15 (50-day, -12.9%); ATR 0.73 (2.1%); hedge SPY: correlation -0.16, beta -0.20; it barely moves with the hedge, so this is close to an outright position",
+   "numbers": {
+    "close": 34.6025,
+    "ret_1d": -0.02446,
+    "ret_5d": 0.0053,
+    "ret_20d": 0.18178,
+    "atr": 0.73294,
+    "atr_pct": 0.02118,
+    "rsi": 68.61245,
+    "dist20_atr": 2.45022,
+    "vol_ratio": 2.0674,
+    "sma50": 30.14845,
+    "sma200": 28.66456,
+    "hi52": 36.19,
+    "lo52": 24.87177,
+    "usd_volume": 236973075.60339,
+    "tightness": 1.0115,
+    "trend": "up",
+    "sma50_change_20d": 0.04157,
+    "price": 34.6025,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": -0.02446,
+    "live_move_atr": -1.20729,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-01-14",
+    "when": "after_close",
+    "sessions_away": 36
+   },
+   "also": [
+    "turn (short)"
+   ],
+   "score": 3.04
+  },
+  {
+   "name": "BJ",
+   "kind": "stock",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "strength": 3.13,
+   "why": "-4.3% (-1.6 ATR) on a day SPY rose +4.1%",
+   "adjust": {},
+   "hedge": "KIE",
+   "hedge_fit": {
+    "corr_60d": 0.54,
+    "beta_60d": 0.96,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -2.8 ATR from the 20-day, RSI 35; volume 1.1x; daily ranges of the 10 sessions before today 0.87x the 50 before; resistance 101.98 (50-day, +1.7%); support 95.65 (200-day, -4.6%); ATR 2.98 (3.0%); hedge KIE: correlation +0.54, beta 0.96",
+   "numbers": {
+    "close": 100.295,
+    "ret_1d": -0.04317,
+    "ret_5d": -0.10355,
+    "ret_20d": -0.05702,
+    "atr": 2.98068,
+    "atr_pct": 0.02972,
+    "rsi": 34.62484,
+    "dist20_atr": -2.83937,
+    "vol_ratio": 1.10301,
+    "sma50": 101.9837,
+    "sma200": 95.65373,
+    "hi52": 113.35,
+    "lo52": 83.212,
+    "usd_volume": 193254464.13841,
+    "tightness": 0.8727,
+    "trend": "up",
+    "sma50_change_20d": 0.06812,
+    "price": 100.295,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": -0.04317,
+    "live_move_atr": -1.60419,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": null,
+   "also": [
+    "earnings_gap_faded (short)"
+   ],
+   "score": 3.022
+  },
+  {
+   "name": "EEM",
+   "kind": "etf",
+   "setup": "live_move",
+   "direction": "long",
+   "strength": 2.76,
+   "why": "+7.7% today (+2.8 ATR) at 8:50 AM CT on 3.7x volume, projected to a full day; SMH, SPY, QQQ gave the same signal and move with it",
+   "adjust": {},
+   "hedge": "SPY",
+   "hedge_fit": {
+    "corr_60d": 0.9,
+    "beta_60d": 1.46,
+    "chosen": "a fund is set against the market",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -1.1 ATR from the 20-day, RSI 42; volume 3.7x; daily ranges of the 10 sessions before today 1.58x the 50 before; resistance 63.57 (50-day, +9.6%); support 53.65 (20-day low, -7.5%); ATR 1.75 (3.0%); hedge SPY: correlation +0.90, beta 1.46",
+   "numbers": {
+    "close": 58.0,
+    "ret_1d": 0.07727,
+    "ret_5d": -0.01511,
+    "ret_20d": -0.06179,
+    "atr": 1.7543,
+    "atr_pct": 0.03025,
+    "rsi": 42.40849,
+    "dist20_atr": -1.14974,
+    "vol_ratio": 3.69465,
+    "sma50": 63.5722,
+    "sma200": 63.76609,
+    "hi52": 71.57,
+    "lo52": 51.37396,
+    "usd_volume": 1598965093.13774,
+    "tightness": 1.58066,
+    "trend": "down",
+    "sma50_change_20d": -0.04296,
+    "price": 58.0,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.07727,
+    "live_move_atr": 2.76196,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": null,
+   "also": [],
+   "score": 2.86,
+   "moved_with": [
+    "SMH",
+    "SPY",
+    "QQQ"
+   ]
+  },
+  {
+   "name": "MMS",
+   "kind": "stock",
+   "setup": "earnings_gap_faded",
+   "direction": "short",
+   "strength": 1.28,
+   "why": "reported 2026-11-19 before open, reacted 2 sessions ago: gap -2.7% (-0.8 ATR), day -5.0%, -4.1% against KIE, volume 1.5x, EPS surprise +14%; beat estimates and still fell against KIE (good news sold)",
+   "adjust": {},
+   "hedge": "KIE",
+   "hedge_fit": {
+    "corr_60d": 0.71,
+    "beta_60d": 1.39,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day below the 200-day and rising (trend mixed); -0.7 ATR from the 20-day, RSI 50; volume 0.1x; daily ranges of the 10 sessions before today 0.98x the 50 before; resistance 70.62 (20-day high, +11.9%); support 61.86 (200-day, -2.0%); ATR 2.10 (3.3%); hedge KIE: correlation +0.71, beta 1.39",
+   "numbers": {
+    "close": 63.1,
+    "ret_1d": 0.00494,
+    "ret_5d": -0.03517,
+    "ret_20d": -0.00122,
+    "atr": 2.09823,
+    "atr_pct": 0.03325,
+    "rsi": 49.89224,
+    "dist20_atr": -0.7012,
+    "vol_ratio": 0.14023,
+    "sma50": 59.99303,
+    "sma200": 61.85805,
+    "hi52": 97.92066,
+    "lo52": 50.78036,
+    "usd_volume": 37653812.37831,
+    "tightness": 0.97588,
+    "trend": "mixed",
+    "sma50_change_20d": 0.04996,
+    "price": 63.1,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.00494,
+    "live_move_atr": 0.14105,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-04",
+    "when": "before_open",
+    "sessions_away": 49
+   },
+   "also": [],
+   "score": 2.814
+  },
+  {
+   "name": "TSM",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "strength": 2.48,
+   "why": "+14.8% today (+2.5 ATR) at 8:50 AM CT on 5.1x volume, projected to a full day",
+   "adjust": {},
+   "hedge": "SMH",
+   "hedge_fit": {
+    "corr_60d": 0.95,
+    "beta_60d": 0.94,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [
+    "Processor chips"
+   ],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -1.0 ATR from the 20-day, RSI 44; volume 5.1x; daily ranges of the 10 sessions before today 1.77x the 50 before; resistance 402.35 (200-day, +9.9%); support 318.48 (20-day low, -13.0%); ATR 22.57 (6.2%); hedge SMH: correlation +0.95, beta 0.94",
+   "numbers": {
+    "close": 365.94501,
+    "ret_1d": 0.14821,
+    "ret_5d": -0.0201,
+    "ret_20d": -0.13767,
+    "atr": 22.56638,
+    "atr_pct": 0.06167,
+    "rsi": 43.66709,
+    "dist20_atr": -1.01548,
+    "vol_ratio": 5.10358,
+    "sma50": 421.08636,
+    "sma200": 402.3456,
+    "hi52": 487.47,
+    "lo52": 264.02566,
+    "usd_volume": 5871947424.29047,
+    "tightness": 1.77069,
+    "trend": "mixed",
+    "sma50_change_20d": -0.02888,
+    "price": 365.94501,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.14821,
+    "live_move_atr": 2.47863,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-01-14",
+    "when": "before_open",
+    "sessions_away": 35
+   },
+   "also": [],
+   "score": 2.813
+  },
+  {
+   "name": "UMC",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "strength": 2.37,
+   "why": "+19.3% today (+2.4 ATR) at 8:50 AM CT on 3.7x volume, projected to a full day",
+   "adjust": {},
+   "hedge": "SMH",
+   "hedge_fit": {
+    "corr_60d": 0.87,
+    "beta_60d": 1.21,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -1.0 ATR from the 20-day, RSI 40; volume 3.7x; daily ranges of the 10 sessions before today 1.35x the 50 before; resistance 17.26 (200-day, +20.2%); support 11.97 (20-day low, -16.7%); ATR 1.11 (7.7%); hedge SMH: correlation +0.87, beta 1.21",
+   "numbers": {
+    "close": 14.365,
+    "ret_1d": 0.19311,
+    "ret_5d": 0.00174,
+    "ret_20d": -0.25104,
+    "atr": 1.10856,
+    "atr_pct": 0.07717,
+    "rsi": 40.32851,
+    "dist20_atr": -0.95552,
+    "vol_ratio": 3.73568,
+    "sma50": 19.7997,
+    "sma200": 17.2623,
+    "hi52": 28.4593,
+    "lo52": 6.92811,
+    "usd_volume": 212082798.64607,
+    "tightness": 1.3499,
+    "trend": "mixed",
+    "sma50_change_20d": -0.08557,
+    "price": 14.365,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.19311,
+    "live_move_atr": 2.37248,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-01-27",
+    "when": "before_open",
+    "sessions_away": 43
+   },
+   "also": [],
+   "score": 2.795
+  },
+  {
+   "name": "TSLA",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "strength": 2.36,
+   "why": "+11.7% today (+2.4 ATR) at 8:50 AM CT on 4.1x volume, projected to a full day",
+   "adjust": {},
+   "hedge": "QQQ",
+   "hedge_fit": {
+    "corr_60d": 0.81,
+    "beta_60d": 1.45,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day below the 200-day and rising (trend mixed); +0.1 ATR from the 20-day, RSI 52; volume 4.1x; daily ranges of the 10 sessions before today 1.19x the 50 before; resistance 414.23 (20-day high, +7.2%); support 381.54 (200-day, -1.2%); ATR 19.03 (4.9%); hedge QQQ: correlation +0.81, beta 1.45",
+   "numbers": {
+    "close": 386.29501,
+    "ret_1d": 0.11704,
+    "ret_5d": 0.01726,
+    "ret_20d": -0.0136,
+    "atr": 19.02822,
+    "atr_pct": 0.04926,
+    "rsi": 52.32047,
+    "dist20_atr": 0.09264,
+    "vol_ratio": 4.05307,
+    "sma50": 376.1821,
+    "sma200": 381.53882,
+    "hi52": 498.82999,
+    "lo52": 297.38,
+    "usd_volume": 12898980216.18958,
+    "tightness": 1.18678,
+    "trend": "mixed",
+    "sma50_change_20d": 0.03133,
+    "price": 386.29501,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.11704,
+    "live_move_atr": 2.36138,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-01-27",
+    "when": "after_close",
+    "sessions_away": 44
+   },
+   "also": [],
+   "score": 2.794
+  },
+  {
+   "name": "VIST",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.99,
+   "why": "was stretched down (RSI 22, -4.0 ATR from the 20-day) and turned: +2.5%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "XLE",
+   "hedge_fit": {
+    "corr_60d": 0.69,
+    "beta_60d": 1.25,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.3 ATR from the 20-day, RSI 26; volume 1.0x; daily ranges of the 10 sessions before today 1.07x the 50 before; resistance 65.46 (50-day, +28.8%); support 48.75 (20-day low, -4.0%); ATR 2.64 (5.2%); hedge XLE: correlation +0.69, beta 1.25",
+   "numbers": {
+    "close": 50.805,
+    "ret_1d": 0.02471,
+    "ret_5d": -0.05002,
+    "ret_20d": -0.30385,
+    "atr": 2.6375,
+    "atr_pct": 0.05191,
+    "rsi": 26.43795,
+    "dist20_atr": -3.25867,
+    "vol_ratio": 0.9609,
+    "sma50": 65.4587,
+    "sma200": 67.21567,
+    "hi52": 81.44,
+    "lo52": 43.71,
+    "usd_volume": 76656097.76154,
+    "tightness": 1.06607,
+    "trend": "down",
+    "sma50_change_20d": -0.07476,
+    "price": 50.805,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.02471,
+    "live_move_atr": 0.44689,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": null,
+   "also": [],
+   "score": 2.664
+  },
+  {
+   "name": "SU",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.49,
+   "why": "was stretched down (RSI 30, -3.5 ATR from the 20-day) and turned: +0.2%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "XLE",
+   "hedge_fit": {
+    "corr_60d": 0.89,
+    "beta_60d": 1.19,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and rising (trend up); -3.2 ATR from the 20-day, RSI 31; volume 0.3x; daily ranges of the 10 sessions before today 0.90x the 50 before; resistance 64.32 (200-day, +0.5%); support 63.39 (20-day low, -0.9%); ATR 1.99 (3.1%); hedge XLE: correlation +0.89, beta 1.19",
+   "numbers": {
+    "close": 63.97,
+    "ret_1d": 0.00235,
+    "ret_5d": -0.05871,
+    "ret_20d": -0.19514,
+    "atr": 1.98747,
+    "atr_pct": 0.03107,
+    "rsi": 30.76391,
+    "dist20_atr": -3.22848,
+    "vol_ratio": 0.34524,
+    "sma50": 71.3588,
+    "sma200": 64.32113,
+    "hi52": 80.25,
+    "lo52": 41.22684,
+    "usd_volume": 281205927.37656,
+    "tightness": 0.90424,
+    "trend": "up",
+    "sma50_change_20d": 0.01773,
+    "price": 63.97,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.00235,
+    "live_move_atr": 0.07123,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-02",
+    "when": "after_close",
+    "sessions_away": 48
+   },
+   "also": [],
+   "score": 2.581
+  },
+  {
+   "name": "NWSA",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.38,
+   "why": "was stretched down (RSI 30, -3.4 ATR from the 20-day) and turned: +1.4%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "RSP",
+   "hedge_fit": {
+    "corr_60d": 0.65,
+    "beta_60d": 1.58,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -2.7 ATR from the 20-day, RSI 33; volume 0.1x; daily ranges of the 10 sessions before today 0.97x the 50 before; resistance 26.90 (200-day, +5.9%); support 24.95 (20-day low, -1.8%); ATR 0.75 (3.0%); hedge RSP: correlation +0.65, beta 1.58",
+   "numbers": {
+    "close": 25.4,
+    "ret_1d": 0.01397,
+    "ret_5d": -0.04726,
+    "ret_20d": -0.16966,
+    "atr": 0.75128,
+    "atr_pct": 0.02958,
+    "rsi": 33.33735,
+    "dist20_atr": -2.70207,
+    "vol_ratio": 0.1097,
+    "sma50": 28.6672,
+    "sma200": 26.90014,
+    "hi52": 31.55383,
+    "lo52": 22.03348,
+    "usd_volume": 120070983.26387,
+    "tightness": 0.96997,
+    "trend": "mixed",
+    "sma50_change_20d": -0.03649,
+    "price": 25.4,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.01397,
+    "live_move_atr": 0.44881,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-04",
+    "when": "after_close",
+    "sessions_away": 50
+   },
+   "also": [],
+   "score": 2.564
+  },
+  {
+   "name": "SNPS",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.06,
+   "why": "was stretched down (RSI 31, -3.1 ATR from the 20-day) and turned: +8.6%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "XLK",
+   "hedge_fit": {
+    "corr_60d": 0.69,
+    "beta_60d": 0.99,
+    "chosen": "its basket's hedge",
+    "weak": false
+   },
+   "baskets": [
+    "Design and analytics software"
+   ],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and rising (trend up); -1.1 ATR from the 20-day, RSI 45; volume 0.8x; daily ranges of the 10 sessions before today 1.00x the 50 before; resistance 440.94 (200-day, +2.5%); support 394.77 (20-day low, -8.3%); ATR 20.37 (4.7%); hedge XLK: correlation +0.69, beta 0.99",
+   "numbers": {
+    "close": 430.33499,
+    "ret_1d": 0.08624,
+    "ret_5d": -0.02491,
+    "ret_20d": -0.05281,
+    "atr": 20.37402,
+    "atr_pct": 0.04734,
+    "rsi": 44.66443,
+    "dist20_atr": -1.14186,
+    "vol_ratio": 0.81396,
+    "sma50": 449.4255,
+    "sma200": 440.93903,
+    "hi52": 539.47998,
+    "lo52": 362.54999,
+    "usd_volume": 800636636.18622,
+    "tightness": 1.00454,
+    "trend": "up",
+    "sma50_change_20d": 0.04147,
+    "price": 430.33499,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.08624,
+    "live_move_atr": 1.78081,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2026-12-08",
+    "when": "after_close",
+    "sessions_away": 11
+   },
+   "also": [],
+   "score": 2.509
+  },
+  {
+   "name": "WMS",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.03,
+   "why": "was stretched down (RSI 33, -3.0 ATR from the 20-day) and turned: +4.4%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "MDY",
+   "hedge_fit": {
+    "corr_60d": 0.82,
+    "beta_60d": 2.15,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.0 ATR from the 20-day, RSI 39; volume 0.4x; daily ranges of the 10 sessions before today 1.41x the 50 before; resistance 127.78 (50-day, +10.2%); support 110.76 (52-week low, -4.5%); ATR 5.50 (4.7%); hedge MDY: correlation +0.82, beta 2.15",
+   "numbers": {
+    "close": 115.995,
+    "ret_1d": 0.04387,
+    "ret_5d": -0.04239,
+    "ret_20d": -0.11609,
+    "atr": 5.495,
+    "atr_pct": 0.04737,
+    "rsi": 39.47039,
+    "dist20_atr": -2.0116,
+    "vol_ratio": 0.4409,
+    "sma50": 127.7757,
+    "sma200": 140.71759,
+    "hi52": 178.60562,
+    "lo52": 110.76,
+    "usd_volume": 90279151.34735,
+    "tightness": 1.40678,
+    "trend": "down",
+    "sma50_change_20d": -0.02978,
+    "price": 115.995,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.04387,
+    "live_move_atr": 0.88451,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-04",
+    "when": "before_open",
+    "sessions_away": 49
+   },
+   "also": [],
+   "score": 2.505
+  },
+  {
+   "name": "BA",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 2.69,
+   "why": "was stretched down (RSI 25, -2.7 ATR from the 20-day) and turned: +2.8%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "XLF",
+   "hedge_fit": {
+    "corr_60d": 0.48,
+    "beta_60d": 0.97,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -1.6 ATR from the 20-day, RSI 33; volume 0.7x; daily ranges of the 10 sessions before today 1.02x the 50 before; resistance 183.09 (50-day, +14.2%); support 155.56 (52-week low, -3.0%); ATR 5.41 (3.4%); hedge XLF: correlation +0.48, beta 0.97",
+   "numbers": {
+    "close": 160.32001,
+    "ret_1d": 0.02842,
+    "ret_5d": -0.02966,
+    "ret_20d": -0.14864,
+    "atr": 5.40647,
+    "atr_pct": 0.03372,
+    "rsi": 32.94238,
+    "dist20_atr": -1.63545,
+    "vol_ratio": 0.65969,
+    "sma50": 183.0934,
+    "sma200": 211.09455,
+    "hi52": 254.35001,
+    "lo52": 155.56,
+    "usd_volume": 1261024185.29663,
+    "tightness": 1.02479,
+    "trend": "down",
+    "sma50_change_20d": -0.08572,
+    "price": 160.32001,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.02842,
+    "live_move_atr": 0.81249,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-01-26",
+    "when": "before_open",
+    "sessions_away": 42
+   },
+   "also": [],
+   "score": 2.448
+  },
+  {
+   "name": "Apparel and footwear",
+   "basket_id": "apparel",
+   "kind": "basket",
+   "members": [
+    "NKE",
+    "DECK",
+    "RL",
+    "LULU",
+    "TPR"
+   ],
+   "hedge": "XLY",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "strength": 1.08,
+   "why": "Apparel and footwear against XLY: -1.6% today (-1.1 sd), 5-day -4.6%, 20-day -2.7%, z -1.7, the 10 sessions before today 1.09x as volatile as the 50 before; a 20-day low",
+   "chart": "3 of 5 members above their 50-day; best RL +3.6%, worst LULU -0.2%; spread -1.1 sd today, z -1.7",
+   "numbers": {
+    "today": -0.01556,
+    "sd_20d": 0.01441,
+    "today_sd": -1.08037,
+    "tightness": 1.09441,
+    "ret_5d": -0.04582,
+    "ret_20d": -0.02691,
+    "z_50d": -1.66025,
+    "z_50d_prev": -0.83816,
+    "new_20d_high": false,
+    "new_20d_low": true
+   },
+   "members_reporting_within_5": [],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.38
+  },
+  {
+   "name": "RELX",
+   "kind": "stock",
+   "setup": "breakdown",
+   "direction": "short",
+   "strength": 0.22,
+   "why": "trading at 38.36, below the 20-day low 38.43, on 1.8x volume (-0.5%, -0.2 ATR); from a tight base: daily ranges of the 10 sessions before today 0.65x the 50 before; 50-day above the 200-day and rising (trend up), against this trade",
+   "adjust": {
+    "tight_base": 0.15
+   },
+   "hedge": "KIE",
+   "hedge_fit": {
+    "corr_60d": 0.65,
+    "beta_60d": 1.16,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); -1.7 ATR from the 20-day, RSI 45; volume 1.8x; daily ranges of the 10 sessions before today 0.65x the 50 before; resistance 38.43 (20-day low, +0.2%); support 37.29 (50-day, -2.8%); ATR 0.79 (2.1%); hedge KIE: correlation +0.65, beta 1.16",
+   "numbers": {
+    "close": 38.36,
+    "ret_1d": -0.00467,
+    "ret_5d": -0.05143,
+    "ret_20d": -0.0453,
+    "atr": 0.79183,
+    "atr_pct": 0.02064,
+    "rsi": 44.66795,
+    "dist20_atr": -1.73458,
+    "vol_ratio": 1.77062,
+    "sma50": 37.2898,
+    "sma200": 34.38737,
+    "hi52": 42.19543,
+    "lo52": 26.82952,
+    "usd_volume": 85998482.66983,
+    "tightness": 0.65094,
+    "trend": "up",
+    "sma50_change_20d": 0.04955,
+    "price": 38.36,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": -0.00467,
+    "live_move_atr": -0.21919,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2027-02-11",
+    "when": "before_open",
+    "sessions_away": 54
+   },
+   "also": [],
+   "score": 2.287
+  },
+  {
+   "name": "Robotics and automation",
+   "basket_id": "robotics",
+   "kind": "basket",
+   "members": [
+    "SYM",
+    "CGNX",
+    "OUST",
+    "HSAI",
+    "NOVT",
+    "ZBRA"
+   ],
+   "hedge": "XLI",
+   "setup": "basket_big_move",
+   "direction": "long",
+   "strength": 2.78,
+   "why": "Robotics and automation against XLI: +7.2% today (+2.8 sd), 5-day +0.8%, 20-day -7.5%, z -1.3, the 10 sessions before today 0.84x as volatile as the 50 before",
+   "chart": "0 of 6 members above their 50-day; best SYM +19.7%, worst ZBRA +4.7%; spread +2.8 sd today, z -1.3",
+   "numbers": {
+    "today": 0.07208,
+    "sd_20d": 0.02589,
+    "today_sd": 2.78374,
+    "tightness": 0.8441,
+    "ret_5d": 0.00798,
+    "ret_20d": -0.07539,
+    "z_50d": -1.32302,
+    "z_50d_prev": -2.29819,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [
+    "SYM"
+   ],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.264
+  },
+  {
+   "name": "Auto parts retail",
+   "basket_id": "auto_parts_retail",
+   "kind": "basket",
+   "members": [
+    "AZO",
+    "ORLY",
+    "GPC"
+   ],
+   "hedge": "XLY",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "strength": 2.39,
+   "why": "Auto parts retail against XLY: -3.4% today (-2.4 sd), 5-day +0.2%, 20-day -2.2%, z -0.3, the 10 sessions before today 0.81x as volatile as the 50 before",
+   "chart": "2 of 3 members above their 50-day; best GPC +0.5%, worst AZO -0.4%; spread -2.4 sd today, z -0.3",
+   "numbers": {
+    "today": -0.03361,
+    "sd_20d": 0.01407,
+    "today_sd": -2.38815,
+    "tightness": 0.81117,
+    "ret_5d": 0.00233,
+    "ret_20d": -0.02198,
+    "z_50d": -0.28371,
+    "z_50d_prev": 1.50864,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.198
+  },
+  {
+   "name": "Retail REITs",
+   "basket_id": "retail_reits",
+   "kind": "basket",
+   "members": [
+    "SPG",
+    "O",
+    "KIM",
+    "REG",
+    "FRT"
+   ],
+   "hedge": "XLRE",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "strength": 2.38,
+   "why": "Retail REITs against XLRE: -1.1% today (-2.4 sd), 5-day +0.3%, 20-day +2.7%, z +1.6, the 10 sessions before today 0.55x as volatile as the 50 before",
+   "chart": "4 of 5 members above their 50-day; best SPG +0.7%, worst REG -0.2%; spread -2.4 sd today, z +1.6",
+   "numbers": {
+    "today": -0.01129,
+    "sd_20d": 0.00475,
+    "today_sd": -2.37728,
+    "tightness": 0.55465,
+    "ret_5d": 0.00337,
+    "ret_20d": 0.02726,
+    "z_50d": 1.60377,
+    "z_50d_prev": 2.50304,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.196
+  },
+  {
+   "name": "Analog and auto chips",
+   "basket_id": "analog_chips",
+   "kind": "basket",
+   "members": [
+    "TXN",
+    "ADI",
+    "NXPI",
+    "ON",
+    "MCHP"
+   ],
+   "hedge": "SMH",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "strength": 2.36,
+   "why": "Analog and auto chips against SMH: -4.6% today (-2.4 sd), 5-day +0.2%, 20-day +8.4%, z +1.3, the 10 sessions before today 0.68x as volatile as the 50 before",
+   "chart": "2 of 5 members above their 50-day; best TXN +11.6%, worst ON +7.9%; spread -2.4 sd today, z +1.3",
+   "numbers": {
+    "today": -0.04575,
+    "sd_20d": 0.01941,
+    "today_sd": -2.35672,
+    "tightness": 0.68092,
+    "ret_5d": 0.00225,
+    "ret_20d": 0.0839,
+    "z_50d": 1.30674,
+    "z_50d_prev": 1.97709,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [
+    "ADI"
+   ],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.193
+  },
+  {
+   "name": "Neoclouds",
+   "basket_id": "neoclouds",
+   "kind": "basket",
+   "members": [
+    "CRWV",
+    "NBIS",
+    "APLD",
+    "IREN",
+    "WULF",
+    "CBRS"
+   ],
+   "hedge": "SMH",
+   "setup": "basket_big_move",
+   "direction": "long",
+   "strength": 2.09,
+   "why": "Neoclouds against SMH: +8.7% today (+2.1 sd), 5-day -0.8%, 20-day -1.6%, z -1.0, the 10 sessions before today 1.01x as volatile as the 50 before",
+   "chart": "0 of 6 members above their 50-day; best IREN +27.7%, worst WULF +15.2%; spread +2.1 sd today, z -1.0",
+   "numbers": {
+    "today": 0.08705,
+    "sd_20d": 0.04165,
+    "today_sd": 2.09003,
+    "tightness": 1.01053,
+    "ret_5d": -0.00845,
+    "ret_20d": -0.01572,
+    "z_50d": -0.99658,
+    "z_50d_prev": -1.47789,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.148
+  },
+  {
+   "name": "Home improvement and specialty retail",
+   "basket_id": "home_specialty_retail",
+   "kind": "basket",
+   "members": [
+    "HD",
+    "LOW",
+    "WSM",
+    "TSCO",
+    "ULTA",
+    "BBY"
+   ],
+   "hedge": "XLY",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "strength": 2.05,
+   "why": "Home improvement and specialty retail against XLY: -2.9% today (-2.1 sd), 5-day -3.2%, 20-day +1.4%, z +0.7, the 10 sessions before today 0.72x as volatile as the 50 before",
+   "chart": "5 of 6 members above their 50-day; best WSM +1.8%, worst TSCO -1.5%; spread -2.1 sd today, z +0.7",
+   "numbers": {
+    "today": -0.02944,
+    "sd_20d": 0.01435,
+    "today_sd": -2.05182,
+    "tightness": 0.72018,
+    "ret_5d": -0.0317,
+    "ret_20d": 0.01394,
+    "z_50d": 0.67549,
+    "z_50d_prev": 1.58252,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "members_reporting_within_5": [
+    "BBY"
+   ],
+   "also": [],
+   "members_flagged": [],
+   "score": 2.142
+  },
+  {
+   "name": "CSIQ",
+   "kind": "stock",
+   "setup": "breakdown",
+   "direction": "short",
+   "strength": 0.06,
+   "why": "trading at 5.97, below the 52-week closing low 6.02, on 3.8x volume (-0.9%, -0.1 ATR); from a loose base: daily ranges of the 10 sessions before today 1.54x the 50 before; 50-day below the 200-day and falling (trend down)",
+   "adjust": {},
+   "hedge": "TAN",
+   "hedge_fit": {
+    "corr_60d": 0.74,
+    "beta_60d": 1.56,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [
+    "Utility-scale solar"
+   ],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.8 ATR from the 20-day, RSI 24; volume 3.8x; daily ranges of the 10 sessions before today 1.54x the 50 before; resistance 10.21 (50-day, +71.2%); support 5.71 (52-week low, -4.3%); ATR 0.88 (14.7%); hedge TAN: correlation +0.74, beta 1.56",
+   "numbers": {
+    "close": 5.965,
+    "ret_1d": -0.00914,
+    "ret_5d": -0.3488,
+    "ret_20d": -0.32599,
+    "atr": 0.87903,
+    "atr_pct": 0.14736,
+    "rsi": 23.78982,
+    "dist20_atr": -3.76865,
+    "vol_ratio": 3.80832,
+    "sma50": 10.2135,
+    "sma200": 14.46202,
+    "hi52": 30.05,
+    "lo52": 5.71,
+    "usd_volume": 21235453.03123,
+    "tightness": 1.54382,
+    "trend": "down",
+    "sma50_change_20d": -0.14954,
+    "price": 5.965,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": -0.00914,
+    "live_move_atr": -0.06214,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2026-12-03",
+    "when": "before_open",
+    "sessions_away": 7
+   },
+   "also": [
+    "stretched (long)"
+   ],
+   "score": 2.11
+  },
+  {
+   "name": "XLY/XLP",
+   "factor": "cyclical_defensive",
+   "kind": "factor",
+   "long": "XLY",
+   "short": "XLP",
+   "setup": "factor_turn",
+   "direction": "long",
+   "strength": 2.76,
+   "why": "XLY/XLP (discretionary vs staples): +3.9% today (+2.3 sd), 5-day +1.3%, 20-day -0.6%, z -1.1, the 10 sessions before today 1.31x as volatile as the 50 before; was stretched at z -2.8 and turned",
+   "chart": "discretionary vs staples; z -1.1 vs 50-day, 20-day -0.6%",
+   "numbers": {
+    "today": 0.03938,
+    "sd_20d": 0.01704,
+    "today_sd": 2.31193,
+    "tightness": 1.30928,
+    "ret_5d": 0.01258,
+    "ret_20d": -0.00596,
+    "z_50d": -1.07363,
+    "z_50d_prev": -2.7563,
+    "new_20d_high": false,
+    "new_20d_low": false
+   },
+   "also": [],
+   "score": 2.059
+  }
+ ],
+ "more": [
+  {
+   "name": "CORT",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.422,
+   "why": "was stretched down (RSI 21, -2.5 ATR from the 20-day) and turned: +4.9%, trading in the top quarter of the day"
+  },
+  {
+   "name": "UGP",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.407,
+   "why": "was stretched down (RSI 25, -2.4 ATR from the 20-day) and turned: +2.5%, trading in the top quarter of the day"
+  },
+  {
+   "name": "Internet infrastructure",
+   "kind": "basket",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "score": 2.141,
+   "why": "Internet infrastructure against XLK: -6.4% today (-2.0 sd), 5-day -4.5%, 20-day +6.6%, z +0.8, the 10 sessions before today 1.07x as volatile as the 50 before"
+  },
+  {
+   "name": "HYG/IEF",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 2.006,
+   "why": "HYG/IEF (high yield vs treasuries): +0.6% today (+1.3 sd), 5-day -1.4%, 20-day -0.9%, z -1.7, the 10 sessions before today 1.63x as volatile as the 50 before; was stretched at z -2.4 and turned"
+  },
+  {
+   "name": "QUAL/SPY",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "short",
+   "score": 1.975,
+   "why": "QUAL/SPY (quality vs market): -0.8% today (-1.6 sd), 5-day +0.0%, 20-day +2.0%, z +1.4, the 10 sessions before today 1.02x as volatile as the 50 before; was stretched at z +2.2 and turned"
+  },
+  {
+   "name": "GDX/GLD",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 1.966,
+   "why": "GDX/GLD (gold miners vs gold): +2.1% today (+1.0 sd), 5-day -3.1%, 20-day -1.1%, z -1.5, the 10 sessions before today 1.04x as volatile as the 50 before; was stretched at z -2.2 and turned"
+  },
+  {
+   "name": "IWF/IWD",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 1.955,
+   "why": "IWF/IWD (large-cap growth vs value): +5.6% today (+3.1 sd), 5-day +1.4%, 20-day -7.1%, z -1.3, the 10 sessions before today 1.43x as volatile as the 50 before; was stretched at z -2.1 and turned"
+  },
+  {
+   "name": "XLK/XLU",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 1.948,
+   "why": "XLK/XLU (tech vs utilities): +7.0% today (+2.3 sd), 5-day +0.1%, 20-day -14.7%, z -1.5, the 10 sessions before today 1.26x as volatile as the 50 before; was stretched at z -2.1 and turned"
+  },
+  {
+   "name": "SMH/IGV",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 1.947,
+   "why": "SMH/IGV (semiconductors vs software): +10.3% today (+3.3 sd), 5-day +3.4%, 20-day -0.2%, z -0.9, the 10 sessions before today 1.04x as volatile as the 50 before; was stretched at z -2.1 and turned"
+  },
+  {
+   "name": "RSP/SPY",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "short",
+   "score": 1.945,
+   "why": "RSP/SPY (equal weight vs cap weight): -2.1% today (-2.6 sd), 5-day -0.5%, 20-day +3.5%, z +1.3, the 10 sessions before today 1.07x as volatile as the 50 before; was stretched at z +2.1 and turned"
+  },
+  {
+   "name": "SPHB/SPLV",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "score": 1.941,
+   "why": "SPHB/SPLV (high beta vs low volatility): +8.3% today (+2.5 sd), 5-day +0.7%, 20-day -9.8%, z -1.3, the 10 sessions before today 1.26x as volatile as the 50 before; was stretched at z -2.0 and turned"
+  },
+  {
+   "name": "HWC",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.22,
+   "why": "stretched down: RSI 24, -4.0 ATR from the 20-day, no turn yet"
+  },
+  {
+   "name": "UUP",
+   "kind": "etf",
+   "setup": "stretched",
+   "direction": "short",
+   "score": 1.22,
+   "why": "stretched up: RSI 74, +4.0 ATR from the 20-day, no turn yet"
+  },
+  {
+   "name": "Managed care",
+   "kind": "basket",
+   "setup": "basket_stretched",
+   "direction": "long",
+   "score": 1.22,
+   "why": "Managed care against XLV: -1.7% today (-0.8 sd), 5-day -11.2%, 20-day -10.6%, z -2.6, the 10 sessions before today 2.07x as volatile as the 50 before; stretched, no turn yet"
+  },
+  {
+   "name": "CRM",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.197,
+   "why": "stretched down: RSI 24, -3.5 ATR from the 20-day, no turn yet"
+  }
+ ],
+ "held_back": [
+  {
+   "name": "BILI",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "strength": 1.2798241950112776,
+   "why": "stretched down: RSI 29, -3.8 ATR from the 20-day, no turn yet",
+   "adjust": {},
+   "hedge": "TAN",
+   "hedge_fit": {
+    "corr_60d": 0.51,
+    "beta_60d": 0.52,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.8 ATR from the 20-day, RSI 29; volume 1.7x; daily ranges of the 10 sessions before today 1.21x the 50 before; resistance 13.95 (50-day, +27.0%); support 10.58 (52-week low, -3.7%); ATR 0.51 (4.7%); hedge TAN: correlation +0.51, beta 0.52",
+   "numbers": {
+    "close": 10.985,
+    "ret_1d": 0.03632,
+    "ret_5d": -0.13231,
+    "ret_20d": -0.17654,
+    "atr": 0.51081,
+    "atr_pct": 0.0465,
+    "rsi": 28.65303,
+    "dist20_atr": -3.83947,
+    "vol_ratio": 1.67066,
+    "sma50": 13.9532,
+    "sma200": 19.13817,
+    "hi52": 36.4,
+    "lo52": 10.58,
+    "usd_volume": 42290101.63083,
+    "tightness": 1.21004,
+    "trend": "down",
+    "sma50_change_20d": -0.08631,
+    "price": 10.985,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.03632,
+    "live_move_atr": 0.75817,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2026-11-24",
+    "when": "before_open",
+    "sessions_away": 1
+   },
+   "also": [],
+   "held_back": "reports 2026-11-24 before open, inside the next session"
+  },
+  {
+   "name": "GGAL",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "strength": 3.2039225757063985,
+   "why": "was stretched down (RSI 22, -3.2 ATR from the 20-day) and turned: +6.2%, trading in the top quarter of the day",
+   "adjust": {},
+   "hedge": "XME",
+   "hedge_fit": {
+    "corr_60d": 0.51,
+    "beta_60d": 0.58,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.0 ATR from the 20-day, RSI 32; volume 0.2x; daily ranges of the 10 sessions before today 1.25x the 50 before; resistance 34.76 (50-day, +29.4%); support 25.03 (52-week low, -6.8%); ATR 1.60 (6.0%); hedge XME: correlation +0.51, beta 0.58",
+   "numbers": {
+    "close": 26.86,
+    "ret_1d": 0.06208,
+    "ret_5d": -0.04752,
+    "ret_20d": -0.24017,
+    "atr": 1.60395,
+    "atr_pct": 0.05972,
+    "rsi": 31.66126,
+    "dist20_atr": -1.95642,
+    "vol_ratio": 0.18071,
+    "sma50": 34.76463,
+    "sma200": 43.23899,
+    "hi52": 57.94362,
+    "lo52": 25.03,
+    "usd_volume": 34506801.49822,
+    "tightness": 1.24639,
+    "trend": "down",
+    "sma50_change_20d": -0.13319,
+    "price": 26.86,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.06208,
+    "live_move_atr": 0.98006,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2026-11-24",
+    "when": "before_open",
+    "sessions_away": 1
+   },
+   "also": [],
+   "held_back": "reports 2026-11-24 before open, inside the next session"
+  },
+  {
+   "name": "SYM",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "strength": 2.8932205676141276,
+   "why": "+19.7% today (+2.9 ATR) at 8:50 AM CT on 6.4x volume, projected to a full day; reported today after close",
+   "adjust": {},
+   "hedge": "URA",
+   "hedge_fit": {
+    "corr_60d": 0.72,
+    "beta_60d": 1.0,
+    "chosen": "the best match of 42 funds",
+    "weak": false
+   },
+   "baskets": [
+    "Robotics and automation"
+   ],
+   "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); +0.4 ATR from the 20-day, RSI 51; volume 6.4x; daily ranges of the 10 sessions before today 1.20x the 50 before; resistance 39.57 (50-day, +6.3%); support 30.33 (52-week low, -18.5%); ATR 2.48 (6.7%); hedge URA: correlation +0.72, beta 1.00",
+   "numbers": {
+    "close": 37.22,
+    "ret_1d": 0.19678,
+    "ret_5d": 0.08576,
+    "ret_20d": -0.01794,
+    "atr": 2.47705,
+    "atr_pct": 0.06655,
+    "rsi": 51.40011,
+    "dist20_atr": 0.436,
+    "vol_ratio": 6.38675,
+    "sma50": 39.5706,
+    "sma200": 46.1982,
+    "hi52": 87.88,
+    "lo52": 30.325,
+    "usd_volume": 60820443.06622,
+    "tightness": 1.19744,
+    "trend": "down",
+    "sma50_change_20d": -0.04831,
+    "price": 37.22,
+    "price_at": "2026-11-23T09:50:00-05:00",
+    "live_phase": "regular",
+    "live_move": 0.19678,
+    "live_move_atr": 2.89322,
+    "live_bars": 0,
+    "session_minutes": 20
+   },
+   "next_earnings": {
+    "date": "2026-11-23",
+    "when": "after_close",
+    "sessions_away": 1
+   },
+   "also": [],
+   "held_back": "reports 2026-11-23 after close, inside the next session"
+  }
+ ],
+ "in_book": [
+  {
+   "name": "NTES",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "score": 3.375,
+   "why": "reported 2026-11-19 before open, reacted 2 sessions ago: gap -5.5% (-2.2 ATR), day -11.4%, -9.4% against SPY, volume 2.8x, EPS surprise -12%; trading in the bottom third and still below the middle of that day's range (108.98)",
+   "in_book": "the book holds it (2026-11-19-S04)"
+  },
+  {
+   "name": "INTU",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "score": 3.326,
+   "why": "reported 2026-11-19 after close, reacted yesterday: gap -8.4% (-2.0 ATR), day -12.8%, -12.6% against KIE, volume 3.5x, EPS surprise +10%; trading in the bottom third and still below the middle of that day's range (284.88)",
+   "in_book": "the book closed it on 2026-11-20 (2026-11-20-S03: stopped: down 6.4% at 8:57 AM CT, past the 6% stop)"
+  },
+  {
+   "name": "NVDA",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "score": 2.974,
+   "why": "+29.4% today (+3.4 ATR) at 8:50 AM CT on 14.1x volume, projected to a full day",
+   "in_book": "the book holds it (2026-11-18-S02)"
+  },
+  {
+   "name": "ZS",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "score": 2.855,
+   "why": "+18.0% today (+2.7 ATR) at 8:50 AM CT on 20.7x volume, projected to a full day",
+   "in_book": "the book holds it (2026-11-23-S01)"
+  },
+  {
+   "name": "RCAT",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.233,
+   "why": "stretched down: RSI 25, -4.2 ATR from the 20-day, no turn yet",
+   "in_book": "the book closed it on 2026-11-20 (2026-11-17-S01: time limit: session 4 of 4)"
+  },
+  {
+   "name": "TU",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "short",
+   "score": 1.215,
+   "why": "stretched up: RSI 70, +3.9 ATR from the 20-day, no turn yet",
+   "in_book": "the book holds it (2026-11-19-S05)"
+  },
+  {
+   "name": "CVI",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.2,
+   "why": "stretched down: RSI 23, -3.6 ATR from the 20-day, no turn yet",
+   "in_book": "the book holds it (2026-11-18-S07)"
+  }
+ ],
+ "judged_recently": [
+  {
+   "name": "WSM",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "short",
+   "score": 3.313,
+   "why": "reported 2026-11-19 before open, reacted 2 sessions ago: gap -6.5% (-1.9 ATR), day -15.2%, -12.3% against XRT, volume 4.5x, EPS surprise +8%; trading in the bottom third and still below the middle of that day's range (232.17)",
+   "judged": "the night pass for 2026-11-20 judged it (take) and it has moved -0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "VVV",
+   "kind": "stock",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "score": 3.166,
+   "why": "reported 2026-11-19 before open, reacted 2 sessions ago: gap +2.1% (+0.6 ATR), day +10.4%, +12.4% against ITB, volume 3.2x, EPS surprise -1%; missed estimates and still rose against ITB (bad news bought)",
+   "judged": "the night pass for 2026-11-20 judged it (take) and it has moved +0.3 ATR since, under 1.5"
+  },
+  {
+   "name": "HALO",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.844,
+   "why": "was stretched down (RSI 20, -5.1 ATR from the 20-day) and turned: +2.9%, trading in the top quarter of the day",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.4 ATR since, under 1.5"
+  },
+  {
+   "name": "SAP",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.823,
+   "why": "was stretched down (RSI 26, -4.9 ATR from the 20-day) and turned: +1.8%, trading in the top quarter of the day",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved -0.1 ATR since, under 1.5"
+  },
+  {
+   "name": "FUTU",
+   "kind": "stock",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "score": 2.813,
+   "why": "reported 2026-11-19 before open, reacted 2 sessions ago: gap +2.8% (+0.5 ATR), day +4.8%, +7.4% against URA, volume 2.4x, EPS surprise -9%; missed estimates and still rose against URA (bad news bought)",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved +1.1 ATR since, under 1.5"
+  },
+  {
+   "name": "PBR",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.721,
+   "why": "was stretched down (RSI 21, -4.3 ATR from the 20-day) and turned: +0.3%, trading in the top quarter of the day",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved -0.3 ATR since, under 1.5"
+  },
+  {
+   "name": "VALE",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.718,
+   "why": "was stretched down (RSI 20, -4.3 ATR from the 20-day) and turned: +3.6%, trading in the top quarter of the day",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.2 ATR since, under 1.5"
+  },
+  {
+   "name": "YPF",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.699,
+   "why": "was stretched down (RSI 19, -4.2 ATR from the 20-day) and turned: +5.5%, trading in the top quarter of the day",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.7 ATR since, under 1.5"
+  },
+  {
+   "name": "PEGA",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.597,
+   "why": "was stretched down (RSI 25, -3.6 ATR from the 20-day) and turned: +1.9%, trading in the top quarter of the day",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved -0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "XPEV",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "score": 2.505,
+   "why": "was stretched down (RSI 32, -3.0 ATR from the 20-day) and turned: +9.3%, trading in the top quarter of the day",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "CTVA",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.254,
+   "why": "stretched down: RSI 22, -4.6 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved -0.2 ATR since, under 1.5"
+  },
+  {
+   "name": "CNQ",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.21,
+   "why": "stretched down: RSI 28, -3.8 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved -0.1 ATR since, under 1.5"
+  },
+  {
+   "name": "BVN",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.209,
+   "why": "stretched down: RSI 24, -3.8 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "HIMS",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.202,
+   "why": "stretched down: RSI 28, -3.6 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved +0.2 ATR since, under 1.5"
+  },
+  {
+   "name": "STLA",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.201,
+   "why": "stretched down: RSI 30, -3.6 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved +0.4 ATR since, under 1.5"
+  },
+  {
+   "name": "BIDU",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.191,
+   "why": "stretched down: RSI 29, -3.4 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "CM",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.187,
+   "why": "stretched down: RSI 34, -3.4 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved -0.1 ATR since, under 1.5"
+  },
+  {
+   "name": "GLBE",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.187,
+   "why": "stretched down: RSI 31, -3.4 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved -0.4 ATR since, under 1.5"
+  },
+  {
+   "name": "FXI",
+   "kind": "etf",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.185,
+   "why": "stretched down: RSI 33, -3.3 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved +0.7 ATR since, under 1.5"
+  },
+  {
+   "name": "HDB",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "short",
+   "score": 1.183,
+   "why": "stretched up: RSI 71, +3.3 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved -0.9 ATR since, under 1.5"
+  },
+  {
+   "name": "DVA",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.182,
+   "why": "stretched down: RSI 32, -3.3 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved -0.8 ATR since, under 1.5"
+  },
+  {
+   "name": "MSTR",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.179,
+   "why": "stretched down: RSI 31, -3.2 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved +0.4 ATR since, under 1.5"
+  },
+  {
+   "name": "NIO",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.179,
+   "why": "stretched down: RSI 30, -3.2 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-23 judged it (pass) and it has moved +0.5 ATR since, under 1.5"
+  },
+  {
+   "name": "RY",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.178,
+   "why": "stretched down: RSI 35, -3.2 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.2 ATR since, under 1.5"
+  },
+  {
+   "name": "LOPE",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.169,
+   "why": "stretched down: RSI 28, -3.1 ATR from the 20-day, no turn yet",
+   "judged": "the night pass for 2026-11-20 judged it (pass) and it has moved +0.1 ATR since, under 1.5"
+  },
+  {
+   "name": "SLV",
+   "kind": "etf",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.168,
+   "why": "stretched down: RSI 31, -3.0 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.9 ATR since, under 1.5"
+  },
+  {
+   "name": "MUFG",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "score": 1.167,
+   "why": "stretched down: RSI 34, -3.0 ATR from the 20-day, no turn yet",
+   "judged": "the morning pass for 2026-11-20 judged it (pass) and it has moved +0.1 ATR since, under 1.5"
+  }
+ ],
+ "earnings_ahead": [
+  {
+   "symbol": "ADI",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Analog and auto chips"
+   ],
+   "usd_volume": 1735511503
+  },
+  {
+   "symbol": "HPE",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [
+    "PC and server hardware"
+   ],
+   "usd_volume": 724692698
+  },
+  {
+   "symbol": "MDT",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Medical devices"
+   ],
+   "usd_volume": 683101359
+  },
+  {
+   "symbol": "SMTC",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 350406835
+  },
+  {
+   "symbol": "A",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [
+    "Life science tools"
+   ],
+   "usd_volume": 347861416
+  },
+  {
+   "symbol": "BURL",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Off-price retail"
+   ],
+   "usd_volume": 302942849
+  },
+  {
+   "symbol": "DLTR",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Discount stores"
+   ],
+   "usd_volume": 280734611
+  },
+  {
+   "symbol": "BBY",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Home improvement and specialty retail"
+   ],
+   "usd_volume": 271552434
+  },
+  {
+   "symbol": "DKS",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 221769433
+  },
+  {
+   "symbol": "SJM",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [
+    "Packaged food"
+   ],
+   "usd_volume": 151117392
+  },
+  {
+   "symbol": "ANF",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 142962005
+  },
+  {
+   "symbol": "J",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 116789521
+  },
+  {
+   "symbol": "DY",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 110136352
+  },
+  {
+   "symbol": "SYM",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [
+    "Robotics and automation"
+   ],
+   "usd_volume": 60820443
+  },
+  {
+   "symbol": "BILI",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 42290102
+  },
+  {
+   "symbol": "GGAL",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 34506801
+  },
+  {
+   "symbol": "VIPS",
+   "date": "2026-11-24",
+   "when": "before_open",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 29812612
+  },
+  {
+   "symbol": "DAC",
+   "date": "2026-11-23",
+   "when": "after_close",
+   "sessions_away": 1,
+   "baskets": [],
+   "usd_volume": 23912381
+  },
+  {
+   "symbol": "DELL",
+   "date": "2026-11-24",
+   "when": "after_close",
+   "sessions_away": 2,
+   "baskets": [
+    "PC and server hardware"
+   ],
+   "usd_volume": 2768610630
+  },
+  {
+   "symbol": "DE",
+   "date": "2026-11-25",
+   "when": "before_open",
+   "sessions_away": 2,
+   "baskets": [
+    "Agriculture"
+   ],
+   "usd_volume": 815585486
+  },
+  {
+   "symbol": "ADSK",
+   "date": "2026-11-24",
+   "when": "after_close",
+   "sessions_away": 2,
+   "baskets": [
+    "Seat-based software"
+   ],
+   "usd_volume": 458589939
+  },
+  {
+   "symbol": "WDAY",
+   "date": "2026-11-24",
+   "when": "after_close",
+   "sessions_away": 2,
+   "baskets": [
+    "Seat-based software",
+    "Payroll and HR software"
+   ],
+   "usd_volume": 406317525
+  },
+  {
+   "symbol": "HPQ",
+   "date": "2026-11-24",
+   "when": "after_close",
+   "sessions_away": 2,
+   "baskets": [
+    "PC and server hardware"
+   ],
+   "usd_volume": 355000816
+  },
+  {
+   "symbol": "NTNX",
+   "date": "2026-11-24",
+   "when": "after_close",
+   "sessions_away": 2,
+   "baskets": [],
+   "usd_volume": 136923338
+  },
+  {
+   "symbol": "BZ",
+   "date": "2026-11-25",
+   "when": "before_open",
+   "sessions_away": 2,
+   "baskets": [],
+   "usd_volume": 82985509
+  },
+  {
+   "symbol": "GDS",
+   "date": "2026-11-25",
+   "when": "before_open",
+   "sessions_away": 2,
+   "baskets": [],
+   "usd_volume": 69534121
+  },
+  {
+   "symbol": "LI",
+   "date": "2026-11-25",
+   "when": "before_open",
+   "sessions_away": 2,
+   "baskets": [],
+   "usd_volume": 27757398
+  },
+  {
+   "symbol": "NAT",
+   "date": "2026-11-27",
+   "when": "after_close",
+   "sessions_away": 4,
+   "baskets": [
+    "Oil tankers"
+   ],
+   "usd_volume": 28071027
+  },
+  {
+   "symbol": "RBRK",
+   "date": "2026-11-30",
+   "when": "after_close",
+   "sessions_away": 5,
+   "baskets": [
+    "Cybersecurity"
+   ],
+   "usd_volume": 317599871
+  },
+  {
+   "symbol": "CPRT",
+   "date": "2026-12-01",
+   "when": "before_open",
+   "sessions_away": 5,
+   "baskets": [],
+   "usd_volume": 314659144
+  },
+  {
+   "symbol": "NIO",
+   "date": "2026-12-01",
+   "when": "before_open",
+   "sessions_away": 5,
+   "baskets": [],
+   "usd_volume": 126201566
+  }
+ ],
+ "calendar_ahead": [],
+ "regime": [
+  "Sector correlation moved from 0.40 to 0.50 in five sessions"
+ ],
+ "session": "2026-11-23",
+ "slot": "morning",
+ "live": true,
+ "phase": "regular",
+ "prices_at": "2026-11-23T09:50:00-05:00",
+ "session_minutes": 20,
+ "priced": 1241
+}

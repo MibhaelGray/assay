@@ -1,7 +1,9 @@
 {
  "session": "2026-11-23",
  "handled": [
-  "night"
+  "night",
+  "morning",
+  "midday"
  ],
  "trades": [
   {
@@ -80,6 +82,208 @@
    "first_session": "2026-11-23",
    "lead": "XLU",
    "stood_down": "stood down by hand: the owner said to stop trying for a fill (2026-11-22, 10:23 PM CT); XLU had no overnight fills in 12 tries"
+  },
+  {
+   "id": "2026-11-23-M01",
+   "book": "small",
+   "source": "proposal 2026-11-23-P04",
+   "proposal_id": "2026-11-23-P04",
+   "conviction": 3,
+   "name": "ZS",
+   "setup": "live_move",
+   "direction": "long",
+   "why": "Bloomberg reports CrowdStrike, about seven times Zscaler's size, is in talks to buy it; the 16% pop comes off a close that was down 24% in a month, so 226 is still well under any price a founder-led board would take, and a market bounce cushions the fall-back if the talks die.",
+   "wrong_if": "CrowdStrike, Zscaler or Jay Chaudhry denies the talks; or Bloomberg, Reuters, the WSJ or the FT reports they have ended or stalled; or a deal is announced worth about $230 a share or less at CrowdStrike's price that day, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 468,
+   "sizing": {
+    "risk_dollars": 38,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "ZS",
+     "side": "long",
+     "shares": 2,
+     "ref_price": 226.65
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-23",
+   "lead": "ZS",
+   "stood_down": "passed: spread wider than 2% (ZS 2.2%) when it was due to enter",
+   "passed_on_spread": "2026-11-23T00:32:35-05:00"
+  },
+  {
+   "id": "2026-11-23-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-23-P41",
+   "proposal_id": "2026-11-23-P41",
+   "conviction": 3,
+   "name": "CSIQ",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "A report that Canadian Solar and Recurrent hired advisers and are weighing Chapter 11 has gone a full session and a weekend with no denial, and the stock is flat at a 52-week low on a morning solar is up 5-7%: the story is its own and still running.",
+   "wrong_if": "Canadian Solar or Recurrent publicly denies weighing Chapter 11 or hiring restructuring advisers; or announces a Recurrent sale, asset sale or financing that pays down debt outside a court process; or Bloomberg, Reuters or the WSJ reports a buyer or rescue investor, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TAN",
+     "side": "long",
+     "shares": 523,
+     "ref_price": 35.715
+    },
+    {
+     "symbol": "CSIQ",
+     "side": "short",
+     "shares": 3221,
+     "ref_price": 5.804
+    }
+   ],
+   "hedge": "TAN",
+   "pass": "morning",
+   "first_session": "2026-11-24",
+   "lead": "CSIQ"
+  },
+  {
+   "id": "2026-11-23-M02",
+   "book": "small",
+   "source": "proposal 2026-11-23-P41",
+   "proposal_id": "2026-11-23-P41",
+   "conviction": 3,
+   "name": "CSIQ",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "A report that Canadian Solar and Recurrent hired advisers and are weighing Chapter 11 has gone a full session and a weekend with no denial, and the stock is flat at a 52-week low on a morning solar is up 5-7%: the story is its own and still running.",
+   "wrong_if": "Canadian Solar or Recurrent publicly denies weighing Chapter 11 or hiring restructuring advisers; or announces a Recurrent sale, asset sale or financing that pays down debt outside a court process; or Bloomberg, Reuters or the WSJ reports a buyer or rescue investor, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 468,
+   "sizing": {
+    "risk_dollars": 38,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "TAN",
+     "side": "long",
+     "shares": 13,
+     "ref_price": 35.715
+    },
+    {
+     "symbol": "CSIQ",
+     "side": "short",
+     "shares": 80,
+     "ref_price": 5.804
+    }
+   ],
+   "hedge": "TAN",
+   "pass": "morning",
+   "first_session": "2026-11-24",
+   "lead": "CSIQ",
+   "empty_tries": 1
+  },
+  {
+   "id": "2026-11-23-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-23-P66",
+   "proposal_id": "2026-11-23-P66",
+   "conviction": 3,
+   "name": "IP",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "International Paper is down about 4% on 4.7 times normal volume on the market's biggest up day in years while its subpoenaed peers Packaging Corp and Smurfit Westrock are up 2-4%: the selling is IP's own (three guide cuts, negative free cash flow, an uncovered dividend, a DOJ grand-jury subpoena) and nothing dated inside the window stops it.",
+   "wrong_if": "International Paper announces a sale of or a buyer for its EMEA (DS Smith) business; or reaffirms or raises its Q4 EBITDA or full-year free-cash-flow guide in a filing or at an investor event; or the DOJ containerboard inquiry is reported closed or settled; or two or more covering brokers upgrade it, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLB",
+     "side": "long",
+     "shares": 430,
+     "ref_price": 49.71
+    },
+    {
+     "symbol": "IP",
+     "side": "short",
+     "shares": 733,
+     "ref_price": 29.165
+    }
+   ],
+   "hedge": "XLB",
+   "pass": "midday",
+   "first_session": "2026-11-24",
+   "lead": "IP"
+  },
+  {
+   "id": "2026-11-23-M03",
+   "book": "small",
+   "source": "proposal 2026-11-23-P66",
+   "proposal_id": "2026-11-23-P66",
+   "conviction": 3,
+   "name": "IP",
+   "setup": "breakdown",
+   "direction": "short",
+   "why": "International Paper is down about 4% on 4.7 times normal volume on the market's biggest up day in years while its subpoenaed peers Packaging Corp and Smurfit Westrock are up 2-4%: the selling is IP's own (three guide cuts, negative free cash flow, an uncovered dividend, a DOJ grand-jury subpoena) and nothing dated inside the window stops it.",
+   "wrong_if": "International Paper announces a sale of or a buyer for its EMEA (DS Smith) business; or reaffirms or raises its Q4 EBITDA or full-year free-cash-flow guide in a filing or at an investor event; or the DOJ containerboard inquiry is reported closed or settled; or two or more covering brokers upgrade it, inside the window.",
+   "entry_date": "2026-11-23",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 535,
+   "sizing": {
+    "risk_dollars": 38,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLB",
+     "side": "long",
+     "shares": 10,
+     "ref_price": 49.71
+    },
+    {
+     "symbol": "IP",
+     "side": "short",
+     "shares": 18,
+     "ref_price": 29.165
+    }
+   ],
+   "hedge": "XLB",
+   "pass": "midday",
+   "first_session": "2026-11-24",
+   "lead": "IP"
   }
  ],
  "marks": {
@@ -138,9 +342,188 @@
     "XSD": 380.0,
     "ZS": 226.65
    }
+  },
+  "morning": {
+   "at": "2026-11-23T09:56:53-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "APLD": 14.2875,
+    "AZO": 3253.4521,
+    "BA": 160.625,
+    "BJ": 99.215,
+    "CBRS": 99.59,
+    "CGNX": 48.11,
+    "CRWV": 47.84,
+    "CSIQ": 5.804,
+    "DECK": 79.96,
+    "EEM": 58.125,
+    "FRT": 110.035,
+    "GPC": 118.82,
+    "HD": 342.25,
+    "HSAI": 12.72,
+    "IBN": 34.9,
+    "IREN": 15.2151,
+    "KIE": 64.24,
+    "KIM": 25.32,
+    "LOW": 222.69,
+    "LULU": 101.9988,
+    "MCHP": 60.41,
+    "MDY": 642.83,
+    "MMS": 62.93,
+    "NBIS": 99.31,
+    "NKE": 33.27,
+    "NOVT": 109.48,
+    "NWSA": 25.34,
+    "NXPI": 256.37,
+    "O": 58.27,
+    "ON": 66.07,
+    "ORLY": 92.705,
+    "OUST": 27.8609,
+    "QQQ": 648.4725,
+    "REG": 73.355,
+    "RELX": 38.3,
+    "RL": 382.5,
+    "RSP": 211.63,
+    "SMH": 457.6599,
+    "SNPS": 429.015,
+    "SPG": 226.5,
+    "SPY": 720.47,
+    "SU": 64.26,
+    "TAN": 35.715,
+    "TPR": 123.67,
+    "TSCO": 37.86,
+    "TSLA": 388.92,
+    "TSM": 365.69,
+    "TXN": 294.53,
+    "UGI": 35.576,
+    "ULTA": 618.92,
+    "UMC": 14.315,
+    "VIST": 51.125,
+    "VOD": 13.44,
+    "WMS": 115.335,
+    "WSM": 212.025,
+    "WULF": 11.335,
+    "XLE": 60.895,
+    "XLF": 55.59,
+    "XLI": 161.11,
+    "XLK": 162.06,
+    "XLP": 89.805,
+    "XLRE": 42.955,
+    "XLU": 42.965,
+    "XLY": 116.49,
+    "ZBRA": 317.7285
+   }
+  },
+  "midday": {
+   "at": "2026-11-23T13:08:09-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ASH": 69.88,
+    "ATO": 168.15,
+    "AXP": 307.175,
+    "BEN": 33.825,
+    "BLK": 1150.3005,
+    "BLSH": 21.365,
+    "BMNR": 14.645,
+    "BNY": 146.18,
+    "CAVA": 51.13,
+    "CHTR": 127.08,
+    "CMCSA": 24.65,
+    "CMG": 35.965,
+    "CNP": 39.64,
+    "COF": 179.765,
+    "COIN": 109.23,
+    "CRCL": 51.815,
+    "CRM": 185.435,
+    "DPZ": 350.69,
+    "DRI": 230.525,
+    "ECO": 78.8198,
+    "ENS": 133.4677,
+    "EQNR": 38.66,
+    "FIS": 26.675,
+    "HOOD": 67.66,
+    "HYG": 76.6,
+    "IBIT": 34.84,
+    "IEF": 91.53,
+    "IGV": 95.21,
+    "IP": 29.165,
+    "IVZ": 28.395,
+    "IYT": 80.67,
+    "KBR": 32.5,
+    "MCD": 275.07,
+    "MNST": 42.945,
+    "MSTR": 85.465,
+    "NFG": 72.995,
+    "NJR": 55.66,
+    "NTAP": 172.17,
+    "NTRS": 167.3815,
+    "OGS": 81.42,
+    "P": 101.74,
+    "PDD": 87.205,
+    "PFGC": 110.295,
+    "SBUX": 105.7,
+    "SMCI": 24.855,
+    "SMH": 459.2,
+    "SNDK": 90.5068,
+    "SPY": 722.8999,
+    "SR": 85.79,
+    "STT": 162.58,
+    "SWX": 88.47,
+    "SYF": 68.085,
+    "SYY": 79.85,
+    "T": 22.1843,
+    "TMUS": 163.88,
+    "TSN": 62.43,
+    "TXRH": 179.58,
+    "UGI": 34.875,
+    "USFD": 109.04,
+    "UUP": 29.8243,
+    "VLUE": 179.29,
+    "VZ": 46.03,
+    "WING": 146.055,
+    "XLB": 49.71,
+    "XLC": 103.4,
+    "XLE": 60.295,
+    "XLF": 55.76,
+    "XLK": 162.3,
+    "XLP": 90.455,
+    "XLU": 43.18,
+    "XLY": 117.38,
+    "XRT": 87.685,
+    "XSD": 411.425,
+    "YUM": 163.88
+   }
   }
  },
- "exits": [],
+ "exits": [
+  {
+   "trade_id": "2026-11-18-S02",
+   "book": "dynamic",
+   "session_number": 4,
+   "intraday": true,
+   "at": "8:56 AM CT",
+   "pass": "morning",
+   "reason": "review: Nvidia's board reinstated Huang as CEO (8-K dated 11-22, release 11-23) and the stock is +31% against SMH +14% at 8:50 AM CT: the discount the trade was for has narrowed in one morning, with one session left, the board's probe still open and the 10-Q due 12-4."
+  },
+  {
+   "trade_id": "2026-11-23-S01",
+   "book": "dynamic",
+   "session_number": 1,
+   "intraday": true,
+   "at": "8:56 AM CT",
+   "pass": "morning",
+   "reason": "review: The deal was announced this morning (CrowdStrike 8-K, 11-23): all stock, 1.135 CrowdStrike shares per Zscaler share, about $240 at CrowdStrike's 8:50 AM CT price of 211.63 against Zscaler at 232.88. The event the trade waited for has happened; what is left is a 3% spread on a deal closing next year and exposure to CrowdStrike's own fall."
+  },
+  {
+   "trade_id": "2026-11-20-S06",
+   "book": "dynamic",
+   "session_number": 1,
+   "intraday": true,
+   "at": "8:56 AM CT",
+   "pass": null,
+   "reason": "stopped: down 8.8% at 8:56 AM CT, past the 8% stop"
+  }
+ ],
  "runs": [
   {
    "at": "2026-11-22T20:43:24-05:00",
@@ -605,7 +988,406 @@
     "2026-11-23-S02: SELL 583 XLU went in with a message from the gateway: Warning 2109, reqId 125: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
    ],
    "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-23T00:32:35-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [
+    "2026-11-23-M01"
+   ],
+   "warnings": [
+    "2026-11-23-M01 ZS: spread wider than 2% (ZS 2.2%), so the trade is passed on."
+   ]
+  },
+  {
+   "at": "2026-11-23T09:56:53-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-23-S03",
+    "2026-11-23-M02"
+   ],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-18-S02",
+     "book": "dynamic",
+     "session_number": 4,
+     "intraday": true,
+     "at": "8:56 AM CT",
+     "pass": "morning",
+     "reason": "review: Nvidia's board reinstated Huang as CEO (8-K dated 11-22, release 11-23) and the stock is +31% against SMH +14% at 8:50 AM CT: the discount the trade was for has narrowed in one morning, with one session left, the board's probe still open and the 10-Q due 12-4."
+    },
+    {
+     "trade_id": "2026-11-23-S01",
+     "book": "dynamic",
+     "session_number": 1,
+     "intraday": true,
+     "at": "8:56 AM CT",
+     "pass": "morning",
+     "reason": "review: The deal was announced this morning (CrowdStrike 8-K, 11-23): all stock, 1.135 CrowdStrike shares per Zscaler share, about $240 at CrowdStrike's 8:50 AM CT price of 211.63 against Zscaler at 232.88. The event the trade waited for has happened; what is left is a 3% spread on a deal closing next year and exposure to CrowdStrike's own fall."
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "book": "dynamic",
+     "session_number": 1,
+     "intraday": true,
+     "at": "8:56 AM CT",
+     "pass": null,
+     "reason": "stopped: down 8.8% at 8:56 AM CT, past the 8% stop"
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S03",
+     "symbol": "CSIQ",
+     "action": "SELL",
+     "shares": 3221,
+     "kind": "LMT",
+     "limit": 5.65,
+     "venue": "regular",
+     "ref_price": 5.68,
+     "priced_on": "gateway bid/ask",
+     "bid": 5.68,
+     "ask": 5.72,
+     "spread_pct": 0.702,
+     "order_id": 130,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-M02",
+     "symbol": "CSIQ",
+     "action": "SELL",
+     "shares": 80,
+     "kind": "LMT",
+     "limit": 5.65,
+     "venue": "regular",
+     "ref_price": 5.68,
+     "priced_on": "gateway bid/ask",
+     "bid": 5.68,
+     "ask": 5.72,
+     "spread_pct": 0.702,
+     "order_id": 132,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "symbol": "NVDA",
+     "action": "SELL",
+     "shares": 131,
+     "kind": "LMT",
+     "limit": 166.6,
+     "venue": "regular",
+     "ref_price": 167.44,
+     "priced_on": "gateway bid/ask",
+     "bid": 167.44,
+     "ask": 167.45,
+     "spread_pct": 0.006,
+     "order_id": 134,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S02",
+     "symbol": "SMH",
+     "action": "BUY",
+     "shares": 44,
+     "kind": "LMT",
+     "limit": 461.59,
+     "venue": "regular",
+     "ref_price": 459.29,
+     "priced_on": "gateway bid/ask",
+     "bid": 459.02,
+     "ask": 459.29,
+     "spread_pct": 0.059,
+     "order_id": 136,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S01",
+     "symbol": "ZS",
+     "action": "SELL",
+     "shares": 82,
+     "kind": "LMT",
+     "limit": 226.26,
+     "venue": "regular",
+     "ref_price": 227.4,
+     "priced_on": "gateway bid/ask",
+     "bid": 227.4,
+     "ask": 227.75,
+     "spread_pct": 0.154,
+     "order_id": 138,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "symbol": "PAVE",
+     "action": "SELL",
+     "shares": 377,
+     "kind": "LMT",
+     "limit": 50.52,
+     "venue": "regular",
+     "ref_price": 50.77,
+     "priced_on": "gateway bid/ask",
+     "bid": 50.77,
+     "ask": 50.79,
+     "spread_pct": 0.039,
+     "order_id": 140,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-20-S06",
+     "symbol": "MTZ",
+     "action": "BUY",
+     "shares": 128,
+     "kind": "LMT",
+     "limit": 163.17,
+     "venue": "regular",
+     "ref_price": 162.36,
+     "priced_on": "gateway bid/ask",
+     "bid": 161.51,
+     "ask": 162.36,
+     "spread_pct": 0.525,
+     "order_id": 142,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "takes": {
+    "morning": 1
+   },
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-23T09:59:42-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S03",
+     "symbol": "TAN",
+     "action": "BUY",
+     "shares": 227,
+     "kind": "LMT",
+     "limit": 35.8,
+     "venue": "regular",
+     "ref_price": 35.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 35.48,
+     "ask": 35.62,
+     "spread_pct": 0.394,
+     "order_id": 147,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "symbol": "CSIQ",
+     "action": "SELL",
+     "shares": 1821,
+     "kind": "LMT",
+     "limit": 5.63,
+     "venue": "regular",
+     "ref_price": 5.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 5.66,
+     "ask": 5.69,
+     "spread_pct": 0.529,
+     "order_id": 149,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-M02",
+     "symbol": "CSIQ",
+     "action": "SELL",
+     "shares": 80,
+     "kind": "LMT",
+     "limit": 5.63,
+     "venue": "regular",
+     "ref_price": 5.66,
+     "priced_on": "gateway bid/ask",
+     "bid": 5.66,
+     "ask": 5.69,
+     "spread_pct": 0.529,
+     "order_id": 151,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "symbol": "TAN",
+     "action": "BUY",
+     "shares": 296,
+     "kind": "LMT",
+     "limit": 35.8,
+     "venue": "regular",
+     "ref_price": 35.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 35.48,
+     "ask": 35.62,
+     "spread_pct": 0.394,
+     "order_id": 154,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-M02",
+     "symbol": "TAN",
+     "action": "BUY",
+     "shares": 13,
+     "kind": "LMT",
+     "limit": 35.8,
+     "venue": "regular",
+     "ref_price": 35.62,
+     "priced_on": "gateway bid/ask",
+     "bid": 35.48,
+     "ask": 35.62,
+     "spread_pct": 0.394,
+     "order_id": 156,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-23T13:08:09-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-23-S04",
+    "2026-11-23-M03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-23-S04",
+     "symbol": "IP",
+     "action": "SELL",
+     "shares": 733,
+     "kind": "LMT",
+     "limit": 29.01,
+     "venue": "regular",
+     "ref_price": 29.16,
+     "priced_on": "gateway bid/ask",
+     "bid": 29.16,
+     "ask": 29.17,
+     "spread_pct": 0.034,
+     "order_id": 161,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-M03",
+     "symbol": "IP",
+     "action": "SELL",
+     "shares": 18,
+     "kind": "LMT",
+     "limit": 29.01,
+     "venue": "regular",
+     "ref_price": 29.16,
+     "priced_on": "gateway bid/ask",
+     "bid": 29.16,
+     "ask": 29.17,
+     "spread_pct": 0.034,
+     "order_id": 163,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "symbol": "XLB",
+     "action": "BUY",
+     "shares": 430,
+     "kind": "LMT",
+     "limit": 49.97,
+     "venue": "regular",
+     "ref_price": 49.72,
+     "priced_on": "gateway bid/ask",
+     "bid": 49.71,
+     "ask": 49.72,
+     "spread_pct": 0.02,
+     "order_id": 166,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-M03",
+     "symbol": "XLB",
+     "action": "BUY",
+     "shares": 10,
+     "kind": "LMT",
+     "limit": 49.97,
+     "venue": "regular",
+     "ref_price": 49.72,
+     "priced_on": "gateway bid/ask",
+     "bid": 49.71,
+     "ask": 49.72,
+     "spread_pct": 0.02,
+     "order_id": 168,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [],
+   "takes": {
+    "midday": 1
+   },
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-23T15:02:12-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "No price for every leg of 2026-11-23-M02, 2026-11-23-S03, so their stop wasn't checked this time; the next check tries again."
+   ]
   }
  ],
- "last_attempt": "2026-11-23T00:05:15-05:00"
+ "last_attempt": "2026-11-23T13:08:09-05:00",
+ "last_stop_check": "2026-11-23T15:32:51-05:00"
 }

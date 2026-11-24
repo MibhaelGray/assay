@@ -727,6 +727,1034 @@
     "min_searches": 8,
     "min_reads": 5
    }
+  },
+  {
+   "at": "2026-11-23T09:53:47-05:00",
+   "measured": true,
+   "session_id": "00dadbe1-49c5-46a4-8dde-31c66e9ea7e7",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Research Robotics and automation",
+     "names": [
+      "Robotics and automation"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Apparel and footwear",
+     "names": [
+      "Apparel and footwear"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VOD",
+     "names": [
+      "VOD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research RELX",
+     "names": [
+      "RELX"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 11,
+     "other_tools": 1
+    },
+    {
+     "what": "Research NWSA",
+     "names": [
+      "NWSA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SU",
+     "names": [
+      "SU"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VIST",
+     "names": [
+      "VIST"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Neoclouds",
+     "names": [
+      "Neoclouds"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 14,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Position news check B",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 22,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Market stories research",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TSLA",
+     "names": [
+      "TSLA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TSM",
+     "names": [
+      "TSM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SNPS",
+     "names": [
+      "SNPS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Position news check A",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 4,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IBN",
+     "names": [
+      "IBN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Auto parts retail",
+     "names": [
+      "Auto parts retail"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MMS",
+     "names": [
+      "MMS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Position news check C",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Retail REITs",
+     "names": [
+      "Retail REITs"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Home improvement retail",
+     "names": [
+      "Home improvement and specialty retail"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 11,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research EEM",
+     "names": [
+      "EEM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BA",
+     "names": [
+      "BA"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research UMC",
+     "names": [
+      "UMC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Analog and auto chips",
+     "names": [
+      "Analog and auto chips"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research WMS",
+     "names": [
+      "WMS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research UGI",
+     "names": [
+      "UGI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research RELX (second)",
+     "names": [
+      "RELX"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CSIQ",
+     "names": [
+      "CSIQ"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research XLY/XLP",
+     "names": [
+      "XLY/XLP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BJ",
+     "names": [
+      "BJ"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "Robotics and automation": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Apparel and footwear": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VOD": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "RELX": {
+     "searches": 12.0,
+     "reads": 20.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "NWSA": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SU": {
+     "searches": 8.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VIST": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Neoclouds": {
+     "searches": 14.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TSLA": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TSM": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "SNPS": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "IBN": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Auto parts retail": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MMS": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Retail REITs": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Home improvement and specialty retail": {
+     "searches": 11.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "EEM": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BA": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "UMC": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Analog and auto chips": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "WMS": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "UGI": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CSIQ": {
+     "searches": 10.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "XLY/XLP": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BJ": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {},
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5
+   }
+  },
+  {
+   "at": "2026-11-23T13:07:40-05:00",
+   "measured": true,
+   "session_id": "af4d324a-a442-461e-9b9c-b41dde8e5a44",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Market stories right now",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 2,
+     "reads": 2,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SPY (second)",
+     "names": [
+      "SPY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 12,
+     "other_tools": 1
+    },
+    {
+     "what": "Research UUP",
+     "names": [
+      "UUP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Gas utilities",
+     "names": [
+      "Gas utilities"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research FIS",
+     "names": [
+      "FIS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research XLB",
+     "names": [
+      "XLB"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PC and server hardware",
+     "names": [
+      "PC and server hardware"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "News check: retail and media trades",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 16,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ASH (second)",
+     "names": [
+      "ASH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Telecom and cable",
+     "names": [
+      "Telecom and cable"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 10,
+     "other_tools": 1
+    },
+    {
+     "what": "Research EQNR",
+     "names": [
+      "EQNR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SNDK (second)",
+     "names": [
+      "SNDK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research IP",
+     "names": [
+      "IP"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ECO",
+     "names": [
+      "ECO"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CRM",
+     "names": [
+      "CRM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ENS",
+     "names": [
+      "ENS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "News check: single-name trades",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 12,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PDD",
+     "names": [
+      "PDD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VLUE",
+     "names": [
+      "VLUE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Crypto stocks",
+     "names": [
+      "Crypto stocks"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 12,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research FIS (second)",
+     "names": [
+      "FIS"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Asset managers and custody banks",
+     "names": [
+      "Asset managers and custody banks"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 11,
+     "reads": 9,
+     "other_tools": 1
+    },
+    {
+     "what": "Research MNST",
+     "names": [
+      "MNST"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 12,
+     "other_tools": 0
+    },
+    {
+     "what": "Research EQNR (second)",
+     "names": [
+      "EQNR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research TSN",
+     "names": [
+      "TSN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "other_tools": 1
+    },
+    {
+     "what": "News check: macro trades",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 12,
+     "reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ASH",
+     "names": [
+      "ASH"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SNDK",
+     "names": [
+      "SNDK"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research HYG/IEF",
+     "names": [
+      "HYG/IEF"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SPY",
+     "names": [
+      "SPY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 7,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Food distributors",
+     "names": [
+      "Food distributors"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Card lenders",
+     "names": [
+      "Card lenders"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 10,
+     "reads": 5,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Restaurants",
+     "names": [
+      "Restaurants"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 11,
+     "reads": 6,
+     "other_tools": 1
+    },
+    {
+     "what": "Research KBR",
+     "names": [
+      "KBR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 6,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "SPY": {
+     "searches": 13.0,
+     "reads": 19.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "UUP": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Gas utilities": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "FIS": {
+     "searches": 14.0,
+     "reads": 18.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "XLB": {
+     "searches": 9.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PC and server hardware": {
+     "searches": 10.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ASH": {
+     "searches": 15.0,
+     "reads": 14.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "Telecom and cable": {
+     "searches": 10.0,
+     "reads": 10.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "EQNR": {
+     "searches": 16.0,
+     "reads": 11.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "SNDK": {
+     "searches": 13.0,
+     "reads": 16.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "IP": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ECO": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CRM": {
+     "searches": 8.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ENS": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PDD": {
+     "searches": 8.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VLUE": {
+     "searches": 9.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Crypto stocks": {
+     "searches": 12.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Asset managers and custody banks": {
+     "searches": 11.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "MNST": {
+     "searches": 8.0,
+     "reads": 12.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "TSN": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "HYG/IEF": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Food distributors": {
+     "searches": 9.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Card lenders": {
+     "searches": 10.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Restaurants": {
+     "searches": 11.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "KBR": {
+     "searches": 8.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {},
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5
+   }
   }
  ]
 }
