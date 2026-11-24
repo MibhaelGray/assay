@@ -43,8 +43,7 @@ whose answer matters whichever way it comes out, and something to build and lear
 ## How it is built
 
 **Technical signals find the candidates; AI research decides; code trades.** There is one book, the swing book:
-$1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the closest to how Michael trades. A $25,000
-copy trades the same takes at its own size (below).
+$1,000,000 on the IBKR paper account, trades held 1 to 10 sessions. It is the closest to how Michael trades.
 
 - **Three full passes a day, each the same thing:** 7:30 PM CT (Sunday to Thursday, for the next session),
   8:45 AM CT and 12:00 PM CT. Code screens the whole universe (about 1,240 names since 2026-11-18, when big
@@ -107,15 +106,6 @@ judging off the prior day's close was acting on old prices.
 The project is the swing book and its dashboard, and nothing else (the owner, 2026-11-22). New work has to serve
 the swing book to belong here.
 
-**The $25,000 book** (the owner, 2026-11-22) is the swing book at the size of a real account. It runs no research
-of its own: every take a pass records is entered in both books, each sized by the same rules on its own capital
-($25,000: a typical trade is $750 a side, sized to the dollar and in whole shares). It trades on the same paper
-account, with its own trade ids (`M` where the swing book's have `S`), its own fills, caps and 10% pause ($2,500,
-resumed with `fr paper resume --book small`). The passes review the swing book's trades only, and each decision
-(hold, exit) is applied to the same trade in the small book. Stops and time limits are checked per trade, so the
-two can leave at different times. The takes-against-passes record is still the swing book's. What it shows: what
-whole shares, minimum commissions and small orders do to the same decisions.
-
 Two records are kept beside the swing book's verdicts, and no pass reads either: `fr paper side` records Yahoo
 facts (short interest, estimate changes, ratings, insider dealing) and, since 2026-11-23, IBKR's fee to borrow
 each stock and the shares it has to lend, beside each night's verdicts, and
@@ -129,6 +119,9 @@ only work while no pass has seen them.
   judged by Haiku, flat by the close). Both were closed at the restart, and the record began again from zero.
   Their files are kept in `journal/archive/first-book-2026-11-15/` as a closed "before" period, and the intraday
   book's code was removed.
+- **Stopped on 2026-11-23**, after two days showed IBKR's $1.00 minimum commission taking ~80 bp round-trip on small
+  four-leg pairs: the $25,000 twin book (`small`, started 2026-11-22). Its three open trades still wind down on their
+  stops, twin reviews and time limits; no new small-book trades are opened.
 - **Removed on 2026-11-22**, to keep the project on the swing book: a small-cap shadow book ($250M to $1B
   companies, verdicts recorded from 2026-11-19 with no trades), a research lab that tested ideas on history
   (started that day), and the option-chain collector (last run 2026-11-05; the chains it stored are still in

@@ -2,8 +2,7 @@
  "started": "2026-11-15T22:57:35-05:00",
  "design": "three-pass",
  "capital": {
-  "swing": 1000000.0,
-  "small": 25000.0
+  "swing": 1000000.0
  },
  "archive": "journal/archive/first-book-2026-11-15",
  "legacy": {
@@ -43,5 +42,6 @@
   ],
   "close": "FR_JOURNAL_DIR=journal/archive/first-book-2026-11-15 uv run fr paper close --flatten --execute, at a close"
  },
- "small_started": "2026-11-22"
+ "small_started": "2026-11-22",
+ "small_stopped": "2026-11-23"
 }
