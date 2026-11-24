@@ -48,6 +48,10 @@ MIN_CONVICTION = 3         # a take below this is a pass
 # hit the bid or the ask; over it, send nothing, and nothing is ever left resting (entries.py cancels what an order
 # didn't fill at once). If one leg of a trade can't be hit, none of its legs is sent.
 MAX_CROSS_SPREAD = 0.02
+# Overnight entries on IBKR's thin OVERNIGHT venue pay far wider spreads than regular hours (~67 bp vs ~12 bp),
+# so overnight entries only cross inside MAX_OVERNIGHT_SPREAD; wider or illiquid night takes queue for 8:35 AM CT
+# in regular hours instead of being passed on permanently (2026-11-23).
+MAX_OVERNIGHT_SPREAD = 0.005
 
 
 def spread_pct(book_: tuple[float, float] | None) -> float | None:

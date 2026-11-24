@@ -581,8 +581,13 @@
     <div class="fr-papernotes" data-draw="paper-notes" data-source="mkt_paper mkt_paper_account"></div>
     <div class="fr-band fr-paperband" aria-label="Research record" data-draw="paper-band" data-source="mkt_paper mkt_paper_proposals mkt_paper_rank mkt_paper_account"></div>
     <div class="fr-panel">
+      <div class="fr-phead"><h3>All ideas so far</h3><span class="fr-sub" data-draw="paper-live-sum" data-source="mkt_paper_proposals">—</span>
+        <p>Every priced verdict, open and finished together — finished plans at their final result, still-open plans marked to the latest price. Lets you compare all takes against all passes right now, while the top strip waits for each plan's time limit to finish.</p></div>
+      <div class="fr-band" aria-label="All ideas so far" data-draw="paper-live" data-source="mkt_paper_proposals mkt_paper_rank"></div>
+    </div>
+    <div class="fr-panel">
       <div class="fr-phead"><h3>Research verdicts</h3><span class="fr-sub" data-draw="paper-verdict-sum" data-source="mkt_paper_proposals">—</span>
-        <p>Every candidate a pass judged for the swing book, newest first, each pass in its own ranking. "Plan result" scores each one's own plan from the prices when its pass recorded to its stop or time limit, before costs, whether or not it was taken. If the takes don't beat the passes, the research isn't adding anything.</p></div>
+        <p>Every candidate a pass judged for the swing book, newest first, each pass in its own ranking. "Plan result" scores each one's own plan from the prices when its pass recorded to its stop or time limit, before costs, whether or not it was taken. Settled averages wait until a plan's time limit has passed so early stop-outs don't count ahead of surviving peers.</p></div>
       <div class="fr-tablewrap" data-draw="paper-verdicts" data-source="mkt_paper_proposals"></div>
     </div>
     <details class="fr-method"><summary>How the swing book works</summary>
@@ -883,7 +888,7 @@
   dash.draw('pulse', (el) => {
     const reg = okData('mkt_regime');
     const paper = okData('mkt_paper') || [];
-    const done = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null);
+    const done = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null && r.plan_mature !== false);
     const cells = [];
     if (reg) cells.push(regimeTile(reg, 'pct_above_50', 'Breadth'), regimeTile(reg, 'sector_corr_20d', 'Sector correlation'), regimeTile(reg, 'vix_ratio', 'VIX / VIX3M'), regimeTile(reg, 'ten_year', '10-year'));
     else cells.push(Object.assign(h('div', 'fr-stat'), { textContent: 'Market data failed to load' }));
@@ -1098,12 +1103,15 @@
     const rows = okData('mkt_paper'); const props = okData('mkt_paper_proposals');
     if (!rows || !props) { el.replaceChildren(); return; }
     const stat = (label, value, cls, ...subs) => { const c = h('div', 'fr-stat'); c.append(h('p', 'fr-label', label), h('div', `fr-val ${cls}`, value), ...subs.filter(Boolean).map((x) => h('p', 'fr-sub', x))); return c; };
-    const done = props.filter((r) => r.plan_bps != null);
+    const done = props.filter((r) => r.plan_bps != null && r.plan_mature !== false);
+    const early = (take) => props.filter((r) => (r.verdict === 'take') === take && r.plan_bps != null && r.plan_mature === false).length;
     const side = (label, take) => {
       const rs = done.filter((r) => (r.verdict === 'take') === take);
-      if (!rs.length) return stat(label, '—', '', 'None finished yet');
+      const wait = early(take);
+      const waitNote = wait ? ` · ${wait} stopped early, waiting` : '';
+      if (!rs.length) return stat(label, '—', '', wait ? `${wait} stopped early, waiting for time limit` : 'None settled yet');
       const avg = d3.mean(rs, (r) => r.plan_bps);
-      return stat(label, fmtBp(avg), tone(avg), `Average plan result over ${rs.length} finished`, `${rs.filter((r) => r.plan_bps > 0).length} of ${rs.length} made money, before costs`);
+      return stat(label, fmtBp(avg), tone(avg), `Average over ${rs.length} settled${waitNote}`, `${rs.filter((r) => r.plan_bps > 0).length} of ${rs.length} made money, before costs`);
     };
     const takes = props.filter((r) => r.verdict === 'take').length;
     const sessions = new Set(props.map((r) => r.session)).size;
@@ -1123,6 +1131,49 @@
       stat('Closed trades', closed.length ? `${closed.filter((r) => r.pnl > 0).length} of ${closed.length} won` : '—', '',
         closed.length ? `Average ${fmtBp(d3.mean(closed, (r) => r.bps))} after commissions` : 'Nothing closed yet', slip.length ? `Fills vs model ${fmtBp(d3.mean(slip, (r) => r.slippage_bps))}` : null),
       next ? stat('Next step', next.time, '', `${next.day}: ${next.name.toLowerCase()}`, next.what) : stat('Next step', '—', ''));
+  });
+  // All ideas so far: open + finished verdicts together, with open plans marked to their latest price.
+  const currentBp = (r) => r.plan_bps ?? r.plan_so_far_bps;
+  dash.draw('paper-live-sum', (el) => {
+    const priced = (okData('mkt_paper_proposals') || []).filter((r) => currentBp(r) != null);
+    if (!priced.length) { el.textContent = 'No priced verdicts yet'; return; }
+    const open = priced.filter((r) => r.plan_bps == null).length;
+    el.textContent = `${priced.length} priced · ${priced.length - open} finished, ${open} still open · before costs`;
+  });
+  dash.draw('paper-live', (el) => {
+    const props = okData('mkt_paper_proposals');
+    if (!props) { el.replaceChildren(); return; }
+    const stat = (label, value, cls, ...subs) => { const c = h('div', 'fr-stat'); c.append(h('p', 'fr-label', label), h('div', `fr-val ${cls}`, value), ...subs.filter(Boolean).map((x) => h('p', 'fr-sub', x))); return c; };
+    const priced = props.filter((r) => currentBp(r) != null);
+    const takes = priced.filter((r) => r.verdict === 'take');
+    const rest = priced.filter((r) => r.verdict !== 'take');
+    const side = (label, rs) => {
+      if (!rs.length) return stat(label, '—', '', 'None priced yet');
+      const vals = rs.map(currentBp);
+      const avg = d3.mean(vals); const med = d3.median(vals);
+      const fin = rs.filter((r) => r.plan_bps != null).length;
+      const up = vals.filter((v) => v > 0).length;
+      return stat(label, fmtBp(avg), tone(avg), `${up} of ${rs.length} up (${Math.round(up / rs.length * 100)}%) · median ${fmtBp(med)}`, `${fin} finished · ${rs.length - fin} still open`);
+    };
+    const gap = takes.length && rest.length ? d3.mean(takes, currentBp) - d3.mean(rest, currentBp) : null;
+    // Also average takes minus passes inside each pass that had takes, so one busy pass doesn't dominate.
+    const byPass = d3.groups(priced, (r) => `${r.session}|${r.pass || ''}`);
+    const passGaps = byPass.map(([, rs]) => {
+      const t = rs.filter((r) => r.verdict === 'take'); const p = rs.filter((r) => r.verdict !== 'take');
+      return t.length && p.length ? d3.mean(t, currentBp) - d3.mean(p, currentBp) : null;
+    }).filter((v) => v != null);
+    const rk = ((okData('mkt_paper_rank') || [])[0] || {}).so_far;
+    const third = (k) => rk && rk.thirds && rk.thirds[k] && rk.thirds[k].n ? fmtBp(rk.thirds[k].mean) : '—';
+    const ranking = !rk || !rk.nights ? stat('Ranking so far', '—', '', 'Not enough priced verdicts yet')
+      : stat('Ranking so far', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation over ${rk.nights} pass${rk.nights === 1 ? '' : 'es'}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}`,
+        `Top third ${third('top')} · bottom third ${third('bottom')}`);
+    el.replaceChildren(
+      side('All takes', takes),
+      side('All passes', rest),
+      stat('Takes minus passes', fmtBp(gap), tone(gap),
+        passGaps.length ? `Within-pass avg ${fmtBp(d3.mean(passGaps))} (${passGaps.filter((v) => v > 0).length} of ${passGaps.length} passes positive)` : 'All priced verdicts',
+        'Before costs · open plans at latest price'),
+      ranking);
   });
   // The P/L chart: one main line and, when asked, a line for each book.
   const fmtDollars = (v) => `${v < 0 ? '−' : ''}$${d3.format(',.0f')(Math.abs(v))}`;
@@ -1601,7 +1652,7 @@
     box.append(block('Reason', r.reason || '—', true), block('Legs', r.legs || 'None the plan could trade'),
       block('Plan', r.horizon_days ? `${r.horizon_days} session${r.horizon_days === 1 ? '' : 's'} at most · stop at −${d3.format('.1f')(Math.abs(r.stop_pct))}%` : '—'),
       block('Hedge fit', st ? `Correlation ${d3.format('+.2f')(st.corr_60d)}, beta ${d3.format('.2f')(st.beta_60d)} over ${st.sessions} sessions` : '—'),
-      block('Plan result', r.plan_bps != null ? `${fmtBp(r.plan_bps)} · ${r.plan_note}` : r.plan_so_far_bps != null ? `${fmtBp(r.plan_so_far_bps)} so far` : 'Not started'),
+      block('Plan result', r.plan_bps != null ? `${fmtBp(r.plan_bps)} · ${r.plan_note}${r.plan_mature === false && r.plan_due ? ` (enters settled averages after ${day(r.plan_due, '%a %b %-d')})` : ''}` : r.plan_so_far_bps != null ? `${fmtBp(r.plan_so_far_bps)} so far` : 'Not started'),
       block('From', r.source));
     if (r.trade_id) box.append(block('Paper trade', `${r.trade_id} · ${human(r.state)}${r.paper_bps != null ? ` · ${fmtBp(r.paper_bps)} after commissions` : ''}${r.exit_reason ? ` · ${r.exit_reason}` : ''}`));
     if (r.preopen) box.append(block('Before the open', `${r.preopen.decision === 'stand_down' ? 'Stood down' : 'Stands'}: ${r.preopen.reason}`, true));
@@ -1652,9 +1703,9 @@
     });
   };
   dash.draw('paper-verdict-sum', (el) => {
-    const rows = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null);
-    const avg = (v) => { const rs = rows.filter((r) => (r.verdict === 'take') === v); return rs.length ? `${fmtBp(d3.mean(rs, (r) => r.plan_bps))} over ${rs.length}` : 'none finished'; };
-    el.textContent = rows.length ? `Taken ${avg(true)} · not taken ${avg(false)}` : '';
+    const rows = (okData('mkt_paper_proposals') || []).filter((r) => r.plan_bps != null && r.plan_mature !== false);
+    const avg = (v) => { const rs = rows.filter((r) => (r.verdict === 'take') === v); return rs.length ? `${fmtBp(d3.mean(rs, (r) => r.plan_bps))} over ${rs.length}` : 'none settled'; };
+    el.textContent = rows.length ? `Settled: taken ${avg(true)} · not taken ${avg(false)}` : '';
   });
   const drawPaperTables = () => drawVerdicts(document.querySelector('[data-draw=paper-verdicts]'));
   dash.draw('paper-verdicts', drawVerdicts);

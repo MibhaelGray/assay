@@ -147,20 +147,27 @@ class IBPaper:
         for o in orders:
             check_order(o)
         out, placed = [], []
+        # Qualify all unique symbols in one round-trip instead of one per order, cutting quote-to-order latency.
+        unique_syms = list(dict.fromkeys(o["symbol"] for o in orders))
+        qualified: dict[str, Contract] = {}
+        for i in range(0, len(unique_syms), 50):
+            batch = [Stock(s.replace(".", " "), "SMART", "USD") for s in unique_syms[i:i + 50]]
+            for c in await _answer(self.ib.qualifyContractsAsync(*batch), "qualify contracts"):
+                if c and getattr(c, "conId", 0) and c.secType == "STK":
+                    qualified[c.symbol.replace(" ", ".")] = c
         for o in orders:
-            contract = Stock(o["symbol"].replace(".", " "), "SMART", "USD")
-            q = await self.ib.qualifyContractsAsync(contract)
-            if not q or not getattr(q[0], "conId", 0) or q[0].secType != "STK":
+            q = qualified.get(o["symbol"])
+            if not q:
                 out.append({**o, "status": "not sent", "note": "no US stock or ETF by that symbol"})
                 continue
             order_type, tif = ORDER_TYPE[o["kind"]]
             order = Order(action=o["action"], totalQuantity=o["shares"], orderType=order_type, tif=tif,
                           account=self.s.account, orderRef=ref(o["trade_id"], o["symbol"]), outsideRth=False, transmit=True)
-            contract = q[0]
+            contract = q
             if o["kind"] == "LMT":
                 order.lmtPrice, order.outsideRth = round(float(o["limit"]), 2), o["venue"] != "regular"
                 if o["venue"] == "overnight":   # only day limit orders trade overnight, routed to that venue
-                    contract = Contract(conId=q[0].conId, exchange="OVERNIGHT")
+                    contract = Contract(conId=q.conId, exchange="OVERNIGHT")
                 elif o.get("good_till"):        # a pre-market order must not run on into the regular session
                     order.tif, order.goodTillDate = "GTD", o["good_till"]
             placed.append((o, self.ib.placeOrder(contract, order)))

@@ -57,17 +57,35 @@ log = logging.getLogger(__name__)
 
 ENTRY_GAP = timedelta(minutes=20)  # the last 20 minutes of the session belong to the close job
 RETRY = timedelta(minutes=15)     # between tries for what hasn't filled
+RETRY_FAULT = timedelta(minutes=3)  # shorter wait after a transient gateway fault (timeout or competing login)
 FOLLOW = timedelta(seconds=50)    # ... and every run (a minute) while a trade is part of the way in: it hits again for the rest
 PASS_MAX_NEW: int | None = None   # takes entered per pass: every one (the owner, 2026-11-16; three before that).
                                   # The book's own limits still hold: its capital, 60 open trades, 10% in one symbol
-LIMIT_SLIP = 0.005                # how far past the bid or ask the limit sits, so a small move still fills
+LIMIT_SLIP = 0.005                # extended/overnight: how far past the bid or ask the limit sits
+LIMIT_SLIP_REGULAR = 0.0015       # regular hours: tight slip so fast morning stocks don't sweep thin levels (2026-11-23)
+MID_WAIT = 10                     # seconds to try a midpoint limit in regular hours before stepping to the bid/ask
+MIN_MID_SPREAD = 0.02             # only try midpoint when the book is at least this wide in dollars
+REGULAR_ENTRY_START = time(9, 35) # New York (8:35 AM CT): when deferred overnight takes enter, after opening auctions settle
+MAX_CHASE_ATR = 1.0               # stand down a deferred or delayed trade if it already ran this many ATRs in our direction
+DRIFT_GUARD_AFTER = timedelta(minutes=5)  # apply the chasing guard once entry is delayed past this long after the pass mark
 PREMARKET_END = time(9, 10)       # New York: the last pre-market order, good until GOOD_TILL so it never meets the open
 GOOD_TILL = "09:25:00"
 SETTLE = 3                        # seconds after sending before the fills are pulled
-STOP_EVERY = timedelta(minutes=10)  # how often the regular session checks open trades against their stops (2 minutes until 2026-11-22)
-NO_FILL_TRIES = 3                 # tries that hit the bid or ask and filled nothing before a trade is passed on (the owner,
-                                  # 2026-11-22: a quote with nothing behind it, as XLU's was overnight, isn't chased)
+STOP_EVERY = timedelta(minutes=10)      # regular-session stop check cadence after the opening half-hour
+OPEN_STOP_EVERY = timedelta(minutes=2)  # first 30 minutes of the regular session (9:30-10:00 AM ET / 8:30-9:00 AM CT)
+OPEN_WINDOW_END = time(10, 0)
+NO_FILL_TRIES = 3                 # tries that hit the bid or ask and filled nothing before deferring (overnight) or passing on
 STOP_SLACK = timedelta(seconds=15) # launchd's minute is not exact; a check due in a few seconds counts as due
+
+
+def stop_interval(now: datetime) -> timedelta:
+    """Every 2 minutes during the opening half-hour (where most stop overshoots occur), then every 10 minutes."""
+    return OPEN_STOP_EVERY if time(9, 30) <= now.time() < OPEN_WINDOW_END else STOP_EVERY
+
+
+def spread_limit(where: str) -> float:
+    """Maximum bid-ask spread for entries in `where`: 0.5% overnight (wider queues for 8:35 AM CT), 2% otherwise."""
+    return rules.MAX_OVERNIGHT_SPREAD if where == "overnight" else rules.MAX_CROSS_SPREAD
 
 
 def venue(now: datetime) -> str | None:
@@ -119,8 +137,12 @@ def make_trades(which: str, kind: str, takes: list[dict], session: date, state: 
         if which != book.MAIN:
             t["book"] = which
     kept, capped = rules.apply_caps(made, same, max_gross=cap, max_symbol=cap * rules.MAX_SYMBOL_SHARE)
+    by_prop = {p["id"]: p for p in takes}
     for t in kept:
-        t.update({"pass": kind, "first_session": first_session(kind, session).isoformat(), "lead": rules.lead_leg(t, traded)})
+        nums = (by_prop.get(t.get("proposal_id")) or {}).get("signal", {}).get("numbers") or {}
+        daily_move = nums.get("atr_pct") or nums.get("sd_20d")
+        t.update({"pass": kind, "first_session": first_session(kind, session).isoformat(), "lead": rules.lead_leg(t, traded),
+                  **({"atr_pct": round(float(daily_move), 5)} if daily_move else {})})
     state["trades"] += kept
     record["new"] += [t["id"] for t in kept]
     record["skipped"] += [{**x, "pass": kind, **({"book": which} if which != book.MAIN else {})} for x in [*skipped, *capped]]
@@ -144,8 +166,57 @@ def crossing(action: str, book_: tuple[float, float] | None) -> float | None:
     return book_[1] if action == "BUY" else book_[0]
 
 
-def limit_price(action: str, price: float) -> float:
-    return round(price * (1 + LIMIT_SLIP) if action == "BUY" else price * (1 - LIMIT_SLIP), 2)
+def limit_price(action: str, price: float, where: str = "extended") -> float:
+    slip = LIMIT_SLIP_REGULAR if where == "regular" else LIMIT_SLIP
+    return round(price * (1 + slip) if action == "BUY" else price * (1 - slip), 2)
+
+
+def _mid_order(trade_id: str, symbol: str, action: str, shares: int, book_: tuple[float, float], where: str,
+               now: datetime, session: date) -> dict | None:
+    """A passive midpoint limit order for regular hours when the spread is wide enough to sit strictly inside."""
+    if where != "regular" or book_[1] - book_[0] < MIN_MID_SPREAD:
+        return None
+    mid = round((book_[0] + book_[1]) / 2, 2)
+    if not (book_[0] < mid < book_[1]):
+        return None
+    return {"trade_id": trade_id, "symbol": symbol, "action": action, "shares": shares, "kind": "LMT",
+            "limit": mid, "venue": where, "ref_price": mid, "priced_on": "gateway midpoint", **book_fields(book_)}
+
+
+def _daily_move(trade: dict) -> float | None:
+    """The trade's typical daily move (as a decimal fraction), from its screen ATR/sd or implied by its stop."""
+    if (v := trade.get("atr_pct")) and v > 0:
+        return float(v)
+    if pct := abs(((trade.get("stop") or {}).get("spread_pct") or 0)):
+        return pct / 100 / rules.STOP_MOVES
+    return None
+
+
+def _chased(trade: dict, state: dict, books: dict, now: datetime) -> str | None:
+    """When a deferred or delayed trade is ready to enter, check whether the spread already ran > MAX_CHASE_ATR
+    in our direction since the pass was marked. Returns the reason to stand it down, or None."""
+    m = (state.get("marks") or {}).get(trade.get("pass"))
+    if not m or not m.get("prices"):
+        return None
+    mark_at = datetime.fromisoformat(m["at"]) if m.get("at") else None
+    delayed = bool(trade.get("deferred_from") or trade.get("defer_regular")
+                   or (mark_at is not None and now - mark_at >= DRIFT_GUARD_AFTER))
+    if not delayed:
+        return None
+    daily = _daily_move(trade)
+    if not daily:
+        return None
+    entry = m["prices"]
+    longs = [l["symbol"] for l in trade["legs"] if l["side"] == "long"]
+    shorts = [l["symbol"] for l in trade["legs"] if l["side"] == "short"]
+    legs = [*longs, *shorts]
+    if any(s not in entry or s not in books or not entry[s] for s in legs):
+        return None
+    w = journal._weights({"long": longs or None, "short": shorts or None})
+    move = sum(w[s] * (((books[s][0] + books[s][1]) / 2) / entry[s] - 1) for s in legs)
+    if move > MAX_CHASE_ATR * daily:
+        return f"moved {move:+.1%} ({move / daily:+.1f} ATR) in our direction before entry; not chasing"
+    return None
 
 
 def book_fields(book_: tuple[float, float] | None) -> dict:
@@ -201,11 +272,20 @@ def _order(trade_id: str, symbol: str, action: str, shares: int, book_: tuple[fl
            session: date) -> dict:
     px = crossing(action, book_)
     o = {"trade_id": trade_id, "symbol": symbol, "action": action, "shares": shares, "kind": "LMT",
-         "limit": limit_price(action, px), "venue": where, "ref_price": round(px, 4), "priced_on": "gateway bid/ask",
+         "limit": limit_price(action, px, where), "venue": where, "ref_price": round(px, 4), "priced_on": "gateway bid/ask",
          **book_fields(book_)}
     if where == "extended" and now.time() < PREMARKET_END:
         o["good_till"] = f"{session:%Y%m%d} {GOOD_TILL} US/Eastern"
     return o
+
+
+async def _gateway_stop_prices(symbols: list[str], quotes_fn=None) -> dict[str, float]:
+    """Current midpoints from IBKR's paper gateway for stop checks, falling back to Yahoo for any symbol missed."""
+    books, _ = await (quotes_fn or gateway_books)(symbols, False)
+    px = {s: round((b[0] + b[1]) / 2, 4) for s, b in books.items() if rules.spread_pct(b) is not None}
+    if missing := [s for s in symbols if s not in px]:
+        px.update(await asyncio.to_thread(book.quotes, missing))
+    return px
 
 
 def stopped(now: datetime, skip: set[str], prices=None) -> tuple[list[tuple[dict, str]], list[str]]:
@@ -230,11 +310,17 @@ def stopped(now: datetime, skip: set[str], prices=None) -> tuple[list[tuple[dict
 
 
 STALE_SESSION = "in use somewhere else"   # the gateway's words for IBKR error 10197 (gateway.QUOTE_REFUSED)
+GATEWAY_DOWN = "couldn't be asked"        # gateway_books timeout / connection failure (gateway.py)
 HEAL_EVERY = timedelta(minutes=60)
 
 
+def _is_transient_fault(reason: str) -> bool:
+    return STALE_SESSION in (reason or "") or GATEWAY_DOWN in (reason or "")
+
+
 def heal_gateway(missing: dict[str, str], now: datetime | None = None) -> str | None:
-    """Restart the paper gateway when it refuses every quote with error 10197 ("competing live session").
+    """Restart the paper gateway when it refuses every quote with error 10197 ("competing live session") or
+    every quote failed because the gateway hung/timed out.
 
     On 2026-11-16 the gateway gave that answer for ten hours, from just after IBKR's nightly reset, with the live
     login in use nowhere; restarting the container cleared it in ten seconds. A real competing login isn't cured
@@ -243,7 +329,11 @@ def heal_gateway(missing: dict[str, str], now: datetime | None = None) -> str | 
     import shutil
     import subprocess
 
-    if not missing or not all(STALE_SESSION in (why or "") for why in missing.values()):
+    if not missing:
+        return None
+    stale = all(STALE_SESSION in (why or "") for why in missing.values())
+    down = all(GATEWAY_DOWN in (why or "") for why in missing.values())
+    if not (stale or down):
         return None
     now = now or datetime.now(NY)
     stamp = book.ROOT / "gateway_restart.json"
@@ -254,12 +344,13 @@ def heal_gateway(missing: dict[str, str], now: datetime | None = None) -> str | 
                                                          os.path.expanduser("~/.docker/bin/docker"),
                                                          "/Applications/Docker.app/Contents/Resources/bin/docker") if os.path.exists(p)), None)
     name = os.environ.get("FR_PAPER_GATEWAY_CONTAINER", "deploy-ib-gateway-paper-1")
+    cause = "every quote refused with IBKR error 10197" if stale else "the gateway hung or timed out asking for quotes"
     if not docker:
-        return "the gateway refused every quote with a competing-session error, and docker wasn't found to restart it"
-    book._write(stamp, {"at": now.isoformat(timespec="seconds"), "why": "every quote refused with IBKR error 10197"})
+        return f"{cause}, and docker wasn't found to restart it"
+    book._write(stamp, {"at": now.isoformat(timespec="seconds"), "why": cause})
     done = subprocess.run([docker, "restart", name], capture_output=True, text=True, timeout=120)
-    return ("the gateway refused every quote with a competing-session error (IBKR 10197), so the paper gateway was restarted"
-            if done.returncode == 0 else f"tried to restart the paper gateway after a competing-session error, but docker said: {done.stderr.strip()[:200]}")
+    return (f"the paper gateway was restarted ({cause})"
+            if done.returncode == 0 else f"tried to restart the paper gateway ({cause}), but docker said: {done.stderr.strip()[:200]}")
 
 
 def retry_soon(now: datetime | None = None) -> None:
@@ -270,11 +361,12 @@ def retry_soon(now: datetime | None = None) -> None:
         book._write(path(session), {**state, "last_attempt": None})
 
 
-def _why_blocked(symbols: list[str], books: dict, missing: dict[str, str]) -> str:
+def _why_blocked(symbols: list[str], books: dict, missing: dict[str, str], limit: float = rules.MAX_CROSS_SPREAD) -> str:
     parts = []
     wide = [f"{x} {rules.spread_pct(books[x]):.1%}" for x in symbols if x not in missing]
     if wide:
-        parts.append(f"spread wider than {rules.MAX_CROSS_SPREAD:.0%} ({', '.join(wide)})")
+        pct = f"{limit * 100:g}%"
+        parts.append(f"spread wider than {pct} ({', '.join(wide)})")
     reasons: dict[str, list[str]] = {}
     for x in symbols:
         if x in missing:
@@ -305,7 +397,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     s = book.PaperSettings()
     dry = dry or (broker is None and not s.send)
     record = {"at": now.isoformat(timespec="seconds"), "venue": where, "dry_run": dry, "passes": [], "new": [], "stood_down": [],
-              "exits": [], "cancelled": 0, "orders": [], "skipped": [], "passed": [], "warnings": []}
+              "exits": [], "cancelled": 0, "orders": [], "skipped": [], "passed": [], "deferred": [], "warnings": []}
     state = load(session) or _blank(session)
     doc = proposals.load(session)
     recorded = [p["pass"] for p in (doc or {}).get("passes", []) if p["pass"] in proposals.NEW_PASSES]
@@ -319,26 +411,39 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             out += [(t, leg, leg["shares"] - got[leg["symbol"]]) for leg in t["legs"] if leg["shares"] > got[leg["symbol"]]]
         return out
 
+    def ready_now(t: dict) -> bool:
+        return not t.get("defer_regular") or (where == "regular" and now.time() >= REGULAR_ENTRY_START)
+
     active = [t for t in state["trades"] if not t.get("stood_down")]
+    ready_active = [t for t in active if ready_now(t)]
     exiting = {e["trade_id"] for e in state["exits"]}
     wants_out = [t for t in book.open_trades() if (reviews.get(t["id"]) or {}).get("action") == "exit" and t["id"] not in exiting]
     last = datetime.fromisoformat(state["last_attempt"]) if state["last_attempt"] else None
-    part_in = any(any(entered(t).values()) for t in {u["id"]: u for u, _, _ in left_of(active)}.values())
-    every = FOLLOW if part_in else RETRY
-    retry_due = last is None or now - last >= every
-    # Stops, every STOP_EVERY in the regular session (the owner, 2026-11-18): a trade past its stop comes out at
-    # once, not at the close. Trades still entering, or already on their way out, are left alone.
+    part_in = any(any(entered(t).values()) for t in {u["id"]: u for u, _, _ in left_of(ready_active)}.values())
+    just_ready = any(t.get("defer_regular") for t in ready_active)
+    every = FOLLOW if part_in else (RETRY_FAULT if state.get("last_fault") else RETRY)
+    retry_due = just_ready or last is None or now - last >= every
+    # Stops: every 2 minutes in the opening half-hour (9:30-10:00 AM ET), then every 10 minutes; quoted from
+    # IBKR's paper gateway first, falling back to Yahoo only if IBKR misses a symbol.
     stops: list[tuple[dict, str]] = []
     checked = state.get("last_stop_check")
-    stop_due = where == "regular" and (not checked or now - datetime.fromisoformat(checked) >= STOP_EVERY - STOP_SLACK)
+    stop_due = where == "regular" and (not checked or now - datetime.fromisoformat(checked) >= stop_interval(now) - STOP_SLACK)
     if stop_due:
         entering = {t["id"] for t, _, _ in left_of(active)}
-        stops, unchecked = await asyncio.to_thread(stopped, now, exiting | entering | {t["id"] for t in wants_out}, stop_prices)
+        skip_ids = exiting | entering | {t["id"] for t in wants_out}
+        if stop_prices is not None:
+            stops, unchecked = await asyncio.to_thread(stopped, now, skip_ids, stop_prices)
+        else:
+            held_stop = [t for t in book.open_trades() if t["id"] not in skip_ids and date.fromisoformat(t["entry_date"]) <= now.date()]
+            need_syms = sorted({s for t in held_stop for s in ({h["symbol"] for h in t["held"]} | {r["symbol"] for r in (t.get("stop") or {}).get("rules", [])})})
+            px_stop = await _gateway_stop_prices(need_syms, quotes) if need_syms else {}
+            stops, unchecked = stopped(now, skip_ids, lambda _: px_stop)
         state["last_stop_check"] = now.isoformat(timespec="seconds")
         if unchecked:
             record["warnings"].append(f"No price for every leg of {', '.join(unchecked)}, so {'its' if len(unchecked) == 1 else 'their'} "
                                       "stop wasn't checked this time; the next check tries again.")
-    work = bool(left_of(active)) or bool(wants_out)
+    work = bool(left_of(ready_active)) or bool(wants_out)
+    has_deferred = any(t.get("defer_regular") for t in active)
     if not fresh_passes and not ((work and retry_due or stops) and where):
         if stop_due and not dry:
             if record["warnings"]:
@@ -346,6 +451,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             else:   # only the check's time: a check that found nothing adds no line to the runs
                 book._write(path(session), state)
         record["note"] = ("nothing recorded for " + session.isoformat() if not recorded and not state["trades"] else
+                          "queued trades wait for 8:35 AM CT" if not work and has_deferred else
                           "nothing new" if not work else f"waiting: the next try is {f'{every.seconds // 60} minutes' if every >= timedelta(minutes=2) else 'a minute'} after the last"
                           if where else "between sessions; what is left waits")
         return record
@@ -367,6 +473,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
         r = reviews.get(t["id"]) or {}
         if r.get("action") == "exit" and not any(entered(t).values()):
             t["stood_down"] = r["reason"]
+            t.pop("defer_regular", None)
             record["stood_down"].append(t["id"])
     active = [t for t in state["trades"] if not t.get("stood_down")]
 
@@ -384,18 +491,20 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             active += made
         state["handled"].append(kind)
 
-    left = left_of(active)
+    ready_active = [t for t in active if ready_now(t)]
+    left = left_of(ready_active)
     # Why each exit goes: a pass's review, or a stop the check above found. Both only in the regular session.
     why_out = {t["id"]: (f"review: {reviews[t['id']]['reason']}", reviews[t["id"]].get("pass")) for t in wants_out}
     why_out.update({t["id"]: (reason, None) for t, reason in stops})
     send_exits = [*wants_out, *(t for t, _ in stops)] if where == "regular" else []
+    no_overnight: set[str] = set()
     if where and (left or send_exits or record["stood_down"]):
         async with (broker or book._broker(dry=dry)) as b:
             record["cancelled"] = await b.cancel({t["id"] for t in state["trades"]})
             if not dry:
                 await asyncio.sleep(1)
                 await book._pull(b, session)
-            left = left_of(active)
+            left = left_of(ready_active)
             symbols = sorted({leg["symbol"] for _, leg, _ in left} | {h["symbol"] for t in send_exits for h in t["held"]})
             asked = sorted({*symbols, CANARY}) if where == "overnight" and symbols else symbols
             books, missing = await (quotes or gateway_books)(asked, where == "overnight") if symbols else ({}, {})
@@ -405,44 +514,61 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                             and rules.spread_pct(books.get(CANARY)) is not None and no_market(why)}
             if missing:
                 record["no_quote"] = missing
-            usable = lambda x: x not in missing and rules.crossable(books[x])  # noqa: E731
-            orders, committed = [], {}
-            # Entries. If nothing of a trade has filled, the whole trade waits on one bad leg. Otherwise the lead leg
-            # is ordered in full and the others only up to the share of it that has filled (rules.entry_due); a
-            # follower that can't be sent holds the lead back too, so no leg gets ahead.
-            for t in active:
+            entry_limit = spread_limit(where)
+            usable_entry = lambda x: x not in missing and rules.crossable(books[x], entry_limit)  # noqa: E731
+            usable_exit = lambda x: x not in missing and rules.crossable(books[x], rules.MAX_CROSS_SPREAD)  # noqa: E731
+            mid_orders, cross_orders, committed = [], [], {}
+            mid_trades: dict[str, list[dict]] = {}
+            # Entries. Overnight uses a tight 0.5% cap and queues wider/illiquid trades for 8:35 AM CT instead of
+            # killing them; regular hours uses 2%, tries midpoint first on wide books, then crosses at bid/ask.
+            for t in ready_active:
                 mine_left = [(leg, n) for u, leg, n in left if u["id"] == t["id"]]
                 if not mine_left:
                     continue
+                if t.get("defer_regular"):
+                    t["deferred_from"] = t.pop("defer_regular")
                 if "lead" not in t:   # a trade made before 2026-11-16
                     t["lead"] = rules.lead_leg(t, (volumes or dollar_volumes)([leg["symbol"] for leg in t["legs"]]))
-                bad = [leg["symbol"] for leg, _ in mine_left if not usable(leg["symbol"])]
+                bad = [leg["symbol"] for leg, _ in mine_left if not usable_entry(leg["symbol"])]
                 got = entered(t)
                 none_in = not any(got.values())
                 wide = [x for x in bad if x not in missing or x in no_overnight]
                 if wide and none_in:
-                    # Instant fills or nothing (the owner, 2026-11-18): a trade that can't go in at once because a
-                    # leg's spread is too wide, or it has no overnight market, is passed on, not left to wait.
-                    t["stood_down"] = f"passed: {_why_blocked(wide, books, missing)} when it was due to enter"
-                    t["passed_on_spread"] = now.isoformat(timespec="seconds")
-                    record["passed"].append(t["id"])
-                    record["warnings"].append(f"{t['id']} {t['name']}: {_why_blocked(wide, books, missing)}, so the trade is passed on.")
+                    why = _why_blocked(wide, books, missing, entry_limit)
+                    if where == "overnight":
+                        t["defer_regular"] = f"queued for 8:35 AM CT: {why}"
+                        record["deferred"].append(t["id"])
+                        record["warnings"].append(f"{t['id']} {t['name']}: {why}, so the trade queues for 8:35 AM CT.")
+                    else:
+                        t["stood_down"] = f"passed: {why} when it was due to enter"
+                        t["passed_on_spread"] = now.isoformat(timespec="seconds")
+                        record["passed"].append(t["id"])
+                        record["warnings"].append(f"{t['id']} {t['name']}: {why}, so the trade is passed on.")
                     continue
                 if bad:
                     waits = ("the whole trade waits" if none_in else "the rest of the trade waits" if set(bad) - {t["lead"]}
                              else "the other legs only catch up to it")
-                    record["warnings"].append(f"{t['id']} {t['name']}: {_why_blocked(bad, books, missing)}, so {waits} for the next try.")
+                    record["warnings"].append(f"{t['id']} {t['name']}: {_why_blocked(bad, books, missing, entry_limit)}, so {waits} for the next try.")
                 if bad and none_in:
+                    continue
+                if none_in and (chase := _chased(t, state, books, now)):
+                    t["stood_down"] = f"passed: {chase}"
+                    record["passed"].append(t["id"])
+                    record["warnings"].append(f"{t['id']} {t['name']}: {chase}, so the trade is passed on.")
                     continue
                 due = [(leg, n) for leg, n in rules.entry_due(t, got, lead=not set(bad) - {t["lead"]}) if leg["symbol"] not in bad]
                 committed[t["id"]] = {**got, **{leg["symbol"]: got[leg["symbol"]] + n for leg, n in due}}
-                orders += [_order(t["id"], leg["symbol"], "BUY" if leg["side"] == "long" else "SELL", n, books[leg["symbol"]], where, now, session)
-                           for leg, n in due]
-            # Exits a pass asked for, and trades past their stop: all of a trade's legs or none, so a pair doesn't
-            # come out one side at a time.
+                for leg, n in due:
+                    action = "BUY" if leg["side"] == "long" else "SELL"
+                    if not dry and (mo := _mid_order(t["id"], leg["symbol"], action, n, books[leg["symbol"]], where, now, session)):
+                        mid_orders.append(mo)
+                        mid_trades.setdefault(t["id"], []).append(leg)
+                    else:
+                        cross_orders.append(_order(t["id"], leg["symbol"], action, n, books[leg["symbol"]], where, now, session))
+            # Exits a pass asked for, and trades past their stop: always cross immediately (never wait at midpoint).
             for t in send_exits:
                 legs = [h for h in t["held"] if h["shares"] > h["exit_shares"]]
-                bad = [h["symbol"] for h in legs if not usable(h["symbol"])]
+                bad = [h["symbol"] for h in legs if not usable_exit(h["symbol"])]
                 reason, by_pass = why_out[t["id"]]
                 if bad:
                     what = "the exit a pass asked for" if reason.startswith("review") else "its stop exit"
@@ -452,43 +578,70 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                     continue
                 record["exits"].append({"trade_id": t["id"], "book": t["book"], "session_number": book._session(t, session), "intraday": True,
                                         "at": f"{now.astimezone(CT):%-I:%M %p} CT", "pass": by_pass, "reason": reason})
-                orders += [_order(t["id"], h["symbol"], "SELL" if h["side"] == "long" else "BUY", h["shares"] - h["exit_shares"],
-                                  books[h["symbol"]], where, now, session) for h in legs]
+                cross_orders += [_order(t["id"], h["symbol"], "SELL" if h["side"] == "long" else "BUY", h["shares"] - h["exit_shares"],
+                                        books[h["symbol"]], where, now, session) for h in legs]
             state["exits"] += record["exits"]
-            if orders:
+            # Regular-hours midpoint attempt: try inside the spread for MID_WAIT seconds, cancel unfilled, then step to bid/ask.
+            if mid_orders:
+                state["last_attempt"] = now.isoformat(timespec="seconds")
+                _save(session, state, {**record, "orders": mid_orders, "note": "sending midpoint"})
+                sent_mid = await b.place(mid_orders)
+                record["orders"] += sent_mid
+                record["warnings"] += book._order_warnings(sent_mid)
+                await asyncio.sleep(MID_WAIT)
+                await book._pull(b, session)
+                if await b.cancel({o["trade_id"] for o in sent_mid}):
+                    await asyncio.sleep(1)
+                    await book._pull(b, session)
+                for t in ready_active:
+                    if t["id"] not in mid_trades:
+                        continue
+                    got = entered(t)
+                    for leg in mid_trades[t["id"]]:
+                        if (rem := leg["shares"] - got[leg["symbol"]]) > 0 and usable_entry(leg["symbol"]):
+                            action = "BUY" if leg["side"] == "long" else "SELL"
+                            cross_orders.append(_order(t["id"], leg["symbol"], action, rem, books[leg["symbol"]], where, now, session))
+            if cross_orders:
                 if not dry:  # on disk before anything goes
                     state["last_attempt"] = now.isoformat(timespec="seconds")
-                    _save(session, state, {**record, "orders": orders, "note": "sending"})
-                record["orders"] = await b.place(orders)
-                record["warnings"] += book._order_warnings(record["orders"])
+                    _save(session, state, {**record, "orders": [*record["orders"], *cross_orders], "note": "sending"})
+                sent = await b.place(cross_orders)
+                record["orders"] += sent
+                record["warnings"] += book._order_warnings(sent)
                 if not dry:  # an order priced to cross fills at once, so the books aren't left behind
                     await asyncio.sleep(SETTLE)
                     await book._pull(b, session)
-                    # The other legs follow what the leads just filled, in the same run: a lead that fills at once
-                    # has its hedge seconds behind it, not a try later.
-                    follow = [_order(t["id"], leg["symbol"], "BUY" if leg["side"] == "long" else "SELL", n, books[leg["symbol"]], where, now, session)
-                              for t in active if t["id"] in committed
-                              for leg, n in rules.entry_due(t, entered(t), committed[t["id"]], lead=False) if usable(leg["symbol"])]
-                    if follow:
-                        sent = await b.place(follow)
-                        record["orders"] += sent
-                        record["warnings"] += book._order_warnings(sent)
-                        await asyncio.sleep(SETTLE)
-                        await book._pull(b, session)
-                    # Nothing rests: what an order didn't fill at once is cancelled, and the next try hits again.
-                    record["cancelled_unfilled"] = await b.cancel({o["trade_id"] for o in record["orders"]})
-                    if record["cancelled_unfilled"]:
-                        await asyncio.sleep(1)
-                        await book._pull(b, session)
-                    # A quote that never fills isn't chased: a trade whose orders hit the bid or ask NO_FILL_TRIES
-                    # times with nothing filled is passed on, like one whose spread was too wide. A trade that is
-                    # part of the way in keeps going, so it is never left half built.
-                    tried = {o["trade_id"] for o in record["orders"]} & set(committed)
-                    for t in active:
-                        if t["id"] not in tried or any(entered(t).values()):
-                            continue
-                        t["empty_tries"] = t.get("empty_tries", 0) + 1
-                        if t["empty_tries"] >= NO_FILL_TRIES:
+            if not dry and record["orders"]:
+                # The other legs follow what the leads just filled, in the same run: a lead that fills at once
+                # has its hedge seconds behind it, not a try later.
+                follow = [_order(t["id"], leg["symbol"], "BUY" if leg["side"] == "long" else "SELL", n, books[leg["symbol"]], where, now, session)
+                          for t in ready_active if t["id"] in committed
+                          for leg, n in rules.entry_due(t, entered(t), committed[t["id"]], lead=False) if usable_entry(leg["symbol"])]
+                if follow:
+                    sent = await b.place(follow)
+                    record["orders"] += sent
+                    record["warnings"] += book._order_warnings(sent)
+                    await asyncio.sleep(SETTLE)
+                    await book._pull(b, session)
+                # Nothing rests: what an order didn't fill at once is cancelled, and the next try hits again.
+                record["cancelled_unfilled"] = await b.cancel({o["trade_id"] for o in record["orders"]})
+                if record["cancelled_unfilled"]:
+                    await asyncio.sleep(1)
+                    await book._pull(b, session)
+                # A quote that never fills isn't chased: overnight it queues for 8:35 AM CT; in regular hours it is passed on.
+                tried = {o["trade_id"] for o in record["orders"]} & set(committed)
+                for t in ready_active:
+                    if t["id"] not in tried or any(entered(t).values()):
+                        continue
+                    t["empty_tries"] = t.get("empty_tries", 0) + 1
+                    if t["empty_tries"] >= NO_FILL_TRIES:
+                        if where == "overnight":
+                            t["defer_regular"] = f"queued for 8:35 AM CT: no fill in {NO_FILL_TRIES} overnight tries"
+                            t["empty_tries"] = 0
+                            record["deferred"].append(t["id"])
+                            record["warnings"].append(f"{t['id']} {t['name']}: {NO_FILL_TRIES} overnight tries filled nothing, "
+                                                      "so the trade queues for 8:35 AM CT.")
+                        else:
                             t["stood_down"] = (f"passed: no fill in {NO_FILL_TRIES} tries at the bid or ask "
                                                f"({t['lead']} quoted, but nothing traded against it)")
                             record["passed"].append(t["id"])
@@ -497,6 +650,8 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     elif left and not where:
         record["warnings"].append(f"{len({t['id'] for t, _, _ in left})} trade(s) are waiting to enter; no session is trading at "
                                   f"{now.astimezone(CT):%-I:%M %p} CT.")
+    non_market = [w for s, w in (record.get("no_quote") or {}).items() if s not in no_overnight]
+    state["last_fault"] = bool(non_market) and all(_is_transient_fault(w) for w in non_market)
     state["last_attempt"] = now.isoformat(timespec="seconds")
     if not dry:
         _save(session, state, record)
@@ -507,18 +662,20 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
 
 def traded_note(kind: str, record: dict, state: dict, where: str | None, blocked_why: str | None) -> tuple[str, str]:
     """(title, text) for the owner's phone once the order job has acted on a pass: how many takes went in, part of
-    the way in, were passed on or wait. Counts only: alerts go through a public server (watch.py), so no names,
-    shares or dollars."""
+    the way in, queued for regular hours, were passed on or wait. Counts only: alerts go through a public server
+    (watch.py), so no names, shares or dollars."""
     label = "late" if kind.startswith("late") else kind
     takes = record.get("takes", {}).get(kind, 0)
     title = f"{label.capitalize()} pass traded"
     if not takes:
         return title, f"The {label} pass took no trades."
     mine = [t for t in state["trades"] if t.get("pass") == kind and t["id"] in record["new"] and book.book_of(t) == book.MAIN]
-    full = part = passed = waiting = 0
+    full = part = deferred = passed = waiting = 0
     for t in mine:
         got = entered(t)
-        if t["id"] in record["passed"]:
+        if t["id"] in record.get("deferred", []):
+            deferred += 1
+        elif t["id"] in record["passed"]:
             passed += 1
         elif all(got[leg["symbol"]] >= leg["shares"] for leg in t["legs"]):
             full += 1
@@ -530,8 +687,10 @@ def traded_note(kind: str, record: dict, state: dict, where: str | None, blocked
     bits = [f"{full} in"]
     if part:
         bits.append(f"{part} partly in (the rest follows within minutes)")
+    if deferred:
+        bits.append(f"{deferred} queued for 8:35 AM CT")
     if passed:
-        bits.append(f"{passed} passed on (a spread over {rules.MAX_CROSS_SPREAD:.0%}, or no overnight market)")
+        bits.append(f"{passed} passed on (a spread over {rules.MAX_CROSS_SPREAD:.0%}, or chased)")
     if waiting:
         bits.append(f"{waiting} waiting " + ("for a quote" if where else "for the next session"))
     if skipped:
@@ -551,7 +710,7 @@ def _tell(kind: str, record: dict, state: dict, where: str | None, blocked_why: 
 
 def _save(session: date, state: dict, record: dict) -> None:
     """Keep the state, and the run if it did something worth reading back."""
-    did = any(record[k] for k in ("passes", "new", "stood_down", "passed", "exits", "orders", "skipped", "cancelled")) or record.get("no_quote")
+    did = any(record[k] for k in ("passes", "new", "stood_down", "passed", "deferred", "exits", "orders", "skipped", "cancelled")) or record.get("no_quote")
     runs = [r for r in state["runs"] if r["at"] != record["at"]]
     if not did and runs and runs[-1].get("warnings") == record["warnings"]:
         runs[-1]["repeated_until"] = record["at"]   # a wait that hasn't changed: one line, not one a quarter-hour

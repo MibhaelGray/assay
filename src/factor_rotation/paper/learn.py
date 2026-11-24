@@ -146,12 +146,33 @@ def _intraday_hit(day: date, legs: list[str], w: dict, entry: dict, pct: float, 
     return "clear", None
 
 
+def _day_ready(day: date, legs: list[str], close: dict, ix: dict | None, replay: bool, today: date) -> bool:
+    """Whether `day` has settled enough that a surviving plan ending on `day` would have finished."""
+    if not journal._bars_settled(day) or any(s not in close or day not in close[s].index for s in [*legs, "SPY"]):
+        return False
+    if not replay or (today - day).days > INTRADAY_WAIT:
+        return True
+    close_dt = datetime.combine(day, journal.close_time(day), NY)
+    open_dt = datetime.combine(day, time(9, 30), NY)
+    for s in legs:
+        x = ix.get(s) if ix is not None else None
+        x = x[(x.index >= open_dt) & (x.index < close_dt)] if x is not None else None
+        if x is None or x.empty or x.index[-1] < close_dt - timedelta(minutes=5):
+            return False
+    return True
+
+
 def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date | None = None) -> dict | None:
     """The plan result of a verdict from one of the three daily passes: from each leg's price when the order job
     first acted on the pass (entries marks: the same moment for a take and a pass) to the close where its stop
     is hit or its time limit ends, before costs. A morning or midday verdict is already partway through its
     session, so that day's close only checks the stop and the time limit counts from the next session, as it
-    does for the trade itself. None until the pass has been marked; status "open" while sessions remain."""
+    does for the trade itself. None until the pass has been marked; status "open" while sessions remain.
+
+    `mature` is True only once the plan's scheduled time limit (`due`, days[-1]) has settled: an early stop-out
+    records its final result on its own row at once, but waits for its time limit to enter the aggregate tables
+    so stopped-out losers don't get counted ahead of surviving peers from the same pass. While `status == "open"`,
+    an unsettled bar for a day inside `days` (from a live dashboard refresh) marks `bps` to the latest price."""
     from . import entries
 
     session = date.fromisoformat(p["session"])
@@ -165,6 +186,7 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
     horizon = p["plan"]["horizon_days"]
     first = entries.first_session(p["pass"], session)
     days = ([session] if first != session else []) + journal.sessions_from(first, horizon)
+    due = days[-1]
     close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in px[px["symbol"].isin([*legs, "SPY"])].groupby("symbol")}
     w = journal._weights({"long": p["long"] or None, "short": p["short"] or None})
     stop = p["plan"].get("stop") or {}
@@ -197,13 +219,26 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
         if hits:
             status, note = "stopped", f"Stopped at the close of {d}: " + "; ".join(hits)
             break
-        if d == days[-1]:
+        if d == due:
             status, note = "time", f"Held to the time limit, {horizon} session{'s' if horizon > 1 else ''}"
-    if not path:
-        return {"status": "open", "note": "its first close hasn't settled"}
-    d, ret, spy = path[-1]
-    rets = [x[1] for x in path]
-    return {"status": status, "note": note, "exit_date": d.isoformat(), "sessions": len(path), "horizon_days": horizon, "intraday": intraday,
+    # If the plan is still open and today's unsettled quote bar is stored (e.g. from a live refresh), mark it there.
+    live_mark = None
+    if status == "open":
+        seen = {x[0] for x in path}
+        for d in reversed(days):
+            if d in seen:
+                break
+            if all(s in close and d in close[s].index for s in [*legs, "SPY"]):
+                live_mark = (d, sum(w[s] * (close[s][d] / entry[s] - 1) for s in legs), close["SPY"][d] / entry["SPY"] - 1)
+                break
+    if not path and not live_mark:
+        return {"status": "open", "mature": False, "due": due.isoformat(), "note": "its first close hasn't settled"}
+    marks_path = [*path, live_mark] if live_mark else path
+    d, ret, spy = marks_path[-1]
+    rets = [x[1] for x in marks_path]
+    mature = status == "time" or (status == "stopped" and (d == due or _day_ready(due, legs, close, ix, replay, today)))
+    return {"status": status, "mature": mature, "due": due.isoformat(), "note": note, "exit_date": d.isoformat(),
+            "sessions": len(path), "horizon_days": horizon, "intraday": intraday,
             "bps": round(ret * 1e4, 1), "spy_bps": round(spy * 1e4, 1), "best_bps": round(max(rets) * 1e4, 1),
             "worst_bps": round(min(rets) * 1e4, 1), "hit": bool(ret > 0)}
 
@@ -238,12 +273,23 @@ def outcomes() -> list[dict]:
             "stats": p.get("stats"), "wrong_if": p.get("wrong_if"), "reasoning": p.get("reasoning"), "hedge_why": p.get("hedge_why"),
             "why": (p.get("signal") or {}).get("why"),
             "plan_status": plan["status"] if plan else None, "plan_bps": plan["bps"] if done else None,
+            "plan_mature": bool(plan and plan.get("mature")), "plan_due": plan.get("due") if plan else None,
             "plan_so_far_bps": plan["bps"] if plan and not done and "bps" in plan else None,
             "plan_note": plan.get("note") if plan else None, "plan_exit": plan.get("exit_date") if done else None,
             "trade_id": r and r["id"], "state": r and r["state"], "paper_bps": r["bps"] if r and r["state"] == "closed" else None,
             "exit_reason": reason or None, "managed": managed, "tag": m and m["tag"], "lesson": m and m["lesson"],
         })
     return out
+
+
+def _settled(r: dict) -> bool:
+    """Finished AND past its scheduled time limit, so early stop-outs don't enter averages ahead of surviving peers."""
+    return r["plan_bps"] is not None and r.get("plan_mature", True)
+
+
+def _current_bps(r: dict) -> float | None:
+    """The plan's final result if finished, else its latest mark-to-market return while still open."""
+    return r["plan_bps"] if r["plan_bps"] is not None else r.get("plan_so_far_bps")
 
 
 def _stat(values: list[float]) -> dict:
@@ -271,44 +317,59 @@ def _spearman(xs: list[float], ys: list[float]) -> float | None:
     return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (va * vb) ** 0.5 if va and vb else None
 
 
-def rank_table(rows: list[dict] | None = None) -> dict:
-    """Whether the pass's ranking predicts results. Each ranked draft is one night: among its ideas whose plans
-    have finished, the rank correlation between the pass's rank and the plan result, signed so that a positive
-    number means the better-ranked ideas did better. Ideas judged on one night rise and fall together, so the
-    night is the unit: the score is the nights' average, and `t` is that average over its standard error.
-    Also the plan results of each night's top, middle and bottom third, pooled."""
-    rows = outcomes() if rows is None else rows
-    ranked = [r for r in rows if r.get("rank")]
-    nights: dict[tuple, list[dict]] = {}
-    for r in ranked:
-        if r["plan_bps"] is not None:
-            nights.setdefault((r["session"], r["recorded_at"]), []).append(r)
+def _rank_summary(groups: list[tuple[str, list[tuple[dict, float]]]]) -> dict:
     scored = []
-    for (session, _), rs in sorted(nights.items()):
-        ic = _spearman([-r["rank"] for r in rs], [float(r["plan_bps"]) for r in rs]) if len(rs) >= MIN_RANKED else None
+    for session, items in groups:
+        ic = _spearman([-r["rank"] for r, _ in items], [v for _, v in items]) if len(items) >= MIN_RANKED else None
         if ic is not None:
-            scored.append({"session": session, "finished": len(rs), "ranked": rs[0]["ranked"], "ic": round(ic, 3)})
+            scored.append({"session": session, "finished": len(items), "ranked": items[0][0]["ranked"], "ic": round(ic, 3)})
     ics = [n["ic"] for n in scored]
     sd = (sum((v - mean(ics)) ** 2 for v in ics) / (len(ics) - 1)) ** 0.5 if len(ics) > 2 else 0
     third = lambda r: min(2, (r["rank"] - 1) * 3 // r["ranked"])  # noqa: E731
-    done = [r for rs in nights.values() for r in rs]
-    return {"ranked": len(ranked), "finished": len(done), "nights": len(scored), "nights_needed": RANK_NIGHTS,
+    done = [item for _, items in groups for item in items]
+    return {"finished": len(done), "nights": len(scored), "nights_needed": RANK_NIGHTS,
             "ic": round(mean(ics), 3) if ics else None, "t": round(mean(ics) / (sd / len(ics) ** 0.5), 2) if sd else None,
-            "thirds": {name: _stat([r["plan_bps"] for r in done if third(r) == k]) for k, name in enumerate(("top", "middle", "bottom"))},
+            "thirds": {name: _stat([v for r, v in done if third(r) == k]) for k, name in enumerate(("top", "middle", "bottom"))},
             "by_night": scored}
 
 
+def rank_table(rows: list[dict] | None = None) -> dict:
+    """Whether the pass's ranking predicts results. Each ranked draft is one pass: a pass enters the settled ranking
+    only once every priceable idea in it has reached its scheduled time limit (so early stop-outs don't score a pass
+    before its surviving ideas finish). `so_far` scores every pass right now using final results for finished ideas
+    and latest mark-to-market returns for open ones."""
+    rows = outcomes() if rows is None else rows
+    ranked = [r for r in rows if r.get("rank")]
+    passes: dict[tuple, list[dict]] = {}
+    for r in ranked:
+        passes.setdefault((r["session"], r["recorded_at"]), []).append(r)
+    settled_groups, live_groups = [], []
+    for (session, _), rs in sorted(passes.items()):
+        priceable = [r for r in rs if r["plan_status"] not in (None, "unpriced")]
+        if len(priceable) >= MIN_RANKED and all(_settled(r) for r in priceable):
+            settled_groups.append((session, [(r, float(r["plan_bps"])) for r in priceable]))
+        live = [(r, float(v)) for r in priceable if (v := _current_bps(r)) is not None]
+        if len(live) >= MIN_RANKED:
+            live_groups.append((session, live))
+    return {"ranked": len(ranked), **_rank_summary(settled_groups), "so_far": _rank_summary(live_groups)}
+
+
 def tables(rows: list[dict] | None = None) -> dict:
-    """Averages of the finished proposals' plan results by verdict, conviction and setup, the paper results
+    """Averages of the settled proposals' plan results (past their scheduled time limit) by verdict, conviction and
+    setup, plus `so_far` across all priced proposals (open and finished, marked to latest prices), the paper results
     of the trades taken, the trades the review managed against their original plans, and post-mortem tags."""
     rows = outcomes() if rows is None else rows
-    done = [r for r in rows if r["plan_bps"] is not None]
+    done = [r for r in rows if _settled(r)]
+    early_stopped = sum(r["plan_bps"] is not None and not _settled(r) for r in rows)
+    live = [(r, v) for r in rows if (v := _current_bps(r)) is not None]
     by = lambda key: {k: _stat([r["plan_bps"] for r in done if key(r) == k]) for k in sorted({key(r) for r in done}, key=str)}  # noqa: E731
     traded = [r for r in rows if r["paper_bps"] is not None]
     managed = [r for r in traded if r["managed"] and r["plan_bps"] is not None]
     return {
-        "proposals": len(rows), "finished": len(done),
+        "proposals": len(rows), "finished": len(done), "early_stopped": early_stopped,
         "by_verdict": by(lambda r: r["verdict"]),
+        "so_far": {"n": len(live),
+                   "by_verdict": {k: _stat([v for r, v in live if r["verdict"] == k]) for k in sorted({r["verdict"] for r, _ in live})}},
         "by_conviction": by(lambda r: r["conviction"] if r["conviction"] is not None else "none"),
         "rank": rank_table(rows),
         "by_setup": {f"{setup} · {verdict}": s for (setup, verdict), s in by(lambda r: (r["setup"], "take" if r["verdict"] == "take" else "not taken")).items()},
@@ -334,22 +395,27 @@ def brief() -> str:
     t = tables(rows)
     from .. import portfolio
     three = bool(portfolio.restart())
-    lines = [f"{'Swing' if three else 'Automatic'} book record, {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} with a finished plan result.",
-             ("Plan result = the proposal's own plan from the price when its pass was acted on to its stop or time limit, at daily closes, before costs. "
+    waiting_note = f" ({t['early_stopped']} stopped early, waiting for their time limit)" if t["early_stopped"] else ""
+    lines = [f"{'Swing' if three else 'Automatic'} book record, {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} settled{waiting_note}.",
+             ("Plan result = the proposal's own plan from the price when its pass was acted on to its stop or time limit, before costs. "
               if three else "Plan result = the proposal's own plan on daily bars, first open to its stop or time limit, before costs. ")
-             + "The passes are the control: the takes have to beat them.", "", "By verdict"]
-    lines += [_line(k, s) for k, s in t["by_verdict"].items()] or ["  nothing finished yet"]
-    lines += ["", "By conviction"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing finished yet"])
+             + "Settled tables wait until an idea's time limit has passed, so early stop-outs don't count ahead of surviving peers. The passes are the control: the takes have to beat them.",
+             "", "By verdict (settled)"]
+    lines += [_line(k, s) for k, s in t["by_verdict"].items()] or ["  nothing settled yet"]
+    if t["so_far"]["n"]:
+        lines += ["", f"All ideas so far (open + finished, marked to latest price; n={t['so_far']['n']})"]
+        lines += [_line(k, s) for k, s in t["so_far"]["by_verdict"].items()]
+    lines += ["", "By conviction (settled)"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing settled yet"])
     rk = t["rank"]
-    lines += ["", "By rank (1 = the best idea of its pass; the ranking works if better-ranked ideas do better)"]
+    lines += ["", "By rank (1 = the best idea of its pass; settled passes only)"]
     if rk["nights"]:
         lines.append(f"  rank correlation {rk['ic']:+.2f} on average over {rk['nights']} night{'s' if rk['nights'] != 1 else ''}"
                      + (f", t {rk['t']:+.1f}" if rk["t"] is not None else "")
                      + (f"   (an anecdote before about {RANK_NIGHTS} nights)" if rk["nights"] < RANK_NIGHTS else ""))
         lines += [_line(f"{name} third of each night", s) for name, s in rk["thirds"].items()]
     else:
-        lines.append(f"  no ranked night has {MIN_RANKED} finished plans yet ({rk['ranked']} verdicts ranked so far)")
-    lines += ["", "By setup"] + ([_line(k, s) for k, s in t["by_setup"].items()] or ["  nothing finished yet"])
+        lines.append(f"  no ranked pass has fully settled yet ({rk['ranked']} verdicts ranked so far)")
+    lines += ["", "By setup (settled)"] + ([_line(k, s) for k, s in t["by_setup"].items()] or ["  nothing settled yet"])
     lines += ["", "Paper trades closed (after commissions)", _line("all", t["paper"])]
     for kind, s in t["managed"].items():
         lines += [_line(f"{kind}: paper result", s["paper"]), _line(f"{kind}: what the plan would have made", s["plan"])]

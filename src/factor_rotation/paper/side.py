@@ -220,7 +220,7 @@ def table(rows: list[dict] | None = None) -> dict:
     docs: dict[str, dict] = {}
     nights: dict[str, list[tuple[dict, float]]] = {}
     for r in rows:
-        if r["plan_bps"] is None or not subj.get(r["id"]):
+        if r["plan_bps"] is None or not r.get("plan_mature", True) or not subj.get(r["id"]):
             continue
         if r["session"] not in docs:
             docs[r["session"]] = (load(date.fromisoformat(r["session"])) or {}).get("symbols") or {}

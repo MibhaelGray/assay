@@ -348,32 +348,55 @@ class Enter(Taking):
         self.assertEqual([(o["symbol"], o["venue"]) for o in r["orders"]], [("AAA", "regular"), ("HHH", "regular")])
         self.assertEqual(entries.load(DAY)["trades"][0]["first_session"], NEXT.isoformat())
 
-    def test_a_wide_spread_passes_on_the_trade_instead_of_waiting(self):
+    def test_a_wide_overnight_spread_queues_for_835_ct_and_enters_then(self):
         self.night_take(verdict("AAA", 1))
         b = Broker()
-        r = self.enter(SUNDAY_NIGHT, b, books={"AAA": (49.0, 51.0), "HHH": (99.95, 100.05)})
+        # 1.0% wide overnight (> 0.5% overnight cap): deferred to 8:35 AM CT instead of killed
+        r = self.enter(SUNDAY_NIGHT, b, books={"AAA": (49.75, 50.25), "HHH": (99.95, 100.05)})
         self.assertEqual(b.sent, [])
-        self.assertEqual(r["passed"], [f"{DAY}-S01"])
+        self.assertEqual((r["passed"], r["deferred"]), ([], [f"{DAY}-S01"]))
+        self.assertIn("spread wider than 0.5% (AAA 1.0%), so the trade queues for 8:35 AM CT", r["warnings"][0])
+        # Quietly waits during overnight and 9:31 AM ET (8:31 AM CT)
+        self.assertEqual(self.enter(SUNDAY_NIGHT.replace(minute=50), b)["note"], "queued trades wait for 8:35 AM CT")
+        self.assertEqual(self.enter(datetime(2026, 11, 9, 9, 31, tzinfo=NY), b)["note"], "queued trades wait for 8:35 AM CT")
+        # At 9:35 AM ET (8:35 AM CT), enters immediately in regular hours
+        r = self.enter(datetime(2026, 11, 9, 9, 35, tzinfo=NY), b)
+        self.assertEqual([(o["symbol"], o["venue"]) for o in r["orders"]], [("AAA", "regular"), ("HHH", "regular")])
+        self.assertEqual(self.state(f"{DAY}-S01"), "open")
+
+    def test_a_wide_regular_spread_still_passes_on_the_trade(self):
+        self.screen("morning", "AAA")
+        self.record("morning", MORNING, verdict("AAA", 1))
+        b = Broker()
+        r = self.enter(MORNING, b, books={"AAA": (49.0, 51.0), "HHH": (99.95, 100.05)})
+        self.assertEqual((b.sent, r["passed"]), ([], [f"{DAY}-S01"]))
         self.assertIn("spread wider than 2% (AAA 4.0%), so the trade is passed on", r["warnings"][0])
         self.assertEqual(entries.waiting(DAY), [])
-        r = self.enter(SUNDAY_NIGHT.replace(minute=50), b)          # the spread is fine later: still nothing sent
-        self.assertEqual(b.sent, [])
 
-    def test_no_overnight_market_passes_on_the_trade_but_a_gateway_fault_waits(self):
+    def test_chasing_guard_stands_down_a_deferred_trade_that_already_ran_away(self):
+        self.night_take(verdict("AAA", 1))  # atr_pct=0.02, marked at AAA=50, HHH=100
+        b = Broker()
+        self.enter(SUNDAY_NIGHT, b, books={"AAA": (49.0, 51.0), "HHH": (99.95, 100.05)})
+        # Overnight AAA jumped +3% (+1.5 ATR > 1.0 ATR) to 51.50 against flat HHH: do not chase at 8:35 AM CT
+        r = self.enter(datetime(2026, 11, 9, 9, 35, tzinfo=NY), b, books={"AAA": (51.45, 51.55), "HHH": (99.95, 100.05)})
+        self.assertEqual((b.sent, r["passed"]), ([], [f"{DAY}-S01"]))
+        self.assertIn("not chasing", r["warnings"][0])
+
+    def test_no_overnight_market_queues_for_regular_hours_but_a_gateway_fault_waits(self):
         nothing = {"AAA": "the gateway sent no bid or ask within 8 seconds and gave no reason"}
         refused = {"AAA": "the live IBKR login is in use somewhere else (IBKR error 10197)"}
         spy = {"SPY": (599.95, 600.05), "HHH": (99.95, 100.05)}
         self.night_take(verdict("AAA", 1))
         r = self.enter(SUNDAY_NIGHT, Broker(), books={"HHH": (99.95, 100.05)}, missing=nothing)   # SPY unquoted too: the gateway
-        self.assertEqual(r["passed"], [])
-        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=1), Broker(), books=spy, missing=refused)   # a refusal is a fault
-        self.assertEqual(r["passed"], [])
+        self.assertEqual((r["passed"], r["deferred"]), ([], []))
+        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=1), Broker(), books=spy, missing=refused)   # a refusal is a fault -> 3 min retry
+        self.assertEqual((r["passed"], r["deferred"]), ([], []))
         self.assertIn("waits for the next try", r["warnings"][0])
+        self.assertEqual(self.enter(SUNDAY_NIGHT.replace(hour=21, minute=2), Broker())["note"], "waiting: the next try is 3 minutes after the last")
         b = Broker()
-        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=20), b, books=spy, missing=nothing)
-        self.assertEqual((b.sent, r["passed"]), ([], [f"{DAY}-S01"]))
-        self.assertIn("so the trade is passed on", r["warnings"][0])
-        self.assertEqual(entries.waiting(DAY), [])
+        r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=5), b, books=spy, missing=nothing)
+        self.assertEqual((b.sent, r["passed"], r["deferred"]), ([], [], [f"{DAY}-S01"]))
+        self.assertIn("queues for 8:35 AM CT", r["warnings"][0])
 
     def test_a_late_pass_by_hand_is_a_second_night_pass_and_its_takes_are_traded(self):
         self.screen("night", "AAA")
@@ -403,19 +426,29 @@ class Enter(Taking):
         t = entries.load(DAY)["trades"][0]
         self.assertEqual((t["pass"], t["first_session"], t["name"]), ("late2", DAY.isoformat(), "BBB"))
 
-    def test_a_trade_that_never_fills_is_passed_on_after_three_tries(self):
+    def test_a_trade_that_never_fills_overnight_queues_for_regular_hours_after_three_tries(self):
         self.night_take(verdict("AAA", 1))
         b = Slow({"AAA": 0})                                                # the quote is there; nothing fills against it
         self.enter(SUNDAY_NIGHT, b)
         self.enter(SUNDAY_NIGHT.replace(hour=21, minute=0), b)
-        self.assertIsNone(entries.load(DAY)["trades"][0].get("stood_down"))
+        self.assertIsNone(entries.load(DAY)["trades"][0].get("defer_regular"))
         r = self.enter(SUNDAY_NIGHT.replace(hour=21, minute=15), b)
         t = entries.load(DAY)["trades"][0]
-        self.assertIn("no fill in 3 tries", t["stood_down"])
-        self.assertEqual(r["passed"], [t["id"]])
+        self.assertIn("no fill in 3 overnight tries", t["defer_regular"])
+        self.assertEqual((r["passed"], r["deferred"]), ([], [t["id"]]))
         sent = len(b.sent)
-        self.enter(SUNDAY_NIGHT.replace(hour=21, minute=30), b)             # and it is not tried again
+        self.enter(SUNDAY_NIGHT.replace(hour=21, minute=30), b)             # waits quietly overnight
         self.assertEqual(len(b.sent), sent)
+
+    def test_regular_hours_tries_midpoint_then_steps_to_ask_with_tight_slip(self):
+        self.screen("morning", "AAA")
+        self.record("morning", MORNING, verdict("AAA", 1, hedge=None))
+        # Broker only fills if limit reaches the ask (50.05), so midpoint (50.00) cancels and crossing fills at 50.05 * 1.0015 = 50.13
+        b = Broker(fill=lambda o: o["limit"] >= 50.05)
+        r = self.enter(MORNING, b, books={"AAA": (49.95, 50.05)})
+        self.assertEqual([(o["priced_on"], o["limit"]) for o in r["orders"]],
+                         [("gateway midpoint", 50.0), ("gateway bid/ask", 50.13)])
+        self.assertEqual(self.state(f"{DAY}-S01"), "open")
 
     def test_the_hedge_is_never_ordered_while_the_lead_has_not_filled(self):
         self.night_take(verdict("AAA", 1))
@@ -517,10 +550,27 @@ class Enter(Taking):
         again = self.enter(MORNING + entries.STOP_EVERY, Broker(), marks={"AAA": 94.0})
         self.assertEqual([e["trade_id"] for e in again["exits"]], ["T1"])
 
+    def test_stops_check_every_two_minutes_during_the_opening_half_hour(self):
+        self.held_trade()
+        t0 = datetime(2026, 11, 9, 9, 32, tzinfo=NY)
+        self.enter(t0, Broker(), marks={"AAA": 96.0})
+        self.assertEqual(self.enter(t0 + timedelta(minutes=1), Broker(), marks={"AAA": 90.0})["exits"], [])
+        later = self.enter(t0 + timedelta(minutes=2), Broker(), marks={"AAA": 90.0})
+        self.assertEqual([e["trade_id"] for e in later["exits"]], ["T1"])
+
+    def test_stops_use_gateway_quotes_first_and_fall_back_to_yahoo(self):
+        self.held_trade()
+        # Gateway quotes AAA at 93.90/94.10 (mid 94.0, past 5% stop) and misses HHH -> Yahoo fills HHH at 100.0
+        async def gw(symbols, overnight):
+            return ({"AAA": (93.9, 94.1)} if "AAA" in symbols else {}), {}
+        with mock.patch.object(book, "quotes", lambda syms: {s: 100.0 for s in syms}):
+            px = asyncio.run(entries._gateway_stop_prices(["AAA", "HHH"], gw))
+        self.assertEqual(px, {"AAA": 94.0, "HHH": 100.0})
+
     def test_the_phone_hears_how_a_pass_was_traded_once_and_in_counts_only(self):
         self.night_take(verdict("AAA", 1, hedge=None), verdict("BBB", 2, hedge=None))
-        self.enter(SUNDAY_NIGHT, Broker(), books={"AAA": (49.95, 50.05), "BBB": (19.0, 21.0)})   # BBB 10% wide
-        self.assertEqual(self.sent, [("Night pass traded", "2 takes: 1 in, 1 passed on (a spread over 2%, or no overnight market).")])
+        self.enter(SUNDAY_NIGHT, Broker(), books={"AAA": (49.95, 50.05), "BBB": (19.0, 21.0)})   # BBB 10% wide -> queues
+        self.assertEqual(self.sent, [("Night pass traded", "2 takes: 1 in, 1 queued for 8:35 AM CT.")])
         self.enter(SUNDAY_NIGHT + timedelta(minutes=1), Broker())
         self.assertEqual(len(self.sent), 1)                      # the pass is told once, not every minute
 
@@ -609,11 +659,18 @@ class Heal(unittest.TestCase):
 
     """A gateway stuck on IBKR's competing-session error is restarted, at most once an hour."""
 
-    def test_only_when_every_quote_is_refused_for_a_competing_session(self):
+    def test_only_when_every_quote_is_refused_for_a_competing_session_or_gateway_hang(self):
         from factor_rotation.paper import entries
         stale = "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time"
+        hung = "the gateway couldn't be asked for quotes (TimeoutError)"
         self.assertIsNone(entries.heal_gateway({}))
         self.assertIsNone(entries.heal_gateway({"XSD": stale, "LUNR": "the account has no market data subscription for it over the API"}))
+        self.assertIsNone(entries.heal_gateway({"XSD": hung, "LUNR": "the account has no market data subscription for it over the API"}))
+        with tempfile.TemporaryDirectory() as d, mock.patch.object(book, "ROOT", Path(d)), \
+                mock.patch("shutil.which", return_value="/bin/docker"), \
+                mock.patch("subprocess.run", return_value=mock.Mock(returncode=0, stderr="")) as run:
+            self.assertIn("restarted", entries.heal_gateway({"XSD": hung}, datetime(2026, 11, 16, 1, 0, tzinfo=NY)))
+            self.assertEqual(run.call_count, 1)
 
     def test_restarts_once_then_waits_an_hour(self):
         import subprocess

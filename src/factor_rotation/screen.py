@@ -717,6 +717,8 @@ class OvernightCheck:
         return self.swept is None or _trading(self.swept.get(symbol))
 
     def __call__(self, top: list[dict]) -> dict[str, dict]:
+        """Annotate each candidate's overnight spread and whether it can enter overnight inside MAX_OVERNIGHT_SPREAD.
+        Nothing is dropped: night takes that can't enter cheaply overnight queue for 8:35 AM CT in regular hours."""
         from .paper import rules
         from .paper.gateway import no_market
         legs = {}
@@ -730,26 +732,26 @@ class OvernightCheck:
         self._quote({x for own, h in legs.values() for x in (*own, *([h] if h else []))})
         if self.unchecked:
             return {}
-        drop = {}
         for c in top:
             if c["name"] not in legs:
                 continue
             own, hedge = legs[c["name"]]
-            wide = {x: v for x in own if (v := self.spread(x)) is not None and v > rules.MAX_CROSS_SPREAD}
+            wide = {x: v for x in own if (v := self.spread(x)) is not None and v > rules.MAX_OVERNIGHT_SPREAD}
             none = [x for x in own if x in self.missing and no_market(self.missing[x])]
             quiet = [x for x in own if x not in wide and x not in none and not self.trading(x)]
+            c["overnight"] = {x: _pct_or_none(self.spread(x)) for x in own}
             if wide or none or quiet:
                 why = [f"{x} {v:.1%} wide" for x, v in wide.items()] + [f"{x} has no overnight bid and ask" for x in none] + \
                     [_quiet_text(x, self.swept.get(x)) for x in quiet]
-                drop[c["name"]] = {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "direction": c["direction"],
-                                   "why": "; ".join(why)}
-                continue
-            c["overnight"] = {x: _pct_or_none(self.spread(x)) for x in own}
+                c["overnight_tradeable"] = False
+                c["overnight_note"] = "queues for 8:35 AM CT (" + "; ".join(why) + ")"
+            else:
+                c["overnight_tradeable"] = True
             if hedge:
                 hs = self.spread(hedge)
                 c["overnight_hedge"] = {"symbol": hedge, "spread": _pct_or_none(hs), "trading": self.trading(hedge),
-                                        "tradeable": hs is not None and hs <= rules.MAX_CROSS_SPREAD and self.trading(hedge)}
-        return drop
+                                        "tradeable": hs is not None and hs <= rules.MAX_OVERNIGHT_SPREAD and self.trading(hedge)}
+        return {}
 
     def report(self, dropped: dict[str, dict]) -> dict:
         if self.unchecked:
@@ -1021,13 +1023,15 @@ def summary(payload: dict) -> str:
         lines.append("Left out, judged by a recent pass: " + ", ".join(c["name"] for c in payload["judged_recently"]))
     if (o := payload.get("overnight")) and not o["checked"]:
         lines.append(o["why"].capitalize())
-    elif o and o["dropped"]:
-        lines.append("Left out, can't trade overnight (over a 2% spread, or not trading): " + ", ".join(f"{d['name']} ({d['why']})" for d in o["dropped"]))
+    elif o:
+        queued = [f"{c['name']} ({c['overnight_note']})" for c in payload["candidates"] if c.get("overnight_note")]
+        if queued:
+            lines.append("Enters at 8:35 AM CT if taken (overnight wider than 0.5% or quiet): " + ", ".join(queued))
     wide_hedge = [f"{c['name']} (hedge {c['overnight_hedge']['symbol']} {c['overnight_hedge']['spread'] or 'no quote'}"
                   f"{'' if c['overnight_hedge'].get('trading', True) else ', not trading'})"
                   for c in payload["candidates"] if c.get("overnight_hedge") and not c["overnight_hedge"]["tradeable"]]
     if wide_hedge:
-        lines.append("Default hedge too wide or not trading overnight, choose another or none: " + ", ".join(wide_hedge))
+        lines.append("Default hedge wider than 0.5% or quiet overnight (trade will queue for 8:35 AM CT unless another hedge or none is chosen): " + ", ".join(wide_hedge))
     if (s := payload.get("overnight_sweep")) and not s["swept"]:
         lines.append(f"Overnight sweep not run: {s['why']}")
     elif s:

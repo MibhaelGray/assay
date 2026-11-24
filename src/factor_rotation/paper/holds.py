@@ -91,7 +91,8 @@ def rows() -> list[dict]:
             continue
         third = THIRDS[min(2, (r["rank"] - 1) * 3 // r["ranked"])] if r.get("rank") else None
         out.append({"id": r["id"], "session": r["session"], "name": r["name"], "setup": r["setup"], "taken": r["verdict"] == "take", "own": p["kind"] == "own",
-                    "rank": r.get("rank"), "third": third, "limit": p["plan"]["horizon_days"], "plan_bps": r["plan_bps"],
+                    "rank": r.get("rank"), "third": third, "limit": p["plan"]["horizon_days"],
+                    "plan_bps": r["plan_bps"] if r.get("plan_mature", True) else None,
                     "held": path, "stopped": _stopped(path, (p["plan"].get("stop") or {}).get("spread_pct"))})
     return out
 

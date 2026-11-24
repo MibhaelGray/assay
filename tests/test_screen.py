@@ -254,7 +254,7 @@ class BookNames(unittest.TestCase):
 
 
 class Overnight(unittest.TestCase):
-    """The night screen drops what can't be hit inside a 2% spread overnight, before the pass researches it."""
+    """The night screen annotates overnight liquidity against 0.5% without dropping names: wider or quiet names queue for 8:35 AM CT."""
 
     def check(self, books, missing=None):
         asked = []
@@ -264,7 +264,7 @@ class Overnight(unittest.TestCase):
             return ({s: books[s] for s in [*symbols, "SPY"] if s in books}, {s: w for s, w in (missing or {}).items() if s in symbols})
         return screen.OvernightCheck(gateway), asked
 
-    def test_wide_or_unquoted_names_are_dropped_a_wide_hedge_is_only_shown(self):
+    def test_wide_or_unquoted_names_are_annotated_not_dropped(self):
         top = [{**cand("AAA", "turn", 3), "hedge": "XLK"}, {**cand("BBB", "turn", 2), "hedge": "XLK"},
                {**cand("CCC", "turn", 1), "hedge": "XRT"}, {**cand("DDD", "turn", 1), "hedge": "XLK"},
                {"name": "Refiners", "kind": "basket", "members": ["MPC", "VLO", "PSX"], "hedge": "XLE", "setup": "turn", "direction": "long"}]
@@ -273,16 +273,20 @@ class Overnight(unittest.TestCase):
                                  "PSX": (130.0, 130.2), "XLE": (90.0, 90.1)},
                                 {"DDD": "the gateway sent no bid or ask within 8 seconds and gave no reason"})
         drop = chk(top)
-        self.assertEqual(set(drop), {"BBB", "DDD", "Refiners"})
-        self.assertIn("VLO 11.3% wide", drop["Refiners"]["why"])
-        self.assertIn("no overnight bid and ask", drop["DDD"]["why"])
+        self.assertEqual(drop, {})
+        self.assertTrue(top[0]["overnight_tradeable"])
+        self.assertFalse(top[1]["overnight_tradeable"])
+        self.assertFalse(top[3]["overnight_tradeable"])
+        self.assertIn("no overnight bid and ask", top[3]["overnight_note"])
+        self.assertFalse(top[4]["overnight_tradeable"])
+        self.assertIn("VLO 11.3% wide", top[4]["overnight_note"])
         ccc = top[2]["overnight_hedge"]
         self.assertEqual((ccc["symbol"], ccc["tradeable"]), ("XRT", False))
         self.assertTrue(top[0]["overnight_hedge"]["tradeable"])
         chk(top)                       # asked again: nothing new to quote
         self.assertEqual(len(asked), 1)
 
-    def test_a_leg_that_is_quoted_but_not_trading_is_dropped_and_a_quiet_hedge_is_flagged(self):
+    def test_a_leg_that_is_quoted_but_not_trading_is_annotated_and_a_quiet_hedge_is_flagged(self):
         """XLU on 2026-11-22: a 0.6% spread all evening on 209 shares, and nothing filled in 12 tries."""
         q = lambda last, volume: {"bid": last * 0.999, "ask": last * 1.001, "last": last, "volume": volume}  # noqa: E731
         sweep = {"at": "2026-11-22T20:35:00-05:00", "quotes": {"AAA": q(100.0, 5000.0), "BBB": q(43.0, 209.0), "CCC": q(50.0, 9000.0),
@@ -291,8 +295,10 @@ class Overnight(unittest.TestCase):
         chk = screen.OvernightCheck(lambda symbols: ({s: books[s] for s in [*symbols, "SPY"] if s in books}, {}), sweep)
         top = [{**cand("AAA", "turn", 3), "hedge": "XLK"}, {**cand("BBB", "turn", 2), "hedge": "XLK"}, {**cand("CCC", "turn", 1), "hedge": "XLU"}]
         drop = chk(top)
-        self.assertEqual(set(drop), {"BBB"})
-        self.assertIn("BBB has traded only $8,987 overnight", drop["BBB"]["why"])
+        self.assertEqual(drop, {})
+        self.assertTrue(top[0]["overnight_tradeable"])
+        self.assertFalse(top[1]["overnight_tradeable"])
+        self.assertIn("BBB has traded only $8,987 overnight", top[1]["overnight_note"])
         self.assertTrue(top[0]["overnight_hedge"]["tradeable"])
         xlu = top[2]["overnight_hedge"]
         self.assertEqual((xlu["symbol"], xlu["trading"], xlu["tradeable"]), ("XLU", False, False))

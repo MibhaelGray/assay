@@ -476,6 +476,36 @@ class Learn(Research):
         self.assertEqual((row["plan_status"], row["plan_bps"], row["plan_so_far_bps"]), ("open", None, 100.0))
         self.assertEqual(learn.tables()["finished"], 0)
 
+    def test_early_stop_waits_for_its_time_limit_before_entering_settled_tables(self):
+        names = ["AAA", "BBB", "CCC", "DDD"]
+        screen = {**SCREEN, "candidates": [{**SCREEN["candidates"][0], "name": n} for n in names]}
+        self.write_screen(screen)
+        plan = {"horizon_days": 3, "stop": {"spread_pct": -5}}
+        self.propose(verdict(plan=plan), *[{"candidate": n, "decision": "pass", "conviction": 2, "reason": "no story", "plan": plan} for n in names[1:]])
+        # After 1 day of a 3-day plan, BBB stops out at -7% while AAA/CCC/DDD are still open and up.
+        self.bars = frame({"AAA": [104.0], "BBB": [93.0], "CCC": [102.0], "DDD": [101.0], "HHH": [100.0]})
+        rows = {r["name"]: r for r in learn.outcomes()}
+        self.assertEqual((rows["BBB"]["plan_status"], rows["BBB"]["plan_bps"], rows["BBB"]["plan_mature"]), ("stopped", -700.0, False))
+        t = learn.tables()
+        # Settled tables wait for day 3 so BBB doesn't bias passes alone; so_far includes all four right now.
+        self.assertEqual((t["finished"], t["early_stopped"], t["by_verdict"]), (0, 1, {}))
+        self.assertEqual((t["so_far"]["n"], t["so_far"]["by_verdict"]["take"]["mean"], t["so_far"]["by_verdict"]["pass"]["mean"]),
+                         (4, 400.0, round((-700.0 + 200.0 + 100.0) / 3, 1)))
+        self.assertEqual((t["rank"]["nights"], t["rank"]["so_far"]["nights"]), (0, 1))
+        # Once day 3 settles, all four enter settled tables and settled ranking together.
+        self.bars = frame({"AAA": [104.0, 105.0, 106.0], "BBB": [93.0, 105.0, 105.0], "CCC": [102.0, 103.0, 104.0], "DDD": [101.0, 100.0, 99.0], "HHH": [100.0] * 3})
+        t = learn.tables()
+        self.assertEqual((t["finished"], t["early_stopped"]), (4, 0))
+        self.assertEqual((t["by_verdict"]["take"]["mean"], t["by_verdict"]["pass"]["mean"], t["rank"]["nights"]),
+                         (600.0, round((-700.0 + 400.0 - 100.0) / 3, 1), 1))
+
+    def test_unsettled_live_bar_marks_open_plan_so_far_without_finishing_it(self):
+        self.propose(verdict(plan={"horizon_days": 1, "stop": {"spread_pct": -5}}))
+        self.bars = frame({"AAA": [103.0], "HHH": [100.0]})
+        with mock.patch.object(book.journal, "_bars_settled", lambda d: False):
+            (row, _) = learn.outcomes()
+        self.assertEqual((row["plan_status"], row["plan_bps"], row["plan_mature"], row["plan_so_far_bps"]), ("open", None, False, 300.0))
+
     def test_a_post_mortem_tag_has_to_agree_with_the_result(self):
         t = {**pair("T1", horizon=1), "proposal_id": f"{DAY}-P01"}
         self.write("entries", DAY, {"trades": [t], "orders": [{"status": "PreSubmitted"}]})
