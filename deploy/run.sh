@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 # One job of a kind at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
 # use the paper gateway and have their own lock, so a long data job can't make the 3:45 PM exits miss the
 # market-on-close cutoff.
-case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
+case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*|gateway-preflight) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
 if [ -z "${FR_LOCKED:-}" ]; then
   export FR_LOCKED=1
   if command -v flock >/dev/null; then exec flock "$lock" "$0" "$@"; fi
@@ -55,6 +55,30 @@ case "$1" in
     # trades Monday's night pass. A run with nothing to do prints nothing.
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
     exec uv run fr paper enter ;;
+  gateway-preflight)
+    # Deterministic gateway check 10 minutes before each scheduled pass and 5 minutes before paper-close.
+    # Auto-restarts a hung/disconnected gateway silently; pings Telegram only if the phone app (10197) is holding
+    # quotes or if a restart couldn't recover it.
+    [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
+    hm=$((10#$(TZ=America/New_York date +%H%M)))
+    wd=$(TZ=America/New_York date +%u)
+    if [ "$hm" -ge 900 ] && [ "$hm" -le 1015 ]; then
+      uv run fr trading-day || exit 0
+      exec uv run fr paper preflight "Morning pass"
+    elif [ "$hm" -ge 1225 ] && [ "$hm" -le 1244 ]; then
+      uv run fr trading-day --closing || exit 0
+      exec uv run fr paper preflight --no-quotes "Paper close"
+    elif [ "$hm" -ge 1245 ] && [ "$hm" -le 1315 ]; then
+      uv run fr trading-day --full || exit 0
+      exec uv run fr paper preflight "Midday pass"
+    elif [ "$hm" -ge 1525 ] && [ "$hm" -le 1544 ]; then
+      uv run fr trading-day --closing || exit 0
+      exec uv run fr paper preflight --no-quotes "Paper close"
+    elif [ "$hm" -ge 2000 ] && [ "$hm" -le 2045 ]; then
+      [ "$wd" = 5 ] || [ "$wd" = 6 ] && exit 0
+      exec uv run fr paper preflight "Night pass"
+    fi
+    exit 0 ;;
   publish)
     # The public site (publish.py): pull today's prices and the paper account, push the page if it changed.
     exec uv run fr publish --pull ;;

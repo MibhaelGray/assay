@@ -37,13 +37,15 @@ SCHEDULE = {
     "paper-sync": ["16:20"],
     "side-facts": ["22:15", "23:45", "11:15", "14:15"],
     "keep-awake": ["16:40"],
+    # 10 min before each pass (7:20 PM, 8:35 AM, 11:50 AM CT) and 5 min before close (2:40 PM / 11:40 AM CT).
+    "gateway-preflight": ["09:35", "12:40", "12:50", "15:40", "20:20"],
     # 7:30 PM, 8:45 AM and 12:00 PM Central.
     "pass-night": ["20:30"],
     "pass-morning": ["09:45"],
     "pass-midday": ["13:00"],
 }
 # job -> New York times on Sundays as well: the night pass for Monday's session
-SUNDAY = {"keep-awake": ["19:55"], "side-facts": ["22:15", "23:45"], "pass-night": ["20:30"]}
+SUNDAY = {"keep-awake": ["19:55"], "side-facts": ["22:15", "23:45"], "gateway-preflight": ["20:20"], "pass-night": ["20:30"]}
 # job -> seconds between runs, every day. The order job looks for a newly recorded pass each minute; a run with
 # nothing to do reads two small files and ends. The watchdog (watch.py) checks every five minutes for anything broken.
 # The public site (publish.py) is refreshed every 15 minutes; GitHub allows about ten site builds an hour.

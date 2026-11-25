@@ -18,6 +18,7 @@ services:
       BYPASS_WARNING: "yes"
       TIME_ZONE: America/New_York
       AUTO_RESTART_TIME: "11:55 PM"
+      EXISTING_SESSION_DETECTED_ACTION: primary
       RELOGIN_AFTER_TWOFA_TIMEOUT: "yes"
       TWOFA_TIMEOUT_ACTION: restart
     ports:

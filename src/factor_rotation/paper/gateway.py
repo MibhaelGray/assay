@@ -8,16 +8,25 @@ client id, so it never collides with the order connection (paper/broker.py).
 
 import asyncio
 import logging
+import os
+import shutil
+import subprocess
+import time
+from datetime import datetime, timedelta
 
 import numpy as np
 
-from .broker import PaperSettings
+from ..config import CT, NY
+from .broker import IBPaper, PaperSettings
 
 log = logging.getLogger(__name__)
 
 DATA_CLIENT_ID = 77         # the gateway quotes' own connection
+PREFLIGHT_CLIENT_ID = 76    # pre-flight health check's own connection
 QUOTE_TRIES = 3             # asks of the gateway for a bid and ask before a leg is left to wait
 SNAPSHOT_BATCH = 50
+GATEWAY_LOST_CODES = {1100, 2110}
+RESTART_WAIT = 15           # seconds after docker restart for IBC to log back in (~5 s in practice)
 
 
 class IBMarket:
@@ -172,3 +181,108 @@ async def gateway_books(symbols: list[str], overnight: bool) -> tuple[dict[str, 
         log.warning("gateway_quotes_failed %r", e)
         why = f"the gateway couldn't be asked for quotes ({type(e).__name__}{': ' + str(e) if str(e) else ''})"
         return {}, {s: why for s in symbols}
+
+
+def _find_docker() -> str | None:
+    return shutil.which("docker") or next(
+        (p for p in ("/usr/local/bin/docker", "/opt/homebrew/bin/docker",
+                     os.path.expanduser("~/.docker/bin/docker"),
+                     "/Applications/Docker.app/Contents/Resources/bin/docker") if os.path.exists(p)),
+        None,
+    )
+
+
+def restart_container(cause: str, now: datetime | None = None,
+                      cooldown: timedelta = timedelta(minutes=15)) -> tuple[bool, str | None]:
+    """Restart the paper IB Gateway Docker container with a cooldown so nothing reboot-loops.
+    Returns (restarted_ok, message_or_None_if_in_cooldown)."""
+    from . import book
+
+    now = now or datetime.now(NY)
+    stamp = book.ROOT / "gateway_restart.json"
+    last = (book._read(stamp) or {}).get("at")
+    if last and cooldown.total_seconds() > 0 and now - datetime.fromisoformat(last) < cooldown:
+        return False, None
+    docker = _find_docker()
+    name = os.environ.get("FR_PAPER_GATEWAY_CONTAINER", "deploy-ib-gateway-paper-1")
+    if not docker:
+        return False, f"{cause}, and docker wasn't found to restart it"
+    book._write(stamp, {"at": now.isoformat(timespec="seconds"), "why": cause})
+    done = subprocess.run([docker, "restart", name], capture_output=True, text=True, timeout=120)
+    if done.returncode == 0:
+        return True, f"the paper gateway was restarted ({cause})"
+    return False, f"tried to restart the paper gateway ({cause}), but docker said: {done.stderr.strip()[:200]}"
+
+
+async def _probe_health(check_quotes: bool = True) -> tuple[str, str | None]:
+    """Check gateway connectivity and (optionally) whether quotes are blocked by a competing live login (10197).
+    Returns (kind, detail) where kind is 'ok', 'down', or '10197'."""
+    s = PaperSettings()
+    s = type(s)(host=s.host, port=s.port, account=s.account, client_id=PREFLIGHT_CLIENT_ID, send=False)
+    try:
+        async with IBPaper(s, readonly=True) as b:
+            await asyncio.sleep(1.5)
+            lost = [e for e in b.errors if e["code"] in GATEWAY_LOST_CODES]
+            if lost:
+                return "down", f"gateway lost IBKR ({lost[-1]['code']})"
+            await asyncio.wait_for(b.ib.accountSummaryAsync(s.account), 20)
+    except asyncio.TimeoutError:
+        return "down", "gateway connects but timed out on account summary"
+    except Exception as e:  # noqa: BLE001
+        return "down", f"gateway unreachable ({type(e).__name__})"
+    if not check_quotes:
+        return "ok", None
+    from .entries import venue
+    overnight = venue(datetime.now(NY)) == "overnight"
+    try:
+        async with IBMarket(client_id=PREFLIGHT_CLIENT_ID) as m:
+            await asyncio.wait_for(m.quotes([CANARY], overnight=overnight, need_books=True), 25)
+            why = m.missing.get(CANARY, "")
+            if "10197" in why:
+                return "10197", why
+    except Exception as e:  # noqa: BLE001
+        return "down", f"quote probe failed ({type(e).__name__})"
+    return "ok", None
+
+
+def preflight(label: str, *, check_quotes: bool = True, notify: bool = True, now: datetime | None = None,
+              probe=None, restarter=None, sleeper=None, sender=None) -> dict:
+    """Deterministic pre-flight check before a scheduled pass or close job.
+    Auto-restarts Docker silently if the gateway is down/frozen or stuck on stale 10197; notifies Telegram
+    only if it is still unhealthy or if a live phone/TWS login (10197) is actively holding market data."""
+    from .. import watch
+
+    now = now or datetime.now(NY)
+    probe_fn = probe or (lambda: asyncio.run(_probe_health(check_quotes=check_quotes)))
+    restart_fn = restarter or (lambda why: restart_container(why, now=now, cooldown=timedelta(minutes=5)))
+    sleep_fn = sleeper or time.sleep
+    send_fn = sender or watch.send
+
+    kind, detail = probe_fn()
+    if kind == "ok":
+        return {"ok": True, "status": "ok", "restarted": False, "label": label, "at": now.isoformat(timespec="seconds")}
+
+    restarted, msg = restart_fn(f"pre-flight before {label}: {detail or kind}")
+    if restarted:
+        sleep_fn(RESTART_WAIT)
+        kind, detail = probe_fn()
+        if kind == "ok":
+            return {"ok": True, "status": "recovered", "restarted": True, "note": msg,
+                    "label": label, "at": now.isoformat(timespec="seconds")}
+
+    if notify:
+        when = now.astimezone(CT).strftime("%-I:%M %p CT")
+        if kind == "10197":
+            send_fn(
+                f"{label}: close IBKR on phone",
+                f"{label} is coming up (checked {when}), and IBKR is refusing quotes (error 10197) because your live "
+                "login is open on your phone, browser or TWS. Log out there so paper quotes work.",
+            )
+        else:
+            send_fn(
+                f"{label}: paper gateway down",
+                f"Checked before {label} ({when}) and tried restarting the paper gateway, but it still isn't healthy: "
+                f"{detail or msg or kind}.",
+            )
+    return {"ok": False, "status": kind, "restarted": restarted, "detail": detail or msg,
+            "label": label, "at": now.isoformat(timespec="seconds")}

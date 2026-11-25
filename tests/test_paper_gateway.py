@@ -71,5 +71,69 @@ class QuoteReasons(unittest.TestCase):
         self.assertEqual(set(missing), {"AAA", "HHH"})
 
 
+class Preflight(unittest.TestCase):
+    def test_healthy_gateway_is_silent_and_does_not_restart(self):
+        sent, restarted = [], []
+        res = gateway.preflight(
+            "Morning pass",
+            probe=lambda: ("ok", None),
+            restarter=lambda why: (restarted.append(why) or True, "restarted"),
+            sleeper=lambda _: None,
+            sender=lambda t, b: sent.append((t, b)),
+        )
+        self.assertTrue(res["ok"])
+        self.assertEqual(res["status"], "ok")
+        self.assertFalse(res["restarted"])
+        self.assertEqual(restarted, [])
+        self.assertEqual(sent, [])
+
+    def test_hung_gateway_restarts_silently_when_recovery_succeeds(self):
+        probes = iter([("down", "gateway lost IBKR (2110)"), ("ok", None)])
+        sent, restarted = [], []
+        res = gateway.preflight(
+            "Night pass",
+            probe=lambda: next(probes),
+            restarter=lambda why: (restarted.append(why) or True, "restarted"),
+            sleeper=lambda _: None,
+            sender=lambda t, b: sent.append((t, b)),
+        )
+        self.assertTrue(res["ok"])
+        self.assertEqual(res["status"], "recovered")
+        self.assertTrue(res["restarted"])
+        self.assertEqual(len(restarted), 1)
+        self.assertEqual(sent, [])
+
+    def test_persistent_10197_pings_telegram_to_close_phone_app(self):
+        probes = iter([("10197", "competing live session"), ("10197", "competing live session")])
+        sent = []
+        res = gateway.preflight(
+            "Midday pass",
+            probe=lambda: next(probes),
+            restarter=lambda why: (True, "restarted"),
+            sleeper=lambda _: None,
+            sender=lambda t, b: sent.append((t, b)),
+        )
+        self.assertFalse(res["ok"])
+        self.assertEqual(res["status"], "10197")
+        self.assertEqual(len(sent), 1)
+        self.assertIn("close IBKR on phone", sent[0][0])
+        self.assertIn("10197", sent[0][1])
+
+    def test_still_down_after_restart_alerts_telegram(self):
+        probes = iter([("down", "timeout"), ("down", "still timeout")])
+        sent = []
+        res = gateway.preflight(
+            "Paper close",
+            probe=lambda: next(probes),
+            restarter=lambda why: (True, "restarted"),
+            sleeper=lambda _: None,
+            sender=lambda t, b: sent.append((t, b)),
+        )
+        self.assertFalse(res["ok"])
+        self.assertEqual(res["status"], "down")
+        self.assertEqual(len(sent), 1)
+        self.assertIn("paper gateway down", sent[0][0])
+
+
 if __name__ == "__main__":
     unittest.main()

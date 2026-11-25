@@ -257,11 +257,17 @@ def lost_quotes(now: datetime, state: dict, probe=None) -> list[tuple[str, str, 
 
 # ---- the job --------------------------------------------------------------------------------------------------
 
-def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_probe=None) -> list[str]:
+def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_probe=None,
+        check_gateway: bool = False) -> list[str]:
     now = now or datetime.now(NY)
     state = _state()
-    found = [*failed_jobs(), *missing_passes(now), *refused_quotes(now), *gateway(now, state, probe)]
-    if not any(k.startswith("quotes:") for k, _, _ in found):   # the order job's own alert already says it
+    # Gateway connectivity and 10197 quote checks moved to scheduled pre-flight checks before each pass and close
+    # (paper/gateway.py:preflight) so the watchdog isn't polling the gateway every 5 minutes while the owner trades
+    # on their phone. Pass check_gateway=True (or probe/quote_probe) to run them here explicitly.
+    found = [*failed_jobs(), *missing_passes(now), *refused_quotes(now)]
+    if check_gateway or probe is not None:
+        found += gateway(now, state, probe)
+    if (check_gateway or quote_probe is not None) and not any(k.startswith("quotes:") for k, _, _ in found):
         found += lost_quotes(now, state, quote_probe)
     sent_at = state.setdefault("sent", {})
     out = []

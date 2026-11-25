@@ -249,7 +249,11 @@ async def _pull(b, today: date) -> dict:
     path = ROOT / "fills" / f"{today}.json"
     new = await b.fills()
     positions = await b.positions()
-    nav = await b.net_liquidation()
+    try:
+        nav = await b.net_liquidation()
+    except Exception as e:  # noqa: BLE001 - a slow account summary must never block closing exits
+        log.warning("paper_nav_failed %r", e)
+        nav = (_read(path) or {}).get("net_liquidation")
     # IBKR's own prices for what the account holds. With nothing held there is nothing to price, and the gateway
     # doesn't answer the request at all: it timed out after 30 seconds on every pull of an empty account.
     marks = await b.marks() if positions and hasattr(b, "marks") else {}
@@ -296,11 +300,29 @@ def reconcile(positions: dict[str, float]) -> list[str]:
 
 async def close_session(today: date, flatten: bool = False, broker=None, dry: bool = False) -> dict:
     """Check each open trade at 3:45 PM ET (12:45 PM ET on a half day) and send market-on-close exits for those leaving today."""
+    from . import gateway
+
     path = ROOT / "exits" / f"{today}.json"
     if path.exists():
         raise FileExistsError(f"{path} exists; today's exits already went out")
     s = PaperSettings()
     dry = dry or (broker is None and not s.send)
+    for attempt in (1, 2):
+        try:
+            return await _close_once(today, path, flatten=flatten, broker=broker, dry=dry)
+        except (TimeoutError, ConnectionError, OSError) as e:
+            if attempt == 2 or dry or broker is not None or path.exists():
+                raise
+            log.warning("paper_close_gateway_retry error=%r", e)
+            restarted, msg = gateway.restart_container(f"paper close hit {type(e).__name__}", cooldown=timedelta(minutes=5))
+            if not restarted:
+                raise
+            log.warning("paper_close_restarted %s", msg)
+            await asyncio.sleep(gateway.RESTART_WAIT)
+    raise RuntimeError("unreachable")
+
+
+async def _close_once(today: date, path: Path, flatten: bool = False, broker=None, dry: bool = False) -> dict:
     exits, extended, retried, unchecked, orders, warnings = [], [], [], [], [], []
     review = {} if flatten else proposals.reviews(today)
     moc = lambda t: [{"trade_id": t["id"], "symbol": h["symbol"], "action": "SELL" if h["side"] == "long" else "BUY",  # noqa: E731

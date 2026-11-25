@@ -74,10 +74,12 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--execute", action="store_true",
                    help="a job that sends orders only looks when it is run by hand: it prints what it would send "
                         "and sends nothing. This makes it count, as the scheduled job does")
-    c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume",
+    c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume", "preflight",
                                    "propose", "postmortem", "desk", "learn", "hedges", "side", "holds", "depth"])
     c.add_argument("args", nargs="*", help="propose, postmortem: the draft JSON file; hedges: the symbols on one side; "
-                                           "side: `report` to score the side facts instead of pulling them")
+                                           "side: `report` to score the side facts instead of pulling them; "
+                                           "preflight: optional label (e.g. 'Night pass')")
+    c.add_argument("--no-quotes", action="store_true", help="preflight: check gateway connectivity only, skip the 10197 quote check")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
     c.add_argument("--reason", default="", help="halt: why, kept in the HALT file")
     c.add_argument("--book", choices=["swing"],
@@ -330,23 +332,40 @@ def _paper(a) -> None:
         if r["failed"]:
             print("  ! nothing from Yahoo for " + ", ".join(r["failed"]) + "; the next run tries again")
         return
+    if a.job == "preflight":
+        # Deterministic gateway check before a pass or close job: auto-restarts a hung gateway silently, pings Telegram
+        # only if a phone/TWS live session (10197) is blocking quotes or if restarting didn't recover it.
+        from .paper import gateway
+        label = " ".join(a.args).strip() or "Scheduled pass"
+        res = gateway.preflight(label, check_quotes=not a.no_quotes)
+        print(f"paper preflight ({label}): {res['status']}" + (f" ({res.get('detail') or res.get('note')})" if res.get("detail") or res.get("note") else ""))
+        sys.exit(0 if res["ok"] else 1)
     today = _today()
     if a.job in ("close", "sync") and not journal.is_trading_day(today):
         logging.info("market_closed date=%s", today)
         return
     # A close job that starts late (the Mac woke from sleep, say) must not send after the auction cutoff:
-    # market-on-close by 3:50 PM ET. Missed exits go out the next session, since a trade past its time limit
-    # exits at the next check.
-    now = datetime.now(NY).strftime("%H:%M")
-    if a.job == "close" and not ("15:30" <= now <= "15:49") and PaperSettings().send:
-        ct = lambda hm: f"{(int(hm[:2]) - 1) % 12 or 12}:{hm[3:]} {'PM' if int(hm[:2]) - 1 >= 12 else 'AM'}"  # New York to Central
-        print(f"paper close: {ct(now)} CT is outside {ct('15:30')}-{ct('15:49')} CT, so nothing was sent")
+    # market-on-close by 10 minutes before the session close (3:50 PM ET full day, 12:50 PM ET half day).
+    # Missed exits go out the next session, since a trade past its time limit exits at the next check.
+    now_dt = datetime.now(NY)
+    close_dt = datetime.combine(today, journal.close_time(today), NY)
+    if a.job == "close" and not (close_dt - timedelta(minutes=30) <= now_dt <= close_dt - timedelta(minutes=10, seconds=1)) and PaperSettings().send:
+        from .config import CT
+        lo, hi = (close_dt - timedelta(minutes=30)).astimezone(CT), (close_dt - timedelta(minutes=11)).astimezone(CT)
+        print(f"paper close: {now_dt.astimezone(CT):%-I:%M %p} CT is outside {lo:%-I:%M %p}-{hi:%-I:%M %p} CT, so nothing was sent")
         sys.exit(1)
     looking = _looking(a) if a.job in ("enter", "close") else False
     if a.job == "enter":
         # The three-pass book's order job (paper/entries.py): trades a pass's takes and exits once it has recorded.
         from .paper import entries
-        r = asyncio.run(entries.run(dry=looking))
+        try:
+            r = asyncio.run(entries.run(dry=looking))
+        except (TimeoutError, ConnectionError, OSError) as e:
+            if not looking and (healed := entries.heal_gateway({"_broker": f"the gateway couldn't be asked for quotes ({type(e).__name__})"})):
+                entries.retry_soon()
+                print(f"paper enter: {type(e).__name__}: {e}; {healed}")
+                return
+            raise
         if not looking and (healed := entries.heal_gateway(r.get("no_quote") or {})):   # after the run: its connection is closed
             entries.retry_soon()
             r["warnings"].append(healed + "; the next try is in a minute or two.")
