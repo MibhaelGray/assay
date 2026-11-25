@@ -13,6 +13,7 @@ accession number so each Form 4 is fetched only once.
 import json
 import logging
 import os
+import re
 import threading
 import time
 import urllib.error
@@ -20,6 +21,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta, timezone
+from html.parser import HTMLParser
 from pathlib import Path
 
 from .config import settings
@@ -28,14 +30,25 @@ log = logging.getLogger(__name__)
 
 TICKERS_URL = "https://www.sec.gov/files/company_tickers.json"
 EFTS_URL = "https://efts.sec.gov/LATEST/search-index"
+SUBMISSIONS_URL = "https://data.sec.gov/submissions/CIK{cik:010d}.json"
+INDEX_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{acc}/index.json"
 ARCHIVE_URL = "https://www.sec.gov/Archives/edgar/data/{cik}/{acc}/{doc}"
 RATE = 8                      # SEC permits 10 requests/second; stay safely under it
 TICKERS_TTL = 24 * 3600       # refresh ticker->CIK map once a day
+SUBMISSIONS_TTL = 6 * 3600    # refresh per-company submissions list every 6 hours
 PAGE_SIZE = 100
 MAX_PAGES = 15                # safety cap on EFTS pagination per query
 MAX_FORM4_FETCH = 60          # cap uncached Form 4 XML fetches in a single screen call
 FORM4_SINGLE_MIN = 100_000.0  # one officer/director open-market buy
 FORM4_CLUSTER_MIN = 50_000.0  # combined open-market buys by 2+ officers/directors
+SEC_HOSTS = {"sec.gov", "www.sec.gov", "data.sec.gov", "efts.sec.gov"}
+BOILERPLATE_STOP = re.compile(
+    r"^\s*(?:forward[- ]looking statements|cautionary (?:note|statement) regarding forward|safe harbor statement|"
+    r"reconciliation of gaap|non-gaap financial measures reconciliation|about [a-z0-9 .,&'-]{2,40}$)",
+    re.I,
+)
+EX99_RE = re.compile(r"(?:ex|exhibit)?[-_.]?99[-_.]?1\b|ex99|earnings|release|press", re.I)
+XBRL_TABLE_RE = re.compile(r"^R\d+\.htm$|^Financial_Report|^FilingSummary|index\.htm", re.I)
 
 REPO = Path(__file__).resolve().parents[2]
 
@@ -354,3 +367,208 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
         "counts": counts,
         "by_symbol": by_symbol,
     }
+
+
+class _HTMLText(HTMLParser):
+    """Strip HTML/iXBRL tags into clean readable paragraphs without external dependencies."""
+
+    SKIP = {"script", "style", "head", "title", "ix:header", "ix:hidden", "noscript"}
+    BREAK = {"p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6", "br", "hr", "section", "article"}
+    CELL = {"td", "th"}
+
+    def __init__(self):
+        super().__init__()
+        self._skip = 0
+        self.parts: list[str] = []
+
+    def handle_starttag(self, tag, attrs):
+        t = tag.lower()
+        if t in self.SKIP or any(k.lower() == "style" and "display:none" in (v or "").replace(" ", "").lower() for k, v in attrs):
+            self._skip += 1
+            return
+        if self._skip:
+            return
+        if t in self.BREAK:
+            self.parts.append("\n")
+        elif t in self.CELL:
+            self.parts.append(" | ")
+
+    def handle_endtag(self, tag):
+        t = tag.lower()
+        if t in self.SKIP and self._skip:
+            self._skip -= 1
+        elif not self._skip and t in self.BREAK:
+            self.parts.append("\n")
+
+    def handle_data(self, data):
+        if not self._skip:
+            self.parts.append(data)
+
+
+def html_to_text(raw: bytes | str, max_chars: int = 8_000, trim_boilerplate: bool = True) -> str:
+    """Convert raw SEC HTML or plain text into concise, readable Markdown-friendly text."""
+    text = raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else str(raw)
+    if "<html" in text[:4000].lower() or "<p" in text[:4000].lower() or "<div" in text[:4000].lower() or "<table" in text[:4000].lower():
+        parser = _HTMLText()
+        parser.feed(text)
+        text = "".join(parser.parts)
+    lines: list[str] = []
+    for raw_line in text.splitlines():
+        line = re.sub(r"\s+", " ", raw_line.replace("\xa0", " ")).strip(" |")
+        line = re.sub(r"(?:\s*\|\s*){2,}", " | ", line)
+        if not line:
+            continue
+        if trim_boilerplate and sum(len(x) + 1 for x in lines) >= 3_000 and BOILERPLATE_STOP.match(line):
+            break
+        lines.append(line)
+        if sum(len(x) + 1 for x in lines) >= max_chars + 400:
+            break
+    out = "\n".join(lines)
+    if len(out) > max_chars:
+        cut = out.rfind("\n", 0, max_chars)
+        out = out[:cut if cut > max_chars // 2 else max_chars].rstrip() + "\n[... trimmed for brevity ...]"
+    return out
+
+
+def read_url(url: str, max_chars: int = 14_000, fetcher=_get) -> str:
+    """Fetch a sec.gov filing URL using SEC_USER_AGENT and return clean readable text."""
+    parsed = urllib.parse.urlparse(url.strip())
+    host = parsed.netloc.lower()
+    if parsed.scheme != "https" or host not in SEC_HOSTS:
+        raise ValueError(f"fr edgar read only fetches https://sec.gov URLs (got {url!r})")
+    raw = fetcher(url.strip())
+    return html_to_text(raw, max_chars=max_chars, trim_boilerplate=False)
+
+
+def company_submissions(cik: int, fetcher=_get) -> dict:
+    """Per-company recent SEC filings metadata, cached for SUBMISSIONS_TTL seconds."""
+    path = _cache_dir() / "submissions" / f"CIK{cik:010d}.json"
+    if path.exists() and time.time() - path.stat().st_mtime < SUBMISSIONS_TTL:
+        return json.loads(path.read_text())
+    data = json.loads(fetcher(SUBMISSIONS_URL.format(cik=cik)))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data))
+    return data
+
+
+def _pick_exhibit(cik: int, acc: str, primary_doc: str, form: str, fetcher=_get) -> tuple[str, str]:
+    """For 8-K / 6-K filings, prefer Exhibit 99.1 (the actual press release) over the 1-page cover sheet."""
+    acc_no = acc.replace("-", "")
+    default = (primary_doc, ARCHIVE_URL.format(cik=cik, acc=acc_no, doc=primary_doc))
+    if not form.upper().startswith(("8-K", "6-K")):
+        return default
+    try:
+        idx = json.loads(fetcher(INDEX_URL.format(cik=cik, acc=acc_no)))
+    except Exception:  # noqa: BLE001
+        return default
+    items = ((idx.get("directory") or {}).get("item")) or []
+    candidates = []
+    for it in items:
+        name = str(it.get("name") or "")
+        low = name.lower()
+        if not low.endswith((".htm", ".html", ".txt")) or name == primary_doc or XBRL_TABLE_RE.search(name):
+            continue
+        if low.endswith(".txt") and acc_no in low.replace("-", ""):
+            continue  # skip the raw full-submission .txt bundle
+        try:
+            size = int(it.get("size") or 0)
+        except ValueError:
+            size = 0
+        if size < 400:
+            continue
+        score = (2 if EX99_RE.search(name) else 0) + (1 if low.endswith((".htm", ".html")) else 0)
+        candidates.append((score, size, name))
+    if not candidates:
+        return default
+    candidates.sort(reverse=True)
+    best = candidates[0][2]
+    if candidates[0][0] >= 2:
+        return best, ARCHIVE_URL.format(cik=cik, acc=acc_no, doc=best)
+    return default
+
+
+def _cached_doc_text(cik: int, acc: str, doc: str, url: str, max_chars: int, fetcher=_get) -> str:
+    acc_no = acc.replace("-", "")
+    safe = re.sub(r"[^A-Za-z0-9._-]", "_", doc)
+    path = _cache_dir() / "docs" / f"{acc_no}_{safe}.txt"
+    if path.exists():
+        text = path.read_text()
+    else:
+        text = html_to_text(fetcher(url), max_chars=12_000, trim_boilerplate=True)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text)
+    if len(text) > max_chars:
+        cut = text.rfind("\n", 0, max_chars)
+        return text[:cut if cut > max_chars // 2 else max_chars].rstrip() + "\n[... trimmed for brevity ...]"
+    return text
+
+
+def recent_filings_text(symbol: str, cik: int, as_of: date, *, earnings_days: int = 45, material_days: int = 21,
+                        max_filings: int = 3, primary_chars: int = 6_000, secondary_chars: int = 2_600,
+                        fetcher=_get) -> list[dict]:
+    """Recent primary SEC filing text (preferring Exhibit 99.1 press releases) for one company."""
+    try:
+        sub = company_submissions(cik, fetcher=fetcher)
+    except Exception as e:  # noqa: BLE001
+        log.warning("edgar_submissions_failed symbol=%s cik=%s error=%r", symbol, cik, e)
+        return []
+    rec = (sub.get("filings") or {}).get("recent") or {}
+    forms = rec.get("form") or []
+    dates = rec.get("filingDate") or []
+    accs = rec.get("accessionNumber") or []
+    docs = rec.get("primaryDocument") or []
+    items_col = rec.get("items") or []
+
+    earn_cut = (as_of - timedelta(days=earnings_days)).isoformat()
+    mat_cut = (as_of - timedelta(days=material_days)).isoformat()
+    recent_cut = (as_of - timedelta(days=7)).isoformat()
+
+    picked: list[dict] = []
+    have_earnings = False
+    for i, form in enumerate(forms):
+        fdate = dates[i] if i < len(dates) else ""
+        if not fdate or fdate < earn_cut:
+            break
+        fu = str(form).upper()
+        acc = accs[i] if i < len(accs) else ""
+        pdoc = docs[i] if i < len(docs) else ""
+        raw_items = items_col[i] if i < len(items_col) else []
+        items = raw_items if isinstance(raw_items, list) else [x.strip() for x in str(raw_items).split(",") if x.strip()]
+        if not acc or not pdoc:
+            continue
+        is_earn_8k = fu in ("8-K", "8-K/A") and EARNINGS_ITEM in items
+        is_mat_8k = fu in ("8-K", "8-K/A") and any(x in MATERIAL_8K for x in items)
+        is_recent_8k = fu == "8-K" and fdate >= recent_cut
+        is_6k = fu in ("6-K", "6-K/A") and fdate >= mat_cut
+        is_13d_or_late = fu in INITIAL_13D or fu in LATE_FORMS
+        if is_earn_8k and not have_earnings:
+            picked.append({"form": fu, "filed": fdate, "acc": acc, "primary_doc": pdoc, "items": items, "kind": "earnings"})
+            have_earnings = True
+        elif fdate >= mat_cut and (is_mat_8k or is_13d_or_late or is_recent_8k or is_6k):
+            picked.append({"form": fu, "filed": fdate, "acc": acc, "primary_doc": pdoc, "items": items,
+                           "kind": "earnings" if (is_6k and not have_earnings) else "material"})
+            if is_6k and not have_earnings:
+                have_earnings = True
+        if len(picked) >= max_filings:
+            break
+
+    out: list[dict] = []
+    for idx, row in enumerate(picked):
+        doc, url = _pick_exhibit(cik, row["acc"], row["primary_doc"], row["form"], fetcher=fetcher)
+        limit = primary_chars if (idx == 0 or row["kind"] == "earnings") else secondary_chars
+        try:
+            body = _cached_doc_text(cik, row["acc"], doc, url, max_chars=limit, fetcher=fetcher)
+        except Exception as e:  # noqa: BLE001
+            log.warning("edgar_doc_failed symbol=%s url=%s error=%r", symbol, url, e)
+            continue
+        if not body.strip():
+            continue
+        out.append({
+            "form": row["form"],
+            "filed": row["filed"],
+            "items": row["items"],
+            "doc": doc,
+            "url": url,
+            "text": body,
+        })
+    return out

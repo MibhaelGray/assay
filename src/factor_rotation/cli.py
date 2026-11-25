@@ -75,11 +75,15 @@ def main(argv: list[str] | None = None) -> None:
                    help="a job that sends orders only looks when it is run by hand: it prints what it would send "
                         "and sends nothing. This makes it count, as the scheduled job does")
     c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume", "preflight",
-                                   "propose", "postmortem", "desk", "learn", "hedges", "side", "holds", "depth"])
+                                   "propose", "postmortem", "desk", "learn", "hedges", "side", "holds", "depth", "packet"])
     c.add_argument("args", nargs="*", help="propose, postmortem: the draft JSON file; hedges: the symbols on one side; "
                                            "side: `report` to score the side facts instead of pulling them; "
-                                           "preflight: optional label (e.g. 'Night pass')")
+                                           "preflight: optional label (e.g. 'Night pass'); packet: pass slot (night/morning/midday)")
     c.add_argument("--no-quotes", action="store_true", help="preflight: check gateway connectivity only, skip the 10197 quote check")
+    c = sub.add_parser("edgar", help="read SEC EDGAR primary filings cleanly using SEC_USER_AGENT (edgar.py)")
+    c.add_argument("job", choices=["read"])
+    c.add_argument("url", help="https://www.sec.gov/... filing URL")
+    c.add_argument("--max-chars", type=int, default=14_000, help="character cap on extracted plain text")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
     c.add_argument("--reason", default="", help="halt: why, kept in the HALT file")
     c.add_argument("--book", choices=["swing"],
@@ -180,6 +184,19 @@ def main(argv: list[str] | None = None) -> None:
             sys.exit(f"fr screen refused: {e}")
         print(path)
         print(screen.summary(payload))
+        if a.live:
+            from .paper import packets
+            try:
+                pk = packets.build(a.live, payload)
+                print(f"packets: {pk['index']} ({pk['count']} candidate SEC packets + MARKET.md)")
+            except Exception as e:  # noqa: BLE001 - packets must never break a live screen
+                logging.warning("packet_build_failed slot=%s error=%r", a.live, e)
+    elif a.cmd == "edgar":
+        from . import edgar
+        try:
+            print(edgar.read_url(a.url, max_chars=a.max_chars))
+        except (ValueError, RuntimeError) as e:
+            sys.exit(f"fr edgar refused: {e}")
     elif a.cmd == "earnings":
         from . import earnings
         print(json.dumps(earnings.pull()))
@@ -318,6 +335,12 @@ def _paper(a) -> None:
         # How much research each candidate got, from this session's transcripts (paper/depth.py). `args`: a session id.
         from .paper import depth
         return print(depth.report(depth.measure(a.args[0] if a.args else None)))
+    if a.job == "packet":
+        # Build pre-fetched primary-source packets (EDGAR Exhibit 99.1 + MARKET.md) for a live screen slot.
+        from .paper import packets
+        slot = a.args[0] if a.args else "night"
+        pk = packets.build(slot)
+        return print(f"packets: {pk['index']} ({pk['count']} candidate SEC packets + MARKET.md)")
     if a.job == "holds":
         # Every idea scored at every hold from 1 to 10 sessions (paper/holds.py). Journal and bars only.
         from .paper import holds

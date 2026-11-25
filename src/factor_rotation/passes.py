@@ -36,7 +36,7 @@ LOGS = Path("data/pass-logs")
 APP_BUILDS = Path.home() / "Library" / "Application Support" / "Claude" / "claude-code"
 READING = ["Read", "Glob", "Grep", "WebSearch", "WebFetch", "Agent", "Skill",
            f"Write({DRAFTS}/**)", f"Edit({DRAFTS}/**)", "Bash(uv run fr trading-day)", "Bash(uv run fr paper desk)",
-           "Bash(uv run fr quotes:*)"]
+           "Bash(uv run fr quotes:*)", "Bash(uv run fr edgar read:*)", "Bash(uv run fr paper packet:*)"]
 # What each pass may run on top of the reading tools. Each leaves the session's proposals file rewritten
 # (paper/daily.py). Headless since 2026-11-16 so the judge is always Fable 5.2 at high effort: a pass scheduled in
 # the Claude app runs on whatever model the app is set to. "late" is a second night pass, by hand (`fr pass late`).

@@ -39,8 +39,10 @@ MAX_NAMES = 2          # names to one agent; one is the rule, two when they shar
 # before), and a pass relaunched an agent for every name under them, about two agents a name and most of a 5-hour
 # usage limit a pass, so from 11-19 a name under the floors was only noted. Since 2026-11-22 a pass has 25 names,
 # not 40, and a thin name gets one more agent, once.
-MIN_SEARCHES = 8       # web searches a name, over its agents
-MIN_READS = 5          # pages opened and read a name, over its agents (the first four nights averaged two)
+MIN_SEARCHES = 8       # web searches a name, over its agents (without a pre-fetched EDGAR packet)
+MIN_READS = 5          # pages opened and read a name, over its agents (without a pre-fetched EDGAR packet)
+PACKET_MIN_SEARCHES = 6  # web searches a name when the agent read its pre-fetched SEC EDGAR packet
+PACKET_MIN_READS = 4     # sources read (packet + fr edgar read + WebFetch) when a pre-fetched packet was read
 NAMES_LINE = re.compile(r"^\s*NAMES:\s*(.+?)\s*$", re.M)
 
 
@@ -77,7 +79,7 @@ def _model(path: Path) -> str | None:
 def _agent(path: Path) -> dict:
     meta_path = path.with_name(path.name.replace(".jsonl", ".meta.json"))
     meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
-    prompt, searches, reads, other, models = None, 0, 0, 0, {}
+    prompt, searches, reads, packet_reads, other, models = None, 0, 0, 0, 0, {}
     for x in _lines(path):
         m = x.get("message") or {}
         if x.get("type") == "user" and prompt is None:
@@ -89,16 +91,22 @@ def _agent(path: Path) -> dict:
         for b in m.get("content") or []:
             if isinstance(b, dict) and b.get("type") == "tool_use":
                 name = b.get("name", "").lower()
+                inp = b.get("input") or {}
                 if "search" in name and "tool" not in name:
                     searches += 1
                 elif "fetch" in name:
+                    reads += 1
+                elif name == "read" and "pass-packets" in str(inp.get("file_path") or ""):
+                    reads += 1
+                    packet_reads += 1
+                elif name == "bash" and "fr edgar read" in str(inp.get("command") or ""):
                     reads += 1
                 else:
                     other += 1
     found = NAMES_LINE.search("\n".join((prompt or "").splitlines()[:5]))
     return {"what": meta.get("description") or (prompt or "")[:60], "names": [n.strip() for n in found.group(1).split(",") if n.strip()] if found else [],
             "model": max(models, key=models.get) if models else None, "effort": meta.get("effort"),
-            "searches": searches, "reads": reads, "other_tools": other}
+            "searches": searches, "reads": reads, "packet_reads": packet_reads, "other_tools": other}
 
 
 def measure(session_id: str | None = None, candidates: list[str] | None = None) -> dict:
@@ -117,6 +125,7 @@ def measure(session_id: str | None = None, candidates: list[str] | None = None) 
     if judge["effort"] and judge["effort"] != JUDGE_EFFORT:
         flags.append(f"this pass is at {judge['effort']} effort, not {JUDGE_EFFORT}")
     names: dict[str, dict] = {}
+    with_packet: set[str] = set()
     for a in agents:
         if not a["names"]:
             continue
@@ -128,6 +137,8 @@ def measure(session_id: str | None = None, candidates: list[str] | None = None) 
             r["reads"] += a["reads"] / len(a["names"])
             r["agents"] += 1
             r["shared_with"] = max(r["shared_with"], len(a["names"]) - 1)
+            if a.get("packet_reads"):
+                with_packet.add(n)
     if candidates is None:
         from . import daily   # one of the three daily passes judges its own live screen
         screen = daily.screen_now()
@@ -139,20 +150,23 @@ def measure(session_id: str | None = None, candidates: list[str] | None = None) 
     thin = {}
     for n, r in names.items():
         r["searches"], r["reads"] = round(r["searches"], 1), round(r["reads"], 1)
+        min_s = PACKET_MIN_SEARCHES if n in with_packet else MIN_SEARCHES
+        min_r = PACKET_MIN_READS if n in with_packet else MIN_READS
         why = []
         if not r["agents"]:
             why.append("no research agent named it")
         else:
             if r["shared_with"] >= MAX_NAMES:
                 why.append(f"its agent had {r['shared_with'] + 1} names; {MAX_NAMES} at most")
-            if r["reads"] < MIN_READS:
-                why.append(f"{r['reads']:g} pages read, the floor is {MIN_READS}")
-            if r["searches"] < MIN_SEARCHES:
-                why.append(f"{r['searches']:g} searches, the floor is {MIN_SEARCHES}")
+            if r["reads"] < min_r:
+                why.append(f"{r['reads']:g} pages read, the floor is {min_r}")
+            if r["searches"] < min_s:
+                why.append(f"{r['searches']:g} searches, the floor is {min_s}")
         if why:
             thin[n] = "; ".join(why)
     return {"measured": True, "session_id": session_id, "judge": judge, "agents": agents, "names": names, "thin": thin, "flags": flags,
-            "floors": {"max_names_per_agent": MAX_NAMES, "min_searches": MIN_SEARCHES, "min_reads": MIN_READS}}
+            "floors": {"max_names_per_agent": MAX_NAMES, "min_searches": MIN_SEARCHES, "min_reads": MIN_READS,
+                       "packet_min_searches": PACKET_MIN_SEARCHES, "packet_min_reads": PACKET_MIN_READS}}
 
 
 def report(m: dict | None = None) -> str:

@@ -88,6 +88,25 @@ class Depth(unittest.TestCase):
             self.assertEqual((m["measured"], depth.keep(day, m)), (False, None))
             self.assertIn("not measured", depth.report(m))
 
+    def test_pre_fetched_packet_and_edgar_read_count_as_sources_with_packet_floor(self):
+        d = self.dir / SESSION / "subagents"
+        d.mkdir(parents=True, exist_ok=True)
+        tools = [
+            {"type": "tool_use", "name": "Read", "input": {"file_path": "data/pass-packets/2026-11-25-night/MDT.md"}},
+            {"type": "tool_use", "name": "Bash", "input": {"command": "uv run fr edgar read https://www.sec.gov/Archives/x.htm"}},
+            *[{"type": "tool_use", "name": "WebSearch", "input": {"query": "MDT"}} for _ in range(6)],
+            *[{"type": "tool_use", "name": "WebFetch", "input": {"url": "https://example.com"}} for _ in range(2)],
+        ]
+        rows = [
+            {"type": "user", "message": {"content": [{"type": "text", "text": "NAMES: MDT\nResearch MDT."}]}},
+            {"type": "assistant", "message": {"model": depth.AGENT_MODEL, "content": tools}},
+        ]
+        (d / "agent-mdt.jsonl").write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+        (d / "agent-mdt.meta.json").write_text(json.dumps({"description": "Research MDT", "effort": "medium"}))
+        m = depth.measure(candidates=["MDT"])
+        self.assertEqual(m["names"]["MDT"], {"searches": 6.0, "reads": 4.0, "agents": 1, "shared_with": 0})
+        self.assertEqual(m["thin"], {})
+
 
 if __name__ == "__main__":
     unittest.main()
