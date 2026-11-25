@@ -1,4 +1,4 @@
-"""A local copy of the Factor Rotation Ledger dashboard.
+"""A local copy of the Assay dashboard.
 
 dashboard/page.html is the same page published to claude.ai. Online, the Dashboard runtime supplies the
 `dash` API, the design tokens and the data files; here dashboard/shim.js and dashboard/tokens.css stand in,
@@ -53,7 +53,7 @@ def build(out: Path = DEFAULT_OUT, as_of: date | None = None, workers=None) -> d
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Factor Rotation Ledger</title>
+<title>Assay</title>
 <style>
 {(DASHBOARD / "tokens.css").read_text()}
 </style>

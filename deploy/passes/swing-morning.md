@@ -1,4 +1,4 @@
-Run the swing book's MORNING PASS for the ETF Factor Rotation project. It is a full pass on the latest prices (the pre-market and the first minutes of the session), and its trades go out as soon as it records. Record it by about 10:15 AM CT; the command refuses after 11:30 AM CT.
+Run the swing book's MORNING PASS for the Assay project. It is a full pass on the latest prices (the pre-market and the first minutes of the session), and its trades go out as soon as it records. Record it by about 10:15 AM CT; the command refuses after 11:30 AM CT.
 
 1. Work in the repo: `cd "/Users/michael/Projects/ETF Factor Rotation"`. Run `uv run fr trading-day`; if it exits non-zero, today is not a session: say so and stop.
 2. Read `/Users/michael/Projects/ETF Factor Rotation/.claude/skills/swing-pass/SKILL.md` in full and follow it with `morning` as the pass: the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.

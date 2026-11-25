@@ -2,7 +2,7 @@
 
 The SEC asks every automated client to identify itself in the HTTP User-Agent header
 (https://www.sec.gov/os/accessing-edgar-data). Set SEC_USER_AGENT in .env (for example,
-"ETF-Factor-Rotation you@example.com"); it is sent only to sec.gov and never logged or written out.
+"Assay you@example.com"); it is sent only to sec.gov and never logged or written out.
 
 Unlike per-company submissions loops (1,200+ requests), live screens query the SEC's EFTS full-text
 search index by date range and form type (a handful of JSON calls, ~2-5 seconds total), match the

@@ -1,4 +1,4 @@
-# ETF Factor Rotation
+# Assay
 
 An AI-run swing trading book on an IBKR paper account. Code screens about 1,240 US-listed stocks and ETFs for unusual events, AI research decides what to trade, and code sizes and sends the orders. Every verdict, taken or passed, is kept and scored, to answer one question: can AI research produce statistically significant alpha?
 
@@ -95,7 +95,7 @@ Setting up the Mac (paper gateway, launchd): [docs/operations.md](docs/operation
 - **Earnings**
 - **Chart**
 
-The same page is published every 15 minutes to a [public site](https://mibhaelgray.github.io/etf-factor-rotation/), and an older copy is on claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv).
+The same page is published every 15 minutes to a [public site](https://mibhaelgray.github.io/assay/), and an older copy is on claude.ai as the [Factor Rotation Ledger](https://claude.ai/artifact/TVknCZmSXjToEPbmMGPSKv).
 
 ## Layout
 

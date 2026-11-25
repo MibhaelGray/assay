@@ -1,4 +1,4 @@
-Run the swing book's NIGHT PASS for the ETF Factor Rotation project. It is a full pass on the latest prices (after-hours, up to 7:00 PM CT), and its trades go out as soon as it records. Record it by about 9:00 PM CT, so its takes trade in tonight's overnight session.
+Run the swing book's NIGHT PASS for the Assay project. It is a full pass on the latest prices (after-hours, up to 7:00 PM CT), and its trades go out as soon as it records. Record it by about 9:00 PM CT, so its takes trade in tonight's overnight session.
 
 1. Work in the repo: `cd "/Users/michael/Projects/ETF Factor Rotation"`. The night pass runs the evening before each session, Sunday included.
 2. Read `/Users/michael/Projects/ETF Factor Rotation/.claude/skills/swing-pass/SKILL.md` in full and follow it with `night` as the pass: the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.

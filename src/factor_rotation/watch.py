@@ -284,5 +284,5 @@ def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_prob
 
 
 def test() -> None:
-    ok = send("Factor Rotation test", "Phone alerts are working. You'll hear here when a pass, a job or the gateway breaks.")
+    ok = send("Assay test", "Phone alerts are working. You'll hear here when a pass, a job or the gateway breaks.")
     print("sent" if ok else "not sent: set FR_NTFY_TOPIC, or FR_TELEGRAM_TOKEN and FR_TELEGRAM_CHAT, in .env")
