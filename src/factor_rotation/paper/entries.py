@@ -75,6 +75,7 @@ STOP_EVERY = timedelta(minutes=10)      # regular-session stop check cadence aft
 OPEN_STOP_EVERY = timedelta(minutes=2)  # first 30 minutes of the regular session (9:30-10:00 AM ET / 8:30-9:00 AM CT)
 OPEN_WINDOW_END = time(10, 0)
 NO_FILL_TRIES = 3                 # tries that hit the bid or ask and filled nothing before deferring (overnight) or passing on
+WIDE_SPREAD_TRIES = 3             # regular-hours tries on a wide spread before standing down, in case the book tightens
 STOP_SLACK = timedelta(seconds=15) # launchd's minute is not exact; a check due in a few seconds counts as due
 
 
@@ -84,8 +85,12 @@ def stop_interval(now: datetime) -> timedelta:
 
 
 def spread_limit(where: str) -> float:
-    """Maximum bid-ask spread for entries in `where`: 0.5% overnight (wider queues for 8:35 AM CT), 2% otherwise."""
-    return rules.MAX_OVERNIGHT_SPREAD if where == "overnight" else rules.MAX_CROSS_SPREAD
+    """Maximum bid-ask spread for entries in `where`: 0.5% in regular hours and overnight, 2% in extended hours."""
+    if where == "overnight":
+        return rules.MAX_OVERNIGHT_SPREAD
+    if where == "regular":
+        return rules.MAX_REGULAR_SPREAD
+    return rules.MAX_CROSS_SPREAD
 
 
 def venue(now: datetime) -> str | None:
@@ -116,9 +121,11 @@ def books_running() -> tuple[str, ...]:
 
 
 def make_trades(which: str, kind: str, takes: list[dict], session: date, state: dict, others: list[dict], volumes, record: dict,
-                blocked_why: str | None) -> list[dict]:
+                blocked_why: str | None, leaving: set[str] = frozenset()) -> list[dict]:
     """One book's trades from a pass's takes: sized by their risk on that book's capital (rules.side_dollars), inside
-    that book's caps, and added to the session's state. `others` are the trades already open or waiting, in any book."""
+    that book's caps, and added to the session's state. `others` are the trades already open or waiting, in any book;
+    `leaving` names trades already queued to exit (review exit, intraday stop, or exit sent) so they don't count
+    against gross/symbol caps while waiting for their exit fills, though their symbols stay reserved until closed."""
     if not takes:
         return []
     if blocked_why:
@@ -127,6 +134,7 @@ def make_trades(which: str, kind: str, takes: list[dict], session: date, state: 
     cap = book.capital(which)
     same = [t for t in others if book.book_of(t) == which]
     used = {x for t in same for x in rules.core_symbols(t)}
+    counted = [t for t in same if t["id"] not in leaving]
     traded = (volumes or dollar_volumes)(sorted({s for p in takes for s in [*p["long"], *p["short"]]}))
     letter = book.ID_LETTER[which]
     start = sum(book.book_of(t) == which for t in state["trades"]) + 1
@@ -136,7 +144,7 @@ def make_trades(which: str, kind: str, takes: list[dict], session: date, state: 
         t["id"] = t["id"].replace(f"{session.isoformat()}-A", f"{session.isoformat()}-{letter}", 1)
         if which != book.MAIN:
             t["book"] = which
-    kept, capped = rules.apply_caps(made, same, max_gross=cap, max_symbol=cap * rules.MAX_SYMBOL_SHARE)
+    kept, capped = rules.apply_caps(made, counted, max_gross=cap * rules.MAX_GROSS_SHARE, max_symbol=cap * rules.MAX_SYMBOL_SHARE)
     by_prop = {p["id"]: p for p in takes}
     for t in kept:
         nums = (by_prop.get(t.get("proposal_id")) or {}).get("signal", {}).get("numbers") or {}
@@ -421,7 +429,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     last = datetime.fromisoformat(state["last_attempt"]) if state["last_attempt"] else None
     part_in = any(any(entered(t).values()) for t in {u["id"]: u for u, _, _ in left_of(ready_active)}.values())
     just_ready = any(t.get("defer_regular") for t in ready_active)
-    every = FOLLOW if part_in else (RETRY_FAULT if state.get("last_fault") else RETRY)
+    every = FOLLOW if part_in else (RETRY_FAULT if state.get("last_fault") or state.get("last_wide") else RETRY)
     retry_due = just_ready or last is None or now - last >= every
     # Stops: every 2 minutes in the opening half-hour (9:30-10:00 AM ET), then every 10 minutes; quoted from
     # IBKR's paper gateway first, falling back to Yahoo only if IBKR misses a symbol.
@@ -482,12 +490,13 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     blocked_why = halted or ((why := drawdown.paused(book.MAIN)) and f"paused: {why}")   # the swing book's, for the phone note
     mine = {t["id"] for t in state["trades"]}
     held = [t for t in book.open_trades() if t["id"] not in mine]
+    leaving = exiting | {t["id"] for t in wants_out} | {t["id"] for t, _ in stops}
     for kind in fresh_passes:
         takes = [p for p in doc["proposals"] if p.get("pass") == kind and p["decision"] == "take"]
         record.setdefault("takes", {})[kind] = len(takes)
         for which in books_running():   # every book trades the same takes, each sized on its own capital and inside its own limits
             made = make_trades(which, kind, takes, session, state, [*held, *active], volumes, record,
-                               halted or ((w := drawdown.paused(which)) and f"paused: {w}"))
+                               halted or ((w := drawdown.paused(which)) and f"paused: {w}"), leaving=leaving)
             active += made
         state["handled"].append(kind)
 
@@ -498,6 +507,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     why_out.update({t["id"]: (reason, None) for t, reason in stops})
     send_exits = [*wants_out, *(t for t, _ in stops)] if where == "regular" else []
     no_overnight: set[str] = set()
+    wide_retry = False
     if where and (left or send_exits or record["stood_down"]):
         async with (broker or book._broker(dry=dry)) as b:
             record["cancelled"] = await b.cancel({t["id"] for t in state["trades"]})
@@ -519,8 +529,9 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             usable_exit = lambda x: x not in missing and rules.crossable(books[x], rules.MAX_CROSS_SPREAD)  # noqa: E731
             mid_orders, cross_orders, committed = [], [], {}
             mid_trades: dict[str, list[dict]] = {}
-            # Entries. Overnight uses a tight 0.5% cap and queues wider/illiquid trades for 8:35 AM CT instead of
-            # killing them; regular hours uses 2%, tries midpoint first on wide books, then crosses at bid/ask.
+            # Entries. Overnight uses a 0.5% cap and queues wider/illiquid trades for 8:35 AM CT instead of killing
+            # them; regular hours uses 0.5% too, retries briefly if a book flashes wide, tries midpoint first, then
+            # crosses at bid/ask.
             for t in ready_active:
                 mine_left = [(leg, n) for u, leg, n in left if u["id"] == t["id"]]
                 if not mine_left:
@@ -539,6 +550,17 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                         t["defer_regular"] = f"queued for 8:35 AM CT: {why}"
                         record["deferred"].append(t["id"])
                         record["warnings"].append(f"{t['id']} {t['name']}: {why}, so the trade queues for 8:35 AM CT.")
+                    elif where == "regular":
+                        t["wide_tries"] = t.get("wide_tries", 0) + 1
+                        if t["wide_tries"] < WIDE_SPREAD_TRIES:
+                            wide_retry = True
+                            record["warnings"].append(f"{t['id']} {t['name']}: {why} (try {t['wide_tries']} of {WIDE_SPREAD_TRIES}), "
+                                                      "so the whole trade waits for the spread to tighten.")
+                        else:
+                            t["stood_down"] = f"passed: {why} in {WIDE_SPREAD_TRIES} tries"
+                            t["passed_on_spread"] = now.isoformat(timespec="seconds")
+                            record["passed"].append(t["id"])
+                            record["warnings"].append(f"{t['id']} {t['name']}: {why} in {WIDE_SPREAD_TRIES} tries, so the trade is passed on.")
                     else:
                         t["stood_down"] = f"passed: {why} when it was due to enter"
                         t["passed_on_spread"] = now.isoformat(timespec="seconds")
@@ -551,6 +573,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                     record["warnings"].append(f"{t['id']} {t['name']}: {_why_blocked(bad, books, missing, entry_limit)}, so {waits} for the next try.")
                 if bad and none_in:
                     continue
+                t.pop("wide_tries", None)
                 if none_in and (chase := _chased(t, state, books, now)):
                     t["stood_down"] = f"passed: {chase}"
                     record["passed"].append(t["id"])
@@ -652,6 +675,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                                   f"{now.astimezone(CT):%-I:%M %p} CT.")
     non_market = [w for s, w in (record.get("no_quote") or {}).items() if s not in no_overnight]
     state["last_fault"] = bool(non_market) and all(_is_transient_fault(w) for w in non_market)
+    state["last_wide"] = wide_retry
     state["last_attempt"] = now.isoformat(timespec="seconds")
     if not dry:
         _save(session, state, record)
@@ -690,7 +714,8 @@ def traded_note(kind: str, record: dict, state: dict, where: str | None, blocked
     if deferred:
         bits.append(f"{deferred} queued for 8:35 AM CT")
     if passed:
-        bits.append(f"{passed} passed on (a spread over {rules.MAX_CROSS_SPREAD:.0%}, or chased)")
+        pct = f"{spread_limit(where) * 100:g}%" if where else f"{rules.MAX_CROSS_SPREAD * 100:g}%"
+        bits.append(f"{passed} passed on (a spread over {pct}, or chased)")
     if waiting:
         bits.append(f"{waiting} waiting " + ("for a quote" if where else "for the next session"))
     if skipped:

@@ -29,6 +29,7 @@ RISK = 0.0015                                  # of capital, lost at the stop by
 CONVICTION_RISK = {3: 1.0, 4: 1.5, 5: 2.0}     # multiples of RISK
 MAX_SIDE = 0.06                                # of capital: the most on one side, however tight the stop
 MAX_ADV = 0.0025                               # of a leg's average daily dollar volume: never large for its stock
+MAX_GROSS_SHARE = 1.5                          # of capital: long plus short (~0.75x each side; leaves buffer under 2x Reg-T)
 MAX_SYMBOL_SHARE = 0.10                        # of capital: net exposure to one symbol, hedges across trades included
 MAX_OPEN = 60              # open trades
 MAX_GROSS = 900_000        # dollars, long plus short
@@ -52,6 +53,9 @@ MAX_CROSS_SPREAD = 0.02
 # so overnight entries only cross inside MAX_OVERNIGHT_SPREAD; wider or illiquid night takes queue for 8:35 AM CT
 # in regular hours instead of being passed on permanently (2026-11-23).
 MAX_OVERNIGHT_SPREAD = 0.005
+# Regular-hours entries share the same 0.5% cap (2026-11-25, after MMS crossed a 1.43% morning book); wider books
+# retry briefly in case the spread tightens before standing down. Exits keep MAX_CROSS_SPREAD so a trade isn't stuck.
+MAX_REGULAR_SPREAD = 0.005
 
 
 def spread_pct(book_: tuple[float, float] | None) -> float | None:
@@ -264,8 +268,8 @@ def exposure(trades: list[dict]) -> tuple[float, dict[str, float]]:
 
 def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_GROSS,
                max_symbol: float = MAX_SYMBOL) -> tuple[list[dict], list[dict]]:
-    """Keep new trades, in the order given, while every cap holds. `max_gross` is the book's capital and
-    `max_symbol` the most net exposure to one symbol (the swing book: MAX_SYMBOL_SHARE of its capital)."""
+    """Keep new trades, in the order given, while every cap holds. `max_gross` is MAX_GROSS_SHARE of the book's
+    capital and `max_symbol` the most net exposure to one symbol (MAX_SYMBOL_SHARE of its capital)."""
     kept, skipped = [], []
     for t in new:
         trial = [*open_trades, *kept, t]

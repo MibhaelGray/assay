@@ -364,14 +364,82 @@ class Enter(Taking):
         self.assertEqual([(o["symbol"], o["venue"]) for o in r["orders"]], [("AAA", "regular"), ("HHH", "regular")])
         self.assertEqual(self.state(f"{DAY}-S01"), "open")
 
-    def test_a_wide_regular_spread_still_passes_on_the_trade(self):
+    def test_a_wide_regular_spread_retries_then_passes_on_the_trade(self):
         self.screen("morning", "AAA")
         self.record("morning", MORNING, verdict("AAA", 1))
         b = Broker()
-        r = self.enter(MORNING, b, books={"AAA": (49.0, 51.0), "HHH": (99.95, 100.05)})
-        self.assertEqual((b.sent, r["passed"]), ([], [f"{DAY}-S01"]))
-        self.assertIn("spread wider than 2% (AAA 4.0%), so the trade is passed on", r["warnings"][0])
+        wide = {"AAA": (49.75, 50.25), "HHH": (99.95, 100.05)}  # AAA 1.0% wide > 0.5% regular-hours cap
+        r1 = self.enter(MORNING, b, books=wide)
+        self.assertEqual((b.sent, r1["passed"]), ([], []))
+        self.assertIn("spread wider than 0.5% (AAA 1.0%) (try 1 of 3)", r1["warnings"][0])
+        self.assertEqual(self.enter(MORNING + timedelta(minutes=1), b, books=wide)["note"],
+                         "waiting: the next try is 3 minutes after the last")
+        r2 = self.enter(MORNING + timedelta(minutes=3), b, books=wide)
+        self.assertEqual((b.sent, r2["passed"]), ([], []))
+        self.assertIn("try 2 of 3", r2["warnings"][0])
+        r3 = self.enter(MORNING + timedelta(minutes=6), b, books=wide)
+        self.assertEqual((b.sent, r3["passed"]), ([], [f"{DAY}-S01"]))
+        self.assertIn("spread wider than 0.5% (AAA 1.0%) in 3 tries, so the trade is passed on", r3["warnings"][0])
         self.assertEqual(entries.waiting(DAY), [])
+
+    def test_a_wide_regular_spread_that_tightens_on_retry_enters_cleanly(self):
+        self.screen("morning", "AAA")
+        self.record("morning", MORNING, verdict("AAA", 1))
+        b = Broker()
+        wide = {"AAA": (49.65, 50.35), "HHH": (99.95, 100.05)}  # AAA 1.4% wide (like MMS)
+        r1 = self.enter(MORNING, b, books=wide)
+        self.assertEqual((b.sent, r1["passed"]), ([], []))
+        r2 = self.enter(MORNING + timedelta(minutes=3), b)       # spread tightens to 0.2%
+        self.assertEqual(r2["passed"], [])
+        self.assertEqual(self.state(f"{DAY}-S01"), "open")
+        self.assertNotIn("wide_tries", entries.load(DAY)["trades"][0])
+
+    def test_pending_review_exits_do_not_block_new_takes_on_the_gross_cap(self):
+        # Fill the $900k test book (1.5x cap = $1,350,000 gross) with an open trade ($1,320k gross)
+        big = {
+            "id": "T_BIG", "book": "dynamic", "source": "test", "name": "ZZZ", "setup": "breakout", "direction": "long",
+            "why": "", "entry_date": date(2026, 11, 6).isoformat(), "horizon_days": 4, "stop": {"spread_pct": -5.0},
+            "notional": 660_000, "hedge": "YYY",
+            "legs": [{"symbol": "ZZZ", "side": "long", "shares": 6600, "ref_price": 100.0},
+                     {"symbol": "YYY", "side": "short", "shares": 6600, "ref_price": 100.0}],
+        }
+        self.write("entries", date(2026, 11, 6), {"trades": [big]})
+        self.write("fills", date(2026, 11, 6), {"fills": [fill("T_BIG", "ZZZ", "BOT", 6600), fill("T_BIG", "YYY", "SLD", 6600)]})
+        self.prices.update({"ZZZ": 100.0, "YYY": 100.0})
+        # Morning pass exits T_BIG and takes AAA ($54k gross, which would exceed $1,350k if T_BIG were still counted)
+        self.screen("morning", "AAA")
+        self.record("morning", MORNING, verdict("AAA", 1),
+                    reviews=[{"trade_id": "T_BIG", "action": "exit", "thesis": "played_out", "reason": "done"}])
+        # Even if IBKR 10197 blocks quotes during this run so T_BIG hasn't exited yet, AAA is NOT skipped on gross cap
+        refused = {s: "the live IBKR login is in use somewhere else (IBKR error 10197)" for s in ("AAA", "HHH", "ZZZ", "YYY")}
+        b = Broker()
+        r = self.enter(MORNING, b, books={}, missing=refused)
+        self.assertEqual(r["skipped"], [])
+        self.assertEqual(r["new"], [f"{DAY}-S01"])
+        # Once quotes return 3 minutes later, T_BIG exits and AAA enters cleanly
+        r2 = self.enter(MORNING + timedelta(minutes=3), b)
+        self.assertEqual([e["trade_id"] for e in r2["exits"]], ["T_BIG"])
+        self.assertEqual((self.state("T_BIG"), self.state(f"{DAY}-S01")), ("closed", "open"))
+
+    def test_gross_cap_allows_up_to_one_and_a_half_times_capital(self):
+        # On the $900k test book, 1.5x gross cap is $1,350,000: $1,250k open + $54k new fits, a second $54k skips
+        existing = {
+            "id": "T_EX", "book": "dynamic", "source": "test", "name": "ZZZ", "setup": "breakout", "direction": "long",
+            "why": "", "entry_date": date(2026, 11, 6).isoformat(), "horizon_days": 4, "stop": {"spread_pct": -5.0},
+            "notional": 625_000, "hedge": "YYY",
+            "legs": [{"symbol": "ZZZ", "side": "long", "shares": 6250, "ref_price": 100.0},
+                     {"symbol": "YYY", "side": "short", "shares": 6250, "ref_price": 100.0}],
+        }
+        self.write("entries", date(2026, 11, 6), {"trades": [existing]})
+        self.write("fills", date(2026, 11, 6), {"fills": [fill("T_EX", "ZZZ", "BOT", 6250), fill("T_EX", "YYY", "SLD", 6250)]})
+        self.prices.update({"ZZZ": 100.0, "YYY": 100.0})
+        self.screen("morning", "AAA", "BBB")
+        self.record("morning", MORNING, verdict("AAA", 1, hedge="SPY"), verdict("BBB", 2, hedge="SPY"),
+                    reviews=[{"trade_id": "T_EX", "action": "hold", "thesis": "intact", "reason": "holding"}])
+        r = self.enter(MORNING, Broker())
+        self.assertEqual(r["new"], [f"{DAY}-S01"])
+        self.assertEqual(len(r["skipped"]), 1)
+        self.assertIn("over $1,350,000", r["skipped"][0]["reason"])
 
     def test_chasing_guard_stands_down_a_deferred_trade_that_already_ran_away(self):
         self.night_take(verdict("AAA", 1))  # atr_pct=0.02, marked at AAA=50, HHH=100
