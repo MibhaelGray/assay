@@ -1,0 +1,3172 @@
+{
+ "as_of": "2026-11-24",
+ "built_at": "2026-11-24T20:09:53-05:00",
+ "bars_settled": true,
+ "next_session": "2026-11-25",
+ "reports": {
+  "tonight": [
+   {
+    "symbol": "DELL",
+    "close": 295.28,
+    "ret_1d": -0.11833,
+    "ret_5d": -0.08523,
+    "ret_20d": -0.41175,
+    "atr_pct": 0.13018,
+    "rsi14": 36.5068,
+    "volume_z20": 2.60965,
+    "rs_vs_spy_20d": -0.34564,
+    "dist_sma200": -0.15483,
+    "dist_52w_high": -0.49747,
+    "gap": -0.07139,
+    "open_to_close": -0.05055,
+    "move_atr": -0.90899,
+    "usd_volume_20d": 2768610630.12238,
+    "baskets": "PC and server hardware",
+    "report": "2026-11-24",
+    "when": "after_close",
+    "eps_estimate": 6.59
+   },
+   {
+    "symbol": "DE",
+    "close": 613.76,
+    "ret_1d": -0.03044,
+    "ret_5d": -0.05463,
+    "ret_20d": -0.04037,
+    "atr_pct": 0.03382,
+    "rsi14": 37.43497,
+    "volume_z20": 2.17883,
+    "rs_vs_spy_20d": 0.02574,
+    "dist_sma200": 0.00104,
+    "dist_52w_high": -0.13285,
+    "gap": 0.00166,
+    "open_to_close": -0.03205,
+    "move_atr": -0.90007,
+    "usd_volume_20d": 845086871.75293,
+    "baskets": "Agriculture",
+    "report": "2026-11-25",
+    "when": "before_open",
+    "eps_estimate": 4.06
+   },
+   {
+    "symbol": "ADSK",
+    "close": 255.7,
+    "ret_1d": 0.00145,
+    "ret_5d": 0.00188,
+    "ret_20d": 0.05618,
+    "atr_pct": 0.03564,
+    "rsi14": 53.59136,
+    "volume_z20": 0.98494,
+    "rs_vs_spy_20d": 0.12228,
+    "dist_sma200": 0.09219,
+    "dist_52w_high": -0.17583,
+    "gap": -0.0018,
+    "open_to_close": 0.00326,
+    "move_atr": 0.04066,
+    "usd_volume_20d": 487792307.87964,
+    "baskets": "Seat-based software",
+    "report": "2026-11-24",
+    "when": "after_close",
+    "eps_estimate": 3.07
+   },
+   {
+    "symbol": "WDAY",
+    "close": 179.23,
+    "ret_1d": 0.01789,
+    "ret_5d": -0.01953,
+    "ret_20d": -0.12766,
+    "atr_pct": 0.04187,
+    "rsi14": 39.485,
+    "volume_z20": 2.39148,
+    "rs_vs_spy_20d": -0.06156,
+    "dist_sma200": 0.14505,
+    "dist_52w_high": -0.23304,
+    "gap": -0.00676,
+    "open_to_close": 0.02482,
+    "move_atr": 0.4273,
+    "usd_volume_20d": 428912291.87393,
+    "baskets": "Seat-based software, Payroll and HR software",
+    "report": "2026-11-24",
+    "when": "after_close",
+    "eps_estimate": 2.74
+   },
+   {
+    "symbol": "HPQ",
+    "close": 27.94,
+    "ret_1d": -0.03322,
+    "ret_5d": -0.02682,
+    "ret_20d": -0.16796,
+    "atr_pct": 0.04402,
+    "rsi14": 40.97609,
+    "volume_z20": 2.19592,
+    "rs_vs_spy_20d": -0.10185,
+    "dist_sma200": 0.11706,
+    "dist_52w_high": -0.21251,
+    "gap": -0.01384,
+    "open_to_close": -0.01965,
+    "move_atr": -0.75462,
+    "usd_volume_20d": 365781457.20329,
+    "baskets": "PC and server hardware",
+    "report": "2026-11-24",
+    "when": "after_close",
+    "eps_estimate": 0.74
+   },
+   {
+    "symbol": "NTNX",
+    "close": 54.59,
+    "ret_1d": -0.0516,
+    "ret_5d": -0.03415,
+    "ret_20d": -0.24952,
+    "atr_pct": 0.0514,
+    "rsi14": 32.4327,
+    "volume_z20": 3.54364,
+    "rs_vs_spy_20d": -0.18341,
+    "dist_sma200": 0.01203,
+    "dist_52w_high": -0.26852,
+    "gap": -0.01286,
+    "open_to_close": -0.03925,
+    "move_atr": -1.00385,
+    "usd_volume_20d": 141535806.61888,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "after_close",
+    "eps_estimate": 0.61
+   },
+   {
+    "symbol": "BZ",
+    "close": 12.74,
+    "ret_1d": -0.01849,
+    "ret_5d": -0.02674,
+    "ret_20d": -0.23483,
+    "atr_pct": 0.05567,
+    "rsi14": 31.69226,
+    "volume_z20": -0.02089,
+    "rs_vs_spy_20d": -0.16873,
+    "dist_sma200": -0.12328,
+    "dist_52w_high": -0.40728,
+    "gap": -0.00963,
+    "open_to_close": -0.00895,
+    "move_atr": -0.33215,
+    "usd_volume_20d": 83100759.34553,
+    "baskets": "",
+    "report": "2026-11-25",
+    "when": "before_open",
+    "eps_estimate": 2.24
+   },
+   {
+    "symbol": "GDS",
+    "close": 13.79,
+    "ret_1d": -0.08796,
+    "ret_5d": -0.15966,
+    "ret_20d": -0.39544,
+    "atr_pct": 0.13092,
+    "rsi14": 27.20927,
+    "volume_z20": 0.88653,
+    "rs_vs_spy_20d": -0.32933,
+    "dist_sma200": -0.5977,
+    "dist_52w_high": -0.70981,
+    "gap": -0.06614,
+    "open_to_close": -0.02337,
+    "move_atr": -0.67186,
+    "usd_volume_20d": 72878807.45459,
+    "baskets": "",
+    "report": "2026-11-25",
+    "when": "before_open",
+    "eps_estimate": -1.28
+   },
+   {
+    "symbol": "LI",
+    "close": 10.7,
+    "ret_1d": 0.0,
+    "ret_5d": -0.07519,
+    "ret_20d": -0.04973,
+    "atr_pct": 0.03795,
+    "rsi14": 38.48252,
+    "volume_z20": 0.54741,
+    "rs_vs_spy_20d": 0.01637,
+    "dist_sma200": -0.25515,
+    "dist_52w_high": -0.46553,
+    "gap": -0.02243,
+    "open_to_close": 0.02294,
+    "move_atr": 0.0,
+    "usd_volume_20d": 28038728.82833,
+    "baskets": "",
+    "report": "2026-11-25",
+    "when": "before_open",
+    "eps_estimate": -0.84
+   }
+  ],
+  "traded_today": [
+   {
+    "symbol": "ADI",
+    "close": 312.95001,
+    "ret_1d": -0.17373,
+    "ret_5d": -0.18433,
+    "ret_20d": -0.26425,
+    "atr_pct": 0.07969,
+    "rsi14": 32.71204,
+    "volume_z20": 2.20257,
+    "rs_vs_spy_20d": -0.19815,
+    "dist_sma200": -0.17014,
+    "dist_52w_high": -0.29536,
+    "gap": -0.13399,
+    "open_to_close": -0.04588,
+    "move_atr": -2.18017,
+    "usd_volume_20d": 1808833802.74811,
+    "baskets": "Analog and auto chips",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 4.56,
+    "gap_bucket": "down 10%+",
+    "history": {
+     "gap": "down 10%+",
+     "cut": "all",
+     "n": 855,
+     "sessions": 422,
+     "mean_bp": 45.6,
+     "median_bp": -15.9,
+     "up_share": 0.487,
+     "hold_mean_bp": 44.2,
+     "hold_up_share": 0.502,
+     "drift_n": 852,
+     "drift_mean_bp": 1.0,
+     "drift_median_bp": -38.7,
+     "drift_up_share": 0.479
+    }
+   },
+   {
+    "symbol": "ANF",
+    "close": 168.1,
+    "ret_1d": 0.19687,
+    "ret_5d": 0.17651,
+    "ret_20d": 0.01645,
+    "atr_pct": 0.05612,
+    "rsi14": 62.16409,
+    "volume_z20": 3.9561,
+    "rs_vs_spy_20d": 0.08255,
+    "dist_sma200": 0.53996,
+    "dist_52w_high": -0.01748,
+    "gap": 0.13129,
+    "open_to_close": 0.05796,
+    "move_atr": 3.50772,
+    "usd_volume_20d": 142962004.54483,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 21.35,
+    "gap_bucket": "up 10%+",
+    "history": {
+     "gap": "up 10%+",
+     "cut": "all",
+     "n": 979,
+     "sessions": 447,
+     "mean_bp": 30.4,
+     "median_bp": 11.3,
+     "up_share": 0.508,
+     "hold_mean_bp": 67.0,
+     "hold_up_share": 0.507,
+     "drift_n": 976,
+     "drift_mean_bp": 38.7,
+     "drift_median_bp": 1.2,
+     "drift_up_share": 0.501
+    }
+   },
+   {
+    "symbol": "SMTC",
+    "close": 86.46,
+    "ret_1d": -0.16969,
+    "ret_5d": -0.19022,
+    "ret_20d": -0.40104,
+    "atr_pct": 0.15433,
+    "rsi14": 36.30847,
+    "volume_z20": 2.02279,
+    "rs_vs_spy_20d": -0.33493,
+    "dist_sma200": -0.32053,
+    "dist_52w_high": -0.56156,
+    "gap": -0.12062,
+    "open_to_close": -0.0558,
+    "move_atr": -1.09952,
+    "usd_volume_20d": 350406834.65462,
+    "baskets": "",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 3.32,
+    "gap_bucket": "down 10%+",
+    "history": {
+     "gap": "down 10%+",
+     "cut": "all",
+     "n": 855,
+     "sessions": 422,
+     "mean_bp": 45.6,
+     "median_bp": -15.9,
+     "up_share": 0.487,
+     "hold_mean_bp": 44.2,
+     "hold_up_share": 0.502,
+     "drift_n": 852,
+     "drift_mean_bp": 1.0,
+     "drift_median_bp": -38.7,
+     "drift_up_share": 0.479
+    }
+   },
+   {
+    "symbol": "HPE",
+    "close": 40.19,
+    "ret_1d": -0.16306,
+    "ret_5d": -0.12801,
+    "ret_20d": -0.33941,
+    "atr_pct": 0.10772,
+    "rsi14": 35.61505,
+    "volume_z20": 2.71185,
+    "rs_vs_spy_20d": -0.27331,
+    "dist_sma200": -0.06071,
+    "dist_52w_high": -0.4529,
+    "gap": -0.11787,
+    "open_to_close": -0.05123,
+    "move_atr": -1.51369,
+    "usd_volume_20d": 742772336.91101,
+    "baskets": "PC and server hardware",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 11.01,
+    "gap_bucket": "down 10%+",
+    "history": {
+     "gap": "down 10%+",
+     "cut": "all",
+     "n": 855,
+     "sessions": 422,
+     "mean_bp": 45.6,
+     "median_bp": -15.9,
+     "up_share": 0.487,
+     "hold_mean_bp": 44.2,
+     "hold_up_share": 0.502,
+     "drift_n": 852,
+     "drift_mean_bp": 1.0,
+     "drift_median_bp": -38.7,
+     "drift_up_share": 0.479
+    }
+   },
+   {
+    "symbol": "DKS",
+    "close": 153.17,
+    "ret_1d": 0.14588,
+    "ret_5d": 0.08731,
+    "ret_20d": 0.08247,
+    "atr_pct": 0.04751,
+    "rsi14": 58.34161,
+    "volume_z20": 3.04796,
+    "rs_vs_spy_20d": 0.14858,
+    "dist_sma200": -0.17267,
+    "dist_52w_high": -0.35351,
+    "gap": 0.11282,
+    "open_to_close": 0.02971,
+    "move_atr": 3.0708,
+    "usd_volume_20d": 224871163.73901,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 37.61,
+    "gap_bucket": "up 10%+",
+    "history": {
+     "gap": "up 10%+",
+     "cut": "all",
+     "n": 979,
+     "sessions": 447,
+     "mean_bp": 30.4,
+     "median_bp": 11.3,
+     "up_share": 0.508,
+     "hold_mean_bp": 67.0,
+     "hold_up_share": 0.507,
+     "drift_n": 976,
+     "drift_mean_bp": 38.7,
+     "drift_median_bp": 1.2,
+     "drift_up_share": 0.501
+    }
+   },
+   {
+    "symbol": "DY",
+    "close": 179.01,
+    "ret_1d": -0.18024,
+    "ret_5d": -0.18912,
+    "ret_20d": -0.22153,
+    "atr_pct": 0.08441,
+    "rsi14": 31.94717,
+    "volume_z20": 3.32708,
+    "rs_vs_spy_20d": -0.15542,
+    "dist_sma200": -0.5101,
+    "dist_52w_high": -0.66553,
+    "gap": -0.07954,
+    "open_to_close": -0.1094,
+    "move_atr": -2.13543,
+    "usd_volume_20d": 135071091.94183,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 14.51,
+    "gap_bucket": "down 5-10%",
+    "history": {
+     "gap": "down 5-10%",
+     "cut": "all",
+     "n": 1854,
+     "sessions": 592,
+     "mean_bp": 13.0,
+     "median_bp": 7.4,
+     "up_share": 0.506,
+     "hold_mean_bp": 14.7,
+     "hold_up_share": 0.501,
+     "drift_n": 1847,
+     "drift_mean_bp": 6.0,
+     "drift_median_bp": -9.9,
+     "drift_up_share": 0.489
+    }
+   },
+   {
+    "symbol": "DLTR",
+    "close": 154.65,
+    "ret_1d": 0.11179,
+    "ret_5d": 0.10694,
+    "ret_20d": 0.25071,
+    "atr_pct": 0.03897,
+    "rsi14": 68.451,
+    "volume_z20": 3.39668,
+    "rs_vs_spy_20d": 0.31681,
+    "dist_sma200": 0.31096,
+    "dist_52w_high": 0.0,
+    "gap": 0.07829,
+    "open_to_close": 0.03107,
+    "move_atr": 2.86871,
+    "usd_volume_20d": 292655955.44128,
+    "baskets": "Discount stores",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 25.43,
+    "gap_bucket": "up 5-10%",
+    "history": {
+     "gap": "up 5-10%",
+     "cut": "all",
+     "n": 1984,
+     "sessions": 585,
+     "mean_bp": 17.9,
+     "median_bp": 7.5,
+     "up_share": 0.511,
+     "hold_mean_bp": 24.6,
+     "hold_up_share": 0.504,
+     "drift_n": 1977,
+     "drift_mean_bp": 4.9,
+     "drift_median_bp": -23.6,
+     "drift_up_share": 0.484
+    }
+   },
+   {
+    "symbol": "BILI",
+    "close": 11.1,
+    "ret_1d": 0.01928,
+    "ret_5d": -0.07035,
+    "ret_20d": -0.15332,
+    "atr_pct": 0.05076,
+    "rsi14": 30.40926,
+    "volume_z20": 3.48818,
+    "rs_vs_spy_20d": -0.08721,
+    "dist_sma200": -0.417,
+    "dist_52w_high": -0.69098,
+    "gap": -0.06428,
+    "open_to_close": 0.0893,
+    "move_atr": 0.37992,
+    "usd_volume_20d": 45937791.5,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 3.78,
+    "gap_bucket": "down 5-10%",
+    "history": {
+     "gap": "down 5-10%",
+     "cut": "all",
+     "n": 1854,
+     "sessions": 592,
+     "mean_bp": 13.0,
+     "median_bp": 7.4,
+     "up_share": 0.506,
+     "hold_mean_bp": 14.7,
+     "hold_up_share": 0.501,
+     "drift_n": 1847,
+     "drift_mean_bp": 6.0,
+     "drift_median_bp": -9.9,
+     "drift_up_share": 0.489
+    }
+   },
+   {
+    "symbol": "A",
+    "close": 183.52,
+    "ret_1d": 0.04249,
+    "ret_5d": 0.06561,
+    "ret_20d": 0.03397,
+    "atr_pct": 0.03181,
+    "rsi14": 60.53163,
+    "volume_z20": 2.71422,
+    "rs_vs_spy_20d": 0.10008,
+    "dist_sma200": 0.3186,
+    "dist_52w_high": 0.0,
+    "gap": 0.06203,
+    "open_to_close": -0.0184,
+    "move_atr": 1.33571,
+    "usd_volume_20d": 362170015.40222,
+    "baskets": "Life science tools",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 7.71,
+    "gap_bucket": "up 5-10%",
+    "history": {
+     "gap": "up 5-10%",
+     "cut": "all",
+     "n": 1984,
+     "sessions": 585,
+     "mean_bp": 17.9,
+     "median_bp": 7.5,
+     "up_share": 0.511,
+     "hold_mean_bp": 24.6,
+     "hold_up_share": 0.504,
+     "drift_n": 1977,
+     "drift_mean_bp": 4.9,
+     "drift_median_bp": -23.6,
+     "drift_up_share": 0.484
+    }
+   },
+   {
+    "symbol": "SJM",
+    "close": 130.85,
+    "ret_1d": -0.01454,
+    "ret_5d": -0.01941,
+    "ret_20d": 0.03581,
+    "atr_pct": 0.02973,
+    "rsi14": 52.14664,
+    "volume_z20": 2.47647,
+    "rs_vs_spy_20d": 0.10191,
+    "dist_sma200": 0.17238,
+    "dist_52w_high": -0.0346,
+    "gap": -0.04722,
+    "open_to_close": 0.03431,
+    "move_atr": -0.48889,
+    "usd_volume_20d": 167310349.39346,
+    "baskets": "Packaged food",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 24.78,
+    "gap_bucket": "down 2-5%",
+    "history": {
+     "gap": "down 2-5%",
+     "cut": "all",
+     "n": 3037,
+     "sessions": 724,
+     "mean_bp": 8.4,
+     "median_bp": 11.2,
+     "up_share": 0.511,
+     "hold_mean_bp": 13.7,
+     "hold_up_share": 0.504,
+     "drift_n": 3028,
+     "drift_mean_bp": 6.7,
+     "drift_median_bp": -2.8,
+     "drift_up_share": 0.498
+    }
+   },
+   {
+    "symbol": "BURL",
+    "close": 244.34,
+    "ret_1d": 0.03904,
+    "ret_5d": 0.03913,
+    "ret_20d": 0.03908,
+    "atr_pct": 0.04791,
+    "rsi14": 47.38388,
+    "volume_z20": 2.79633,
+    "rs_vs_spy_20d": 0.10519,
+    "dist_sma200": -0.19321,
+    "dist_52w_high": -0.34351,
+    "gap": 0.04184,
+    "open_to_close": -0.00269,
+    "move_atr": 0.81476,
+    "usd_volume_20d": 302942848.51913,
+    "baskets": "Off-price retail",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": -1.12,
+    "gap_bucket": "up 2-5%",
+    "history": {
+     "gap": "up 2-5%",
+     "cut": "all",
+     "n": 3606,
+     "sessions": 712,
+     "mean_bp": 14.3,
+     "median_bp": 7.7,
+     "up_share": 0.512,
+     "hold_mean_bp": 30.0,
+     "hold_up_share": 0.516,
+     "drift_n": 3598,
+     "drift_mean_bp": 12.1,
+     "drift_median_bp": 4.2,
+     "drift_up_share": 0.504
+    }
+   },
+   {
+    "symbol": "J",
+    "close": 151.98,
+    "ret_1d": -0.03523,
+    "ret_5d": -0.0395,
+    "ret_20d": 0.02454,
+    "atr_pct": 0.03213,
+    "rsi14": 49.17338,
+    "volume_z20": 0.86182,
+    "rs_vs_spy_20d": 0.09065,
+    "dist_sma200": 0.12693,
+    "dist_52w_high": -0.05155,
+    "gap": -0.03466,
+    "open_to_close": -0.00059,
+    "move_atr": -1.0966,
+    "usd_volume_20d": 127594174.92294,
+    "baskets": "",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 3.57,
+    "gap_bucket": "down 2-5%",
+    "history": {
+     "gap": "down 2-5%",
+     "cut": "all",
+     "n": 3037,
+     "sessions": 724,
+     "mean_bp": 8.4,
+     "median_bp": 11.2,
+     "up_share": 0.511,
+     "hold_mean_bp": 13.7,
+     "hold_up_share": 0.504,
+     "drift_n": 3028,
+     "drift_mean_bp": 6.7,
+     "drift_median_bp": -2.8,
+     "drift_up_share": 0.498
+    }
+   },
+   {
+    "symbol": "MDT",
+    "close": 96.13,
+    "ret_1d": -0.04557,
+    "ret_5d": -0.0605,
+    "ret_20d": 0.0232,
+    "atr_pct": 0.02777,
+    "rsi14": 43.03283,
+    "volume_z20": 3.32262,
+    "rs_vs_spy_20d": 0.08931,
+    "dist_sma200": 0.10289,
+    "dist_52w_high": -0.08413,
+    "gap": -0.03296,
+    "open_to_close": -0.01304,
+    "move_atr": -1.64131,
+    "usd_volume_20d": 729294760.02464,
+    "baskets": "Medical devices",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 0.6,
+    "gap_bucket": "down 2-5%",
+    "history": {
+     "gap": "down 2-5%",
+     "cut": "all",
+     "n": 3037,
+     "sessions": 724,
+     "mean_bp": 8.4,
+     "median_bp": 11.2,
+     "up_share": 0.511,
+     "hold_mean_bp": 13.7,
+     "hold_up_share": 0.504,
+     "drift_n": 3028,
+     "drift_mean_bp": 6.7,
+     "drift_median_bp": -2.8,
+     "drift_up_share": 0.498
+    }
+   },
+   {
+    "symbol": "SYM",
+    "close": 37.39,
+    "ret_1d": 0.0692,
+    "ret_5d": 0.13097,
+    "ret_20d": -0.04079,
+    "atr_pct": 0.07085,
+    "rsi14": 52.27846,
+    "volume_z20": 2.43966,
+    "rs_vs_spy_20d": 0.02532,
+    "dist_sma200": -0.18825,
+    "dist_52w_high": -0.57171,
+    "gap": -0.03003,
+    "open_to_close": 0.1023,
+    "move_atr": 0.97675,
+    "usd_volume_20d": 63681011.45496,
+    "baskets": "Robotics and automation",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 8.34,
+    "gap_bucket": "down 2-5%",
+    "history": {
+     "gap": "down 2-5%",
+     "cut": "all",
+     "n": 3037,
+     "sessions": 724,
+     "mean_bp": 8.4,
+     "median_bp": 11.2,
+     "up_share": 0.511,
+     "hold_mean_bp": 13.7,
+     "hold_up_share": 0.504,
+     "drift_n": 3028,
+     "drift_mean_bp": 6.7,
+     "drift_median_bp": -2.8,
+     "drift_up_share": 0.498
+    }
+   },
+   {
+    "symbol": "VIPS",
+    "close": 13.03,
+    "ret_1d": 0.03331,
+    "ret_5d": 0.01243,
+    "ret_20d": 0.02598,
+    "atr_pct": 0.03021,
+    "rsi14": 50.67401,
+    "volume_z20": 1.74976,
+    "rs_vs_spy_20d": 0.09209,
+    "dist_sma200": -0.07759,
+    "dist_52w_high": -0.33114,
+    "gap": 0.02776,
+    "open_to_close": 0.0054,
+    "move_atr": 1.1026,
+    "usd_volume_20d": 30127315.63406,
+    "baskets": "",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": -2.96,
+    "gap_bucket": "up 2-5%",
+    "history": {
+     "gap": "up 2-5%",
+     "cut": "all",
+     "n": 3606,
+     "sessions": 712,
+     "mean_bp": 14.3,
+     "median_bp": 7.7,
+     "up_share": 0.512,
+     "hold_mean_bp": 30.0,
+     "hold_up_share": 0.516,
+     "drift_n": 3598,
+     "drift_mean_bp": 12.1,
+     "drift_median_bp": 4.2,
+     "drift_up_share": 0.504
+    }
+   },
+   {
+    "symbol": "BBY",
+    "close": 99.62,
+    "ret_1d": 0.02701,
+    "ret_5d": 0.0124,
+    "ret_20d": 0.01137,
+    "atr_pct": 0.03929,
+    "rsi14": 52.31936,
+    "volume_z20": 2.40015,
+    "rs_vs_spy_20d": 0.07748,
+    "dist_sma200": 0.29341,
+    "dist_52w_high": -0.06266,
+    "gap": 0.02289,
+    "open_to_close": 0.00403,
+    "move_atr": 0.68746,
+    "usd_volume_20d": 294567217.29851,
+    "baskets": "Home improvement and specialty retail",
+    "report": "2026-11-24",
+    "when": "before_open",
+    "surprise_pct": 8.64,
+    "gap_bucket": "up 2-5%",
+    "history": {
+     "gap": "up 2-5%",
+     "cut": "all",
+     "n": 3606,
+     "sessions": 712,
+     "mean_bp": 14.3,
+     "median_bp": 7.7,
+     "up_share": 0.512,
+     "hold_mean_bp": 30.0,
+     "hold_up_share": 0.516,
+     "drift_n": 3598,
+     "drift_mean_bp": 12.1,
+     "drift_median_bp": 4.2,
+     "drift_up_share": 0.504
+    }
+   },
+   {
+    "symbol": "DAC",
+    "close": 143.33,
+    "ret_1d": -0.02906,
+    "ret_5d": -0.02364,
+    "ret_20d": -0.08979,
+    "atr_pct": 0.0277,
+    "rsi14": 33.63497,
+    "volume_z20": 0.88016,
+    "rs_vs_spy_20d": -0.02369,
+    "dist_sma200": 0.07576,
+    "dist_52w_high": -0.15297,
+    "gap": 0.00935,
+    "open_to_close": -0.03805,
+    "move_atr": -1.04909,
+    "usd_volume_20d": 26637253.86047,
+    "baskets": "",
+    "report": "2026-11-23",
+    "when": "after_close",
+    "surprise_pct": 36.54,
+    "gap_bucket": "flat \u00b12%",
+    "history": {
+     "gap": "flat \u00b12%",
+     "cut": "all",
+     "n": 8151,
+     "sessions": 877,
+     "mean_bp": 8.6,
+     "median_bp": 11.6,
+     "up_share": 0.514,
+     "hold_mean_bp": 14.2,
+     "hold_up_share": 0.503,
+     "drift_n": 8142,
+     "drift_mean_bp": 2.9,
+     "drift_median_bp": -12.5,
+     "drift_up_share": 0.481
+    }
+   }
+  ]
+ },
+ "movers_up": [
+  {
+   "symbol": "SNY",
+   "close": 51.9,
+   "ret_1d": 0.10969,
+   "ret_5d": 0.09194,
+   "ret_20d": 0.23896,
+   "atr_pct": 0.02507,
+   "rsi14": 76.5551,
+   "volume_z20": 2.39736,
+   "rs_vs_spy_20d": 0.30507,
+   "dist_sma200": 0.18845,
+   "dist_52w_high": 0.0,
+   "gap": 0.07601,
+   "open_to_close": 0.0313,
+   "move_atr": 4.37578,
+   "usd_volume_20d": 191716904.25949,
+   "baskets": ""
+  },
+  {
+   "symbol": "ANF",
+   "close": 168.1,
+   "ret_1d": 0.19687,
+   "ret_5d": 0.17651,
+   "ret_20d": 0.01645,
+   "atr_pct": 0.05612,
+   "rsi14": 62.16409,
+   "volume_z20": 3.9561,
+   "rs_vs_spy_20d": 0.08255,
+   "dist_sma200": 0.53996,
+   "dist_52w_high": -0.01748,
+   "gap": 0.13129,
+   "open_to_close": 0.05796,
+   "move_atr": 3.50772,
+   "usd_volume_20d": 142962004.54483,
+   "baskets": ""
+  },
+  {
+   "symbol": "DKS",
+   "close": 153.17,
+   "ret_1d": 0.14588,
+   "ret_5d": 0.08731,
+   "ret_20d": 0.08247,
+   "atr_pct": 0.04751,
+   "rsi14": 58.34161,
+   "volume_z20": 3.04796,
+   "rs_vs_spy_20d": 0.14858,
+   "dist_sma200": -0.17267,
+   "dist_52w_high": -0.35351,
+   "gap": 0.11282,
+   "open_to_close": 0.02971,
+   "move_atr": 3.0708,
+   "usd_volume_20d": 224871163.73901,
+   "baskets": ""
+  },
+  {
+   "symbol": "DLTR",
+   "close": 154.65,
+   "ret_1d": 0.11179,
+   "ret_5d": 0.10694,
+   "ret_20d": 0.25071,
+   "atr_pct": 0.03897,
+   "rsi14": 68.451,
+   "volume_z20": 3.39668,
+   "rs_vs_spy_20d": 0.31681,
+   "dist_sma200": 0.31096,
+   "dist_52w_high": 0.0,
+   "gap": 0.07829,
+   "open_to_close": 0.03107,
+   "move_atr": 2.86871,
+   "usd_volume_20d": 292655955.44128,
+   "baskets": "Discount stores"
+  },
+  {
+   "symbol": "CYTK",
+   "close": 59.9,
+   "ret_1d": 0.11359,
+   "ret_5d": 0.15973,
+   "ret_20d": -0.02633,
+   "atr_pct": 0.04875,
+   "rsi14": 54.75865,
+   "volume_z20": 0.62883,
+   "rs_vs_spy_20d": 0.03977,
+   "dist_sma200": -0.13721,
+   "dist_52w_high": -0.31355,
+   "gap": 0.01041,
+   "open_to_close": 0.10212,
+   "move_atr": 2.33027,
+   "usd_volume_20d": 103953440.03506,
+   "baskets": ""
+  },
+  {
+   "symbol": "AMGN",
+   "close": 473.935,
+   "ret_1d": 0.05544,
+   "ret_5d": 0.04093,
+   "ret_20d": 0.06412,
+   "atr_pct": 0.02709,
+   "rsi14": 63.58592,
+   "volume_z20": 0.27347,
+   "rs_vs_spy_20d": 0.13023,
+   "dist_sma200": 0.24799,
+   "dist_52w_high": -0.00378,
+   "gap": 0.00699,
+   "open_to_close": 0.04811,
+   "move_atr": 2.04661,
+   "usd_volume_20d": 1244143325.64087,
+   "baskets": "Large-cap biotech"
+  },
+  {
+   "symbol": "KRYS",
+   "close": 344.415,
+   "ret_1d": 0.07208,
+   "ret_5d": 0.15363,
+   "ret_20d": 0.07435,
+   "atr_pct": 0.03703,
+   "rsi14": 64.61598,
+   "volume_z20": 0.35526,
+   "rs_vs_spy_20d": 0.14046,
+   "dist_sma200": 0.10708,
+   "dist_52w_high": -0.08921,
+   "gap": 0.00962,
+   "open_to_close": 0.06186,
+   "move_atr": 1.94629,
+   "usd_volume_20d": 81320246.83228,
+   "baskets": ""
+  },
+  {
+   "symbol": "CPNG",
+   "close": 16.01,
+   "ret_1d": 0.08616,
+   "ret_5d": 0.14357,
+   "ret_20d": 0.15097,
+   "atr_pct": 0.04577,
+   "rsi14": 59.46561,
+   "volume_z20": 0.98807,
+   "rs_vs_spy_20d": 0.21708,
+   "dist_sma200": -0.0523,
+   "dist_52w_high": -0.43146,
+   "gap": -0.00204,
+   "open_to_close": 0.08838,
+   "move_atr": 1.88229,
+   "usd_volume_20d": 200645048.24262,
+   "baskets": ""
+  },
+  {
+   "symbol": "ROIV",
+   "close": 42.34,
+   "ret_1d": 0.06838,
+   "ret_5d": 0.09377,
+   "ret_20d": 0.15873,
+   "atr_pct": 0.03704,
+   "rsi14": 66.27738,
+   "volume_z20": 1.1265,
+   "rs_vs_spy_20d": 0.22484,
+   "dist_sma200": 0.28772,
+   "dist_52w_high": 0.0,
+   "gap": 0.01539,
+   "open_to_close": 0.05219,
+   "move_atr": 1.84622,
+   "usd_volume_20d": 312238994.11716,
+   "baskets": ""
+  },
+  {
+   "symbol": "GLOB",
+   "close": 50.05,
+   "ret_1d": 0.09831,
+   "ret_5d": 0.17406,
+   "ret_20d": 0.16477,
+   "atr_pct": 0.05467,
+   "rsi14": 63.80179,
+   "volume_z20": 1.49553,
+   "rs_vs_spy_20d": 0.23087,
+   "dist_sma200": 0.23632,
+   "dist_52w_high": -0.29715,
+   "gap": 0.01404,
+   "open_to_close": 0.0831,
+   "move_atr": 1.79833,
+   "usd_volume_20d": 49954452.49271,
+   "baskets": ""
+  }
+ ],
+ "movers_down": [
+  {
+   "symbol": "ADI",
+   "close": 312.95001,
+   "ret_1d": -0.17373,
+   "ret_5d": -0.18433,
+   "ret_20d": -0.26425,
+   "atr_pct": 0.07969,
+   "rsi14": 32.71204,
+   "volume_z20": 2.20257,
+   "rs_vs_spy_20d": -0.19815,
+   "dist_sma200": -0.17014,
+   "dist_52w_high": -0.29536,
+   "gap": -0.13399,
+   "open_to_close": -0.04588,
+   "move_atr": -2.18017,
+   "usd_volume_20d": 1808833802.74811,
+   "baskets": "Analog and auto chips"
+  },
+  {
+   "symbol": "BG",
+   "close": 84.06,
+   "ret_1d": -0.08601,
+   "ret_5d": -0.12071,
+   "ret_20d": -0.1646,
+   "atr_pct": 0.04018,
+   "rsi14": 24.53715,
+   "volume_z20": 2.41209,
+   "rs_vs_spy_20d": -0.0985,
+   "dist_sma200": -0.26313,
+   "dist_52w_high": -0.35157,
+   "gap": -0.00185,
+   "open_to_close": -0.08431,
+   "move_atr": -2.14051,
+   "usd_volume_20d": 176415639.73808,
+   "baskets": "Agriculture"
+  },
+  {
+   "symbol": "DY",
+   "close": 179.01,
+   "ret_1d": -0.18024,
+   "ret_5d": -0.18912,
+   "ret_20d": -0.22153,
+   "atr_pct": 0.08441,
+   "rsi14": 31.94717,
+   "volume_z20": 3.32708,
+   "rs_vs_spy_20d": -0.15542,
+   "dist_sma200": -0.5101,
+   "dist_52w_high": -0.66553,
+   "gap": -0.07954,
+   "open_to_close": -0.1094,
+   "move_atr": -2.13543,
+   "usd_volume_20d": 135071091.94183,
+   "baskets": ""
+  },
+  {
+   "symbol": "ZTO",
+   "close": 19.25,
+   "ret_1d": -0.05498,
+   "ret_5d": -0.06235,
+   "ret_20d": -0.0399,
+   "atr_pct": 0.02588,
+   "rsi14": 32.90817,
+   "volume_z20": 4.1748,
+   "rs_vs_spy_20d": 0.02621,
+   "dist_sma200": -0.14883,
+   "dist_52w_high": -0.25618,
+   "gap": -0.06726,
+   "open_to_close": 0.01316,
+   "move_atr": -2.12418,
+   "usd_volume_20d": 39493085.45418,
+   "baskets": ""
+  },
+  {
+   "symbol": "TXN",
+   "close": 258.44,
+   "ret_1d": -0.11247,
+   "ret_5d": -0.12648,
+   "ret_20d": -0.1593,
+   "atr_pct": 0.06483,
+   "rsi14": 39.14261,
+   "volume_z20": 1.05865,
+   "rs_vs_spy_20d": -0.09319,
+   "dist_sma200": -0.02351,
+   "dist_52w_high": -0.21442,
+   "gap": -0.04756,
+   "open_to_close": -0.06815,
+   "move_atr": -1.73473,
+   "usd_volume_20d": 2618237868.96667,
+   "baskets": "Analog and auto chips"
+  },
+  {
+   "symbol": "MDT",
+   "close": 96.13,
+   "ret_1d": -0.04557,
+   "ret_5d": -0.0605,
+   "ret_20d": 0.0232,
+   "atr_pct": 0.02777,
+   "rsi14": 43.03283,
+   "volume_z20": 3.32262,
+   "rs_vs_spy_20d": 0.08931,
+   "dist_sma200": 0.10289,
+   "dist_52w_high": -0.08413,
+   "gap": -0.03296,
+   "open_to_close": -0.01304,
+   "move_atr": -1.64131,
+   "usd_volume_20d": 729294760.02464,
+   "baskets": "Medical devices"
+  },
+  {
+   "symbol": "HPE",
+   "close": 40.19,
+   "ret_1d": -0.16306,
+   "ret_5d": -0.12801,
+   "ret_20d": -0.33941,
+   "atr_pct": 0.10772,
+   "rsi14": 35.61505,
+   "volume_z20": 2.71185,
+   "rs_vs_spy_20d": -0.27331,
+   "dist_sma200": -0.06071,
+   "dist_52w_high": -0.4529,
+   "gap": -0.11787,
+   "open_to_close": -0.05123,
+   "move_atr": -1.51369,
+   "usd_volume_20d": 742772336.91101,
+   "baskets": "PC and server hardware"
+  },
+  {
+   "symbol": "DAR",
+   "close": 47.06,
+   "ret_1d": -0.06886,
+   "ret_5d": -0.10905,
+   "ret_20d": -0.15466,
+   "atr_pct": 0.04925,
+   "rsi14": 28.38662,
+   "volume_z20": 2.61709,
+   "rs_vs_spy_20d": -0.08855,
+   "dist_sma200": -0.20402,
+   "dist_52w_high": -0.31138,
+   "gap": -0.01068,
+   "open_to_close": -0.0588,
+   "move_atr": -1.39823,
+   "usd_volume_20d": 130313022.51396,
+   "baskets": ""
+  },
+  {
+   "symbol": "VC",
+   "close": 79.48,
+   "ret_1d": -0.05493,
+   "ret_5d": 0.02967,
+   "ret_20d": 0.07755,
+   "atr_pct": 0.04411,
+   "rsi14": 47.76076,
+   "volume_z20": -0.89455,
+   "rs_vs_spy_20d": 0.14366,
+   "dist_sma200": -0.19033,
+   "dist_52w_high": -0.35614,
+   "gap": 0.01058,
+   "open_to_close": -0.06483,
+   "move_atr": -1.24554,
+   "usd_volume_20d": 52125169.54918,
+   "baskets": ""
+  },
+  {
+   "symbol": "LFUS",
+   "close": 360.22,
+   "ret_1d": -0.07463,
+   "ret_5d": -0.04866,
+   "ret_20d": -0.05753,
+   "atr_pct": 0.06081,
+   "rsi14": 43.39266,
+   "volume_z20": 0.04379,
+   "rs_vs_spy_20d": 0.00858,
+   "dist_sma200": -0.10912,
+   "dist_52w_high": -0.26055,
+   "gap": -0.0197,
+   "open_to_close": -0.05603,
+   "move_atr": -1.22724,
+   "usd_volume_20d": 102198462.19506,
+   "baskets": ""
+  }
+ ],
+ "baskets": [
+  {
+   "id": "discount_stores",
+   "name": "Discount stores",
+   "hedge": "XLP",
+   "members": "DG, DLTR, TGT",
+   "spread_today_pct": 4.74,
+   "ret_5d": 0.0787,
+   "ret_20d": 0.1231,
+   "z_50d": 3.95,
+   "worst": [
+    "DG",
+    3.33
+   ],
+   "best": [
+    "DLTR",
+    11.18
+   ],
+   "member_range_pct": 7.85
+  },
+  {
+   "id": "managed_care",
+   "name": "Managed care",
+   "hedge": "XLV",
+   "members": "UNH, HUM, ELV, CNC, MOH, OSCR, CI",
+   "spread_today_pct": -0.61,
+   "ret_5d": -0.0961,
+   "ret_20d": -0.1048,
+   "z_50d": -2.59,
+   "worst": [
+    "OSCR",
+    1.05
+   ],
+   "best": [
+    "HUM",
+    4.96
+   ],
+   "member_range_pct": 3.91
+  },
+  {
+   "id": "utility_solar",
+   "name": "Utility-scale solar",
+   "hedge": "XLU",
+   "members": "FSLR, NXT, SHLS, TE, CSIQ",
+   "spread_today_pct": -6.29,
+   "ret_5d": -0.1692,
+   "ret_20d": -0.3249,
+   "z_50d": -2.56,
+   "worst": [
+    "CSIQ",
+    -14.94
+   ],
+   "best": [
+    "FSLR",
+    1.0
+   ],
+   "member_range_pct": 15.94
+  },
+  {
+   "id": "air_freight",
+   "name": "Parcel and freight forwarding",
+   "hedge": "XLI",
+   "members": "UPS, FDX, EXPD, CHRW",
+   "spread_today_pct": 1.78,
+   "ret_5d": 0.024,
+   "ret_20d": 0.0469,
+   "z_50d": 2.2,
+   "worst": [
+    "FDX",
+    -0.77
+   ],
+   "best": [
+    "CHRW",
+    2.45
+   ],
+   "member_range_pct": 3.22
+  },
+  {
+   "id": "coatings_chemicals",
+   "name": "Coatings and specialty chemicals",
+   "hedge": "XLB",
+   "members": "SHW, ECL, PPG",
+   "spread_today_pct": 0.11,
+   "ret_5d": 0.028,
+   "ret_20d": 0.1081,
+   "z_50d": 2.2,
+   "worst": [
+    "ECL",
+    0.4
+   ],
+   "best": [
+    "SHW",
+    0.88
+   ],
+   "member_range_pct": 0.48
+  },
+  {
+   "id": "card_lenders",
+   "name": "Card lenders",
+   "hedge": "XLF",
+   "members": "AXP, COF, SYF",
+   "spread_today_pct": -0.41,
+   "ret_5d": -0.0131,
+   "ret_20d": -0.0755,
+   "z_50d": -2.19,
+   "worst": [
+    "SYF",
+    -0.07
+   ],
+   "best": [
+    "COF",
+    0.75
+   ],
+   "member_range_pct": 0.82
+  },
+  {
+   "id": "construction_materials",
+   "name": "Construction materials",
+   "hedge": "XLB",
+   "members": "VMC, MLM, CRH",
+   "spread_today_pct": 0.59,
+   "ret_5d": 0.0511,
+   "ret_20d": 0.1126,
+   "z_50d": 2.19,
+   "worst": [
+    "MLM",
+    0.93
+   ],
+   "best": [
+    "CRH",
+    1.51
+   ],
+   "member_range_pct": 0.58
+  },
+  {
+   "id": "refiners",
+   "name": "Refiners",
+   "hedge": "XLE",
+   "members": "MPC, VLO, PSX, PBF, DINO, DK, CVI, PARR",
+   "spread_today_pct": -2.69,
+   "ret_5d": -0.0795,
+   "ret_20d": -0.117,
+   "z_50d": -2.11,
+   "worst": [
+    "DK",
+    -4.65
+   ],
+   "best": [
+    "PSX",
+    -0.11
+   ],
+   "member_range_pct": 4.54
+  },
+  {
+   "id": "copper_miners",
+   "name": "Copper miners",
+   "hedge": "XLB",
+   "members": "FCX, SCCO, TECK, HBM, ERO, TGB",
+   "spread_today_pct": -5.55,
+   "ret_5d": -0.1233,
+   "ret_20d": -0.2551,
+   "z_50d": -2.04,
+   "worst": [
+    "ERO",
+    -6.89
+   ],
+   "best": [
+    "TECK",
+    -3.5
+   ],
+   "member_range_pct": 3.39
+  },
+  {
+   "id": "pc_insurers",
+   "name": "Property and casualty insurers",
+   "hedge": "XLF",
+   "members": "PGR, CB, TRV, ALL, HIG, ACGL, WRB, CINF, EG, BRK B",
+   "spread_today_pct": 0.56,
+   "ret_5d": 0.0207,
+   "ret_20d": 0.0537,
+   "z_50d": 2.04,
+   "worst": [
+    "HIG",
+    0.84
+   ],
+   "best": [
+    "PGR",
+    2.31
+   ],
+   "member_range_pct": 1.47
+  },
+  {
+   "id": "retail_reits",
+   "name": "Retail REITs",
+   "hedge": "XLRE",
+   "members": "SPG, O, KIM, REG, FRT",
+   "spread_today_pct": 0.22,
+   "ret_5d": 0.0082,
+   "ret_20d": 0.0265,
+   "z_50d": 2.04,
+   "worst": [
+    "SPG",
+    1.22
+   ],
+   "best": [
+    "FRT",
+    1.82
+   ],
+   "member_range_pct": 0.6
+  },
+  {
+   "id": "multiline_insurers",
+   "name": "Multi-line insurers",
+   "hedge": "XLF",
+   "members": "AIG, AIZ, L",
+   "spread_today_pct": 0.01,
+   "ret_5d": 0.0185,
+   "ret_20d": 0.0411,
+   "z_50d": 2.03,
+   "worst": [
+    "L",
+    0.54
+   ],
+   "best": [
+    "AIZ",
+    1.13
+   ],
+   "member_range_pct": 0.59
+  },
+  {
+   "id": "datacenter_reits",
+   "name": "Data center REITs",
+   "hedge": "XLRE",
+   "members": "EQIX, DLR, IRM",
+   "spread_today_pct": -2.67,
+   "ret_5d": -0.0501,
+   "ret_20d": -0.0773,
+   "z_50d": -2.02,
+   "worst": [
+    "EQIX",
+    -1.66
+   ],
+   "best": [
+    "IRM",
+    -1.17
+   ],
+   "member_range_pct": 0.49
+  },
+  {
+   "id": "insurance_brokers",
+   "name": "Insurance brokers",
+   "hedge": "XLF",
+   "members": "MRSH, AON, AJG, WTW, BRO, ERIE",
+   "spread_today_pct": 2.68,
+   "ret_5d": 0.0473,
+   "ret_20d": 0.1095,
+   "z_50d": 2.0,
+   "worst": [
+    "ERIE",
+    2.76
+   ],
+   "best": [
+    "BRO",
+    4.51
+   ],
+   "member_range_pct": 1.75
+  },
+  {
+   "id": "drones_defense_tech",
+   "name": "Drones and defense tech",
+   "hedge": "XLI",
+   "members": "AVAV, KTOS, RCAT, ONDS, UMAC, AVEX",
+   "spread_today_pct": -3.91,
+   "ret_5d": -0.1307,
+   "ret_20d": -0.3485,
+   "z_50d": -1.97,
+   "worst": [
+    "RCAT",
+    -8.73
+   ],
+   "best": [
+    "KTOS",
+    -1.02
+   ],
+   "member_range_pct": 7.71
+  },
+  {
+   "id": "pc_server_hardware",
+   "name": "PC and server hardware",
+   "hedge": "XLK",
+   "members": "DELL, HPE, HPQ, NTAP, SMCI, P",
+   "spread_today_pct": -5.58,
+   "ret_5d": -0.0316,
+   "ret_20d": -0.1606,
+   "z_50d": -1.81,
+   "worst": [
+    "HPE",
+    -16.31
+   ],
+   "best": [
+    "HPQ",
+    -3.32
+   ],
+   "member_range_pct": 12.99
+  },
+  {
+   "id": "space",
+   "name": "Space",
+   "hedge": "XLI",
+   "members": "RKLB, ASTS, LUNR, PL, RDW, VOYG, FLY, SPCX",
+   "spread_today_pct": -6.58,
+   "ret_5d": -0.1416,
+   "ret_20d": -0.2184,
+   "z_50d": -1.79,
+   "worst": [
+    "VOYG",
+    -9.24
+   ],
+   "best": [
+    "FLY",
+    -5.02
+   ],
+   "member_range_pct": 4.22
+  },
+  {
+   "id": "steel",
+   "name": "Steel",
+   "hedge": "XLB",
+   "members": "NUE, STLD, RS, CMC, CLF",
+   "spread_today_pct": -1.33,
+   "ret_5d": -0.024,
+   "ret_20d": -0.0871,
+   "z_50d": -1.79,
+   "worst": [
+    "CLF",
+    -1.79
+   ],
+   "best": [
+    "NUE",
+    -0.06
+   ],
+   "member_range_pct": 1.73
+  },
+  {
+   "id": "telecom_cable",
+   "name": "Telecom and cable",
+   "hedge": "XLC",
+   "members": "VZ, T, TMUS, CMCSA, CHTR",
+   "spread_today_pct": 1.9,
+   "ret_5d": 0.0125,
+   "ret_20d": 0.1382,
+   "z_50d": 1.76,
+   "worst": [
+    "TMUS",
+    0.57
+   ],
+   "best": [
+    "CHTR",
+    6.21
+   ],
+   "member_range_pct": 5.64
+  },
+  {
+   "id": "investment_banks",
+   "name": "Investment banks and brokers",
+   "hedge": "XLF",
+   "members": "GS, MS, IBKR",
+   "spread_today_pct": -3.04,
+   "ret_5d": -0.0445,
+   "ret_20d": -0.1005,
+   "z_50d": -1.76,
+   "worst": [
+    "IBKR",
+    -2.3
+   ],
+   "best": [
+    "GS",
+    -2.14
+   ],
+   "member_range_pct": 0.16
+  },
+  {
+   "id": "cybersecurity",
+   "name": "Cybersecurity",
+   "hedge": "IGV",
+   "members": "PANW, CRWD, FTNT, ZS, OKTA, S, RBRK, QLYS",
+   "spread_today_pct": -1.16,
+   "ret_5d": 0.1177,
+   "ret_20d": -0.0008,
+   "z_50d": 1.74,
+   "worst": [
+    "OKTA",
+    -3.96
+   ],
+   "best": [
+    "FTNT",
+    1.07
+   ],
+   "member_range_pct": 5.03
+  },
+  {
+   "id": "regional_banks",
+   "name": "Regional banks",
+   "hedge": "XLF",
+   "members": "MTB, FITB, HBAN, RF, CFG, KEY",
+   "spread_today_pct": -0.04,
+   "ret_5d": -0.0073,
+   "ret_20d": -0.0513,
+   "z_50d": -1.73,
+   "worst": [
+    "HBAN",
+    0.41
+   ],
+   "best": [
+    "MTB",
+    1.29
+   ],
+   "member_range_pct": 0.88
+  },
+  {
+   "id": "electric_utilities",
+   "name": "Electric utilities",
+   "hedge": "XLU",
+   "members": "DUK, SO, EXC, AEP, WEC, EVRG, LNT, PPL, FE, ES, PNW",
+   "spread_today_pct": 0.28,
+   "ret_5d": 0.0086,
+   "ret_20d": 0.0159,
+   "z_50d": 1.73,
+   "worst": [
+    "FE",
+    -0.38
+   ],
+   "best": [
+    "ES",
+    1.69
+   ],
+   "member_range_pct": 2.07
+  },
+  {
+   "id": "building_products",
+   "name": "Building products",
+   "hedge": "XLI",
+   "members": "CARR, LII, MAS, AOS, ALLE",
+   "spread_today_pct": 1.19,
+   "ret_5d": 0.0462,
+   "ret_20d": 0.0538,
+   "z_50d": 1.69,
+   "worst": [
+    "MAS",
+    -0.06
+   ],
+   "best": [
+    "AOS",
+    1.46
+   ],
+   "member_range_pct": 1.52
+  },
+  {
+   "id": "quantum",
+   "name": "Quantum computing",
+   "hedge": "QQQ",
+   "members": "IONQ, RGTI, QBTS, QUBT, INFQ, QNT",
+   "spread_today_pct": -3.11,
+   "ret_5d": -0.0936,
+   "ret_20d": -0.2535,
+   "z_50d": -1.67,
+   "worst": [
+    "QBTS",
+    -7.8
+   ],
+   "best": [
+    "QNT",
+    1.1
+   ],
+   "member_range_pct": 8.9
+  },
+  {
+   "id": "crypto_equities",
+   "name": "Crypto stocks",
+   "hedge": "IBIT",
+   "members": "COIN, HOOD, MSTR, CRCL, BMNR, BLSH",
+   "spread_today_pct": -4.23,
+   "ret_5d": -0.042,
+   "ret_20d": -0.1443,
+   "z_50d": -1.67,
+   "worst": [
+    "BMNR",
+    -8.6
+   ],
+   "best": [
+    "HOOD",
+    -2.55
+   ],
+   "member_range_pct": 6.05
+  },
+  {
+   "id": "restaurants",
+   "name": "Restaurants",
+   "hedge": "XLY",
+   "members": "CMG, CAVA, TXRH, SBUX, WING, MCD, DRI, DPZ, YUM",
+   "spread_today_pct": 1.66,
+   "ret_5d": 0.013,
+   "ret_20d": 0.1177,
+   "z_50d": 1.66,
+   "worst": [
+    "SBUX",
+    0.02
+   ],
+   "best": [
+    "WING",
+    6.03
+   ],
+   "member_range_pct": 6.01
+  },
+  {
+   "id": "medical_devices",
+   "name": "Medical devices",
+   "hedge": "XLV",
+   "members": "ABT, MDT, SYK, BSX, ISRG, EW, BDX, ZBH, DXCM, PODD, RMD, IDXX, GEHC, BAX, STE",
+   "spread_today_pct": -0.84,
+   "ret_5d": 0.0166,
+   "ret_20d": 0.0443,
+   "z_50d": 1.64,
+   "worst": [
+    "MDT",
+    -4.56
+   ],
+   "best": [
+    "PODD",
+    5.11
+   ],
+   "member_range_pct": 9.67
+  },
+  {
+   "id": "nuclear_new",
+   "name": "Nuclear fuel and new reactors",
+   "hedge": "XLU",
+   "members": "OKLO, SMR, LEU, BWXT, CCJ, UEC, UUUU, NNE",
+   "spread_today_pct": -4.6,
+   "ret_5d": -0.116,
+   "ret_20d": -0.3013,
+   "z_50d": -1.63,
+   "worst": [
+    "OKLO",
+    -7.56
+   ],
+   "best": [
+    "UUUU",
+    -1.72
+   ],
+   "member_range_pct": 5.84
+  },
+  {
+   "id": "environmental_services",
+   "name": "Waste and environmental services",
+   "hedge": "XLI",
+   "members": "WM, RSG, ROL, VLTO",
+   "spread_today_pct": 1.61,
+   "ret_5d": 0.0194,
+   "ret_20d": 0.1316,
+   "z_50d": 1.62,
+   "worst": [
+    "ROL",
+    -0.26
+   ],
+   "best": [
+    "RSG",
+    1.8
+   ],
+   "member_range_pct": 2.06
+  },
+  {
+   "id": "robotics",
+   "name": "Robotics and automation",
+   "hedge": "XLI",
+   "members": "SYM, CGNX, OUST, HSAI, NOVT, ZBRA",
+   "spread_today_pct": -1.59,
+   "ret_5d": -0.007,
+   "ret_20d": -0.124,
+   "z_50d": -1.61,
+   "worst": [
+    "OUST",
+    -10.43
+   ],
+   "best": [
+    "SYM",
+    6.92
+   ],
+   "member_range_pct": 17.35
+  },
+  {
+   "id": "industrial_machinery",
+   "name": "Industrial machinery",
+   "hedge": "XLI",
+   "members": "ITW, DOV, IR, OTIS, PNR, SNA, SWK, GWW, XYL, FTV",
+   "spread_today_pct": 0.8,
+   "ret_5d": 0.025,
+   "ret_20d": 0.0958,
+   "z_50d": 1.56,
+   "worst": [
+    "XYL",
+    -1.62
+   ],
+   "best": [
+    "PNR",
+    1.9
+   ],
+   "member_range_pct": 3.52
+  },
+  {
+   "id": "genomic_diagnostics",
+   "name": "Genomics and diagnostics",
+   "hedge": "XLV",
+   "members": "NTRA, GH, TEM, ADPT, NEO, TWST",
+   "spread_today_pct": -3.13,
+   "ret_5d": -0.0,
+   "ret_20d": -0.193,
+   "z_50d": -1.54,
+   "worst": [
+    "TEM",
+    -3.87
+   ],
+   "best": [
+    "GH",
+    2.48
+   ],
+   "member_range_pct": 6.35
+  },
+  {
+   "id": "multi_utilities",
+   "name": "Multi-utilities",
+   "hedge": "XLU",
+   "members": "NEE, D, ED, CMS, AEE, DTE, XEL",
+   "spread_today_pct": 0.47,
+   "ret_5d": 0.0087,
+   "ret_20d": 0.0235,
+   "z_50d": 1.52,
+   "worst": [
+    "XEL",
+    0.38
+   ],
+   "best": [
+    "CMS",
+    0.9
+   ],
+   "member_range_pct": 0.52
+  },
+  {
+   "id": "texas_power",
+   "name": "Texas power",
+   "hedge": "XLU",
+   "members": "VST, NRG, CEG",
+   "spread_today_pct": -4.27,
+   "ret_5d": -0.0469,
+   "ret_20d": -0.1006,
+   "z_50d": -1.51,
+   "worst": [
+    "NRG",
+    -6.98
+   ],
+   "best": [
+    "VST",
+    -2.54
+   ],
+   "member_range_pct": 4.44
+  },
+  {
+   "id": "big_banks",
+   "name": "Big banks",
+   "hedge": "XLF",
+   "members": "JPM, BAC, WFC, C, PNC, USB, TFC",
+   "spread_today_pct": -0.09,
+   "ret_5d": -0.0102,
+   "ret_20d": -0.04,
+   "z_50d": -1.51,
+   "worst": [
+    "C",
+    -0.44
+   ],
+   "best": [
+    "WFC",
+    1.49
+   ],
+   "member_range_pct": 1.93
+  },
+  {
+   "id": "household_products",
+   "name": "Household products",
+   "hedge": "XLP",
+   "members": "PG, CL, KMB, CHD, CLX",
+   "spread_today_pct": -0.09,
+   "ret_5d": -0.0033,
+   "ret_20d": 0.0359,
+   "z_50d": 1.49,
+   "worst": [
+    "KMB",
+    0.91
+   ],
+   "best": [
+    "CLX",
+    2.6
+   ],
+   "member_range_pct": 1.69
+  },
+  {
+   "id": "payments",
+   "name": "Payments",
+   "hedge": "XLF",
+   "members": "V, MA, FISV, FIS, GPN, PYPL, CPAY, JKHY",
+   "spread_today_pct": 1.42,
+   "ret_5d": 0.0175,
+   "ret_20d": 0.059,
+   "z_50d": 1.49,
+   "worst": [
+    "FIS",
+    1.5
+   ],
+   "best": [
+    "JKHY",
+    3.33
+   ],
+   "member_range_pct": 1.83
+  },
+  {
+   "id": "processors",
+   "name": "Processor chips",
+   "hedge": "SPY",
+   "members": "AMD, INTC, QCOM, AVGO, TSM",
+   "spread_today_pct": -4.55,
+   "ret_5d": -0.046,
+   "ret_20d": -0.1533,
+   "z_50d": -1.48,
+   "worst": [
+    "AMD",
+    -8.86
+   ],
+   "best": [
+    "QCOM",
+    -0.25
+   ],
+   "member_range_pct": 8.61
+  },
+  {
+   "id": "payroll_hr",
+   "name": "Payroll and HR software",
+   "hedge": "IGV",
+   "members": "ADP, PAYX, PAYC, PCTY, WDAY",
+   "spread_today_pct": 1.39,
+   "ret_5d": -0.0067,
+   "ret_20d": 0.1454,
+   "z_50d": 1.46,
+   "worst": [
+    "PAYC",
+    -0.13
+   ],
+   "best": [
+    "ADP",
+    2.87
+   ],
+   "member_range_pct": 3.0
+  },
+  {
+   "id": "industrial_distributors",
+   "name": "Building and industrial distributors",
+   "hedge": "XLI",
+   "members": "FERG, WSO, CNM, FAST",
+   "spread_today_pct": 1.73,
+   "ret_5d": 0.0193,
+   "ret_20d": 0.0747,
+   "z_50d": 1.46,
+   "worst": [
+    "FERG",
+    -0.22
+   ],
+   "best": [
+    "WSO",
+    2.36
+   ],
+   "member_range_pct": 2.58
+  },
+  {
+   "id": "autos",
+   "name": "Automakers and parts",
+   "hedge": "XLY",
+   "members": "F, GM, APTV",
+   "spread_today_pct": 0.04,
+   "ret_5d": 0.0017,
+   "ret_20d": -0.05,
+   "z_50d": -1.45,
+   "worst": [
+    "APTV",
+    -1.27
+   ],
+   "best": [
+    "F",
+    2.58
+   ],
+   "member_range_pct": 3.85
+  },
+  {
+   "id": "pipelines",
+   "name": "Pipelines",
+   "hedge": "XLE",
+   "members": "WMB, KMI, OKE, TRGP",
+   "spread_today_pct": 0.54,
+   "ret_5d": 0.0181,
+   "ret_20d": 0.0292,
+   "z_50d": 1.43,
+   "worst": [
+    "WMB",
+    0.87
+   ],
+   "best": [
+    "TRGP",
+    2.13
+   ],
+   "member_range_pct": 1.26
+  },
+  {
+   "id": "ai_networking",
+   "name": "AI networking and optics",
+   "hedge": "SMH",
+   "members": "CIEN, COHR, LITE, CRDO, MRVL, GLW, FN, AAOI, POET, MTSI",
+   "spread_today_pct": -1.99,
+   "ret_5d": -0.0382,
+   "ret_20d": -0.0916,
+   "z_50d": -1.38,
+   "worst": [
+    "MTSI",
+    -13.45
+   ],
+   "best": [
+    "AAOI",
+    -0.78
+   ],
+   "member_range_pct": 12.67
+  },
+  {
+   "id": "critical_minerals",
+   "name": "Rare earths and critical minerals",
+   "hedge": "XLB",
+   "members": "MP, USAR, UAMY, ALM, ALB",
+   "spread_today_pct": -4.65,
+   "ret_5d": -0.0494,
+   "ret_20d": -0.2285,
+   "z_50d": -1.35,
+   "worst": [
+    "UAMY",
+    -8.79
+   ],
+   "best": [
+    "MP",
+    1.04
+   ],
+   "member_range_pct": 9.83
+  },
+  {
+   "id": "neoclouds",
+   "name": "Neoclouds",
+   "hedge": "SMH",
+   "members": "CRWV, NBIS, APLD, IREN, WULF, CBRS",
+   "spread_today_pct": -3.37,
+   "ret_5d": -0.0746,
+   "ret_20d": -0.1356,
+   "z_50d": -1.34,
+   "worst": [
+    "CRWV",
+    -11.85
+   ],
+   "best": [
+    "WULF",
+    -8.25
+   ],
+   "member_range_pct": 3.6
+  },
+  {
+   "id": "agriculture",
+   "name": "Agriculture",
+   "hedge": "XLB",
+   "members": "ADM, BG, CF, MOS, DE",
+   "spread_today_pct": -3.91,
+   "ret_5d": -0.0487,
+   "ret_20d": -0.0402,
+   "z_50d": -1.34,
+   "worst": [
+    "BG",
+    -8.6
+   ],
+   "best": [
+    "CF",
+    0.67
+   ],
+   "member_range_pct": 9.27
+  },
+  {
+   "id": "exchanges_data",
+   "name": "Exchanges and financial data",
+   "hedge": "XLF",
+   "members": "SPGI, MCO, MSCI, ICE, CME, NDAQ, CBOE, FDS",
+   "spread_today_pct": 0.64,
+   "ret_5d": 0.0196,
+   "ret_20d": 0.0513,
+   "z_50d": 1.34,
+   "worst": [
+    "SPGI",
+    0.71
+   ],
+   "best": [
+    "FDS",
+    2.63
+   ],
+   "member_range_pct": 1.92
+  },
+  {
+   "id": "internet_infrastructure",
+   "name": "Internet infrastructure",
+   "hedge": "XLK",
+   "members": "VRSN, GDDY, GEN, TWLO",
+   "spread_today_pct": 3.05,
+   "ret_5d": 0.0151,
+   "ret_20d": 0.1574,
+   "z_50d": 1.34,
+   "worst": [
+    "TWLO",
+    -2.07
+   ],
+   "best": [
+    "VRSN",
+    1.05
+   ],
+   "member_range_pct": 3.12
+  },
+  {
+   "id": "biotech",
+   "name": "Large-cap biotech",
+   "hedge": "XBI",
+   "members": "VRTX, REGN, AMGN, GILD, BIIB, BMRN, ABBV, INCY",
+   "spread_today_pct": -1.59,
+   "ret_5d": -0.0246,
+   "ret_20d": 0.0822,
+   "z_50d": 1.31,
+   "worst": [
+    "ABBV",
+    4.1
+   ],
+   "best": [
+    "BMRN",
+    6.04
+   ],
+   "member_range_pct": 1.94
+  },
+  {
+   "id": "california_utilities",
+   "name": "California utilities",
+   "hedge": "XLU",
+   "members": "EIX, PCG, SRE",
+   "spread_today_pct": 0.49,
+   "ret_5d": 0.0216,
+   "ret_20d": 0.0157,
+   "z_50d": 1.3,
+   "worst": [
+    "EIX",
+    -0.32
+   ],
+   "best": [
+    "SRE",
+    1.34
+   ],
+   "member_range_pct": 1.66
+  },
+  {
+   "id": "drug_distributors",
+   "name": "Drug distributors",
+   "hedge": "XLV",
+   "members": "MCK, COR, CAH",
+   "spread_today_pct": 0.08,
+   "ret_5d": -0.0023,
+   "ret_20d": 0.0755,
+   "z_50d": 1.29,
+   "worst": [
+    "CAH",
+    2.82
+   ],
+   "best": [
+    "COR",
+    3.44
+   ],
+   "member_range_pct": 0.62
+  },
+  {
+   "id": "big_pharma",
+   "name": "Big pharma",
+   "hedge": "XLV",
+   "members": "PFE, MRK, BMY",
+   "spread_today_pct": 1.05,
+   "ret_5d": 0.0027,
+   "ret_20d": -0.0374,
+   "z_50d": -1.29,
+   "worst": [
+    "BMY",
+    3.64
+   ],
+   "best": [
+    "MRK",
+    4.5
+   ],
+   "member_range_pct": 0.86
+  },
+  {
+   "id": "memory_storage",
+   "name": "Memory and storage",
+   "hedge": "SMH",
+   "members": "MU, SNDK, WDC, STX, SIMO",
+   "spread_today_pct": -3.84,
+   "ret_5d": -0.0188,
+   "ret_20d": -0.0923,
+   "z_50d": -1.28,
+   "worst": [
+    "SNDK",
+    -17.42
+   ],
+   "best": [
+    "STX",
+    -7.23
+   ],
+   "member_range_pct": 10.19
+  },
+  {
+   "id": "dc_power_equipment",
+   "name": "Data-center power equipment",
+   "hedge": "XLI",
+   "members": "VRT, ETN, GEV, BE, MPWR, NVT, POWL, PWR, HUBB, EME, FIX",
+   "spread_today_pct": -4.93,
+   "ret_5d": -0.02,
+   "ret_20d": -0.0725,
+   "z_50d": -1.26,
+   "worst": [
+    "MPWR",
+    -10.77
+   ],
+   "best": [
+    "EME",
+    -2.7
+   ],
+   "member_range_pct": 8.07
+  },
+  {
+   "id": "life_science_tools",
+   "name": "Life science tools",
+   "hedge": "XLV",
+   "members": "TMO, DHR, A, WAT, ILMN, TECH, RVTY, TXG, AVTR, BIO, MTD, CRL, BRKR",
+   "spread_today_pct": -2.8,
+   "ret_5d": 0.017,
+   "ret_20d": -0.0905,
+   "z_50d": -1.25,
+   "worst": [
+    "BRKR",
+    -2.31
+   ],
+   "best": [
+    "A",
+    4.25
+   ],
+   "member_range_pct": 6.56
+  },
+  {
+   "id": "entertainment",
+   "name": "Entertainment",
+   "hedge": "XLC",
+   "members": "NFLX, DIS, LYV, TKO",
+   "spread_today_pct": 0.94,
+   "ret_5d": 0.0285,
+   "ret_20d": 0.0439,
+   "z_50d": 1.25,
+   "worst": [
+    "NFLX",
+    1.33
+   ],
+   "best": [
+    "TKO",
+    2.33
+   ],
+   "member_range_pct": 1.0
+  },
+  {
+   "id": "trucks_farm_machinery",
+   "name": "Trucks and farm machinery",
+   "hedge": "XLI",
+   "members": "PCAR, WAB, AGCO, CNH, TEX, OSK, ALSN, TTC, GATX",
+   "spread_today_pct": -0.15,
+   "ret_5d": 0.0115,
+   "ret_20d": 0.0869,
+   "z_50d": 1.25,
+   "worst": [
+    "ALSN",
+    -3.67
+   ],
+   "best": [
+    "TEX",
+    7.26
+   ],
+   "member_range_pct": 10.93
+  },
+  {
+   "id": "design_software",
+   "name": "Design and analytics software",
+   "hedge": "XLK",
+   "members": "CDNS, SNPS, INTU, PLTR, FICO, PTC, TRMB, TYL",
+   "spread_today_pct": 2.97,
+   "ret_5d": 0.0185,
+   "ret_20d": 0.0964,
+   "z_50d": 1.22,
+   "worst": [
+    "SNPS",
+    -2.85
+   ],
+   "best": [
+    "TRMB",
+    1.83
+   ],
+   "member_range_pct": 4.68
+  },
+  {
+   "id": "hyperscalers",
+   "name": "Hyperscalers",
+   "hedge": "QQQ",
+   "members": "MSFT, GOOGL, AMZN",
+   "spread_today_pct": 1.47,
+   "ret_5d": 0.0111,
+   "ret_20d": 0.0496,
+   "z_50d": 1.2,
+   "worst": [
+    "AMZN",
+    -1.21
+   ],
+   "best": [
+    "MSFT",
+    0.74
+   ],
+   "member_range_pct": 1.95
+  },
+  {
+   "id": "office_reits",
+   "name": "Office REITs",
+   "hedge": "XLRE",
+   "members": "BXP, VNO, CUZ, KRC, ARE, CDP",
+   "spread_today_pct": 0.05,
+   "ret_5d": -0.0057,
+   "ret_20d": -0.0234,
+   "z_50d": -1.19,
+   "worst": [
+    "ARE",
+    0.89
+   ],
+   "best": [
+    "CUZ",
+    2.02
+   ],
+   "member_range_pct": 1.13
+  },
+  {
+   "id": "business_data",
+   "name": "Business data services",
+   "hedge": "XLI",
+   "members": "EFX, VRSK, BR",
+   "spread_today_pct": 2.33,
+   "ret_5d": 0.012,
+   "ret_20d": 0.0885,
+   "z_50d": 1.18,
+   "worst": [
+    "BR",
+    1.61
+   ],
+   "best": [
+    "VRSK",
+    2.03
+   ],
+   "member_range_pct": 0.42
+  },
+  {
+   "id": "china_internet",
+   "name": "China internet",
+   "hedge": "FXI",
+   "members": "BABA, PDD, JD",
+   "spread_today_pct": 0.76,
+   "ret_5d": 0.0863,
+   "ret_20d": 0.0188,
+   "z_50d": 1.17,
+   "worst": [
+    "BABA",
+    -1.37
+   ],
+   "best": [
+    "JD",
+    1.66
+   ],
+   "member_range_pct": 3.03
+  },
+  {
+   "id": "ai_software",
+   "name": "AI software",
+   "hedge": "IGV",
+   "members": "NET, MDB, DDOG, SNOW",
+   "spread_today_pct": -1.31,
+   "ret_5d": 0.016,
+   "ret_20d": -0.1025,
+   "z_50d": -1.17,
+   "worst": [
+    "DDOG",
+    -2.15
+   ],
+   "best": [
+    "SNOW",
+    -0.07
+   ],
+   "member_range_pct": 2.08
+  },
+  {
+   "id": "gas_utilities",
+   "name": "Gas utilities",
+   "hedge": "XLU",
+   "members": "ATO, OGS, SR, SWX, NJR, NFG, UGI, CNP",
+   "spread_today_pct": 0.9,
+   "ret_5d": -0.0049,
+   "ret_20d": -0.0285,
+   "z_50d": -1.17,
+   "worst": [
+    "UGI",
+    -0.03
+   ],
+   "best": [
+    "NJR",
+    1.52
+   ],
+   "member_range_pct": 1.55
+  },
+  {
+   "id": "defense_primes",
+   "name": "Defense primes",
+   "hedge": "XLI",
+   "members": "LMT, NOC, GD, RTX, LHX, HII, LDOS, TXT",
+   "spread_today_pct": 2.11,
+   "ret_5d": 0.0103,
+   "ret_20d": 0.0291,
+   "z_50d": 1.14,
+   "worst": [
+    "TXT",
+    -0.33
+   ],
+   "best": [
+    "LDOS",
+    3.97
+   ],
+   "member_range_pct": 4.3
+  },
+  {
+   "id": "hotels_casinos",
+   "name": "Hotels and casinos",
+   "hedge": "XLY",
+   "members": "HLT, MAR, LVS, WYNN, MGM",
+   "spread_today_pct": 0.12,
+   "ret_5d": 0.0005,
+   "ret_20d": 0.1,
+   "z_50d": 1.14,
+   "worst": [
+    "HLT",
+    -0.17
+   ],
+   "best": [
+    "MGM",
+    1.87
+   ],
+   "member_range_pct": 2.04
+  },
+  {
+   "id": "home_specialty_retail",
+   "name": "Home improvement and specialty retail",
+   "hedge": "XLY",
+   "members": "HD, LOW, WSM, TSCO, ULTA, BBY",
+   "spread_today_pct": 1.9,
+   "ret_5d": -0.0086,
+   "ret_20d": 0.0405,
+   "z_50d": 1.08,
+   "worst": [
+    "WSM",
+    0.82
+   ],
+   "best": [
+    "TSCO",
+    5.0
+   ],
+   "member_range_pct": 4.18
+  },
+  {
+   "id": "nat_gas",
+   "name": "Natural gas producers",
+   "hedge": "XLE",
+   "members": "AR, EQT, EXE, RRC",
+   "spread_today_pct": 1.05,
+   "ret_5d": 0.0204,
+   "ret_20d": -0.0257,
+   "z_50d": 1.05,
+   "worst": [
+    "EXE",
+    1.56
+   ],
+   "best": [
+    "AR",
+    2.74
+   ],
+   "member_range_pct": 1.18
+  },
+  {
+   "id": "it_services",
+   "name": "IT services",
+   "hedge": "XLK",
+   "members": "ACN, IBM, CTSH, IT",
+   "spread_today_pct": 6.3,
+   "ret_5d": 0.0212,
+   "ret_20d": 0.0774,
+   "z_50d": 0.99,
+   "worst": [
+    "IBM",
+    1.12
+   ],
+   "best": [
+    "ACN",
+    4.51
+   ],
+   "member_range_pct": 3.39
+  },
+  {
+   "id": "texas_ai_hosts",
+   "name": "Texas AI hosts",
+   "hedge": "SMH",
+   "members": "IREN, CORZ, CIFR, RIOT, GLXY, MARA",
+   "spread_today_pct": -0.96,
+   "ret_5d": -0.0652,
+   "ret_20d": -0.0206,
+   "z_50d": -0.94,
+   "worst": [
+    "IREN",
+    -11.54
+   ],
+   "best": [
+    "MARA",
+    -3.05
+   ],
+   "member_range_pct": 8.49
+  },
+  {
+   "id": "aero_engines",
+   "name": "Commercial aerospace",
+   "hedge": "XLI",
+   "members": "GE, TDG, HWM",
+   "spread_today_pct": -1.12,
+   "ret_5d": -0.0126,
+   "ret_20d": 0.0988,
+   "z_50d": 0.93,
+   "worst": [
+    "HWM",
+    -2.96
+   ],
+   "best": [
+    "TDG",
+    -0.97
+   ],
+   "member_range_pct": 1.99
+  },
+  {
+   "id": "app_ads",
+   "name": "App and game advertising",
+   "hedge": "IGV",
+   "members": "APP, U, APPS, MGNI",
+   "spread_today_pct": -0.25,
+   "ret_5d": -0.0687,
+   "ret_20d": 0.2691,
+   "z_50d": 0.91,
+   "worst": [
+    "APPS",
+    -4.57
+   ],
+   "best": [
+    "APP",
+    1.92
+   ],
+   "member_range_pct": 6.49
+  },
+  {
+   "id": "railroads",
+   "name": "Railroads",
+   "hedge": "XLI",
+   "members": "UNP, CSX, NSC",
+   "spread_today_pct": 1.07,
+   "ret_5d": 0.0019,
+   "ret_20d": -0.0101,
+   "z_50d": 0.91,
+   "worst": [
+    "CSX",
+    0.44
+   ],
+   "best": [
+    "UNP",
+    0.67
+   ],
+   "member_range_pct": 0.23
+  },
+  {
+   "id": "food_distributors",
+   "name": "Food distributors",
+   "hedge": "XLP",
+   "members": "SYY, USFD, PFGC",
+   "spread_today_pct": -1.54,
+   "ret_5d": 0.0128,
+   "ret_20d": 0.0101,
+   "z_50d": 0.9,
+   "worst": [
+    "PFGC",
+    -0.86
+   ],
+   "best": [
+    "USFD",
+    1.32
+   ],
+   "member_range_pct": 2.18
+  },
+  {
+   "id": "custody_asset_managers",
+   "name": "Asset managers and custody banks",
+   "hedge": "XLF",
+   "members": "BLK, BNY, STT, NTRS, IVZ, BEN",
+   "spread_today_pct": -1.41,
+   "ret_5d": -0.0167,
+   "ret_20d": -0.0089,
+   "z_50d": -0.87,
+   "worst": [
+    "IVZ",
+    -1.94
+   ],
+   "best": [
+    "BLK",
+    0.13
+   ],
+   "member_range_pct": 2.07
+  },
+  {
+   "id": "electronic_components",
+   "name": "Electronic components",
+   "hedge": "XLK",
+   "members": "APH, TEL, FLEX, JBL, KEYS, TDY",
+   "spread_today_pct": -1.91,
+   "ret_5d": -0.0026,
+   "ret_20d": 0.0534,
+   "z_50d": 0.87,
+   "worst": [
+    "FLEX",
+    -10.14
+   ],
+   "best": [
+    "TDY",
+    -1.33
+   ],
+   "member_range_pct": 8.81
+  },
+  {
+   "id": "analog_chips",
+   "name": "Analog and auto chips",
+   "hedge": "SMH",
+   "members": "TXN, ADI, NXPI, ON, MCHP",
+   "spread_today_pct": -2.93,
+   "ret_5d": -0.0391,
+   "ret_20d": 0.0309,
+   "z_50d": 0.85,
+   "worst": [
+    "ADI",
+    -17.37
+   ],
+   "best": [
+    "NXPI",
+    -6.5
+   ],
+   "member_range_pct": 10.87
+  },
+  {
+   "id": "packaging",
+   "name": "Packaging",
+   "hedge": "XLB",
+   "members": "PKG, IP, SW, AMCR, AVY, BALL",
+   "spread_today_pct": 1.68,
+   "ret_5d": 0.0099,
+   "ret_20d": 0.0085,
+   "z_50d": 0.83,
+   "worst": [
+    "SW",
+    1.01
+   ],
+   "best": [
+    "IP",
+    5.66
+   ],
+   "member_range_pct": 4.65
+  },
+  {
+   "id": "off_price",
+   "name": "Off-price retail",
+   "hedge": "XRT",
+   "members": "TJX, ROST, BURL",
+   "spread_today_pct": 1.48,
+   "ret_5d": 0.0415,
+   "ret_20d": -0.0089,
+   "z_50d": -0.82,
+   "worst": [
+    "TJX",
+    3.31
+   ],
+   "best": [
+    "ROST",
+    4.21
+   ],
+   "member_range_pct": 0.9
+  },
+  {
+   "id": "oil_services",
+   "name": "Oil services",
+   "hedge": "XLE",
+   "members": "SLB, HAL, BKR",
+   "spread_today_pct": -0.12,
+   "ret_5d": 0.0103,
+   "ret_20d": -0.0538,
+   "z_50d": -0.8,
+   "worst": [
+    "BKR",
+    -0.33
+   ],
+   "best": [
+    "SLB",
+    1.8
+   ],
+   "member_range_pct": 2.13
+  },
+  {
+   "id": "healthcare_reits",
+   "name": "Health care REITs",
+   "hedge": "XLRE",
+   "members": "WELL, VTR, DOC",
+   "spread_today_pct": -0.06,
+   "ret_5d": 0.0143,
+   "ret_20d": 0.044,
+   "z_50d": 0.79,
+   "worst": [
+    "VTR",
+    0.18
+   ],
+   "best": [
+    "DOC",
+    1.8
+   ],
+   "member_range_pct": 1.62
+  },
+  {
+   "id": "industrial_reits",
+   "name": "Industrial REITs",
+   "hedge": "XLRE",
+   "members": "PLD, EGP, STAG, FR, REXR",
+   "spread_today_pct": 0.41,
+   "ret_5d": 0.027,
+   "ret_20d": -0.0191,
+   "z_50d": -0.74,
+   "worst": [
+    "REXR",
+    1.27
+   ],
+   "best": [
+    "FR",
+    2.02
+   ],
+   "member_range_pct": 0.75
+  },
+  {
+   "id": "hospitals",
+   "name": "Hospitals and care facilities",
+   "hedge": "XLV",
+   "members": "HCA, UHS, THC, ENSG, EHC",
+   "spread_today_pct": -2.17,
+   "ret_5d": -0.0277,
+   "ret_20d": 0.0387,
+   "z_50d": -0.7,
+   "worst": [
+    "UHS",
+    -0.07
+   ],
+   "best": [
+    "EHC",
+    1.8
+   ],
+   "member_range_pct": 1.87
+  },
+  {
+   "id": "travel",
+   "name": "Airlines, cruises and bookings",
+   "hedge": "XLY",
+   "members": "DAL, UAL, RCL, CCL, NCLH, BKNG, AAL, LUV, ALK, EXPE",
+   "spread_today_pct": -0.18,
+   "ret_5d": -0.0088,
+   "ret_20d": 0.003,
+   "z_50d": -0.61,
+   "worst": [
+    "ALK",
+    -1.27
+   ],
+   "best": [
+    "RCL",
+    3.62
+   ],
+   "member_range_pct": 4.89
+  },
+  {
+   "id": "oil_producers",
+   "name": "Oil producers",
+   "hedge": "XLE",
+   "members": "COP, EOG, OXY, DVN, FANG, APA",
+   "spread_today_pct": 0.45,
+   "ret_5d": 0.0062,
+   "ret_20d": -0.0143,
+   "z_50d": 0.56,
+   "worst": [
+    "EOG",
+    0.86
+   ],
+   "best": [
+    "APA",
+    1.93
+   ],
+   "member_range_pct": 1.07
+  },
+  {
+   "id": "alt_managers",
+   "name": "Alternative asset managers",
+   "hedge": "XLF",
+   "members": "BX, KKR, APO, ARES, OWL",
+   "spread_today_pct": 0.84,
+   "ret_5d": 0.0283,
+   "ret_20d": 0.037,
+   "z_50d": 0.55,
+   "worst": [
+    "KKR",
+    0.51
+   ],
+   "best": [
+    "BX",
+    3.01
+   ],
+   "member_range_pct": 2.5
+  },
+  {
+   "id": "consumer_internet",
+   "name": "Consumer internet marketplaces",
+   "hedge": "QQQ",
+   "members": "DASH, UBER, ABNB, CVNA, EBAY, RDDT",
+   "spread_today_pct": 1.26,
+   "ret_5d": -0.0226,
+   "ret_20d": 0.0672,
+   "z_50d": 0.52,
+   "worst": [
+    "EBAY",
+    -3.29
+   ],
+   "best": [
+    "RDDT",
+    1.78
+   ],
+   "member_range_pct": 5.07
+  },
+  {
+   "id": "auto_parts_retail",
+   "name": "Auto parts retail",
+   "hedge": "XLY",
+   "members": "AZO, ORLY, GPC",
+   "spread_today_pct": 0.96,
+   "ret_5d": 0.012,
+   "ret_20d": 0.017,
+   "z_50d": 0.51,
+   "worst": [
+    "GPC",
+    0.83
+   ],
+   "best": [
+    "AZO",
+    2.15
+   ],
+   "member_range_pct": 1.32
+  },
+  {
+   "id": "apparel",
+   "name": "Apparel and footwear",
+   "hedge": "XLY",
+   "members": "NKE, DECK, RL, LULU, TPR",
+   "spread_today_pct": 2.44,
+   "ret_5d": 0.0188,
+   "ret_20d": 0.0178,
+   "z_50d": 0.5,
+   "worst": [
+    "LULU",
+    1.36
+   ],
+   "best": [
+    "NKE",
+    5.89
+   ],
+   "member_range_pct": 4.53
+  },
+  {
+   "id": "life_insurers",
+   "name": "Life insurers",
+   "hedge": "XLF",
+   "members": "MET, PRU, AFL, PFG, GL",
+   "spread_today_pct": -0.44,
+   "ret_5d": -0.0034,
+   "ret_20d": 0.001,
+   "z_50d": -0.45,
+   "worst": [
+    "PRU",
+    -0.27
+   ],
+   "best": [
+    "PFG",
+    0.97
+   ],
+   "member_range_pct": 1.24
+  },
+  {
+   "id": "residential_reits",
+   "name": "Residential REITs",
+   "hedge": "XLRE",
+   "members": "MAA, UDR, CPT, ESS, VMRK, INVH",
+   "spread_today_pct": 0.52,
+   "ret_5d": 0.0102,
+   "ret_20d": -0.0245,
+   "z_50d": -0.35,
+   "worst": [
+    "ESS",
+    1.19
+   ],
+   "best": [
+    "MAA",
+    2.34
+   ],
+   "member_range_pct": 1.15
+  },
+  {
+   "id": "trucking",
+   "name": "Trucking",
+   "hedge": "XLI",
+   "members": "ODFL, JBHT, FDXF",
+   "spread_today_pct": -0.42,
+   "ret_5d": -0.0323,
+   "ret_20d": 0.0143,
+   "z_50d": 0.32,
+   "worst": [
+    "FDXF",
+    -1.6
+   ],
+   "best": [
+    "JBHT",
+    -0.25
+   ],
+   "member_range_pct": 1.35
+  },
+  {
+   "id": "homebuilders",
+   "name": "Homebuilders",
+   "hedge": "XLY",
+   "members": "DHI, LEN, NVR, PHM",
+   "spread_today_pct": 3.3,
+   "ret_5d": 0.0371,
+   "ret_20d": 0.0096,
+   "z_50d": 0.29,
+   "worst": [
+    "PHM",
+    3.04
+   ],
+   "best": [
+    "NVR",
+    5.5
+   ],
+   "member_range_pct": 2.46
+  },
+  {
+   "id": "wealth_brokers",
+   "name": "Wealth managers",
+   "hedge": "XLF",
+   "members": "SCHW, RJF, AMP",
+   "spread_today_pct": 0.15,
+   "ret_5d": 0.0126,
+   "ret_20d": 0.0245,
+   "z_50d": -0.25,
+   "worst": [
+    "RJF",
+    0.51
+   ],
+   "best": [
+    "SCHW",
+    1.67
+   ],
+   "member_range_pct": 1.16
+  },
+  {
+   "id": "seat_software",
+   "name": "Seat-based software",
+   "hedge": "IGV",
+   "members": "CRM, NOW, WDAY, ADBE, TEAM, HUBS, MNDY, ASAN, ADSK, DOCU, DBX",
+   "spread_today_pct": 2.16,
+   "ret_5d": 0.0058,
+   "ret_20d": -0.0274,
+   "z_50d": 0.24,
+   "worst": [
+    "NOW",
+    0.02
+   ],
+   "best": [
+    "CRM",
+    4.21
+   ],
+   "member_range_pct": 4.19
+  },
+  {
+   "id": "automation_instruments",
+   "name": "Automation and instruments",
+   "hedge": "XLI",
+   "members": "EMR, ROK, AME, IEX, NDSN",
+   "spread_today_pct": -0.33,
+   "ret_5d": 0.0003,
+   "ret_20d": -0.0205,
+   "z_50d": -0.19,
+   "worst": [
+    "AME",
+    -1.6
+   ],
+   "best": [
+    "ROK",
+    -0.17
+   ],
+   "member_range_pct": 1.43
+  },
+  {
+   "id": "packaged_food",
+   "name": "Packaged food",
+   "hedge": "XLP",
+   "members": "GIS, KHC, MKC, SJM, MDLZ",
+   "spread_today_pct": -0.57,
+   "ret_5d": 0.0199,
+   "ret_20d": 0.001,
+   "z_50d": -0.17,
+   "worst": [
+    "SJM",
+    -1.45
+   ],
+   "best": [
+    "MKC",
+    2.42
+   ],
+   "member_range_pct": 3.87
+  },
+  {
+   "id": "tower_reits",
+   "name": "Cell tower REITs",
+   "hedge": "XLRE",
+   "members": "AMT, CCI, SBAC",
+   "spread_today_pct": 0.26,
+   "ret_5d": -0.0076,
+   "ret_20d": -0.0629,
+   "z_50d": -0.17,
+   "worst": [
+    "SBAC",
+    0.92
+   ],
+   "best": [
+    "AMT",
+    1.96
+   ],
+   "member_range_pct": 1.04
+  },
+  {
+   "id": "oil_tankers",
+   "name": "Oil tankers",
+   "hedge": "XLE",
+   "members": "FRO, DHT, INSW, TNK, NAT, ECO, STNG, TRMD",
+   "spread_today_pct": 0.15,
+   "ret_5d": 0.0676,
+   "ret_20d": 0.0198,
+   "z_50d": 0.14,
+   "worst": [
+    "TNK",
+    -0.47
+   ],
+   "best": [
+    "FRO",
+    2.33
+   ],
+   "member_range_pct": 2.8
+  },
+  {
+   "id": "network_gear",
+   "name": "Networking equipment",
+   "hedge": "XLK",
+   "members": "CSCO, ANET, FFIV",
+   "spread_today_pct": 0.01,
+   "ret_5d": 0.012,
+   "ret_20d": -0.0198,
+   "z_50d": 0.14,
+   "worst": [
+    "ANET",
+    -5.47
+   ],
+   "best": [
+    "FFIV",
+    -1.37
+   ],
+   "member_range_pct": 4.1
+  },
+  {
+   "id": "labs_cro",
+   "name": "Labs and clinical research",
+   "hedge": "XLV",
+   "members": "LH, DGX, IQV",
+   "spread_today_pct": -2.31,
+   "ret_5d": 0.0132,
+   "ret_20d": 0.0164,
+   "z_50d": 0.13,
+   "worst": [
+    "IQV",
+    0.04
+   ],
+   "best": [
+    "DGX",
+    0.95
+   ],
+   "member_range_pct": 0.91
+  },
+  {
+   "id": "dental_supplies",
+   "name": "Dental and medical supplies",
+   "hedge": "XLV",
+   "members": "HSIC, ALGN, SOLV, COO",
+   "spread_today_pct": -0.61,
+   "ret_5d": 0.0266,
+   "ret_20d": 0.0222,
+   "z_50d": -0.13,
+   "worst": [
+    "ALGN",
+    1.58
+   ],
+   "best": [
+    "SOLV",
+    3.23
+   ],
+   "member_range_pct": 1.65
+  },
+  {
+   "id": "semicap",
+   "name": "Chip equipment",
+   "hedge": "SMH",
+   "members": "AMAT, LRCX, KLAC, ASML, TER, ONTO, MKSI, ENTG, AEIS, FORM",
+   "spread_today_pct": -0.41,
+   "ret_5d": -0.0116,
+   "ret_20d": 0.0645,
+   "z_50d": -0.1,
+   "worst": [
+    "FORM",
+    -10.14
+   ],
+   "best": [
+    "ASML",
+    -3.45
+   ],
+   "member_range_pct": 6.69
+  }
+ ]
+}

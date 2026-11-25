@@ -1,0 +1,4894 @@
+{
+ "session": "2026-11-24",
+ "screen": "2026-11-24",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-23T20:40:49.417256-05:00",
+   "summary": "S&P 500 +4.7% on Nvidia reinstating Huang, after its worst week since 2020; nearly the whole screen is that one squeeze (bounces with no news of their own), one hit is a dividend artifact and three cannot trade tonight. The one name with its own story is oil, which fell 4.5% through bullish headlines: one take, short USO.",
+   "market": {
+    "ES": "+0.4%",
+    "NQ": "+0.6%",
+    "SPY": "+4.7% (close)",
+    "VIX": "26.6",
+    "10y": "4.92%",
+    "WTI": "80.00",
+    "gold": "3,669",
+    "BTC": "61,454"
+   },
+   "proposals": 12,
+   "takes": 1,
+   "reviews": 15,
+   "prices_at": "2026-11-23T20:00:00-05:00",
+   "phase": "post"
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-24T09:54:40.289068-05:00",
+   "summary": "A giveback morning after Monday's +4.7% (QQQ -1.3%, VIX 29, Dell and HPE down 10-14% on server margins) with retail the one group bought on its own reports: two takes, Abercrombie and Dick's long against XRT; the rest of the screen is single-name baskets, oil bounces inside a falling crude tape, and deal reactions already a day old.",
+   "market": {
+    "SPY": "-0.3%",
+    "QQQ": "-1.3%",
+    "IWM": "+0.5%",
+    "ES": "-1.2% on Monday's settle",
+    "VIX": "29.3",
+    "10y": "4.90%",
+    "WTI": "81.3 (+1.5%)",
+    "gold": "-0.6%"
+   },
+   "proposals": 25,
+   "takes": 2,
+   "reviews": 16,
+   "prices_at": "2026-11-24T09:50:00-05:00",
+   "phase": "regular"
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-24T13:08:30.443485-05:00",
+   "summary": "Monday's Nvidia relief rally is being sold: Nasdaq -1.7%, chips -7%, copper -4.8% and gold -2% while retail, health care and small caps rise. Two takes, both shorts with a reason still running: Dycom after it told the Street its fiber-to-the-home work shrinks next year, and the copper miners after copper erased Monday's bounce in one session. The other 19 are sector moves with no news of their own, bounces with no dated event, or bets the book already holds.",
+   "market": {
+    "SPY": "-0.4%",
+    "QQQ": "-1.7%",
+    "IWM": "+0.8%",
+    "VIX": "26.2",
+    "10y": "4.91%",
+    "WTI": "$81.40 (+1.5%)",
+    "copper": "$5.45 (-4.8%)",
+    "gold": "about $3,565 (-2%)",
+    "SMH": "-7.0%",
+    "bitcoin": "about $60,100 (-2%)",
+    "prices_at": "12:03-12:05 PM CT"
+   },
+   "proposals": 21,
+   "takes": 2,
+   "reviews": 18,
+   "prices_at": "2026-11-24T13:05:00-05:00",
+   "phase": "regular"
+  }
+ ],
+ "proposals": [
+  {
+   "name": "USO",
+   "kind": "etf",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "source": "live screen 2026-11-24 night #1",
+   "signal": {
+    "why": "-4.5% (-1.2 ATR) on a day SPY rose +4.7%",
+    "chart": "overnight at 7:30 PM CT: 132.87, -0.4% from the last regular close (-0.1 ATR; -0.2 ATR net of SPY's +0.4%), 6,690 shares traded, spread 0.05%; after-hours at 7:00 PM CT: 133.57, +0.2% from the last regular close (+0.0 ATR), a trade in 30 five-minute bars; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -2.9 ATR from the 20-day, RSI 34; volume 0.9x; daily ranges of the 10 sessions before today 0.97x the 50 before; resistance 135.01 (20-day low, +1.2%); support 129.47 (200-day, -2.9%); ATR 5.24 (3.9%); hedge SPY: correlation -0.40, beta -0.89; it barely moves with the hedge, so this is close to an outright position",
+    "numbers": {
+     "close": 133.36,
+     "ret_1d": -0.0449,
+     "ret_5d": -0.04763,
+     "ret_20d": -0.19774,
+     "atr": 5.23776,
+     "atr_pct": 0.03928,
+     "rsi": 33.91969,
+     "dist20_atr": -2.8832,
+     "vol_ratio": 0.86352,
+     "sma50": 151.2024,
+     "sma200": 129.47475,
+     "hi52": 171.82001,
+     "lo52": 65.99,
+     "usd_volume": 623402097.44644,
+     "tightness": 0.96695,
+     "trend": "up",
+     "sma50_change_20d": 0.02675,
+     "price": 133.568,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.00156,
+     "live_move_atr": 0.03971,
+     "live_bars": 30,
+     "overnight_price": 132.87,
+     "overnight_move": -0.00367,
+     "overnight_move_atr": -0.09355,
+     "overnight_vs_spy_atr": -0.19825,
+     "overnight_volume": 6690.0,
+     "overnight_spread": 0.00053,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 2.918,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": -0.4,
+     "beta_60d": -0.89,
+     "chosen": "a fund is set against the market",
+     "weak": true
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [],
+   "short": [
+    "USO"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -7.0
+    }
+   },
+   "decision": "take",
+   "conviction": 3,
+   "reason": "Crude fell 4.5% to its lowest close since August on the market's best day in a year and through a weekend of attacks that should have lifted it: Trump pushed any return to war with Iran to next year, supply is coming back and the glut forecasts are unanswered, with OPEC+ expected to lift 2027 quotas on 11-29.",
+   "reviewed": true,
+   "reasoning": {
+    "what_changed": "On 11-23 Trump told Fox News he is giving diplomacy with Iran more time and may resume the war next year if talks fail, which moves the escalation date traders had hedged for (before year-end) out of the window. WTI settled 80.17 (-4.5%), Brent 89.37 (-3.5%); Libya restarted the Sharara pipeline the same day (Rigzone, Nation Thailand, Pomegra).",
+    "story": "A war premium being unwound into a surplus. Brent was above 113 in late October and is down about a fifth this month; Hormuz shipments are reported back near prewar levels; the IEA sees a surplus of 1.7-2 million barrels a day this quarter; US crude stocks built 4.7M and 3.4M barrels in the last two reports and a poll expects another build; Chinese refinery runs were down 8.1% on the year in October. The tell is what did not help: tanker attacks in Hormuz, an Iranian attack on Bahrain and a claimed Houthi strike on Saudi Arabia's Rabigh refinery over the weekend, and oil still fell 4.5% while stocks had their best day since April 2025.",
+    "chart": "USO 133.36, down 4.5% on the day and 19.8% in 20 sessions, below its 50-day (151.20); the 200-day is 129.47, 2.9% below, and is the first place it could stall. RSI 34 and 2.9 ATR under its 20-day: stretched, not washed out, and volume was 0.9x, so no capitulation. 132.87 overnight at 7:30 PM CT with WTI futures 80.00.",
+    "coming": "The API and EIA inventory reports (EIA on Wednesday 11-25; a build is expected); October PCE on Wednesday; Thursday closed, Friday a half day; OPEC+ ministers set 2027 policy on Sunday 11-29, where pre-meeting reporting points to higher quotas and the UAE wants more, with the reaction on 11-30, the plan's last session.",
+    "case_against": "It has already fallen a fifth in a month and sits 3% above its 200-day; bank forecasts (Goldman Brent 88 for 2027, JPMorgan WTI high 70s) are about where spot is, so the fundamental downside from here is modest; the FT reported over the weekend that the administration was weighing new strikes, the blockade continues, and one strike or a closed strait puts 5-8% on crude in a session, through any stop; OPEC+ could answer a 20% fall with a pause. It did not win because today's news is the president himself moving the date, the market has just shown it sells good-for-oil headlines, and every dated event inside the window (inventories, OPEC+ quotas) leans the same way."
+   },
+   "wrong_if": "The US or Israel strikes Iran, or Trump or the White House says the talks have failed or sets a new deadline inside the window; or shipping through Hormuz is reported halted or sharply cut (not just a ship attacked); or the 11-25 EIA report shows a crude draw of 3 million barrels or more; or Reuters or Bloomberg reports OPEC+ delegates preparing to cut or hold back 2027 output at the 11-29 meeting.",
+   "hedge_why": "Outright, not hedged: the belief is about crude itself, and the default hedge SPY moves against USO (correlation -0.40), so a long SPY leg would add a market bet instead of removing one; an energy fund would turn it into a bet on oil stocks against oil, which is not the idea.",
+   "through_earnings": null,
+   "stats": null,
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 1,
+   "ranked": 12,
+   "id": "2026-11-24-P01"
+  },
+  {
+   "name": "MU",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #4",
+   "signal": {
+    "why": "was stretched down (RSI 30, -3.1 ATR from the 20-day) and turned: +19.0%, closed in the top quarter of the day",
+    "chart": "overnight at 7:30 PM CT: 711.58, +0.5% from the last regular close (+0.1 ATR; +0.0 ATR net of SPY's +0.4%), 43,889 shares traded, spread 0.06%; after-hours at 7:00 PM CT: 706.99, -0.1% from the last regular close (-0.0 ATR), a trade in 48 five-minute bars; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -1.0 ATR from the 20-day, RSI 42; volume 1.5x; daily ranges of the 10 sessions before today 1.67x the 50 before; resistance 773.93 (200-day, +9.4%); support 585.25 (20-day low, -17.3%); ATR 66.43 (9.4%); hedge SMH: correlation +0.92, beta 1.34",
+    "numbers": {
+     "close": 707.7,
+     "ret_1d": 0.19039,
+     "ret_5d": -0.01574,
+     "ret_20d": -0.21689,
+     "atr": 66.42966,
+     "atr_pct": 0.09387,
+     "rsi": 42.45392,
+     "dist20_atr": -1.04094,
+     "vol_ratio": 1.46296,
+     "sma50": 907.86884,
+     "sma200": 773.92691,
+     "hi52": 1254.60954,
+     "lo52": 192.3715,
+     "usd_volume": 24155266732.93762,
+     "tightness": 1.66894,
+     "trend": "mixed",
+     "sma50_change_20d": -0.07477,
+     "price": 706.99,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": -0.001,
+     "live_move_atr": -0.01069,
+     "live_bars": 48,
+     "overnight_price": 711.58,
+     "overnight_move": 0.00548,
+     "overnight_move_atr": 0.05841,
+     "overnight_vs_spy_atr": 0.0146,
+     "overnight_volume": 43889.0,
+     "overnight_spread": 0.0006,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 2.518,
+    "adjust": {},
+    "hedge": "SMH",
+    "hedge_fit": {
+     "corr_60d": 0.92,
+     "beta_60d": 1.34,
+     "chosen": "its basket's hedge",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2026-12-17",
+     "when": "after_close",
+     "sessions_away": 18
+    },
+    "also": []
+   },
+   "long": [
+    "MU"
+   ],
+   "short": [
+    "SMH"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 19% day with no Micron news: it rose with Nvidia and the chip squeeze, and the same kind of pop on 11-11 was gone inside a week.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Guided fiscal Q1 well above consensus, under 10 times trailing earnings, down 22% in a month on sentiment and not on a miss; the turn came on 1.5x volume and Dell reports Tuesday with memory costs in focus.",
+    "case_against": "Nothing of its own happened; it is the highest-beta part of a move strategists call mechanical short covering, still below its 50 and 200-day, and TrendForce says contract price rises are slowing.",
+    "why_not": "Against SMH (semiconductor ETF) it is a bet that the squeeze keeps running, and nothing dated says it does."
+   },
+   "stats": {
+    "corr_60d": 0.92,
+    "beta_60d": 1.34,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 2,
+   "ranked": 12,
+   "id": "2026-11-24-P02"
+  },
+  {
+   "name": "BZ",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #10",
+   "signal": {
+    "why": "stretched down: RSI 33, -3.3 ATR from the 20-day, no turn yet",
+    "chart": "after-hours at 3:05 PM CT: 12.98, +0.0% from the last regular close (+0.0 ATR), a trade in 1 five-minute bars; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.3 ATR from the 20-day, RSI 33; volume 1.0x; daily ranges of the 10 sessions before today 2.09x the 50 before; resistance 14.56 (200-day, +12.1%); support 12.12 (20-day low, -6.6%); ATR 0.72 (5.6%); hedge SPY: correlation -0.04, beta -0.13; it barely moves with the hedge, so this is close to an outright position",
+    "numbers": {
+     "close": 12.98,
+     "ret_1d": 0.00855,
+     "ret_5d": 0.02447,
+     "ret_20d": -0.22089,
+     "atr": 0.72185,
+     "atr_pct": 0.05561,
+     "rsi": 33.02726,
+     "dist20_atr": -3.25898,
+     "vol_ratio": 1.0033,
+     "sma50": 15.26711,
+     "sma200": 14.55519,
+     "hi52": 21.67229,
+     "lo52": 12.11566,
+     "usd_volume": 82985508.91218,
+     "tightness": 2.08665,
+     "trend": "mixed",
+     "sma50_change_20d": -0.01779,
+     "price": 12.98,
+     "price_at": "2026-11-23T16:05:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.0,
+     "live_move_atr": 0.0,
+     "live_bars": 1
+    },
+    "score": 1.181,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": -0.04,
+     "beta_60d": -0.13,
+     "chosen": "no fund moves with it (best XRT +0.22); SPY by default",
+     "weak": true
+    },
+    "next_earnings": {
+     "date": "2026-11-25",
+     "when": "before_open",
+     "sessions_away": 2
+    },
+    "also": []
+   },
+   "long": [
+    "BZ"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "It reports on 11-25 before the open and nothing found says which way; a stretched stock into a coin-flip print is the gap trade the lessons warn against, and it cannot trade overnight tonight anyway (2.2% wide).",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "At the low it set after an unexplained 20-25% drop on 11-12, with cash near half its market value, buybacks running and record margins last quarter; a guide at the midpoint could bring a sharp relief move.",
+    "case_against": "Revenue has missed consensus in recent quarters, paying-customer growth is slowing, the price increases are not in the Q3 guide, and last year a beat still fell on the Q4 guide.",
+    "why_not": "The only event that can turn it is the report itself, and I have no read on the report."
+   },
+   "stats": {
+    "corr_60d": -0.04,
+    "beta_60d": -0.13,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 3,
+   "ranked": 12,
+   "id": "2026-11-24-P03"
+  },
+  {
+   "name": "DIA",
+   "kind": "etf",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #2",
+   "signal": {
+    "why": "was stretched down (RSI 27, -4.2 ATR from the 20-day) and turned: +3.1%, closed in the top quarter of the day; USMV gave the same signal and move with it; USMV, USMV gave the same signal and move with it; USMV, USMV, USMV gave the same signal and move with it; USMV, USMV, USMV, USMV gave the same signal and move with it; USMV, USMV, USMV, USMV, USMV gave the same signal and move with it; USMV, USMV, USMV, USMV, USMV, USMV gave the same signal and move with it",
+    "chart": "overnight at 7:30 PM CT: 496.77, +0.2% from the last regular close (+0.1 ATR; -0.1 ATR net of SPY's +0.4%), 366 shares traded, spread 0.01%; after-hours at 7:00 PM CT: 496.80, +0.2% from the last regular close (+0.1 ATR), a trade in 30 five-minute bars; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -2.1 ATR from the 20-day, RSI 40; volume 0.9x; daily ranges of the 10 sessions before today 1.57x the 50 before; resistance 504.81 (200-day, +1.8%); support 479.40 (20-day low, -3.3%); ATR 8.82 (1.8%); hedge SPY: correlation +0.87, beta 0.75",
+    "numbers": {
+     "close": 495.8,
+     "ret_1d": 0.0306,
+     "ret_5d": -0.03748,
+     "ret_20d": -0.0509,
+     "atr": 8.82494,
+     "atr_pct": 0.0178,
+     "rsi": 39.79683,
+     "dist20_atr": -2.06782,
+     "vol_ratio": 0.94741,
+     "sma50": 515.28694,
+     "sma200": 504.80749,
+     "hi52": 544.31528,
+     "lo52": 446.65093,
+     "usd_volume": 1851224180.95459,
+     "tightness": 1.56734,
+     "trend": "mixed",
+     "sma50_change_20d": -0.01141,
+     "price": 496.803,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.00202,
+     "live_move_atr": 0.11366,
+     "live_bars": 30,
+     "overnight_price": 496.77,
+     "overnight_move": 0.00196,
+     "overnight_move_atr": 0.10992,
+     "overnight_vs_spy_atr": -0.1211,
+     "overnight_volume": 366.0,
+     "overnight_spread": 0.00014,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 2.694,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": 0.87,
+     "beta_60d": 0.75,
+     "chosen": "a fund is set against the market",
+     "weak": false
+    },
+    "moved_with": [
+     "USMV",
+     "USMV",
+     "USMV",
+     "USMV",
+     "USMV",
+     "USMV"
+    ],
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "DIA"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -2.7
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The Dow's turn is the whole market's bounce at a lower beta; against SPY it is a bet that the Nvidia squeeze fades, and nothing about the Dow itself says so.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "If Monday was mechanical buying, as Nomura and BTIG argue, the lower-beta Dow gives back less than the S&P 500, and a hawkish PCE on Wednesday hurts long-duration megacaps more.",
+    "case_against": "No fund-specific news; it lagged on the way up because it holds little Nvidia, and if the rally extends it lags again.",
+    "why_not": "It is a view on whether a squeeze holds, which I don't have; the midday pass passed SPY for the same reason."
+   },
+   "stats": {
+    "corr_60d": 0.87,
+    "beta_60d": 0.75,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 4,
+   "ranked": 12,
+   "id": "2026-11-24-P04"
+  },
+  {
+   "name": "SLV",
+   "kind": "etf",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #9",
+   "signal": {
+    "why": "stretched down: RSI 29, -3.3 ATR from the 20-day, no turn yet; GLD gave the same signal and move with it; GLD, GLD gave the same signal and move with it; GLD, GLD, GLD gave the same signal and move with it; GLD, GLD, GLD, GLD gave the same signal and move with it; GLD, GLD, GLD, GLD, GLD gave the same signal and move with it; GLD, GLD, GLD, GLD, GLD, GLD gave the same signal and move with it",
+    "chart": "overnight at 7:30 PM CT: 39.32, +1.1% from the last regular close (+0.2 ATR; +0.1 ATR net of SPY's +0.4%), 39,570 shares traded, spread 0.10%; after-hours at 7:00 PM CT: 39.65, +1.9% from the last regular close (+0.4 ATR), a trade in 48 five-minute bars; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.3 ATR from the 20-day, RSI 29; volume 1.4x; daily ranges of the 10 sessions before today 1.29x the 50 before; resistance 49.25 (20-day high, +26.6%); support 36.81 (52-week low, -5.4%); ATR 1.75 (4.5%); hedge SPY: correlation +0.64, beta 1.39",
+    "numbers": {
+     "close": 38.91,
+     "ret_1d": 0.05247,
+     "ret_5d": -0.08209,
+     "ret_20d": -0.20037,
+     "atr": 1.75177,
+     "atr_pct": 0.04502,
+     "rsi": 29.21821,
+     "dist20_atr": -3.28354,
+     "vol_ratio": 1.37606,
+     "sma50": 50.6492,
+     "sma200": 60.91895,
+     "hi52": 109.83,
+     "lo52": 36.81,
+     "usd_volume": 938124521.31138,
+     "tightness": 1.29294,
+     "trend": "down",
+     "sma50_change_20d": -0.10815,
+     "price": 39.65,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.01902,
+     "live_move_atr": 0.42243,
+     "live_bars": 48,
+     "overnight_price": 39.32,
+     "overnight_move": 0.01054,
+     "overnight_move_atr": 0.23405,
+     "overnight_vs_spy_atr": 0.14272,
+     "overnight_volume": 39570.0,
+     "overnight_spread": 0.00102,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 1.182,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": 0.64,
+     "beta_60d": 1.39,
+     "chosen": "a fund is set against the market",
+     "weak": false
+    },
+    "moved_with": [
+     "GLD",
+     "GLD",
+     "GLD",
+     "GLD",
+     "GLD",
+     "GLD"
+    ],
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "SLV"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.8
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Silver bounced with stocks after a forced-selling week, but the cause (a Fed about to hike) has not changed and Wednesday's PCE decides it either way; no turn yet and the fund is trading above its NAV tonight.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Down 20% in a month to a 14-month low with funds' net longs cut by two thirds, holdings steady through the crash, a sixth year of deficit forecast and bets on a half-point hike fading.",
+    "case_against": "One bounce day inside a downtrend, a quarter-point hike still priced at about 96%, the 10-year at 4.92%, and SLV at 39.65 after-hours was about 3% over its NAV.",
+    "why_not": "The dated event inside the window is a coin flip on an inflation print, not a reason to expect a turn; the standing lesson on stretched names with no turn applies."
+   },
+   "stats": {
+    "corr_60d": 0.64,
+    "beta_60d": 1.39,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 5,
+   "ranked": 12,
+   "id": "2026-11-24-P05"
+  },
+  {
+   "name": "CM",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #11",
+   "signal": {
+    "why": "stretched down: RSI 35, -3.2 ATR from the 20-day, no turn yet",
+    "chart": "after-hours at 5:05 PM CT: 105.49, -0.1% from the last regular close (-0.0 ATR), a trade in 7 five-minute bars; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.2 ATR from the 20-day, RSI 35; volume 1.0x; daily ranges of the 10 sessions before today 1.09x the 50 before; resistance 109.33 (200-day, +3.5%); support 102.70 (20-day low, -2.7%); ATR 2.63 (2.5%); hedge DIA: correlation +0.82, beta 1.12",
+    "numbers": {
+     "close": 105.59,
+     "ret_1d": 0.02674,
+     "ret_5d": -0.07174,
+     "ret_20d": -0.0862,
+     "atr": 2.63135,
+     "atr_pct": 0.02492,
+     "rsi": 34.71532,
+     "dist20_atr": -3.2434,
+     "vol_ratio": 0.95391,
+     "sma50": 112.84073,
+     "sma200": 109.33347,
+     "hi52": 124.02797,
+     "lo52": 80.94629,
+     "usd_volume": 63703571.64917,
+     "tightness": 1.09265,
+     "trend": "mixed",
+     "sma50_change_20d": -0.00531,
+     "price": 105.49481,
+     "price_at": "2026-11-23T18:05:00-05:00",
+     "live_phase": "post",
+     "live_move": -0.0009,
+     "live_move_atr": -0.03618,
+     "live_bars": 7
+    },
+    "score": 1.18,
+    "adjust": {},
+    "hedge": "DIA",
+    "hedge_fit": {
+     "corr_60d": 0.82,
+     "beta_60d": 1.12,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2026-12-03",
+     "when": "before_open",
+     "sessions_away": 7
+    },
+    "also": []
+   },
+   "long": [
+    "CM"
+   ],
+   "short": [
+    "DIA"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.7
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "It fell with every Canadian bank on rate and credit worries, with no news of its own, and the event that could turn it (Q4 results on 12-3) is seven sessions out; it also cannot trade overnight tonight (25% wide).",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Adjusted earnings up 26% last quarter, capital at 13.4%, no CIBC-specific bad news found; a sector drop like this often gives some back.",
+    "case_against": "The Bank of Canada is hiking, mortgage delinquencies and impaired loans are rising, Raymond James trimmed its target on 11-17, and the first bank reports are still a week away.",
+    "why_not": "Stretched with no turn and no dated event near enough to turn it."
+   },
+   "stats": {
+    "corr_60d": 0.82,
+    "beta_60d": 1.12,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 6,
+   "ranked": 12,
+   "id": "2026-11-24-P06"
+  },
+  {
+   "name": "BIDU",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #8",
+   "signal": {
+    "why": "stretched down: RSI 29, -3.5 ATR from the 20-day, no turn yet",
+    "chart": "overnight at 7:30 PM CT: 65.51, +0.3% from the last regular close (+0.1 ATR; -0.0 ATR net of SPY's +0.4%), 5,384 shares traded, spread 0.38%; after-hours at 7:00 PM CT: 65.75, +0.6% from the last regular close (+0.1 ATR), a trade in 20 five-minute bars; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.5 ATR from the 20-day, RSI 29; volume 1.1x; daily ranges of the 10 sessions before today 1.44x the 50 before; resistance 81.30 (50-day, +24.5%); support 61.70 (52-week low, -5.6%); ATR 2.97 (4.5%); hedge SPY: correlation +0.65, beta 1.22",
+    "numbers": {
+     "close": 65.33,
+     "ret_1d": 0.05541,
+     "ret_5d": -0.11645,
+     "ret_20d": -0.16082,
+     "atr": 2.96874,
+     "atr_pct": 0.04544,
+     "rsi": 28.83843,
+     "dist20_atr": -3.47033,
+     "vol_ratio": 1.10075,
+     "sma50": 81.3032,
+     "sma200": 108.28495,
+     "hi52": 165.3,
+     "lo52": 61.7,
+     "usd_volume": 209775443.42085,
+     "tightness": 1.44071,
+     "trend": "down",
+     "sma50_change_20d": -0.0837,
+     "price": 65.7459,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.00637,
+     "live_move_atr": 0.14009,
+     "live_bars": 20,
+     "overnight_price": 65.51,
+     "overnight_move": 0.00276,
+     "overnight_move_atr": 0.06063,
+     "overnight_vs_spy_atr": -0.02986,
+     "overnight_volume": 5384.0,
+     "overnight_spread": 0.00383,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 1.193,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": 0.65,
+     "beta_60d": 1.22,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "BIDU"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.8
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "At a 16-year low for reasons that are still running (ad revenue down 22%, free cash flow negative, two target cuts on 11-18, new US chip rules); Monday's 5.5% was the market, not Baidu.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Cash and investments far above its market value, a first dividend promised before year-end, a chip-unit listing in Hong Kong pending, and reflex buying 6% above the low.",
+    "case_against": "No turn in the core business, the dividend and listing have no dates, and the export rule hits the whole China AI group.",
+    "why_not": "A stretched name with no turn and no dated event; the possible catalysts are undated headlines."
+   },
+   "stats": {
+    "corr_60d": 0.65,
+    "beta_60d": 1.22,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 7,
+   "ranked": 12,
+   "id": "2026-11-24-P07"
+  },
+  {
+   "name": "RSP/SPY",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "short",
+   "source": "live screen 2026-11-24 night #6",
+   "signal": {
+    "why": "RSP/SPY (equal weight vs cap weight): -2.1% today (-2.6 sd), 5-day -0.6%, 20-day +3.5%, z +1.3, the 10 sessions before today 1.07x as volatile as the 50 before; was stretched at z +2.1 and turned",
+    "chart": "equal weight vs cap weight; z +1.3 vs 50-day, 20-day +3.5%",
+    "numbers": {
+     "today": -0.02115,
+     "sd_20d": 0.00799,
+     "today_sd": -2.64689,
+     "tightness": 1.0665,
+     "ret_5d": -0.00572,
+     "ret_20d": 0.03484,
+     "z_50d": 1.26888,
+     "z_50d_prev": 2.06706,
+     "new_20d_high": false,
+     "new_20d_low": false
+    },
+    "score": 1.945,
+    "also": []
+   },
+   "long": [
+    "SPY"
+   ],
+   "short": [
+    "RSP"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The spread fell because SPY holds about 35 times RSP's Nvidia weight on the day Nvidia rose 31%; taking it is a bet that the squeeze in megacaps continues, which the people who measure it call mechanical.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Nvidia is still about 31% under its October high with its chief executive back, so cap weight has room to keep recovering what it lost to equal weight since September.",
+    "case_against": "One day made the whole signal; the House interviews on 12-1, the board's probe and a hawkish PCE on Wednesday all favor the equal-weight side again.",
+    "why_not": "It is the DIA question from the other side, and I have no edge on whether the bounce extends."
+   },
+   "stats": {
+    "corr_60d": 0.83,
+    "beta_60d": 1.09,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 8,
+   "ranked": 12,
+   "id": "2026-11-24-P08"
+  },
+  {
+   "name": "GDX/GLD",
+   "kind": "factor",
+   "setup": "factor_turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #5",
+   "signal": {
+    "why": "GDX/GLD (gold miners vs gold): +3.3% today (+1.5 sd), 5-day -2.0%, 20-day -0.0%, z -1.2, the 10 sessions before today 1.04x as volatile as the 50 before; was stretched at z -2.2 and turned",
+    "chart": "gold miners vs gold; z -1.2 vs 50-day, 20-day -0.0%",
+    "numbers": {
+     "today": 0.03289,
+     "sd_20d": 0.02123,
+     "today_sd": 1.54938,
+     "tightness": 1.04256,
+     "ret_5d": -0.02005,
+     "ret_20d": -7e-05,
+     "z_50d": -1.16882,
+     "z_50d_prev": -2.19653,
+     "new_20d_high": false,
+     "new_20d_low": false
+    },
+    "score": 1.966,
+    "also": []
+   },
+   "long": [
+    "GDX"
+   ],
+   "short": [
+    "GLD"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -3.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Miners beat gold because miners are stocks and stocks rose 4.7%: equity beta, not a turn in the miners, and the book is short GDX on the Fed hike through Tuesday.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "The spread was 2.2 sd low and turned with gold itself bouncing 3%; Newmont's cash flow is strong even at these prices.",
+    "case_against": "Miners have fallen about twice as fast as stocks on every down day this month, margins are thinner than guidance assumed at 3,600 gold, and PCE on Wednesday can send gold and stocks down together.",
+    "why_not": "It is a bet that stocks keep recovering, wearing a gold label."
+   },
+   "stats": {
+    "corr_60d": 0.93,
+    "beta_60d": 1.81,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 9,
+   "ranked": 12,
+   "id": "2026-11-24-P09"
+  },
+  {
+   "name": "MSTR",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 night #7",
+   "signal": {
+    "why": "stretched down: RSI 27, -3.7 ATR from the 20-day, no turn yet",
+    "chart": "overnight at 7:30 PM CT: 85.37, +1.1% from the last regular close (+0.1 ATR; +0.1 ATR net of SPY's +0.4%), 27,158 shares traded, spread 0.21%; after-hours at 7:00 PM CT: 84.89, +0.6% from the last regular close (+0.1 ATR), a trade in 48 five-minute bars; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.7 ATR from the 20-day, RSI 27; volume 1.4x; daily ranges of the 10 sessions before today 1.08x the 50 before; resistance 131.51 (200-day, +55.8%); support 77.69 (52-week low, -8.0%); ATR 9.04 (10.7%); hedge IBIT: correlation +0.91, beta 1.94",
+    "numbers": {
+     "close": 84.4,
+     "ret_1d": 0.08483,
+     "ret_5d": -0.18082,
+     "ret_20d": -0.39637,
+     "atr": 9.03506,
+     "atr_pct": 0.10705,
+     "rsi": 26.96932,
+     "dist20_atr": -3.7137,
+     "vol_ratio": 1.3916,
+     "sma50": 137.8582,
+     "sma200": 131.50635,
+     "hi52": 198.39999,
+     "lo52": 77.69,
+     "usd_volume": 2041984671.31958,
+     "tightness": 1.07983,
+     "trend": "mixed",
+     "sma50_change_20d": -0.01973,
+     "price": 84.89,
+     "price_at": "2026-11-23T20:00:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.00581,
+     "live_move_atr": 0.05423,
+     "live_bars": 48,
+     "overnight_price": 85.37,
+     "overnight_move": 0.01149,
+     "overnight_move_atr": 0.10736,
+     "overnight_vs_spy_atr": 0.06895,
+     "overnight_volume": 27158.0,
+     "overnight_spread": 0.00211,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 1.206,
+    "adjust": {},
+    "hedge": "IBIT",
+    "hedge_fit": {
+     "corr_60d": 0.91,
+     "beta_60d": 1.94,
+     "chosen": "its basket's hedge",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-04",
+     "when": "after_close",
+     "sessions_away": 50
+    },
+    "also": []
+   },
+   "long": [
+    "MSTR"
+   ],
+   "short": [
+    "IBIT"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The bounce was bitcoin and the tape; what is dated inside the window points the other way: MSCI deletes it at the 11-30 close and the company is selling its own stock to buy back its preferred below par.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "RSI 27 and down 40% in a month; index-deletion selling is known in advance and such stocks often bounce once it is done; a cash reserve of about $4.8B covers its dividends.",
+    "case_against": "Bitcoin is 19% under its average cost, the preferred-funded buying is stalled, last week's stock sales went to defending the preferred, and passive selling comes on 11-30.",
+    "why_not": "No turn and the one dated event is a seller; as a short it is about a day's volume of known selling in a name that just rose 8.5% in a squeeze, so not that either."
+   },
+   "stats": {
+    "corr_60d": 0.91,
+    "beta_60d": 1.94,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 10,
+   "ranked": 12,
+   "id": "2026-11-24-P10"
+  },
+  {
+   "name": "Cybersecurity",
+   "kind": "basket",
+   "setup": "basket_stretched",
+   "direction": "short",
+   "source": "live screen 2026-11-24 night #12",
+   "signal": {
+    "why": "Cybersecurity against IGV: +1.6% today (+0.6 sd), 5-day +13.9%, 20-day +2.3%, z +2.2, the 10 sessions before today 1.24x as volatile as the 50 before; stretched, no turn yet",
+    "chart": "4 of 8 members above their 50-day; best ZS +17.7%, worst CRWD -8.9%; spread +0.6 sd today, z +2.2",
+    "numbers": {
+     "today": 0.01624,
+     "sd_20d": 0.02729,
+     "today_sd": 0.59503,
+     "tightness": 1.23871,
+     "ret_5d": 0.13903,
+     "ret_20d": 0.02301,
+     "z_50d": 2.15502,
+     "z_50d_prev": 1.83244,
+     "new_20d_high": true,
+     "new_20d_low": false
+    },
+    "score": 1.18,
+    "hedge": "IGV",
+    "members": [
+     "PANW",
+     "CRWD",
+     "FTNT",
+     "ZS",
+     "OKTA",
+     "S",
+     "RBRK",
+     "QLYS"
+    ],
+    "also": []
+   },
+   "long": [
+    "IGV"
+   ],
+   "short": [
+    "PANW",
+    "CRWD",
+    "FTNT",
+    "ZS",
+    "OKTA",
+    "S",
+    "QLYS"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -4.1
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "The stretch is two company events, not a group move that can mean-revert: Zscaler is up 18% because CrowdStrike is buying it at a fixed share ratio, and Palo Alto raised its guide; the legs cannot trade overnight either.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "The group was crowded before this week and September's run reversed in days; Rubrik reports 11-30 and CrowdStrike 12-1 after a 14% five-session move against software.",
+    "case_against": "Zscaler's gain is a merger price and will not revert; CrowdStrike already fell 9% on the deal; Palo Alto's move rests on a raised guide.",
+    "why_not": "A basket fade needs the basket to have moved together, and it did not."
+   },
+   "stats": {
+    "corr_60d": 0.84,
+    "beta_60d": 0.46,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 11,
+   "ranked": 12,
+   "id": "2026-11-24-P11"
+  },
+  {
+   "name": "COST",
+   "kind": "stock",
+   "setup": "overnight_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 night #3",
+   "signal": {
+    "why": "overnight at 7:30 PM CT: 1,071.50, -2.4% from the last regular close (-1.4 ATR; -1.6 ATR net of SPY's +0.4%), 1,392 shares traded, spread 1.81%",
+    "chart": "overnight at 7:30 PM CT: 1,071.50, -2.4% from the last regular close (-1.4 ATR; -1.6 ATR net of SPY's +0.4%), 1,392 shares traded, spread 1.81%; after-hours at 6:45 PM CT: 1,104.99, +0.6% from the last regular close (+0.4 ATR), a trade in 24 five-minute bars; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +1.9 ATR from the 20-day, RSI 68; volume 1.2x; daily ranges of the 10 sessions before today 0.95x the 50 before; resistance 1,123.67 (20-day high, +2.3%); support 989.39 (50-day, -9.9%); ATR 18.96 (1.7%); hedge XLP: correlation +0.74, beta 0.79",
+    "numbers": {
+     "close": 1097.91,
+     "ret_1d": -0.00385,
+     "ret_5d": -0.01421,
+     "ret_20d": 0.09389,
+     "atr": 18.96021,
+     "atr_pct": 0.01727,
+     "rsi": 67.64949,
+     "dist20_atr": 1.90202,
+     "vol_ratio": 1.23606,
+     "sma50": 989.38897,
+     "sma200": 976.86767,
+     "hi52": 1123.67004,
+     "lo52": 839.11083,
+     "usd_volume": 2447108686.06567,
+     "tightness": 0.94697,
+     "trend": "up",
+     "sma50_change_20d": 0.05438,
+     "price": 1104.992,
+     "price_at": "2026-11-23T19:45:00-05:00",
+     "live_phase": "post",
+     "live_move": 0.00645,
+     "live_move_atr": 0.37352,
+     "live_bars": 24,
+     "overnight_price": 1071.5,
+     "overnight_move": -0.02405,
+     "overnight_move_atr": -1.39292,
+     "overnight_vs_spy_atr": -1.63102,
+     "overnight_volume": 1392.0,
+     "overnight_spread": 0.01811,
+     "overnight_at": "2026-11-23T20:30:42-05:00"
+    },
+    "score": 2.672,
+    "adjust": {},
+    "hedge": "XLP",
+    "hedge_fit": {
+     "corr_60d": 0.74,
+     "beta_60d": 0.79,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2026-12-10",
+     "when": "after_close",
+     "sessions_away": 13
+    },
+    "also": []
+   },
+   "long": [
+    "XLP"
+   ],
+   "short": [
+    "COST"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -2.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "The overnight drop is the $30 special dividend: the record date is 11-24, the overnight session trades Tuesday's date ex-dividend, and 1,071.50 against 1,097.91 less 30 is about +0.3%; no news found.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Up 9% in a month into the payout at about 47 times earnings, so dividend buyers could sell after the date.",
+    "case_against": "October comps +7.3% excluding gas, digital +22.5%, nothing negative reported tonight; the screen's signal is an unadjusted price.",
+    "why_not": "There is no move to trade once the dividend is taken out."
+   },
+   "stats": {
+    "corr_60d": 0.74,
+    "beta_60d": 0.7,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "night",
+   "recorded_at": "2026-11-23T20:40:49.417256-05:00",
+   "rank": 12,
+   "ranked": 12,
+   "id": "2026-11-24-P12"
+  },
+  {
+   "name": "ANF",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #1",
+   "signal": {
+    "why": "reported 2026-11-24 before open, reacted today: gap +13.1% (+2.5 ATR), day +22.7%, +20.4% against XRT, volume 12.1x; trading in the top third and still above the middle of that day's range (165.03)",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +2.1 ATR from the 20-day, RSI 64; volume 12.1x; daily ranges of the 10 sessions before today 1.21x the 50 before; support 172.00 (52-week high, -0.2%); ATR 9.08 (5.3%); hedge XRT: correlation +0.56, beta 1.44",
+    "numbers": {
+     "close": 172.38699,
+     "ret_1d": 0.22739,
+     "ret_5d": 0.20652,
+     "ret_20d": 0.04237,
+     "atr": 9.08008,
+     "atr_pct": 0.05267,
+     "rsi": 64.14304,
+     "dist20_atr": 2.06073,
+     "vol_ratio": 12.05666,
+     "sma50": 148.53034,
+     "sma200": 109.18003,
+     "hi52": 172.0,
+     "lo52": 65.45,
+     "usd_volume": 142962004.54483,
+     "tightness": 1.20542,
+     "trend": "up",
+     "sma50_change_20d": 0.0579,
+     "price": 172.38699,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.22739,
+     "live_move_atr": 4.41207,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 3.425,
+    "adjust": {},
+    "hedge": "XRT",
+    "hedge_fit": {
+     "corr_60d": 0.56,
+     "beta_60d": 1.44,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "live_move (long)",
+     "breakout (long)"
+    ]
+   },
+   "long": [
+    "ANF"
+   ],
+   "short": [
+    "XRT"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "take",
+   "conviction": 3,
+   "reason": "A quarter that beat on operations this time (comps +6%, margin 15.5%, prices up on lean inventory) with the year raised and November called strong, in a stock at about 12 times earnings whose broker targets now sit at or under the price, with Black Friday inside the window.",
+   "reviewed": true,
+   "reasoning": {
+    "what_changed": "Q3 (to 10-31), reported before the open: sales $1.435B, +11%, against about $1.37B expected; comps +6%; both brands and all three regions up double digits; operating margin 15.5% against 12.0%; EPS $3.82 against about $3.10 expected, of which $0.40 is tariff refunds (about $3.42 without, still a clear beat). Full-year EPS guide raised to $13.70-13.90 from $13.10-13.60; Q4 guided to sales +7% and EPS $4.40-4.60; buybacks of at least $120M in Q4 (8-K release and call summary).",
+    "story": "The argument against Abercrombie since August was that its beat was refunds (Citi downgraded on it) and the stock gave back the whole August jump. This quarter the beat is mostly operations: selling prices up high single digits with inventory up only 4%, so it is pricing and not clearance, and management said November started strong with the biggest weeks ahead. At 171 it is about 12 times this year's guide (about 14.5 without refunds). Targets before the print (consensus about 160, Jefferies 175, BMO 170) are at or below the price and have to move, and the buyback is a steady buyer.",
+    "chart": "171 at 8:51 AM CT, +22% on about 12x projected volume, in the top third of the day and above the middle of its range (165), at the August high of 172; above rising 50- and 200-day averages. ATR about 5%, so the first sessions will swing.",
+    "coming": "Broker target changes today and Wednesday; PCE Wednesday 7:30 AM CT; closed Thursday; Black Friday in a half session on 11-27 and Cyber Monday reads on 11-30. No company event until the Q4 report; no 2027 guide until March.",
+    "case_against": "The entry is after +22% at a 52-week high, and the +37% August print was given back over three months. Refunds don't recur, freight is 100 bp worse than the August guide, growth is expected to slow to about 4%, and insiders sold in August. XRT is up 2% today partly on the same reports. It didn't win because this beat is the kind the skeptics asked for, the multiple is low enough that holding it doesn't need more good news, and the dated event inside the window (the holiday weekend) follows a statement that November is strong."
+   },
+   "wrong_if": "Two or more covering brokers downgrade Abercrombie or leave targets under $160 citing refunds or 2027 after the print; or Black Friday and Cyber Monday reads (Adobe, Mastercard SpendingPulse, Sensormatic or the like) show apparel sales or traffic down on the year or name heavy promotions at Abercrombie or Hollister; or Abercrombie trims its Q4 guide, inside the window.",
+   "hedge_why": "Hedged, not outright: the belief is about Abercrombie's own quarter, and with VIX at 29, PCE on Wednesday and holiday reads that move all of retail, XRT (correlation 0.62, beta about 1.2) takes the consumer tape out; outright it would be long a market giving back a +4.7% day.",
+   "through_earnings": "The report is already out: Abercrombie reported before today's open, before this pass. The trade is the reaction to those numbers and is entered after them; the next report is in early March, outside the time limit.",
+   "stats": {
+    "corr_60d": 0.55,
+    "beta_60d": 1.39,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 1,
+   "ranked": 25,
+   "id": "2026-11-24-P13"
+  },
+  {
+   "name": "DKS",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #2",
+   "signal": {
+    "why": "reported 2026-11-24 before open, reacted today: gap +11.3% (+2.5 ATR), day +15.4%, +13.1% against XRT, volume 7.1x; trading in the top third and still above the middle of that day's range (152.27)",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50-day, below the 200-day; 50-day below the 200-day and falling (trend down); +1.6 ATR from the 20-day, RSI 59; volume 7.1x; daily ranges of the 10 sessions before today 1.08x the 50 before; resistance 185.14 (200-day, +20.0%); support 150.35 (20-day high, -2.5%); ATR 7.13 (4.6%); hedge XRT: correlation +0.72, beta 1.54",
+    "numbers": {
+     "close": 154.258,
+     "ret_1d": 0.15402,
+     "ret_5d": 0.09504,
+     "ret_20d": 0.09016,
+     "atr": 7.12512,
+     "atr_pct": 0.04619,
+     "rsi": 58.98975,
+     "dist20_atr": 1.56328,
+     "vol_ratio": 7.12741,
+     "sma50": 138.85176,
+     "sma200": 185.14402,
+     "hi52": 242.08562,
+     "lo52": 119.26961,
+     "usd_volume": 224871163.73901,
+     "tightness": 1.08043,
+     "trend": "down",
+     "sma50_change_20d": -0.0046,
+     "price": 154.258,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.15402,
+     "live_move_atr": 3.44717,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 3.421,
+    "adjust": {},
+    "hedge": "XRT",
+    "hedge_fit": {
+     "corr_60d": 0.72,
+     "beta_60d": 1.54,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "live_move (long)",
+     "breakout (long)"
+    ]
+   },
+   "long": [
+    "DKS"
+   ],
+   "short": [
+    "XRT"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -7.0
+    }
+   },
+   "decision": "take",
+   "conviction": 3,
+   "reason": "The report took away the fear that had cut the stock by a third: Foot Locker comps turned positive, the year was raised, about 18% of the float is short and the company bought 8% of its shares last quarter, at about 13 times earnings.",
+   "reviewed": true,
+   "reasoning": {
+    "what_changed": "Q3 (to 10-31), reported before the open: sales $5.13B against about $5.07B; adjusted EPS $1.94 against about $1.40; Dick's comps +2.6%, Foot Locker pro forma comps +0.5%, the first positive since the deal (US above +4%). Full-year adjusted EPS guide raised to $11.45-12.30 from $11.00-12.00 with the Foot Locker guide unchanged; 6.7M shares ($903M) bought in the quarter at about $135, $2.12B of authorization left (8-K release and call summary).",
+    "story": "The August guide cut on Foot Locker took the stock down 31% in a day; it was down about 32% on the year with about 18% of the float short (one source). The bear case was that Foot Locker was a hole with no floor. A positive comp, an unchanged Foot Locker guide and management calling Q3 the margin low point take the urgency out of that case, and the people who have to act on it are shorts covering into a company that is itself buying. It is the shape of ACM on 11-17: a report that removed the named fear in a cheap stock paid for five sessions.",
+    "chart": "152 at 8:51 AM CT, +14% on about 7x projected volume, its biggest day since 2020, in the top third of the day; above the 50-day (138.85), the 200-day (185) far overhead and the 50-day still falling. ATR about 4.6%.",
+    "coming": "Broker target changes (average about 160 before the print); PCE Wednesday; closed Thursday; Black Friday and Cyber Monday reads; no 2027 guide until March.",
+    "case_against": "Adjusted EPS fell on the year, gross margin fell 73 bp, Foot Locker still lost $40.9M and carries 16% more inventory with clearance into 2027, and Europe is weak. The average target was only about 5% above this price, and a rally toward a falling 50-day in a downtrend is where holders sell. It didn't win because the stock was priced for a deal that had failed and the report says it hasn't, and covering plus the buyback are buyers who don't need a higher target first."
+   },
+   "wrong_if": "Two or more covering brokers downgrade Dick's or cut targets under $150 after the print; or Dick's, Nike or a major outlet says Foot Locker's comps have turned negative again this quarter or that the Jordan reset is cutting its allocations before year-end; or Black Friday and Cyber Monday reads show sporting goods or athletic footwear sales down on the year, inside the window.",
+   "hedge_why": "Hedged, not outright: the belief is about Dick's own report and its shorts, and XRT (correlation 0.76, beta about 1.4) is a close fit that carries the holiday-data and market risk; an outright long of a beta-1.4 retailer the day after a +4.7% market day would be mostly a market bet.",
+   "through_earnings": "The report is already out: Dick's reported before today's open, before this pass. The trade is the reaction to those numbers and is entered after them; the next report is about 3-9-2027, outside the time limit.",
+   "stats": {
+    "corr_60d": 0.73,
+    "beta_60d": 1.5,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 2,
+   "ranked": 25,
+   "id": "2026-11-24-P14"
+  },
+  {
+   "name": "DLTR",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #3",
+   "signal": {
+    "why": "reported 2026-11-24 before open, reacted today: gap +7.8% (+2.1 ATR), day +10.3%, +8.0% against XRT, volume 5.0x; trading in the top third and still above the middle of that day's range (151.45)",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +2.5 ATR from the 20-day, RSI 68; volume 5.0x; daily ranges of the 10 sessions before today 0.87x the 50 before; support 148.54 (52-week high, -3.2%); ATR 5.90 (3.8%); hedge XRT: correlation +0.76, beta 1.43",
+    "numbers": {
+     "close": 153.47501,
+     "ret_1d": 0.10334,
+     "ret_5d": 0.09853,
+     "ret_20d": 0.24121,
+     "atr": 5.89652,
+     "atr_pct": 0.03842,
+     "rsi": 67.75737,
+     "dist20_atr": 2.50771,
+     "vol_ratio": 4.97436,
+     "sma50": 126.3249,
+     "sma200": 117.96133,
+     "hi52": 148.53999,
+     "lo52": 85.88,
+     "usd_volume": 292655955.44128,
+     "tightness": 0.86969,
+     "trend": "up",
+     "sma50_change_20d": 0.03761,
+     "price": 153.47501,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.10334,
+     "live_move_atr": 2.80672,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 3.354,
+    "adjust": {},
+    "hedge": "XRT",
+    "hedge_fit": {
+     "corr_60d": 0.76,
+     "beta_60d": 1.43,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "live_move (long)",
+     "breakout (long)"
+    ]
+   },
+   "long": [
+    "DLTR"
+   ],
+   "short": [
+    "XRT"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -5.8
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Traffic really turned (+3.8% from +0.4%) and the year was raised, but the stock was already up 24% in twenty sessions into the print, sits at 19 times a guide that includes $0.65 of refunds, and nobody is forced to buy it here.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Comps +4.6% above the outlook, traffic acceleration, full-year EPS guide to $8.05-8.25 against about $7.93 expected, $2.3B of buyback left, and a new high on 5x volume with Dollar General's report on 12-3 to run into.",
+    "case_against": "Adjusted EPS fell on the year, the beat came from spending less of the refunds than planned, Q4 guide reads are mixed, Halloween was under plan, no 2027 view until March, and the one fresh target (Stifel $160) is 4% away.",
+    "why_not": "Unlike Abercrombie and Dick's there is no low multiple or short base to close; the good news was largely paid for on the way in."
+   },
+   "stats": {
+    "corr_60d": 0.75,
+    "beta_60d": 1.43,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 3,
+   "ranked": 25,
+   "id": "2026-11-24-P15"
+  },
+  {
+   "name": "PC and server hardware",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #13",
+   "signal": {
+    "why": "PC and server hardware against XLK: -4.2% today (-2.1 sd), 5-day -1.8%, 20-day -14.9%, z -1.6, the 10 sessions before today 0.71x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 6 members above their 50-day; best HPQ -0.4%, worst HPE -14.1%; spread -2.1 sd today, z -1.6",
+    "numbers": {
+     "today": -0.04247,
+     "sd_20d": 0.02012,
+     "today_sd": -2.11102,
+     "tightness": 0.71142,
+     "ret_5d": -0.01794,
+     "ret_20d": -0.14881,
+     "z_50d": -1.6134,
+     "z_50d_prev": -0.99417,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.552,
+    "hedge": "XLK",
+    "members": [
+     "DELL",
+     "HPE",
+     "HPQ",
+     "NTAP",
+     "SMCI",
+     "P"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLK"
+   ],
+   "short": [
+    "HPE",
+    "SMCI",
+    "P"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -3.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "HPE's beat-and-raise sold 14% on its AI-server margin guide and Dell is down 10% in sympathy, so the margin squeeze is a live story, but the basket is being shorted hours before Dell and HP Inc report into that same question.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Memory and component costs rising faster than prices through 2028 by HPE's own account; none of the six is above its 50-day; the market sold a record quarter, which says it only cares about margin.",
+    "case_against": "Demand is at records (HPE revenue +50%, Dell backlog $95B), Dell has already lost 10% today before its own print, and XLK is a hedge that moves on Nvidia.",
+    "why_not": "A short entered this morning is decided by tonight's prints, which I can't call; Dell's date I could not confirm beyond the market write-up."
+   },
+   "stats": {
+    "corr_60d": 0.88,
+    "beta_60d": 0.44,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 4,
+   "ranked": 25,
+   "id": "2026-11-24-P16"
+  },
+  {
+   "name": "CRWD",
+   "kind": "stock",
+   "setup": "earnings_gap_faded",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #6",
+   "signal": {
+    "why": "reported 2026-11-23 before open, reacted yesterday: gap -5.0% (-0.8 ATR), day -8.9%, -12.7% against CIBR, volume 4.6x, EPS surprise +9%; beat estimates and still fell against CIBR (good news sold)",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -1.3 ATR from the 20-day, RSI 40; volume 2.4x; daily ranges of the 10 sessions before today 1.30x the 50 before; resistance 245.92 (50-day, +15.5%); support 200.53 (20-day low, -5.8%); ATR 15.06 (7.1%); hedge CIBR: correlation +0.82, beta 1.39",
+    "numbers": {
+     "close": 212.8288,
+     "ret_1d": 0.01847,
+     "ret_5d": -0.03075,
+     "ret_20d": -0.20592,
+     "atr": 15.05717,
+     "atr_pct": 0.07075,
+     "rsi": 39.99853,
+     "dist20_atr": -1.32048,
+     "vol_ratio": 2.38742,
+     "sma50": 245.92338,
+     "sma200": 177.29624,
+     "hi52": 286.98999,
+     "lo52": 85.68,
+     "usd_volume": 2195013888.17444,
+     "tightness": 1.30419,
+     "trend": "up",
+     "sma50_change_20d": 0.0386,
+     "price": 212.8288,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.01847,
+     "live_move_atr": 0.24557,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.93,
+    "adjust": {},
+    "hedge": "CIBR",
+    "hedge_fit": {
+     "corr_60d": 0.82,
+     "beta_60d": 1.39,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "CIBR"
+   ],
+   "short": [
+    "CRWD"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Monday's fall was the $43.9B all-stock Zscaler deal, announced with a record quarter, not good news sold; the deal spread is only about 3% so arbitrage selling should be modest, and the quarter gives buyers a reason at 200.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Acquirers paying in stock often keep sliding (Hancock Whitney fell another 8% in the week after its deal gap); JPMorgan expects dilution to growth and margins, StoneX cut its target, and a break of 200.53 has air under it.",
+    "case_against": "Net new ARR $419M against a $343-347M guide, year raised, record cash flow; it already lost 12.7% to CIBR in a day and is bouncing; CIBR holds both CrowdStrike and Zscaler, so the hedge is partly the same bet.",
+    "why_not": "The screen's premise (a beat sold) is wrong on the cause, and with fundamentals this strong the short needs deal-driven selling I can't size."
+   },
+   "stats": {
+    "corr_60d": 0.82,
+    "beta_60d": 0.48,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 5,
+   "ranked": 25,
+   "id": "2026-11-24-P17"
+  },
+  {
+   "name": "A",
+   "kind": "stock",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #4",
+   "signal": {
+    "why": "reported 2026-11-23 after close, reacted today: gap +6.2% (+2.1 ATR), day +6.3%, +2.9% against IBB, volume 2.9x; trading in the top third and still above the middle of that day's range (185.57)",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +1.9 ATR from the 20-day, RSI 63; volume 2.9x; daily ranges of the 10 sessions before today 0.94x the 50 before; support 182.99 (52-week high, -2.2%); ATR 5.84 (3.1%); hedge IBB: correlation +0.68, beta 0.79",
+    "numbers": {
+     "close": 187.19,
+     "ret_1d": 0.06334,
+     "ret_5d": 0.08692,
+     "ret_20d": 0.05465,
+     "atr": 5.83796,
+     "atr_pct": 0.03119,
+     "rsi": 63.41708,
+     "dist20_atr": 1.89921,
+     "vol_ratio": 2.89909,
+     "sma50": 172.34348,
+     "sma200": 139.19674,
+     "hi52": 182.99001,
+     "lo52": 107.98101,
+     "usd_volume": 362170015.40222,
+     "tightness": 0.94211,
+     "trend": "up",
+     "sma50_change_20d": 0.06136,
+     "price": 187.19,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.06334,
+     "live_move_atr": 2.1074,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 3.344,
+    "adjust": {},
+    "hedge": "IBB",
+    "hedge_fit": {
+     "corr_60d": 0.68,
+     "beta_60d": 0.79,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "live_move (long)",
+     "breakout (long)"
+    ]
+   },
+   "long": [
+    "A"
+   ],
+   "short": [
+    "IBB"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -4.7
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A clean beat and a guide above consensus, but the gap is already fading (184.7 against 187.2 at the screen), the stock is at about 34 times earnings and most of the new targets ($200-210) are already out.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Core growth 8.3%, China +19%, FY27 EPS guide $6.73-6.86 above $6.70, six target raises this morning, a new all-time high.",
+    "case_against": "The move was smaller than options implied, Q1 EPS guide steps down from Q4, part of the beat is refunds, nothing is scheduled, and IBB is +3.2% today on the Sanofi deal so the spread is already negative on the day.",
+    "why_not": "The TJX shape: confirmed facts on an expensive, well-owned stock with nobody who has to buy; it is trading under its open."
+   },
+   "stats": {
+    "corr_60d": 0.68,
+    "beta_60d": 0.76,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 6,
+   "ranked": 25,
+   "id": "2026-11-24-P18"
+  },
+  {
+   "name": "Discount stores",
+   "kind": "basket",
+   "setup": "basket_breakout",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #12",
+   "signal": {
+    "why": "Discount stores against XLP: +4.1% today (+2.2 sd), 5-day +7.2%, 20-day +11.6%, z +3.7, the 10 sessions before today 0.99x as volatile as the 50 before; a 20-day high",
+    "chart": "3 of 3 members above their 50-day; best DLTR +10.3%, worst DG +1.4%; spread +2.2 sd today, z +3.7",
+    "numbers": {
+     "today": 0.04056,
+     "sd_20d": 0.01884,
+     "today_sd": 2.15244,
+     "tightness": 0.99004,
+     "ret_5d": 0.07167,
+     "ret_20d": 0.11576,
+     "z_50d": 3.70727,
+     "z_50d_prev": 1.94313,
+     "new_20d_high": true,
+     "new_20d_low": false
+    },
+    "score": 2.559,
+    "hedge": "XLP",
+    "members": [
+     "DG",
+     "DLTR",
+     "TGT"
+    ],
+    "also": []
+   },
+   "long": [
+    "DG",
+    "DLTR",
+    "TGT"
+   ],
+   "short": [
+    "XLP"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.8
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Today's basket move is Dollar Tree's report with Dollar General and Target in sympathy; at 3.7 sd above its norm against XLP it is the DLTR question again, and the book already holds Target.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "All three show traffic gains (DG +2.0%, DLTR +3.8%, TGT +5.0%), a trade-down story with Black Friday this week and Dollar General reporting 12-3.",
+    "case_against": "Two of three are moving on old news, refunds flatter the earnings, and lower-income households plan to spend 12% less this weekend (Deloitte).",
+    "why_not": "A stretched spread carried by one name's print is not a group event."
+   },
+   "stats": {
+    "corr_60d": 0.76,
+    "beta_60d": 1.59,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 7,
+   "ranked": 25,
+   "id": "2026-11-24-P19"
+  },
+  {
+   "name": "Regional banks",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #19",
+   "signal": {
+    "why": "Regional banks against XLF: -0.8% today (-1.2 sd), 5-day -1.5%, 20-day -5.8%, z -2.1, the 10 sessions before today 0.57x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 6 members above their 50-day; best RF +0.5%, worst CFG -1.0%; spread -1.2 sd today, z -2.1",
+    "numbers": {
+     "today": -0.00794,
+     "sd_20d": 0.00646,
+     "today_sd": -1.22991,
+     "tightness": 0.56916,
+     "ret_5d": -0.0148,
+     "ret_20d": -0.05842,
+     "z_50d": -2.06569,
+     "z_50d_prev": -1.75066,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.405,
+    "hedge": "XLF",
+    "members": [
+     "MTB",
+     "FITB",
+     "HBAN",
+     "RF",
+     "CFG",
+     "KEY"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLF"
+   ],
+   "short": [
+    "MTB",
+    "FITB",
+    "HBAN",
+    "RF",
+    "CFG",
+    "KEY"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The slide against XLF has a running macro reason (a Fed about to hike, long yields cutting tangible book) but no credit story, and Wednesday's PCE can turn it either way in a morning.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "A 12-9 hike priced above 90%, Citizens' tangible book fell 6.6% last quarter on marks, all six under their 50-day, KRE -6% last week.",
+    "case_against": "Q3 credit and margins were fine, capital relief is at OMB, and the spread is 2.1 sd stretched after a 5.8% slide.",
+    "why_not": "No event of its own; it is a rates bet through a data release, and the 10-year is slipping to 4.90% this morning."
+   },
+   "stats": {
+    "corr_60d": 0.83,
+    "beta_60d": 0.68,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 8,
+   "ranked": 25,
+   "id": "2026-11-24-P20"
+  },
+  {
+   "name": "Big banks",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #17",
+   "signal": {
+    "why": "Big banks against XLF: -0.9% today (-1.9 sd), 5-day -1.9%, 20-day -4.8%, z -1.8, the 10 sessions before today 0.70x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 7 members above their 50-day; best PNC +0.6%, worst TFC -0.7%; spread -1.9 sd today, z -1.8",
+    "numbers": {
+     "today": -0.00948,
+     "sd_20d": 0.00501,
+     "today_sd": -1.89428,
+     "tightness": 0.69857,
+     "ret_5d": -0.01873,
+     "ret_20d": -0.04828,
+     "z_50d": -1.77758,
+     "z_50d_prev": -1.52409,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.516,
+    "hedge": "XLF",
+    "members": [
+     "JPM",
+     "BAC",
+     "WFC",
+     "C",
+     "PNC",
+     "USB",
+     "TFC"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLF"
+   ],
+   "short": [
+    "JPM",
+    "BAC",
+    "WFC",
+    "C",
+    "PNC",
+    "USB",
+    "TFC"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The same rates-and-conditions drift as the regionals with nothing bank-specific found; a 0.9% relative day against XLF is not a story.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Tightening financial conditions, wider spreads for AI-related borrowers, reduced buybacks at JPMorgan, all seven under their 50-day.",
+    "case_against": "Net interest income guides were raised, capital proposals cut requirements, and the 10-year is easing today.",
+    "why_not": "No named cause and no dated event besides PCE."
+   },
+   "stats": {
+    "corr_60d": 0.9,
+    "beta_60d": 0.77,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 9,
+   "ranked": 25,
+   "id": "2026-11-24-P21"
+  },
+  {
+   "name": "SAP",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #25",
+   "signal": {
+    "why": "stretched down: RSI 33, -3.7 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -3.7 ATR from the 20-day, RSI 33; volume 0.9x; daily ranges of the 10 sessions before today 1.11x the 50 before; resistance 221.52 (50-day, +8.6%); support 198.45 (20-day low, -2.7%); ATR 6.14 (3.0%); hedge KIE: correlation +0.58, beta 1.07",
+    "numbers": {
+     "close": 203.96001,
+     "ret_1d": 0.00275,
+     "ret_5d": -0.08337,
+     "ret_20d": -0.13503,
+     "atr": 6.13921,
+     "atr_pct": 0.0301,
+     "rsi": 32.67512,
+     "dist20_atr": -3.73509,
+     "vol_ratio": 0.93486,
+     "sma50": 221.5228,
+     "sma200": 191.39131,
+     "hi52": 251.52751,
+     "lo52": 144.97,
+     "usd_volume": 486537956.67572,
+     "tightness": 1.10984,
+     "trend": "up",
+     "sma50_change_20d": 0.02256,
+     "price": 203.96001,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.00275,
+     "live_move_atr": 0.0891,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 1.208,
+    "adjust": {},
+    "hedge": "KIE",
+    "hedge_fit": {
+     "corr_60d": 0.58,
+     "beta_60d": 1.07,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-28",
+     "when": "before_open",
+     "sessions_away": 43
+    },
+    "also": []
+   },
+   "long": [
+    "SAP"
+   ],
+   "short": [
+    "KIE"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -4.5
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 13.5% slide on software sentiment and an executive departure with the business intact; it is up 1.9% this morning, but nothing is dated before the 1-28 report and the Nasdaq is falling again.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Cloud +26%, backlog +28%, a \u20ac10B buyback, a JPMorgan upgrade on 11-9, and money moving to software and services on a morning chips fall.",
+    "case_against": "The CFO called Q4, half the year's bookings, not 'super conducive'; the board is thin on tenure after Saueressig's exit; KIE is no hedge for it.",
+    "why_not": "A sentiment bounce with no event: the standing lesson on stretched names."
+   },
+   "stats": {
+    "corr_60d": 0.58,
+    "beta_60d": 1.08,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 10,
+   "ranked": 25,
+   "id": "2026-11-24-P22"
+  },
+  {
+   "name": "Trucks and farm machinery",
+   "kind": "basket",
+   "setup": "basket_breakout",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #18",
+   "signal": {
+    "why": "Trucks and farm machinery against XLI: +1.7% today (+1.7 sd), 5-day +3.0%, 20-day +10.7%, z +1.9, the 10 sessions before today 0.49x as volatile as the 50 before; a 20-day high",
+    "chart": "5 of 9 members above their 50-day; best TEX +10.5%, worst GATX -0.7%; spread +1.7 sd today, z +1.9",
+    "numbers": {
+     "today": 0.01727,
+     "sd_20d": 0.0102,
+     "today_sd": 1.69413,
+     "tightness": 0.49142,
+     "ret_5d": 0.03021,
+     "ret_20d": 0.10709,
+     "z_50d": 1.86376,
+     "z_50d_prev": 1.27587,
+     "new_20d_high": true,
+     "new_20d_low": false
+    },
+    "score": 2.482,
+    "hedge": "XLI",
+    "members": [
+     "PCAR",
+     "WAB",
+     "AGCO",
+     "CNH",
+     "TEX",
+     "OSK",
+     "ALSN",
+     "TTC",
+     "GATX"
+    ],
+    "also": []
+   },
+   "long": [
+    "PCAR",
+    "WAB",
+    "AGCO",
+    "CNH",
+    "TEX",
+    "OSK",
+    "ALSN",
+    "TTC",
+    "GATX"
+   ],
+   "short": [
+    "XLI"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The basket's day is Terex selling Genie to Linamar for $1.4B; the other eight have no news and the farm names are still cutting.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Paccar's 2027 market range has a higher top, tariff refunds are flowing, the spread broke out of ten quiet sessions.",
+    "case_against": "October Class 8 orders fell to about 13,500, AGCO cut its outlook, Oshkosh cut hard, and Deere's outlook may land this week.",
+    "why_not": "One name's asset sale, not a group move."
+   },
+   "stats": {
+    "corr_60d": 0.77,
+    "beta_60d": 0.99,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 11,
+   "ranked": 25,
+   "id": "2026-11-24-P23"
+  },
+  {
+   "name": "TTE",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #16",
+   "signal": {
+    "why": "was stretched down (RSI 34, -3.1 ATR from the 20-day) and turned: +1.5%, trading in the top quarter of the day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and rising (trend up); -2.2 ATR from the 20-day, RSI 39; volume 0.8x; daily ranges of the 10 sessions before today 0.87x the 50 before; resistance 85.86 (200-day, +0.5%); support 83.82 (20-day low, -1.9%); ATR 1.74 (2.0%); hedge XLE: correlation +0.81, beta 0.75",
+    "numbers": {
+     "close": 85.46,
+     "ret_1d": 0.0146,
+     "ret_5d": -0.05465,
+     "ret_20d": -0.07461,
+     "atr": 1.74128,
+     "atr_pct": 0.02038,
+     "rsi": 39.1621,
+     "dist20_atr": -2.24835,
+     "vol_ratio": 0.76712,
+     "sma50": 88.97594,
+     "sma200": 85.86268,
+     "hi52": 95.78,
+     "lo52": 60.7828,
+     "usd_volume": 98463019.51752,
+     "tightness": 0.87035,
+     "trend": "up",
+     "sma50_change_20d": 0.00325,
+     "price": 85.46,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.0146,
+     "live_move_atr": 0.69498,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.517,
+    "adjust": {},
+    "hedge": "XLE",
+    "hedge_fit": {
+     "corr_60d": 0.81,
+     "beta_60d": 0.75,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-10",
+     "when": "after_close",
+     "sessions_away": 53
+    },
+    "also": []
+   },
+   "long": [
+    "TTE"
+   ],
+   "short": [
+    "XLE"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.1
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A record quarter and a buyback, but the stock is trading as Brent, and Brent has fallen three weeks on Iran diplomacy with OPEC+ meeting on 11-29; today's bounce is the mine headlines.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Record refining and LNG, 9% gearing, $2.5B of buybacks a quarter, and stalled talks or more tanker incidents lift crude.",
+    "case_against": "Peace headlines have cost it about 5% in a day twice this year; France's windfall-tax debate is open; surplus forecasts for this quarter.",
+    "why_not": "It is a bet on crude's direction, and the book's own view (short USO) is the other way."
+   },
+   "stats": {
+    "corr_60d": 0.81,
+    "beta_60d": 0.75,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 12,
+   "ranked": 25,
+   "id": "2026-11-24-P24"
+  },
+  {
+   "name": "XOP",
+   "kind": "etf",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #15",
+   "signal": {
+    "why": "was stretched down (RSI 30, -3.2 ATR from the 20-day) and turned: +0.6%, trading in the top quarter of the day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -2.8 ATR from the 20-day, RSI 31; volume 0.4x; daily ranges of the 10 sessions before today 1.08x the 50 before; resistance 173.08 (200-day, +4.1%); support 164.43 (20-day low, -1.1%); ATR 5.07 (3.1%); hedge SPY: correlation -0.01, beta -0.02; it barely moves with the hedge, so this is close to an outright position",
+    "numbers": {
+     "close": 166.24001,
+     "ret_1d": 0.00587,
+     "ret_5d": -0.06402,
+     "ret_20d": -0.16884,
+     "atr": 5.07251,
+     "atr_pct": 0.03051,
+     "rsi": 31.36042,
+     "dist20_atr": -2.83371,
+     "vol_ratio": 0.43512,
+     "sma50": 186.90453,
+     "sma200": 173.08472,
+     "hi52": 206.05,
+     "lo52": 121.58391,
+     "usd_volume": 529616835.62622,
+     "tightness": 1.07635,
+     "trend": "mixed",
+     "sma50_change_20d": -0.01862,
+     "price": 166.24001,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.00587,
+     "live_move_atr": 0.18232,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.534,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": -0.01,
+     "beta_60d": -0.02,
+     "chosen": "a fund is set against the market",
+     "weak": true
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "XOP"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -4.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The fund is falling with the war premium in crude, and a +0.6% turn on light volume doesn't change that with OPEC+ on Sunday and Iran talks open.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Producers are disciplined and cash-rich at $80, US inventories are low, and any escalation gaps it up.",
+    "case_against": "The IEA sees a 2M b/d surplus this quarter, last week's crude build was 3.4M, and Hormuz flows are reported near pre-war.",
+    "why_not": "A bounce against a headline-driven trend with the weekend's meeting inside the window; the book is short oil."
+   },
+   "stats": {
+    "corr_60d": -0.01,
+    "beta_60d": -0.02,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 13,
+   "ranked": 25,
+   "id": "2026-11-24-P25"
+  },
+  {
+   "name": "CNQ",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #24",
+   "signal": {
+    "why": "stretched down: RSI 27, -3.8 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.8 ATR from the 20-day, RSI 27; volume 0.4x; daily ranges of the 10 sessions before today 1.06x the 50 before; resistance 46.37 (200-day, +5.4%); support 43.54 (20-day low, -1.0%); ATR 1.37 (3.1%); hedge XOP: correlation +0.89, beta 0.90",
+    "numbers": {
+     "close": 43.98,
+     "ret_1d": 0.00549,
+     "ret_5d": -0.07876,
+     "ret_20d": -0.18661,
+     "atr": 1.36987,
+     "atr_pct": 0.03115,
+     "rsi": 27.29438,
+     "dist20_atr": -3.76057,
+     "vol_ratio": 0.42984,
+     "sma50": 49.8706,
+     "sma200": 46.37215,
+     "hi52": 56.27,
+     "lo52": 29.28013,
+     "usd_volume": 329244262.77008,
+     "tightness": 1.0564,
+     "trend": "mixed",
+     "sma50_change_20d": -0.00804,
+     "price": 43.98,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.00549,
+     "live_move_atr": 0.16794,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 1.209,
+    "adjust": {},
+    "hedge": "XOP",
+    "hedge_fit": {
+     "corr_60d": 0.89,
+     "beta_60d": 0.9,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "CNQ"
+   ],
+   "short": [
+    "XOP"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -4.7
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Nothing wrong at the company and a C$800M-a-month buyback, but the heavy-oil discount is twice its Q3 average and crude is still falling; stretched with no turn.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Record thermal output, net debt under target, all free cash flow to buybacks.",
+    "case_against": "WCS discount about $27-31 against $13.86 in Q3, the widest since 2018, with little new pipeline room until 2027.",
+    "why_not": "No dated event to turn it; the standing lesson on stretched names."
+   },
+   "stats": {
+    "corr_60d": 0.89,
+    "beta_60d": 0.9,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 14,
+   "ranked": 25,
+   "id": "2026-11-24-P26"
+  },
+  {
+   "name": "SJM",
+   "kind": "stock",
+   "setup": "earnings_gap_faded",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #7",
+   "signal": {
+    "why": "reported 2026-11-24 before open, reacted today: gap -5.0% (-1.9 ATR), day -3.2%, -4.4% against XLP, volume 2.4x; trading in the top third, against the gap",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); -0.6 ATR from the 20-day, RSI 48; volume 2.4x; daily ranges of the 10 sessions before today 1.00x the 50 before; resistance 136.30 (20-day high, +6.0%); support 125.29 (50-day, -2.5%); ATR 3.82 (3.0%); hedge XLP: correlation +0.70, beta 1.03",
+    "numbers": {
+     "close": 128.53239,
+     "ret_1d": -0.03199,
+     "ret_5d": -0.03678,
+     "ret_20d": 0.01746,
+     "atr": 3.8208,
+     "atr_pct": 0.02973,
+     "rsi": 47.83525,
+     "dist20_atr": -0.60856,
+     "vol_ratio": 2.42869,
+     "sma50": 125.28584,
+     "sma200": 111.59896,
+     "hi52": 136.3,
+     "lo52": 85.73551,
+     "usd_volume": 167310349.39346,
+     "tightness": 0.99942,
+     "trend": "up",
+     "sma50_change_20d": 0.0198,
+     "price": 128.53239,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.03199,
+     "live_move_atr": -1.20536,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.913,
+    "adjust": {},
+    "hedge": "XLP",
+    "hedge_fit": {
+     "corr_60d": 0.7,
+     "beta_60d": 1.03,
+     "chosen": "its basket's hedge",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "SJM"
+   ],
+   "short": [
+    "XLP"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -4.5
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The gap down was about a soft Q3 guide and a refund-flattered beat, and that reading holds; the recovery off the open is small and brokers haven't spoken yet.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "EPS $3.20 against $2.56, year raised, coffee margins very high, leverage at 3x early with buybacks now possible, above its 50-day.",
+    "case_against": "Sales -2%, coffee pricing being handed back, pet profit -17%, Q3 guided down mid-single digits on both lines.",
+    "why_not": "Faded gaps the passes left alone have lost on average, and I can't name what brings buyers back before the notes are out."
+   },
+   "stats": {
+    "corr_60d": 0.72,
+    "beta_60d": 1.05,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 15,
+   "ranked": 25,
+   "id": "2026-11-24-P27"
+  },
+  {
+   "name": "Managed care",
+   "kind": "basket",
+   "setup": "basket_stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #22",
+   "signal": {
+    "why": "Managed care against XLV: -0.7% today (-0.3 sd), 5-day -9.7%, 20-day -10.5%, z -2.6, the 10 sessions before today 1.99x as volatile as the 50 before; stretched, no turn yet",
+    "chart": "1 of 7 members above their 50-day; best MOH +3.3%, worst UNH +0.1%; spread -0.3 sd today, z -2.6",
+    "numbers": {
+     "today": -0.00666,
+     "sd_20d": 0.0212,
+     "today_sd": -0.31403,
+     "tightness": 1.9925,
+     "ret_5d": -0.0966,
+     "ret_20d": -0.10532,
+     "z_50d": -2.60449,
+     "z_50d_prev": -2.66263,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 1.217,
+    "hedge": "XLV",
+    "members": [
+     "UNH",
+     "HUM",
+     "ELV",
+     "CNC",
+     "MOH",
+     "OSCR",
+     "CI"
+    ],
+    "also": []
+   },
+   "long": [
+    "UNH",
+    "HUM",
+    "ELV",
+    "CNC",
+    "MOH",
+    "OSCR",
+    "CI"
+   ],
+   "short": [
+    "XLV"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The selloff has a cause that stays open for months (CMS's audit rule, comments due in January) and the basket has not turned; no dated event inside the window resolves it.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Guides were raised at UnitedHealth and Humana, the spread is 2.6 sd stretched, and any softening signal on the audits would squeeze it.",
+    "case_against": "About $9B a payment year of recoveries proposed, a Fifth Circuit ruling could land either way, volatility doubled.",
+    "why_not": "Stretched baskets with no turn have been the screen's worst setup, and this one has a live policy reason."
+   },
+   "stats": {
+    "corr_60d": 0.64,
+    "beta_60d": 1.12,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 16,
+   "ranked": 25,
+   "id": "2026-11-24-P28"
+  },
+  {
+   "name": "HWC",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #23",
+   "signal": {
+    "why": "stretched down: RSI 24, -3.8 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.8 ATR from the 20-day, RSI 24; volume 0.1x; daily ranges of the 10 sessions before today 1.54x the 50 before; resistance 70.07 (200-day, +16.4%); support 59.06 (20-day low, -1.9%); ATR 2.03 (3.4%); hedge KBE: correlation +0.66, beta 1.05",
+    "numbers": {
+     "close": 60.197,
+     "ret_1d": 0.00379,
+     "ret_5d": -0.05142,
+     "ret_20d": -0.16947,
+     "atr": 2.03119,
+     "atr_pct": 0.03374,
+     "rsi": 24.40528,
+     "dist20_atr": -3.78269,
+     "vol_ratio": 0.13786,
+     "sma50": 70.96174,
+     "sma200": 70.06965,
+     "hi52": 79.60004,
+     "lo52": 55.32606,
+     "usd_volume": 68762564.23683,
+     "tightness": 1.53911,
+     "trend": "mixed",
+     "sma50_change_20d": -0.03808,
+     "price": 60.197,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.00379,
+     "live_move_atr": 0.10619,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 1.21,
+    "adjust": {},
+    "hedge": "KBE",
+    "hedge_fit": {
+     "corr_60d": 0.66,
+     "beta_60d": 1.05,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-19",
+     "when": "after_close",
+     "sessions_away": 37
+    },
+    "also": []
+   },
+   "long": [
+    "HWC"
+   ],
+   "short": [
+    "KBE"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -5.1
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The slide is the all-stock Trustmark deal (7% dilutive to tangible book, capital at management's floor), which won't resolve in ten sessions; oversold but not turned.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "RSI 24, no credit problem, Citi calls the deal favorable, ex-dividend 12-4.",
+    "case_against": "Piper cut it to neutral, buybacks are paused, a second deal in four months, and rising yields hit the marks that thinned its capital.",
+    "why_not": "Nothing dated to stop acquirer selling; the standing lesson on stretched names."
+   },
+   "stats": {
+    "corr_60d": 0.66,
+    "beta_60d": 1.06,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 17,
+   "ranked": 25,
+   "id": "2026-11-24-P29"
+  },
+  {
+   "name": "PBR",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #10",
+   "signal": {
+    "why": "was stretched down (RSI 20, -4.3 ATR from the 20-day) and turned: +3.3%, trading in the top quarter of the day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.2 ATR from the 20-day, RSI 27; volume 2.1x; daily ranges of the 10 sessions before today 0.89x the 50 before; resistance 19.00 (200-day, +16.3%); support 15.78 (20-day low, -3.4%); ATR 0.72 (4.4%); hedge XLE: correlation +0.52, beta 1.10",
+    "numbers": {
+     "close": 16.33,
+     "ret_1d": 0.03289,
+     "ret_5d": -0.06203,
+     "ret_20d": -0.26771,
+     "atr": 0.71549,
+     "atr_pct": 0.04381,
+     "rsi": 26.67148,
+     "dist20_atr": -3.16776,
+     "vol_ratio": 2.0528,
+     "sma50": 21.334,
+     "sma200": 18.99812,
+     "hi52": 26.39,
+     "lo52": 10.95524,
+     "usd_volume": 435647178.69854,
+     "tightness": 0.8936,
+     "trend": "mixed",
+     "sma50_change_20d": -0.01814,
+     "price": 16.33,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.03289,
+     "live_move_atr": 0.72092,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.713,
+    "adjust": {},
+    "hedge": "XLE",
+    "hedge_fit": {
+     "corr_60d": 0.52,
+     "beta_60d": 1.1,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "PBR"
+   ],
+   "short": [
+    "XLE"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 3% bounce from RSI 20 with no news found, ahead of a 2027-31 business plan due about the end of November whose capex and payout are the stock's main risk.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Record output, cash-flow guide raised, down 27% in twenty sessions, crude up today.",
+    "case_against": "Payout missed, capex raised, last year's plan drew a drop, and crude's trend is down.",
+    "why_not": "The one dated event inside the window is more likely to hurt than help, and its date is unconfirmed."
+   },
+   "stats": {
+    "corr_60d": 0.53,
+    "beta_60d": 1.11,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 18,
+   "ranked": 25,
+   "id": "2026-11-24-P30"
+  },
+  {
+   "name": "LYB",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #14",
+   "signal": {
+    "why": "was stretched down (RSI 31, -3.3 ATR from the 20-day) and turned: +1.0%, trading in the top quarter of the day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.9 ATR from the 20-day, RSI 33; volume 0.2x; daily ranges of the 10 sessions before today 1.21x the 50 before; resistance 61.52 (50-day, +11.3%); support 54.02 (20-day low, -2.3%); ATR 2.21 (4.0%); hedge XOP: correlation +0.69, beta 0.76",
+    "numbers": {
+     "close": 55.29,
+     "ret_1d": 0.01005,
+     "ret_5d": -0.08898,
+     "ret_20d": -0.18004,
+     "atr": 2.21459,
+     "atr_pct": 0.04005,
+     "rsi": 33.29083,
+     "dist20_atr": -2.92356,
+     "vol_ratio": 0.21637,
+     "sma50": 61.5248,
+     "sma200": 63.84031,
+     "hi52": 82.22221,
+     "lo52": 40.61093,
+     "usd_volume": 250271477.16484,
+     "tightness": 1.21091,
+     "trend": "down",
+     "sma50_change_20d": -0.01803,
+     "price": 55.29,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.01005,
+     "live_move_atr": 0.23743,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.549,
+    "adjust": {},
+    "hedge": "XOP",
+    "hedge_fit": {
+     "corr_60d": 0.69,
+     "beta_60d": 0.76,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-29",
+     "when": "before_open",
+     "sessions_away": 44
+    },
+    "also": []
+   },
+   "long": [
+    "LYB"
+   ],
+   "short": [
+    "XOP"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "No cause found for the slide beyond the war premium leaving chemicals, and a 1% turn on a fifth of normal volume says little.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "About a 5% yield, record oxyfuels, polyethylene price increases announced, near its summer support.",
+    "case_against": "Missed Q3, O&P earnings halved, Goldman and BofA negative, the dividend was already halved in February.",
+    "why_not": "No event and an unexplained decline; XOP as its hedge makes it an oil-against-chemicals bet I have no view on."
+   },
+   "stats": {
+    "corr_60d": 0.69,
+    "beta_60d": 0.76,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 19,
+   "ranked": 25,
+   "id": "2026-11-24-P31"
+  },
+  {
+   "name": "UUP",
+   "kind": "etf",
+   "setup": "turn",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #11",
+   "signal": {
+    "why": "was stretched up (RSI 75, +4.1 ATR from the 20-day) and turned: -0.6%, trading in the bottom quarter of the day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +2.5 ATR from the 20-day, RSI 65; volume 0.2x; daily ranges of the 10 sessions before today 1.06x the 50 before; resistance 29.84 (20-day high, +0.8%); support 29.02 (50-day, -2.0%); ATR 0.13 (0.4%); hedge SPY: correlation +0.01, beta 0.00; it barely moves with the hedge, so this is close to an outright position",
+    "numbers": {
+     "close": 29.615,
+     "ret_1d": -0.00554,
+     "ret_5d": 0.00254,
+     "ret_20d": 0.017,
+     "atr": 0.12799,
+     "atr_pct": 0.00432,
+     "rsi": 64.9983,
+     "dist20_atr": 2.54895,
+     "vol_ratio": 0.18055,
+     "sma50": 29.0173,
+     "sma200": 28.12608,
+     "hi52": 29.84,
+     "lo52": 26.4,
+     "usd_volume": 50625636.70311,
+     "tightness": 1.06207,
+     "trend": "up",
+     "sma50_change_20d": 0.01737,
+     "price": 29.615,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.00554,
+     "live_move_atr": -1.32251,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.689,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": 0.01,
+     "beta_60d": 0.0,
+     "chosen": "a fund is set against the market",
+     "weak": true
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "SPY"
+   ],
+   "short": [
+    "UUP"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The dollar's rise rests on a Fed that is hiking while the ECB and BoJ wait, and that hasn't changed; today's dip is a pause the day before PCE.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "RSI 75 at a 20-month high with a hike about 95% priced, so good news has little left to give; a cool PCE would pull it to the 50-day.",
+    "case_against": "The minutes floated a move larger than 25 bp, and a hot PCE takes it through 29.84.",
+    "why_not": "A short here is a call on Wednesday's number, and the move available in a fund with a 0.4% ATR is small."
+   },
+   "stats": {
+    "corr_60d": 0.01,
+    "beta_60d": 0.04,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 20,
+   "ranked": 25,
+   "id": "2026-11-24-P32"
+  },
+  {
+   "name": "SNY",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #5",
+   "signal": {
+    "why": "+9.1% today (+4.2 ATR) at 8:50 AM CT on 12.5x volume, projected to a full day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day below the 200-day and rising (trend mixed); +3.4 ATR from the 20-day, RSI 75; volume 12.5x; daily ranges of the 10 sessions before today 0.92x the 50 before; support 48.98 (52-week high, -4.0%); ATR 1.24 (2.4%); hedge XLV: correlation +0.66, beta 1.07",
+    "numbers": {
+     "close": 51.02,
+     "ret_1d": 0.09087,
+     "ret_5d": 0.07343,
+     "ret_20d": 0.21795,
+     "atr": 1.24134,
+     "atr_pct": 0.02433,
+     "rsi": 74.69149,
+     "dist20_atr": 3.35808,
+     "vol_ratio": 12.49803,
+     "sma50": 43.3196,
+     "sma200": 43.666,
+     "hi52": 48.98,
+     "lo52": 39.07,
+     "usd_volume": 191716904.25949,
+     "tightness": 0.92358,
+     "trend": "mixed",
+     "sma50_change_20d": 0.02336,
+     "price": 51.02,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.09087,
+     "live_move_atr": 4.24064,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 3.107,
+    "adjust": {},
+    "hedge": "XLV",
+    "hedge_fit": {
+     "corr_60d": 0.66,
+     "beta_60d": 1.07,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-28",
+     "when": "before_open",
+     "sessions_away": 43
+    },
+    "also": [
+     "breakout (long)",
+     "stretched (short)"
+    ]
+   },
+   "long": [
+    "SNY"
+   ],
+   "short": [
+    "XLV"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 9% gain for an acquirer paying $41B in cash is the market cheering the Dupixent answer, but what follows a debt-funded deal is financing, rating reviews and a wait until 2028 for accretion.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Brinsupri patents into the 2040s, positive notes from Barclays, Oddo and Jefferies, a new high on 12x volume.",
+    "case_against": "Net debt goes from about \u20ac12B to about \u20ac50B with no agency comment yet, RSI 75 and 3.4 ATR above the 20-day, and the ADR is ahead of Paris.",
+    "why_not": "The first day is the easy part for an acquirer; I'd expect the next headlines (bond sale, ratings) to weigh, not lift."
+   },
+   "stats": {
+    "corr_60d": 0.67,
+    "beta_60d": 1.05,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 21,
+   "ranked": 25,
+   "id": "2026-11-24-P33"
+  },
+  {
+   "name": "PINS",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "source": "live screen 2026-11-24 morning #9",
+   "signal": {
+    "why": "+12.8% today (+2.5 ATR) at 8:50 AM CT on 2.7x volume, projected to a full day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); +0.1 ATR from the 20-day, RSI 49; volume 2.7x; daily ranges of the 10 sessions before today 0.93x the 50 before; resistance 19.83 (50-day, +4.0%); support 16.30 (20-day low, -14.5%); ATR 0.96 (5.0%); hedge XLC: correlation +0.54, beta 1.34",
+    "numbers": {
+     "close": 19.06,
+     "ret_1d": 0.12781,
+     "ret_5d": 0.05479,
+     "ret_20d": -0.07386,
+     "atr": 0.95966,
+     "atr_pct": 0.05035,
+     "rsi": 49.39765,
+     "dist20_atr": 0.07763,
+     "vol_ratio": 2.65425,
+     "sma50": 19.8296,
+     "sma200": 20.3521,
+     "hi52": 27.96,
+     "lo52": 13.84,
+     "usd_volume": 203124607.8989,
+     "tightness": 0.92628,
+     "trend": "down",
+     "sma50_change_20d": -0.04802,
+     "price": 19.06,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.12781,
+     "live_move_atr": 2.50598,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.818,
+    "adjust": {},
+    "hedge": "XLC",
+    "hedge_fit": {
+     "corr_60d": 0.54,
+     "beta_60d": 1.34,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-11",
+     "when": "after_close",
+     "sessions_away": 54
+    },
+    "also": []
+   },
+   "long": [
+    "PINS"
+   ],
+   "short": [
+    "XLC"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -7.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Up 14% with no confirmed cause; the only candidates are a Microsoft ads tie-up and a change-in-control filing that invites takeover talk, and it is into its falling 50- and 200-day.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Elliott is the largest holder, shares outstanding are down 14% this year, it was oversold after a weak Q3.",
+    "case_against": "Q4 growth guided to 8-12%, Europe shrinking per user, broker targets cut, no buyback last quarter.",
+    "why_not": "An unexplained gap; if it is deal talk, the standing lesson says not to buy the pop without a price."
+   },
+   "stats": {
+    "corr_60d": 0.54,
+    "beta_60d": 1.35,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 22,
+   "ranked": 25,
+   "id": "2026-11-24-P34"
+  },
+  {
+   "name": "ZTO",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #8",
+   "signal": {
+    "why": "-5.7% today (-2.9 ATR) at 8:50 AM CT on 21.0x volume, projected to a full day",
+    "chart": "today so far, 20 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.2 ATR from the 20-day, RSI 32; volume 21.0x; daily ranges of the 10 sessions before today 1.17x the 50 before; resistance 19.72 (20-day low, +2.7%); support 18.58 (52-week low, -3.2%); ATR 0.50 (2.6%); hedge SPY: correlation -0.06, beta -0.08; it barely moves with the hedge, so this is close to an outright position",
+    "numbers": {
+     "close": 19.2,
+     "ret_1d": -0.05744,
+     "ret_5d": -0.06478,
+     "ret_20d": -0.04239,
+     "atr": 0.49827,
+     "atr_pct": 0.02595,
+     "rsi": 32.39998,
+     "dist20_atr": -2.23371,
+     "vol_ratio": 20.96629,
+     "sma50": 20.0944,
+     "sma200": 22.61574,
+     "hi52": 25.97,
+     "lo52": 18.58322,
+     "usd_volume": 39493085.45418,
+     "tightness": 1.1681,
+     "trend": "down",
+     "sma50_change_20d": -0.01684,
+     "price": 19.2,
+     "price_at": "2026-11-24T09:50:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.05744,
+     "live_move_atr": -2.89393,
+     "live_bars": 0,
+     "session_minutes": 20
+    },
+    "score": 2.882,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": -0.06,
+     "beta_60d": -0.08,
+     "chosen": "no fund moves with it (best IYT +0.24); SPY by default",
+     "weak": true
+    },
+    "next_earnings": null,
+    "also": [
+     "breakdown (short)"
+    ]
+   },
+   "long": [
+    "SPY"
+   ],
+   "short": [
+    "ZTO"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.9
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "A 5.7% drop on heavy early volume with no news found, in a stock at 11 times earnings with $1.1B of buyback left and its 52-week low 3% below.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Industry volume growth has slowed to 2.9%, peers are growing faster, and a break of 18.58 would draw selling.",
+    "case_against": "Q3 was sound, pricing is calmer, and the September no-news flush reversed within weeks.",
+    "why_not": "A breakdown with no story of its own, and SPY is no hedge for it (correlation -0.06)."
+   },
+   "stats": {
+    "corr_60d": -0.07,
+    "beta_60d": -0.05,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 23,
+   "ranked": 25,
+   "id": "2026-11-24-P35"
+  },
+  {
+   "name": "Packaged food",
+   "kind": "basket",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #20",
+   "signal": {
+    "why": "Packaged food against XLP: -2.0% today (-2.4 sd), 5-day +0.5%, 20-day -1.4%, z -0.7, the 10 sessions before today 0.91x as volatile as the 50 before",
+    "chart": "5 of 5 members above their 50-day; best KHC +1.0%, worst SJM -3.2%; spread -2.4 sd today, z -0.7",
+    "numbers": {
+     "today": -0.02021,
+     "sd_20d": 0.00854,
+     "today_sd": -2.3676,
+     "tightness": 0.90528,
+     "ret_5d": 0.00498,
+     "ret_20d": -0.01367,
+     "z_50d": -0.72329,
+     "z_50d_prev": 0.00337,
+     "new_20d_high": false,
+     "new_20d_low": false
+    },
+    "score": 2.195,
+    "hedge": "XLP",
+    "members": [
+     "GIS",
+     "KHC",
+     "MKC",
+     "SJM",
+     "MDLZ"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLP"
+   ],
+   "short": [
+    "GIS",
+    "KHC",
+    "MKC",
+    "SJM",
+    "MDLZ"
+   ],
+   "plan": {
+    "horizon_days": 2,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "The basket's day is Smucker's gap and XLP rising; the other four have no news.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Private label at a record 23.7% share and refunds flattering earnings across the group.",
+    "case_against": "Mondelez is growing on volume, all five are above their 50-day, and the spread's z is only -0.7.",
+    "why_not": "One name's report; the rest should mean-revert."
+   },
+   "stats": {
+    "corr_60d": 0.83,
+    "beta_60d": 0.57,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 24,
+   "ranked": 25,
+   "id": "2026-11-24-P36"
+  },
+  {
+   "name": "Drug distributors",
+   "kind": "basket",
+   "setup": "basket_big_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 morning #21",
+   "signal": {
+    "why": "Drug distributors against XLV: -2.5% today (-2.2 sd), 5-day -2.8%, 20-day +4.8%, z +0.6, the 10 sessions before today 0.80x as volatile as the 50 before",
+    "chart": "3 of 3 members above their 50-day; best MCK -0.2%, worst CAH -1.0%; spread -2.2 sd today, z +0.6",
+    "numbers": {
+     "today": -0.02511,
+     "sd_20d": 0.01137,
+     "today_sd": -2.20879,
+     "tightness": 0.79834,
+     "ret_5d": -0.02808,
+     "ret_20d": 0.04763,
+     "z_50d": 0.59075,
+     "z_50d_prev": 1.321,
+     "new_20d_high": false,
+     "new_20d_low": false
+    },
+    "score": 2.168,
+    "hedge": "XLV",
+    "members": [
+     "MCK",
+     "COR",
+     "CAH"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLV"
+   ],
+   "short": [
+    "MCK",
+    "COR",
+    "CAH"
+   ],
+   "plan": {
+    "horizon_days": 2,
+    "stop": {
+     "spread_pct": -2.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "The three are down 0.2-1.0% with no news while XLV is up 2% on the Sanofi deal; the spread move is the fund, three weeks after all three raised or held their guides.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Drug-pricing headlines are the standing risk and McKesson already slipped last week.",
+    "case_against": "EPS up 18-28% last quarter, guides raised, targets raised, buybacks running.",
+    "why_not": "No cause on the short side; noise against a rising fund."
+   },
+   "stats": {
+    "corr_60d": 0.54,
+    "beta_60d": 0.44,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "morning",
+   "recorded_at": "2026-11-24T09:54:40.289068-05:00",
+   "rank": 25,
+   "ranked": 25,
+   "id": "2026-11-24-P37"
+  },
+  {
+   "name": "DY",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #2",
+   "signal": {
+    "why": "-16.6% today (-2.8 ATR) at 12:05 PM CT on 5.1x volume, projected to a full day; reported today before open",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.4 ATR from the 20-day, RSI 33; volume 5.1x; daily ranges of the 10 sessions before today 1.17x the 50 before; resistance 186.25 (20-day low, +2.2%); ATR 14.90 (8.2%); hedge XSD: correlation +0.75, beta 0.76",
+    "numbers": {
+     "close": 182.16,
+     "ret_1d": -0.16582,
+     "ret_5d": -0.17485,
+     "ret_20d": -0.20783,
+     "atr": 14.89538,
+     "atr_pct": 0.08177,
+     "rsi": 32.67685,
+     "dist20_atr": -2.42686,
+     "vol_ratio": 5.11726,
+     "sma50": 246.6272,
+     "sma200": 365.4151,
+     "hi52": 566.46997,
+     "lo52": 186.25,
+     "usd_volume": 135071091.94183,
+     "tightness": 1.1726,
+     "trend": "down",
+     "sma50_change_20d": -0.14715,
+     "price": 182.16,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.16582,
+     "live_move_atr": -2.76079,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.86,
+    "adjust": {},
+    "hedge": "XSD",
+    "hedge_fit": {
+     "corr_60d": 0.75,
+     "beta_60d": 0.76,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "breakdown (short)"
+    ]
+   },
+   "long": [
+    "XSD"
+   ],
+   "short": [
+    "DY"
+   ],
+   "plan": {
+    "horizon_days": 4,
+    "stop": {
+     "spread_pct": -7.0
+    }
+   },
+   "decision": "take",
+   "conviction": 3,
+   "reason": "The 17% drop is a reset of the story, not a quarter: management said several large customers decided in recent weeks to slow fiber builds, so fiber-to-the-home revenue falls next fiscal year, and the broker resets have barely started.",
+   "reviewed": true,
+   "reasoning": {
+    "what_changed": "Dycom reported fiscal Q3 before the open: revenue $2.056B and adjusted EPS $5.23 beat, backlog a record $12.9B. But it guided Q4 EPS to $2.48-2.78 (a little under the Street), and on the call said several large customers decided in recent weeks to moderate their build pace, so fiber-to-the-home revenue will fall in fiscal 2028 and Communications grows only mid-single digits. It also reserved $22.7M for a customer in Chapter 11 and another in trouble, and operating cash flow was $14M against $220M a year ago.",
+    "story": "The stock was owned for a multi-year fiber build. Management has now said that build shrinks next year because customers' cost of capital is up and regional overbuilders have stopped. What is left is data-center interconnect and an acquired building-systems arm, bought with debt: net debt is about $2.6B, quarterly interest $39M against $14M, receivables up 49%. This is the second guide-driven drop in three months, and the holders who bought the fiber story (98% institutional) have a reason to leave that a record backlog does not answer. Two write-ups, one from the 8-K and the slides, one from the call summary, agree on the fiscal 2028 comment.",
+    "chart": "182 at 12:05 PM CT, -16.6% on 5.1x projected volume, through the prior 52-week low of 186.25; the high was 566. It opened near the low and has not bounced: MasTec and Quanta are -4% today, so about 12 points of the drop are Dycom's own.",
+    "coming": "Broker target cuts and possible downgrades over the next two sessions (only Wells Fargo's cut to $300 was found so far; 9 Buys with stale targets). Any large customer naming its slower build. October PCE on 11-25 at 7:30 AM CT for the rate tape. No company event until Q4 results in March.",
+    "case_against": "Record backlog, a new $200M buyback and about 13 times this year's earnings argue for a bounce off a washed-out 52-week low, and INTU and MTZ were fresh breakdown shorts stopped at the next open. It didn't win because those were sold on a quarter or the tape, while this is management cutting next year's main business; RCAT and CTVA (a withdrawn target, a guide cut) kept falling after the first day, and the entry here is after the open, not before it."
+   },
+   "wrong_if": "A large customer (AT&T, Verizon, Lumen or another named carrier) says its 2027 fiber build is unchanged or rising, or Dycom says the slowdown is smaller than it described; or two or more covering brokers upgrade Dycom after the print; or Dycom adds to its buyback or reports insider buying after the report, inside the window.",
+   "hedge_why": "Hedged, not outright: Dycom trades with the AI-infrastructure tape (correlation 0.75 with XSD, beta 0.76), which fell 7% today and rose more than that on Monday; the belief is about its own fiber news, and XSD takes out the next swing of that tape either way. Nothing dated sits on the fund beyond the Nvidia headlines it shares with the stock.",
+   "through_earnings": "The report the calendar flags is this morning's, out before the open on 11-24 and the reason for the trade; nothing is held through. The next report is in March, outside the time limit.",
+   "stats": {
+    "corr_60d": 0.75,
+    "beta_60d": 0.74,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 1,
+   "ranked": 21,
+   "id": "2026-11-24-P38"
+  },
+  {
+   "name": "Copper miners",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #8",
+   "signal": {
+    "why": "Copper miners against XLB: -5.4% today (-1.5 sd), 5-day -12.2%, 20-day -25.4%, z -2.0, the 10 sessions before today 1.23x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 6 members above their 50-day; best SCCO -3.9%, worst ERO -6.9%; spread -1.5 sd today, z -2.0",
+    "numbers": {
+     "today": -0.05404,
+     "sd_20d": 0.03554,
+     "today_sd": -1.52056,
+     "tightness": 1.23051,
+     "ret_5d": -0.12199,
+     "ret_20d": -0.25396,
+     "z_50d": -2.02985,
+     "z_50d_prev": -1.82505,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.453,
+    "hedge": "XLB",
+    "members": [
+     "FCX",
+     "SCCO",
+     "TECK",
+     "HBM",
+     "ERO",
+     "TGB"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLB"
+   ],
+   "short": [
+    "FCX",
+    "SCCO",
+    "TECK",
+    "HBM",
+    "ERO",
+    "TGB"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -7.0
+    }
+   },
+   "decision": "take",
+   "conviction": 3,
+   "reason": "Copper gave back all of Monday's Nvidia bounce in one session and is at new lows for the move, down 21% from September's record; the reason the miners are falling is still running and no company event in the window can turn it.",
+   "reviewed": true,
+   "reasoning": {
+    "what_changed": "COMEX copper is -4.8% to $5.45 today and LME briefly broke $12,000 a tonne, erasing Monday's bounce the day after it happened. The six miners are -4% to -7% with the materials fund flat.",
+    "story": "Copper has been sold with the AI trade and for cash: a rate hike on 12-9 is priced at about 95-98%, Chinese demand is weak, and each tech selloff has brought forced selling in metals (gold is back near its low today too). Monday's rally was the test of whether the selling was done, and it failed inside a day. None of the six has bad news of its own, which is the point: this is the metal, and the miners are the levered way it shows up. It is the same shape as the GDX short of 11-18, a screen hit that research put in context.",
+    "chart": "The basket is -5.4% against XLB today (1.5 sd), -12.2% over five sessions and -25.4% over twenty, at a 20-day low with none of the six above its 50-day. Stretched (z -2.0), which is the risk, not the reason.",
+    "coming": "October PCE on 11-25 at 7:30 AM CT (the dollar and the hike odds); Dell and HP Inc tonight for the AI tape copper has traded with; China's PMIs on 11-30. On the names: a Chinese regulator's decision on the Anglo-Teck merger could come any day and would lift Teck alone. No earnings in the window.",
+    "case_against": "At $5.45 the producers still earn a great deal (Freeport's unit cost is $2.07), the spread is already 2 sd stretched, and a soft PCE or an Nvidia bounce would lift copper and squeeze all six; the passes' own lesson says a stretched spread with no turn rarely pays a fade and a late short can be the low. It didn't win because the one event that could have turned it, Monday's relief rally, came and was reversed in a session, and the breakdown shorts the passes left alone have made money as shorts on the settled record."
+   },
+   "wrong_if": "A supply shock is reported (an outage, strike or export halt at a major copper producer) and the metals press credits it with lifting copper; or China announces a stimulus, property or steel-capacity measure that the metals press credits with lifting copper; or CME FedWatch pricing of a 12-9 hike falls below about 80% after the PCE report; or China's regulator approves the Anglo-Teck merger and the group rallies with it.",
+   "hedge_why": "Hedged with XLB, not outright: the belief is about copper, and the materials fund takes out part of a market-wide relief day like Monday's, which is what stopped MTZ. The miners move about twice as much as the fund, so this covers the market and not a copper bounce; the fund's own holdings have nothing dated in the window.",
+   "through_earnings": null,
+   "stats": {
+    "corr_60d": 0.53,
+    "beta_60d": 0.18,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 2,
+   "ranked": 21,
+   "id": "2026-11-24-P39"
+  },
+  {
+   "name": "ADI",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #1",
+   "signal": {
+    "why": "-16.4% today (-2.9 ATR) at 12:05 PM CT on 2.4x volume, projected to a full day; reported today before open",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and rising (trend up); -3.0 ATR from the 20-day, RSI 33; volume 2.4x; daily ranges of the 10 sessions before today 1.53x the 50 before; resistance 343.94 (20-day low, +8.6%); support 222.22 (52-week low, -29.8%); ATR 24.94 (7.9%); hedge SMH: correlation +0.86, beta 0.87",
+    "numbers": {
+     "close": 316.67999,
+     "ret_1d": -0.16388,
+     "ret_5d": -0.1746,
+     "ret_20d": -0.25548,
+     "atr": 24.93826,
+     "atr_pct": 0.07875,
+     "rsi": 33.26256,
+     "dist20_atr": -2.96817,
+     "vol_ratio": 2.38251,
+     "sma50": 395.0916,
+     "sma200": 377.12873,
+     "hi52": 444.55555,
+     "lo52": 222.22068,
+     "usd_volume": 1808833802.74811,
+     "tightness": 1.53434,
+     "trend": "up",
+     "sma50_change_20d": 0.02583,
+     "price": 316.67999,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.16388,
+     "live_move_atr": -2.93832,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.89,
+    "adjust": {},
+    "hedge": "SMH",
+    "hedge_fit": {
+     "corr_60d": 0.86,
+     "beta_60d": 0.87,
+     "chosen": "its basket's hedge",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "breakdown (short)"
+    ]
+   },
+   "long": [
+    "SMH"
+   ],
+   "short": [
+    "ADI"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "About half of the 16% is the chip tape (SMH -7%, Texas Instruments -9%) and Monday's 10% run into the print; what is ADI's own is a capex step-up and a flat guide with bookings still above billings, which is not a reason to own it gone.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "A beat sold 16% on a Q1 EPS guide of $3.82 against $4.06 last quarter, capex more than doubling to $1.6-1.9B, inventory at 165 days and consumer guided down 10-15%: the marks of a cycle peak, with 30 Buy ratings and $460-plus targets still to be cut.",
+    "case_against": "Revenue guide above consensus, book-to-bill above 1 in almost every market, channel inventory in range, about 19 times earnings, and it has already bounced from 304 to 317. Against SMH the spread move is about 9 points, most of it Monday's pop reversing.",
+    "why_not": "I can't say the reaction is about more than a sold run-up into a rough chip day; nearest of the passes, and the one I would have taken with a named downgrade."
+   },
+   "stats": {
+    "corr_60d": 0.86,
+    "beta_60d": 0.86,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 3,
+   "ranked": 21,
+   "id": "2026-11-24-P40"
+  },
+  {
+   "name": "Neoclouds",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #11",
+   "signal": {
+    "why": "Neoclouds against SMH: -4.7% today (-1.1 sd), 5-day -8.8%, 20-day -14.8%, z -1.4, the 10 sessions before today 1.13x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 6 members above their 50-day; best CBRS -9.7%, worst IREN -13.3%; spread -1.1 sd today, z -1.4",
+    "numbers": {
+     "today": -0.04729,
+     "sd_20d": 0.04281,
+     "today_sd": -1.10468,
+     "tightness": 1.13176,
+     "ret_5d": -0.08758,
+     "ret_20d": -0.14775,
+     "z_50d": -1.40884,
+     "z_50d_prev": -1.20955,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.384,
+    "hedge": "SMH",
+    "members": [
+     "CRWV",
+     "NBIS",
+     "APLD",
+     "IREN",
+     "WULF",
+     "CBRS"
+    ],
+    "also": []
+   },
+   "long": [
+    "SMH"
+   ],
+   "short": [
+    "CRWV",
+    "NBIS",
+    "APLD",
+    "IREN",
+    "WULF",
+    "CBRS"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -6.4
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A real funding story (rates near 5%, lenders choosier, CoreWeave near its low), but it is the same bet on the AI tape as the copper short with a spread that moves 4% a day against an 8% stop.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Monday's squeeze reversed at once: CoreWeave -14%, IREN -15%, Nebius -13%; debt-funded capex with a hike priced and a report (unconfirmed) that HPE's CEO said it avoids financing these operators.",
+    "case_against": "Both legs hang on Nvidia headlines; backlogs are large and prepayment or contract news can squeeze any of the six; today's move is only 1.1 sd.",
+    "why_not": "The stop would be decided by noise, and the book already takes this direction through copper."
+   },
+   "stats": {
+    "corr_60d": 0.9,
+    "beta_60d": 0.54,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 4,
+   "ranked": 21,
+   "id": "2026-11-24-P41"
+  },
+  {
+   "name": "Refiners",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #10",
+   "signal": {
+    "why": "Refiners against XLE: -2.7% today (-1.3 sd), 5-day -8.0%, 20-day -11.7%, z -2.1, the 10 sessions before today 0.84x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 8 members above their 50-day; best PSX -0.6%, worst DK -3.7%; spread -1.3 sd today, z -2.1",
+    "numbers": {
+     "today": -0.02735,
+     "sd_20d": 0.02026,
+     "today_sd": -1.34996,
+     "tightness": 0.84164,
+     "ret_5d": -0.07989,
+     "ret_20d": -0.11737,
+     "z_50d": -2.11755,
+     "z_50d_prev": -1.92184,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.425,
+    "hedge": "XLE",
+    "members": [
+     "MPC",
+     "VLO",
+     "PSX",
+     "PBF",
+     "DINO",
+     "DK",
+     "CVI",
+     "PARR"
+    ],
+    "also": []
+   },
+   "long": [
+    "XLE"
+   ],
+   "short": [
+    "MPC",
+    "VLO",
+    "PSX",
+    "PBF",
+    "DINO",
+    "DK",
+    "CVI",
+    "PARR"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -3.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The book already holds this exact trade (2026-11-18-S07, session 4 of 5, in profit); a second take at a 20-day low two sd stretched, the day before the EIA report, would be the same bet doubled late.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Crude is up 1.5% while the refiners fall, squeezing margins; cracks are reported off their 11-18 peak and last week's EIA showed product builds.",
+    "case_against": "z -2.1 after -11.7% in 20 sessions; Russian refinery outages and 22-year-low distillate stocks support diesel; the 11-25 EIA report can reverse it in a morning.",
+    "why_not": "Same bet as an open trade; two takes on one bet count as one."
+   },
+   "stats": {
+    "corr_60d": 0.74,
+    "beta_60d": 0.4,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 5,
+   "ranked": 21,
+   "id": "2026-11-24-P42"
+  },
+  {
+   "name": "VALE",
+   "kind": "stock",
+   "setup": "breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #12",
+   "signal": {
+    "why": "trading at 9.43, below the 52-week closing low 9.49, on 2.9x volume (-3.8%, -1.0 ATR); from a loose base: daily ranges of the 10 sessions before today 1.16x the 50 before; 50-day below the 200-day and falling (trend down)",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.7 ATR from the 20-day, RSI 24; volume 2.9x; daily ranges of the 10 sessions before today 1.16x the 50 before; resistance 9.46 (20-day low, +0.3%); ATR 0.39 (4.2%); hedge COPX: correlation +0.61, beta 0.45",
+    "numbers": {
+     "close": 9.43,
+     "ret_1d": -0.03776,
+     "ret_5d": -0.09501,
+     "ret_20d": -0.20355,
+     "atr": 0.39182,
+     "atr_pct": 0.04155,
+     "rsi": 24.42221,
+     "dist20_atr": -3.74281,
+     "vol_ratio": 2.94747,
+     "sma50": 12.3982,
+     "sma200": 14.53449,
+     "hi52": 17.44236,
+     "lo52": 9.46,
+     "usd_volume": 348614637.49866,
+     "tightness": 1.16043,
+     "trend": "down",
+     "sma50_change_20d": -0.11613,
+     "price": 9.43,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.03776,
+     "live_move_atr": -0.96191,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.26,
+    "adjust": {},
+    "hedge": "COPX",
+    "hedge_fit": {
+     "corr_60d": 0.61,
+     "beta_60d": 0.45,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-11",
+     "when": "after_close",
+     "sessions_away": 54
+    },
+    "also": [
+     "stretched (long)"
+    ]
+   },
+   "long": [
+    "COPX"
+   ],
+   "short": [
+    "VALE"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -6.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Iron ore's slide is real but nothing new came today, every broker target sits above the price, and Vale Day (reported for 12-1, date unconfirmed) with buyback talk sits inside the window.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "A 52-week low on 2.9x volume with the Brazilian line -5%; Chinese steel output down, ore at its weakest since 2022, the CFO ruled out an extra dividend.",
+    "case_against": "RSI 24 after -20% in 20 sessions; the CFO called buybacks attractive at these prices; no iron ore price for today could be found.",
+    "why_not": "The copper short already carries the metals view, and this one has a dated event that could turn it."
+   },
+   "stats": {
+    "corr_60d": 0.61,
+    "beta_60d": 0.82,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 6,
+   "ranked": 21,
+   "id": "2026-11-24-P43"
+  },
+  {
+   "name": "Crypto stocks",
+   "kind": "basket",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #7",
+   "signal": {
+    "why": "Crypto stocks against IBIT: -3.9% today (-1.6 sd), 5-day -3.9%, 20-day -14.2%, z -1.6, the 10 sessions before today 0.81x as volatile as the 50 before; a 20-day low",
+    "chart": "0 of 6 members above their 50-day; best HOOD -3.5%, worst BMNR -7.5%; spread -1.6 sd today, z -1.6",
+    "numbers": {
+     "today": -0.03925,
+     "sd_20d": 0.02396,
+     "today_sd": -1.63785,
+     "tightness": 0.80509,
+     "ret_5d": -0.03901,
+     "ret_20d": -0.14159,
+     "z_50d": -1.63901,
+     "z_50d_prev": -1.34799,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 2.473,
+    "hedge": "IBIT",
+    "members": [
+     "COIN",
+     "HOOD",
+     "MSTR",
+     "CRCL",
+     "BMNR",
+     "BLSH"
+    ],
+    "also": []
+   },
+   "long": [
+    "IBIT"
+   ],
+   "short": [
+    "COIN",
+    "HOOD",
+    "MSTR",
+    "CRCL",
+    "BMNR",
+    "BLSH"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -3.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Six stocks levered to bitcoin falling more than bitcoin is beta, not a story; the spread is a bet on whether $60,000 holds.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Bitcoin is at $60,100 after five days of ETF outflows; Strategy trades under the value of its coins and is selling stock to buy back preferred; Coinbase is at a three-year low with two Underweights.",
+    "case_against": "A bounce in bitcoin lifts the stocks more than the fund; Robinhood and Circle have their own drivers.",
+    "why_not": "No view on bitcoin's next $3,000, which is what decides it."
+   },
+   "stats": {
+    "corr_60d": 0.89,
+    "beta_60d": 0.48,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 7,
+   "ranked": 21,
+   "id": "2026-11-24-P44"
+  },
+  {
+   "name": "VOYG",
+   "kind": "stock",
+   "setup": "breakdown",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #14",
+   "signal": {
+    "why": "trading at 18.36, below the 52-week closing low 18.74, on 2.6x volume (-6.8%, -0.6 ATR); from a loose base: daily ranges of the 10 sessions before today 1.22x the 50 before; 50-day below the 200-day and falling (trend down)",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -2.6 ATR from the 20-day, RSI 33; volume 2.6x; daily ranges of the 10 sessions before today 1.22x the 50 before; resistance 18.51 (20-day low, +0.8%); support 18.07 (52-week low, -1.6%); ATR 2.37 (12.9%); hedge URA: correlation +0.70, beta 1.45",
+    "numbers": {
+     "close": 18.36,
+     "ret_1d": -0.06802,
+     "ret_5d": -0.23627,
+     "ret_20d": -0.33502,
+     "atr": 2.37352,
+     "atr_pct": 0.12928,
+     "rsi": 33.24288,
+     "dist20_atr": -2.60794,
+     "vol_ratio": 2.62484,
+     "sma50": 27.493,
+     "sma200": 31.07605,
+     "hi52": 52.4,
+     "lo52": 18.07,
+     "usd_volume": 35367477.6723,
+     "tightness": 1.21856,
+     "trend": "down",
+     "sma50_change_20d": -0.13256,
+     "price": 18.36,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.06802,
+     "live_move_atr": -0.56037,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.193,
+    "adjust": {},
+    "hedge": "URA",
+    "hedge_fit": {
+     "corr_60d": 0.7,
+     "beta_60d": 1.45,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "URA"
+   ],
+   "short": [
+    "VOYG"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A slide with no news since the 11-2 report; a 13% daily range makes any stop the book allows a coin toss, and it rose 16% in a day two weeks ago.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "A 52-week low on 2.6x volume; gross margin guide cut, $841M of convertibles, cash burn of $187M in nine months, and a report that the 12-3 investor day is postponed.",
+    "case_against": "$554M of cash, Buy ratings with targets twice the price, and a lunar lander launch date that could be named any day.",
+    "why_not": "Nothing dated carries the fall, and the range is wider than the stop."
+   },
+   "stats": {
+    "corr_60d": 0.7,
+    "beta_60d": 0.34,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 8,
+   "ranked": 21,
+   "id": "2026-11-24-P45"
+  },
+  {
+   "name": "HALO",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #21",
+   "signal": {
+    "why": "stretched down: RSI 28, -3.6 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -3.6 ATR from the 20-day, RSI 28; volume 0.5x; daily ranges of the 10 sessions before today 1.05x the 50 before; resistance 112.70 (50-day, +19.2%); support 90.79 (20-day low, -4.0%); ATR 3.94 (4.2%); hedge XLV: correlation +0.41, beta 0.94",
+    "numbers": {
+     "close": 94.54,
+     "ret_1d": 0.005,
+     "ret_5d": -0.0149,
+     "ret_20d": -0.26428,
+     "atr": 3.94446,
+     "atr_pct": 0.04172,
+     "rsi": 28.18441,
+     "dist20_atr": -3.6204,
+     "vol_ratio": 0.51448,
+     "sma50": 112.702,
+     "sma200": 86.0291,
+     "hi52": 134.0,
+     "lo52": 61.23,
+     "usd_volume": 217257062.4939,
+     "tightness": 1.0471,
+     "trend": "up",
+     "sma50_change_20d": 0.00417,
+     "price": 94.54,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.005,
+     "live_move_atr": 0.11517,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 1.201,
+    "adjust": {},
+    "hedge": "XLV",
+    "hedge_fit": {
+     "corr_60d": 0.41,
+     "beta_60d": 0.94,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-16",
+     "when": "after_close",
+     "sessions_away": 56
+    },
+    "also": []
+   },
+   "long": [
+    "HALO"
+   ],
+   "short": [
+    "XLV"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.3
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Cheap at about 10 times earnings with buybacks, but the patent fight with Merck sets the price and the next dated item, a UK trial opening 11-30, leans against it.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Royalties up 44%, guidance raised, $400M bought back this year, RSI 28 after -26% in 20 sessions.",
+    "case_against": "A German court lifted the Keytruda injunction on 11-19, the US patent board has ruled against every challenged claim, and today's uptick is on half of normal volume.",
+    "why_not": "Stretched with no turn and no dated event that helps; the standing lesson says leave it."
+   },
+   "stats": {
+    "corr_60d": 0.41,
+    "beta_60d": 0.94,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 9,
+   "ranked": 21,
+   "id": "2026-11-24-P46"
+  },
+  {
+   "name": "Off-price retail",
+   "kind": "basket",
+   "setup": "basket_breakout",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #4",
+   "signal": {
+    "why": "Off-price retail against XRT: +3.3% today (+2.3 sd), 5-day +6.0%, 20-day +0.9%, z -0.5, the 10 sessions before today 1.52x as volatile as the 50 before; a 20-day high",
+    "chart": "2 of 3 members above their 50-day; best BURL +10.5%, worst TJX +3.7%; spread +2.3 sd today, z -0.5",
+    "numbers": {
+     "today": 0.03282,
+     "sd_20d": 0.01454,
+     "today_sd": 2.25684,
+     "tightness": 1.52168,
+     "ret_5d": 0.05996,
+     "ret_20d": 0.00874,
+     "z_50d": -0.46196,
+     "z_50d_prev": -1.122,
+     "new_20d_high": true,
+     "new_20d_low": false
+    },
+    "score": 2.576,
+    "hedge": "XRT",
+    "members": [
+     "TJX",
+     "ROST",
+     "BURL"
+    ],
+    "also": []
+   },
+   "long": [
+    "TJX",
+    "ROST",
+    "BURL"
+   ],
+   "short": [
+    "XRT"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -2.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "The spread is Burlington's relief pop on a quarter its own CEO called disappointing; TJX and Ross moved in sympathy after their own post-print gains last week.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Ross comps +8% and TJX +4% last week show the trade-down shopper is real; Black Friday is inside the window; a 20-day high for the spread.",
+    "case_against": "Burlington comps +1% with Q4 EPS guided under last year and margin down 80-100 bp; the fund itself is +3% today on Dick's, Abercrombie and Kohl's.",
+    "why_not": "The book is already long two retailers against XRT, and this move rests on the weakest of the three prints."
+   },
+   "stats": {
+    "corr_60d": 0.75,
+    "beta_60d": 0.93,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 10,
+   "ranked": 21,
+   "id": "2026-11-24-P47"
+  },
+  {
+   "name": "GLBE",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #6",
+   "signal": {
+    "why": "was stretched down (RSI 33, -3.1 ATR from the 20-day) and turned: +5.7%, trading in the top quarter of the day",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50-day, above the 200-day; 50-day above the 200-day and rising (trend up); -1.9 ATR from the 20-day, RSI 41; volume 0.8x; daily ranges of the 10 sessions before today 1.17x the 50 before; resistance 40.18 (50-day, +9.1%); support 36.00 (200-day, -2.2%); ATR 1.98 (5.4%); hedge XRT: correlation +0.65, beta 1.18",
+    "numbers": {
+     "close": 36.825,
+     "ret_1d": 0.05667,
+     "ret_5d": -0.07498,
+     "ret_20d": -0.11372,
+     "atr": 1.97941,
+     "atr_pct": 0.05375,
+     "rsi": 40.98403,
+     "dist20_atr": -1.89753,
+     "vol_ratio": 0.77832,
+     "sma50": 40.184,
+     "sma200": 36.0028,
+     "hi52": 45.275,
+     "lo52": 26.845,
+     "usd_volume": 52225661.10954,
+     "tightness": 1.16981,
+     "trend": "up",
+     "sma50_change_20d": 0.01999,
+     "price": 36.825,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.05667,
+     "live_move_atr": 1.0208,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.514,
+    "adjust": {},
+    "hedge": "XRT",
+    "hedge_fit": {
+     "corr_60d": 0.65,
+     "beta_60d": 1.18,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-02-17",
+     "when": "before_open",
+     "sessions_away": 56
+    },
+    "also": []
+   },
+   "long": [
+    "GLBE"
+   ],
+   "short": [
+    "XRT"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A light-volume bounce back to the level it fell to after a print that showed organic growth slowing; no news today.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Guidance raised three times this year, $446M of buyback left, broker targets at $46-50, and Black Friday volume ahead.",
+    "case_against": "Organic growth near 31% against 44% reported the quarter before, take rate under pressure, receivables up 83%; volume 0.8x.",
+    "why_not": "Nothing says the selling after 11-18 is finished except one green morning."
+   },
+   "stats": {
+    "corr_60d": 0.65,
+    "beta_60d": 1.17,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 11,
+   "ranked": 21,
+   "id": "2026-11-24-P48"
+  },
+  {
+   "name": "GLOB",
+   "kind": "stock",
+   "setup": "breakout",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #9",
+   "signal": {
+    "why": "trading at 50.53, above the 20-day high 50.19, on 2.0x volume (+10.9%, +2.0 ATR); from a loose base: daily ranges of the 10 sessions before today 1.17x the 50 before; 50-day above the 200-day and rising (trend up)",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +1.8 ATR from the 20-day, RSI 65; volume 2.0x; daily ranges of the 10 sessions before today 1.17x the 50 before; resistance 72.10 (52-week high, +42.7%); support 50.19 (20-day high, -0.7%); ATR 2.73 (5.4%); hedge KIE: correlation +0.66, beta 2.34",
+    "numbers": {
+     "close": 50.53,
+     "ret_1d": 0.10884,
+     "ret_5d": 0.18532,
+     "ret_20d": 0.17594,
+     "atr": 2.73379,
+     "atr_pct": 0.0541,
+     "rsi": 64.528,
+     "dist20_atr": 1.77757,
+     "vol_ratio": 2.04726,
+     "sma50": 40.9488,
+     "sma200": 40.48555,
+     "hi52": 72.1,
+     "lo52": 27.56,
+     "usd_volume": 49954452.49271,
+     "tightness": 1.17351,
+     "trend": "up",
+     "sma50_change_20d": 0.06843,
+     "price": 50.53,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.10884,
+     "live_move_atr": 1.98992,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.432,
+    "adjust": {},
+    "hedge": "KIE",
+    "hedge_fit": {
+     "corr_60d": 0.66,
+     "beta_60d": 2.34,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "GLOB"
+   ],
+   "short": [
+    "KIE"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "An IT-services squeeze with no company news, in a business whose revenue is shrinking and whose price is now above every broker target found; the book holds the rotation through Accenture.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Accenture and Cognizant are +5% on a down Nasdaq day, the buyback doubled to $250M (about 10% of the company), and it broke a 20-day high on 2x volume.",
+    "case_against": "Revenue -1% with Q4 guided lower, customers down from 978 to 882, UBS neutral at $47 against a $50.5 price.",
+    "why_not": "Same bet as the open Accenture trade, in the weaker company."
+   },
+   "stats": {
+    "corr_60d": 0.66,
+    "beta_60d": 2.33,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 12,
+   "ranked": 21,
+   "id": "2026-11-24-P49"
+  },
+  {
+   "name": "BMRN",
+   "kind": "stock",
+   "setup": "live_move",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #3",
+   "signal": {
+    "why": "+7.7% today (+2.4 ATR) at 12:05 PM CT on 2.5x volume, projected to a full day",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day below the 200-day and falling (trend down); +3.8 ATR from the 20-day, RSI 74; volume 2.5x; daily ranges of the 10 sessions before today 1.17x the 50 before; resistance 70.98 (52-week high, +5.3%); support 64.00 (20-day high, -5.0%); ATR 2.32 (3.4%); hedge XBI: correlation +0.55, beta 0.51",
+    "numbers": {
+     "close": 67.39,
+     "ret_1d": 0.07686,
+     "ret_5d": 0.15177,
+     "ret_20d": 0.21752,
+     "atr": 2.31746,
+     "atr_pct": 0.03439,
+     "rsi": 74.41684,
+     "dist20_atr": 3.82143,
+     "vol_ratio": 2.48934,
+     "sma50": 58.2984,
+     "sma200": 58.59795,
+     "hi52": 70.98,
+     "lo52": 49.26,
+     "usd_volume": 141760005.78861,
+     "tightness": 1.17357,
+     "trend": "down",
+     "sma50_change_20d": -0.04828,
+     "price": 67.39,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.07686,
+     "live_move_atr": 2.36772,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.795,
+    "adjust": {},
+    "hedge": "XBI",
+    "hedge_fit": {
+     "corr_60d": 0.55,
+     "beta_60d": 0.51,
+     "chosen": "its basket's hedge",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": [
+     "breakout (long)",
+     "stretched (short)"
+    ]
+   },
+   "long": [
+    "BMRN"
+   ],
+   "short": [
+    "XBI"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -5.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Up 8% with no company news on a day health care leads; it is the sector rotation in a stock already up 22% in 20 sessions.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "First $1B revenue quarter, a guide cut that was mostly one-time charges, targets of $75 and up, and a breakout on 2.5x volume.",
+    "case_against": "No catalyst in the window, competitors closing on its main drug, and the 52-week high 5% overhead.",
+    "why_not": "Nothing of its own to hold it up if the rotation into health care fades."
+   },
+   "stats": {
+    "corr_60d": 0.55,
+    "beta_60d": 0.51,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 13,
+   "ranked": 21,
+   "id": "2026-11-24-P50"
+  },
+  {
+   "name": "Apparel and footwear",
+   "kind": "basket",
+   "setup": "basket_big_move",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #15",
+   "signal": {
+    "why": "Apparel and footwear against XLY: +3.2% today (+2.2 sd), 5-day +2.6%, 20-day +2.5%, z +0.9, the 10 sessions before today 1.07x as volatile as the 50 before",
+    "chart": "4 of 5 members above their 50-day; best NKE +6.4%, worst TPR +2.7%; spread +2.2 sd today, z +0.9",
+    "numbers": {
+     "today": 0.0315,
+     "sd_20d": 0.01435,
+     "today_sd": 2.19508,
+     "tightness": 1.07114,
+     "ret_5d": 0.02589,
+     "ret_20d": 0.02491,
+     "z_50d": 0.89009,
+     "z_50d_prev": -0.85239,
+     "new_20d_high": false,
+     "new_20d_low": false
+    },
+    "score": 2.166,
+    "hedge": "XLY",
+    "members": [
+     "NKE",
+     "DECK",
+     "RL",
+     "LULU",
+     "TPR"
+    ],
+    "also": []
+   },
+   "long": [
+    "NKE",
+    "DECK",
+    "RL",
+    "LULU",
+    "TPR"
+   ],
+   "short": [
+    "XLY"
+   ],
+   "plan": {
+    "horizon_days": 2,
+    "stop": {
+     "spread_pct": -2.2
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A no-news bounce led by Nike, the weakest of the five, on the back of Dick's print; the book is long Dick's itself.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Tapestry and Ralph Lauren raised guidance this month, Dick's showed athletic demand holding, and Black Friday is ahead.",
+    "case_against": "Nike still guides revenue down, Berenberg reiterated Sell on 11-23, Lululemon's comps are -12%; earlier bounces of this kind on 10-15 and 11-4 reversed.",
+    "why_not": "Sympathy with someone else's report, and the direct trade is already on."
+   },
+   "stats": {
+    "corr_60d": 0.76,
+    "beta_60d": 1.04,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 14,
+   "ranked": 21,
+   "id": "2026-11-24-P51"
+  },
+  {
+   "name": "DOW",
+   "kind": "stock",
+   "setup": "turn",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #5",
+   "signal": {
+    "why": "was stretched down (RSI 34, -3.2 ATR from the 20-day) and turned: +1.5%, trading in the top quarter of the day",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and rising (trend mixed); -2.7 ATR from the 20-day, RSI 38; volume 0.7x; daily ranges of the 10 sessions before today 1.18x the 50 before; resistance 30.34 (50-day, +4.5%); support 28.17 (20-day low, -3.0%); ATR 1.08 (3.7%); hedge XOP: correlation +0.56, beta 0.59",
+    "numbers": {
+     "close": 29.035,
+     "ret_1d": 0.01521,
+     "ret_5d": -0.07443,
+     "ret_20d": -0.14047,
+     "atr": 1.08361,
+     "atr_pct": 0.03732,
+     "rsi": 37.63477,
+     "dist20_atr": -2.65709,
+     "vol_ratio": 0.66627,
+     "sma50": 30.3417,
+     "sma200": 32.41637,
+     "hi52": 41.82441,
+     "lo52": 20.24099,
+     "usd_volume": 246196365.39917,
+     "tightness": 1.18018,
+     "trend": "mixed",
+     "sma50_change_20d": 0.02162,
+     "price": 29.035,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.01521,
+     "live_move_atr": 0.39256,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.534,
+    "adjust": {},
+    "hedge": "XOP",
+    "hedge_fit": {
+     "corr_60d": 0.56,
+     "beta_60d": 0.59,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-28",
+     "when": "before_open",
+     "sessions_away": 43
+    },
+    "also": []
+   },
+   "long": [
+    "DOW"
+   ],
+   "short": [
+    "XOP"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -5.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 1.5% uptick on 0.7x volume with no news; the stock turns on whether November polyethylene price increases stick, which nobody has reported.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Down 14% in 20 sessions to RSI 34, $14B of liquidity, and a settlement that sticks would add about $200M to Q4.",
+    "case_against": "It trades as an oil and Hormuz proxy and the book is short oil; ex-dividend 11-30; producers were split on the increases.",
+    "why_not": "A turn the screen sees and the tape does not confirm."
+   },
+   "stats": {
+    "corr_60d": 0.56,
+    "beta_60d": 0.59,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 15,
+   "ranked": 21,
+   "id": "2026-11-24-P52"
+  },
+  {
+   "name": "IBN",
+   "kind": "stock",
+   "setup": "breakout",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #13",
+   "signal": {
+    "why": "trading at 35.88, above the 52-week closing high 35.47, on 1.6x volume (+1.2%, +0.6 ATR); from a loose base: daily ranges of the 10 sessions before today 1.02x the 50 before; 50-day above the 200-day and rising (trend up)",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day above the 200-day and rising (trend up); +3.6 ATR from the 20-day, RSI 82; volume 1.6x; daily ranges of the 10 sessions before today 1.02x the 50 before; resistance 36.19 (20-day high, +0.9%); support 30.32 (50-day, -15.5%); ATR 0.74 (2.1%); hedge ITB: correlation +0.43, beta 0.29",
+    "numbers": {
+     "close": 35.88,
+     "ret_1d": 0.01156,
+     "ret_5d": 0.03103,
+     "ret_20d": 0.24066,
+     "atr": 0.73988,
+     "atr_pct": 0.02062,
+     "rsi": 82.0281,
+     "dist20_atr": 3.62493,
+     "vol_ratio": 1.61493,
+     "sma50": 30.3154,
+     "sma200": 28.69588,
+     "hi52": 36.19,
+     "lo52": 24.87177,
+     "usd_volume": 240289286.11183,
+     "tightness": 1.0196,
+     "trend": "up",
+     "sma50_change_20d": 0.04769,
+     "price": 35.88,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.01156,
+     "live_move_atr": 0.5556,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 2.193,
+    "adjust": {},
+    "hedge": "ITB",
+    "hedge_fit": {
+     "corr_60d": 0.43,
+     "beta_60d": 0.29,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-14",
+     "when": "after_close",
+     "sessions_away": 35
+    },
+    "also": [
+     "stretched (short)"
+    ]
+   },
+   "long": [
+    "IBN"
+   ],
+   "short": [
+    "ITB"
+   ],
+   "plan": {
+    "horizon_days": 5,
+    "stop": {
+     "spread_pct": -3.1
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "A 52-week high at RSI 82 after +24% in 20 sessions with no news this week; whatever comes next is India's rate decision in early December.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Profit +20%, bad loans 0.30%, record foreign buying of Indian stocks this month.",
+    "case_against": "Growth flattered by foreign-currency deposits, margin guided lower next quarter, and a reversal on heavy volume at the 11-11 record.",
+    "why_not": "Late in a move with nothing dated to extend it."
+   },
+   "stats": {
+    "corr_60d": 0.43,
+    "beta_60d": 0.3,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 16,
+   "ranked": 21,
+   "id": "2026-11-24-P53"
+  },
+  {
+   "name": "HDB",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "short",
+   "source": "live screen 2026-11-24 midday #17",
+   "signal": {
+    "why": "stretched up: RSI 77, +3.9 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; above the 50 and 200-day; 50-day below the 200-day and rising (trend mixed); +3.9 ATR from the 20-day, RSI 77; volume 2.2x; daily ranges of the 10 sessions before today 0.85x the 50 before; resistance 27.81 (20-day high, +0.5%); support 25.19 (200-day, -9.0%); ATR 0.65 (2.4%); hedge ITB: correlation +0.42, beta 0.39",
+    "numbers": {
+     "close": 27.675,
+     "ret_1d": 0.02009,
+     "ret_5d": 0.05388,
+     "ret_20d": 0.29565,
+     "atr": 0.65448,
+     "atr_pct": 0.02365,
+     "rsi": 77.01262,
+     "dist20_atr": 3.93172,
+     "vol_ratio": 2.2095,
+     "sma50": 23.6263,
+     "sma200": 25.19443,
+     "hi52": 37.05,
+     "lo52": 21.36,
+     "usd_volume": 233017504.25005,
+     "tightness": 0.85418,
+     "trend": "mixed",
+     "sma50_change_20d": 0.03719,
+     "price": 27.675,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": 0.02009,
+     "live_move_atr": 0.84217,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 1.218,
+    "adjust": {},
+    "hedge": "ITB",
+    "hedge_fit": {
+     "corr_60d": 0.42,
+     "beta_60d": 0.39,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": {
+     "date": "2027-01-16",
+     "when": "after_close",
+     "sessions_away": 36
+    },
+    "also": []
+   },
+   "long": [
+    "ITB"
+   ],
+   "short": [
+    "HDB"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.5
+    }
+   },
+   "decision": "pass",
+   "conviction": 2,
+   "reason": "Stretched up, but on relief from a governance scare with Citi raising its target; nothing dated would turn it down inside the window.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Up 30% in 20 sessions to RSI 77, the leak review is still open, margin at a record low.",
+    "case_against": "Still 20% under last December's high, a new CEO, foreign money flowing into Indian banks, and today's +2% came on 2.2x volume.",
+    "why_not": "Fading strength with no event is what the standing lesson says not to do."
+   },
+   "stats": {
+    "corr_60d": 0.42,
+    "beta_60d": 0.45,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 17,
+   "ranked": 21,
+   "id": "2026-11-24-P54"
+  },
+  {
+   "name": "Utility-scale solar",
+   "kind": "basket",
+   "setup": "basket_stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #18",
+   "signal": {
+    "why": "Utility-scale solar against XLU: -4.9% today (-0.8 sd), 5-day -15.7%, 20-day -31.5%, z -2.5, the 10 sessions before today 1.53x as volatile as the 50 before; stretched, no turn yet",
+    "chart": "0 of 5 members above their 50-day; best FSLR +2.1%, worst TE -12.9%; spread -0.8 sd today, z -2.5",
+    "numbers": {
+     "today": -0.04877,
+     "sd_20d": 0.05968,
+     "today_sd": -0.81712,
+     "tightness": 1.52962,
+     "ret_5d": -0.15666,
+     "ret_20d": -0.31473,
+     "z_50d": -2.50259,
+     "z_50d_prev": -2.49226,
+     "new_20d_high": false,
+     "new_20d_low": true
+    },
+    "score": 1.209,
+    "hedge": "XLU",
+    "members": [
+     "FSLR",
+     "NXT",
+     "SHLS",
+     "TE",
+     "CSIQ"
+    ],
+    "also": []
+   },
+   "long": [
+    "FSLR",
+    "NXT",
+    "SHLS",
+    "TE",
+    "CSIQ"
+   ],
+   "short": [
+    "XLU"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "The basket's fall is led by Canadian Solar, reported to be weighing Chapter 11 for its developer arm, and T1 Energy, short of cash; the book is short Canadian Solar for that reason.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Down 31% in 20 sessions against utilities, 2.5 sd stretched; First Solar is up today at under 9 times earnings.",
+    "case_against": "No turn, no cause for a turn, T1 -13% today with $60M of cash, and Canadian Solar reports 12-3.",
+    "why_not": "It would be a bounce bet against one of the book's own shorts."
+   },
+   "stats": {
+    "corr_60d": 0.32,
+    "beta_60d": 1.45,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 18,
+   "ranked": 21,
+   "id": "2026-11-24-P55"
+  },
+  {
+   "name": "EC",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #16",
+   "signal": {
+    "why": "stretched down: RSI 20, -3.9 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 210 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day above the 200-day and falling (trend mixed); -3.9 ATR from the 20-day, RSI 20; volume 1.3x; daily ranges of the 10 sessions before today 1.15x the 50 before; resistance 13.08 (20-day low, +0.6%); support 8.76 (52-week low, -32.6%); ATR 0.58 (4.5%); hedge XLE: correlation +0.64, beta 0.94",
+    "numbers": {
+     "close": 13.0,
+     "ret_1d": -0.02622,
+     "ret_5d": -0.12517,
+     "ret_20d": -0.24812,
+     "atr": 0.57899,
+     "atr_pct": 0.04454,
+     "rsi": 19.56674,
+     "dist20_atr": -3.94742,
+     "vol_ratio": 1.34396,
+     "sma50": 16.385,
+     "sma200": 15.13653,
+     "hi52": 18.38,
+     "lo52": 8.7647,
+     "usd_volume": 28144259.33084,
+     "tightness": 1.14727,
+     "trend": "mixed",
+     "sma50_change_20d": -0.04904,
+     "price": 13.0,
+     "price_at": "2026-11-24T13:00:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.02622,
+     "live_move_atr": -0.59588,
+     "live_bars": 0,
+     "session_minutes": 210
+    },
+    "score": 1.219,
+    "adjust": {},
+    "hedge": "XLE",
+    "hedge_fit": {
+     "corr_60d": 0.64,
+     "beta_60d": 0.94,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "EC"
+   ],
+   "short": [
+    "XLE"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -6.7
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "Ecopetrol is falling with Brent, at its lowest since August, and the book is short oil; RSI 20 is not a reason while the thing driving it is still falling.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Record quarter, 25% off in 20 sessions, RSI 20, and any Hormuz headline lifts it.",
+    "case_against": "The profit rode a war-priced barrel that is fading; the state owes it COP 11.4T in fuel subsidies; consensus is Sell.",
+    "why_not": "No turn, no dated event, and it runs against the open oil short."
+   },
+   "stats": {
+    "corr_60d": 0.64,
+    "beta_60d": 0.94,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 19,
+   "ranked": 21,
+   "id": "2026-11-24-P56"
+  },
+  {
+   "name": "BVN",
+   "kind": "stock",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #20",
+   "signal": {
+    "why": "stretched down: RSI 26, -3.6 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.6 ATR from the 20-day, RSI 26; volume 1.0x; daily ranges of the 10 sessions before today 1.40x the 50 before; resistance 28.31 (50-day, +41.5%); support 18.92 (52-week low, -5.4%); ATR 1.27 (6.4%); hedge GDX: correlation +0.91, beta 0.84",
+    "numbers": {
+     "close": 20.01,
+     "ret_1d": -0.03193,
+     "ret_5d": -0.12545,
+     "ret_20d": -0.28496,
+     "atr": 1.27146,
+     "atr_pct": 0.06354,
+     "rsi": 25.69606,
+     "dist20_atr": -3.64132,
+     "vol_ratio": 0.95234,
+     "sma50": 28.30786,
+     "sma200": 31.77692,
+     "hi52": 42.28272,
+     "lo52": 18.92,
+     "usd_volume": 29977756.79409,
+     "tightness": 1.39725,
+     "trend": "down",
+     "sma50_change_20d": -0.11245,
+     "price": 20.01,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.03193,
+     "live_move_atr": -0.50708,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 1.202,
+    "adjust": {},
+    "hedge": "GDX",
+    "hedge_fit": {
+     "corr_60d": 0.91,
+     "beta_60d": 0.84,
+     "chosen": "the best match of 42 funds",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "BVN"
+   ],
+   "short": [
+    "GDX"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -8.0
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "A levered gold and silver miner with no news of its own; gold fell another 2% today toward its low and Wednesday's PCE decides the next move.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "Profit +50%, net cash, RSI 26 near the 52-week low.",
+    "case_against": "Gold's Monday bounce failed in a day, ETF outflows continue, a hike is 95-98% priced.",
+    "why_not": "A bounce bet into a binary number against the trend."
+   },
+   "stats": {
+    "corr_60d": 0.91,
+    "beta_60d": 0.84,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 20,
+   "ranked": 21,
+   "id": "2026-11-24-P57"
+  },
+  {
+   "name": "GLD",
+   "kind": "etf",
+   "setup": "stretched",
+   "direction": "long",
+   "source": "live screen 2026-11-24 midday #19",
+   "signal": {
+    "why": "stretched down: RSI 30, -3.8 ATR from the 20-day, no turn yet",
+    "chart": "today so far, 215 minutes into the session, with volume projected to a full day; below the 50 and 200-day; 50-day below the 200-day and falling (trend down); -3.8 ATR from the 20-day, RSI 30; volume 1.5x; daily ranges of the 10 sessions before today 1.48x the 50 before; resistance 372.36 (50-day, +14.0%); support 320.95 (52-week low, -1.8%); ATR 7.91 (2.4%); hedge SPY: correlation +0.54, beta 0.70",
+    "numbers": {
+     "close": 326.73999,
+     "ret_1d": -0.01886,
+     "ret_5d": -0.07303,
+     "ret_20d": -0.12233,
+     "atr": 7.90644,
+     "atr_pct": 0.0242,
+     "rsi": 30.45318,
+     "dist20_atr": -3.75188,
+     "vol_ratio": 1.52156,
+     "sma50": 372.355,
+     "sma200": 404.5152,
+     "hi52": 509.70001,
+     "lo52": 320.95001,
+     "usd_volume": 3591002824.90845,
+     "tightness": 1.47836,
+     "trend": "down",
+     "sma50_change_20d": -0.05294,
+     "price": 326.73999,
+     "price_at": "2026-11-24T13:05:00-05:00",
+     "live_phase": "regular",
+     "live_move": -0.01886,
+     "live_move_atr": -0.78773,
+     "live_bars": 0,
+     "session_minutes": 215
+    },
+    "score": 1.208,
+    "adjust": {},
+    "hedge": "SPY",
+    "hedge_fit": {
+     "corr_60d": 0.54,
+     "beta_60d": 0.7,
+     "chosen": "a fund is set against the market",
+     "weak": false
+    },
+    "next_earnings": null,
+    "also": []
+   },
+   "long": [
+    "GLD"
+   ],
+   "short": [
+    "SPY"
+   ],
+   "plan": {
+    "horizon_days": 3,
+    "stop": {
+     "spread_pct": -3.6
+    }
+   },
+   "decision": "pass",
+   "conviction": 1,
+   "reason": "Gold is 36% off its January record and 2% above its low with the driver, a Fed about to hike, fully alive; the bounce on Monday lasted one session.",
+   "reviewed": true,
+   "reasoning": null,
+   "wrong_if": null,
+   "hedge_why": null,
+   "through_earnings": null,
+   "pass_case": {
+    "case_for": "RSI 30, central banks bought 321 tonnes in Q3, and with a hike 98% priced a soft PCE on 11-25 could squeeze shorts hard.",
+    "case_against": "20 tonnes left gold ETFs last week, yields near 5%, and forced selling has returned with each tech selloff, including today.",
+    "why_not": "Stretched with no turn; the only dated event is a coin toss."
+   },
+   "stats": {
+    "corr_60d": 0.54,
+    "beta_60d": 0.7,
+    "sessions": 60
+   },
+   "session": "2026-11-24",
+   "pass": "midday",
+   "recorded_at": "2026-11-24T13:08:30.443485-05:00",
+   "rank": 21,
+   "ranked": 21,
+   "id": "2026-11-24-P58"
+  }
+ ]
+}

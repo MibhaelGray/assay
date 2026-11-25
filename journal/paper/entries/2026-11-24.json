@@ -1,0 +1,1151 @@
+{
+ "session": "2026-11-24",
+ "handled": [
+  "night",
+  "morning",
+  "midday"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-24-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-24-P01",
+   "proposal_id": "2026-11-24-P01",
+   "conviction": 3,
+   "name": "USO",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "why": "Crude fell 4.5% to its lowest close since August on the market's best day in a year and through a weekend of attacks that should have lifted it: Trump pushed any return to war with Iran to next year, supply is coming back and the glut forecasts are unanswered, with OPEC+ expected to lift 2027 quotas on 11-29.",
+   "wrong_if": "The US or Israel strikes Iran, or Trump or the White House says the talks have failed or sets a new deadline inside the window; or shipping through Hormuz is reported halted or sharply cut (not just a ship attacked); or the 11-25 EIA report shows a crude draw of 3 million barrels or more; or Reuters or Bloomberg reports OPEC+ delegates preparing to cut or hold back 2027 output at the 11-29 meeting.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "USO",
+     "side": "short",
+     "shares": 160,
+     "ref_price": 133.568
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-24",
+   "lead": "USO"
+  },
+  {
+   "id": "2026-11-24-M01",
+   "book": "small",
+   "source": "proposal 2026-11-24-P01",
+   "proposal_id": "2026-11-24-P01",
+   "conviction": 3,
+   "name": "USO",
+   "setup": "relative_weakness",
+   "direction": "short",
+   "why": "Crude fell 4.5% to its lowest close since August on the market's best day in a year and through a weekend of attacks that should have lifted it: Trump pushed any return to war with Iran to next year, supply is coming back and the glut forecasts are unanswered, with OPEC+ expected to lift 2027 quotas on 11-29.",
+   "wrong_if": "The US or Israel strikes Iran, or Trump or the White House says the talks have failed or sets a new deadline inside the window; or shipping through Hormuz is reported halted or sharply cut (not just a ship attacked); or the 11-25 EIA report shows a crude draw of 3 million barrels or more; or Reuters or Bloomberg reports OPEC+ delegates preparing to cut or hold back 2027 output at the 11-29 meeting.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 535,
+   "sizing": {
+    "risk_dollars": 38,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "USO",
+     "side": "short",
+     "shares": 4,
+     "ref_price": 133.568
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-24",
+   "lead": "USO"
+  },
+  {
+   "id": "2026-11-24-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-24-P13",
+   "proposal_id": "2026-11-24-P13",
+   "conviction": 3,
+   "name": "ANF",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "why": "A quarter that beat on operations this time (comps +6%, margin 15.5%, prices up on lean inventory) with the year raised and November called strong, in a stock at about 12 times earnings whose broker targets now sit at or under the price, with Black Friday inside the window.",
+   "wrong_if": "Two or more covering brokers downgrade Abercrombie or leave targets under $160 citing refunds or 2027 after the print; or Black Friday and Cyber Monday reads (Adobe, Mastercard SpendingPulse, Sensormatic or the like) show apparel sales or traffic down on the year or name heavy promotions at Abercrombie or Hollister; or Abercrombie trims its Q4 guide, inside the window.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -8.0
+   },
+   "notional": 18700,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -8.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "ANF",
+     "side": "long",
+     "shares": 108,
+     "ref_price": 172.2301
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 209,
+     "ref_price": 89.38
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "morning",
+   "first_session": "2026-11-25",
+   "lead": "ANF",
+   "atr_pct": 0.05267
+  },
+  {
+   "id": "2026-11-24-S03",
+   "book": "dynamic",
+   "source": "proposal 2026-11-24-P14",
+   "proposal_id": "2026-11-24-P14",
+   "conviction": 3,
+   "name": "DKS",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "why": "The report took away the fear that had cut the stock by a third: Foot Locker comps turned positive, the year was raised, about 18% of the float is short and the company bought 8% of its shares last quarter, at about 13 times earnings.",
+   "wrong_if": "Two or more covering brokers downgrade Dick's or cut targets under $150 after the print; or Dick's, Nike or a major outlet says Foot Locker's comps have turned negative again this quarter or that the Jordan reset is cutting its allocations before year-end; or Black Friday and Cyber Monday reads show sporting goods or athletic footwear sales down on the year, inside the window.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "DKS",
+     "side": "long",
+     "shares": 140,
+     "ref_price": 152.05
+    },
+    {
+     "symbol": "XRT",
+     "side": "short",
+     "shares": 239,
+     "ref_price": 89.38
+    }
+   ],
+   "hedge": "XRT",
+   "pass": "morning",
+   "first_session": "2026-11-25",
+   "lead": "DKS",
+   "atr_pct": 0.04619
+  },
+  {
+   "id": "2026-11-24-S04",
+   "book": "dynamic",
+   "source": "proposal 2026-11-24-P38",
+   "proposal_id": "2026-11-24-P38",
+   "conviction": 3,
+   "name": "DY",
+   "setup": "live_move",
+   "direction": "short",
+   "why": "The 17% drop is a reset of the story, not a quarter: management said several large customers decided in recent weeks to slow fiber builds, so fiber-to-the-home revenue falls next fiscal year, and the broker resets have barely started.",
+   "wrong_if": "A large customer (AT&T, Verizon, Lumen or another named carrier) says its 2027 fiber build is unchanged or rising, or Dycom says the slowdown is smaller than it described; or two or more covering brokers upgrade Dycom after the print; or Dycom adds to its buyback or reports insider buying after the report, inside the window.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XSD",
+     "side": "long",
+     "shares": 55,
+     "ref_price": 383.52
+    },
+    {
+     "symbol": "DY",
+     "side": "short",
+     "shares": 117,
+     "ref_price": 182.24
+    }
+   ],
+   "hedge": "XSD",
+   "pass": "midday",
+   "first_session": "2026-11-25",
+   "lead": "XSD",
+   "atr_pct": 0.08177
+  },
+  {
+   "id": "2026-11-24-S05",
+   "book": "dynamic",
+   "source": "proposal 2026-11-24-P39",
+   "proposal_id": "2026-11-24-P39",
+   "conviction": 3,
+   "name": "Copper miners",
+   "setup": "basket_breakdown",
+   "direction": "short",
+   "why": "Copper gave back all of Monday's Nvidia bounce in one session and is at new lows for the move, down 21% from September's record; the reason the miners are falling is still running and no company event in the window can turn it.",
+   "wrong_if": "A supply shock is reported (an outage, strike or export halt at a major copper producer) and the metals press credits it with lifting copper; or China announces a stimulus, property or steel-capacity measure that the metals press credits with lifting copper; or CME FedWatch pricing of a 12-9 hike falls below about 80% after the PCE report; or China's regulator approves the Anglo-Teck merger and the group rallies with it.",
+   "entry_date": "2026-11-24",
+   "horizon_days": 3,
+   "stop": {
+    "spread_pct": -7.0
+   },
+   "notional": 21400,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -7.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "XLB",
+     "side": "long",
+     "shares": 428,
+     "ref_price": 49.995
+    },
+    {
+     "symbol": "FCX",
+     "side": "short",
+     "shares": 75,
+     "ref_price": 47.305
+    },
+    {
+     "symbol": "SCCO",
+     "side": "short",
+     "shares": 25,
+     "ref_price": 137.85
+    },
+    {
+     "symbol": "TECK",
+     "side": "short",
+     "shares": 71,
+     "ref_price": 50.08
+    },
+    {
+     "symbol": "HBM",
+     "side": "short",
+     "shares": 211,
+     "ref_price": 16.855
+    },
+    {
+     "symbol": "ERO",
+     "side": "short",
+     "shares": 163,
+     "ref_price": 21.77
+    },
+    {
+     "symbol": "TGB",
+     "side": "short",
+     "shares": 655,
+     "ref_price": 5.445
+    }
+   ],
+   "hedge": "XLB",
+   "pass": "midday",
+   "first_session": "2026-11-25",
+   "lead": "TGB",
+   "atr_pct": 0.03554
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-23T20:41:08-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "BIDU": 65.7459,
+    "BZ": 12.98,
+    "CM": 105.4948,
+    "COST": 1104.992,
+    "CRWD": 212.0698,
+    "DIA": 496.803,
+    "FTNT": 131.13,
+    "GDX": 73.8049,
+    "GLD": 336.03,
+    "IBIT": 34.64,
+    "IGV": 95.4524,
+    "MSTR": 84.89,
+    "MU": 706.99,
+    "OKTA": 207.8,
+    "PANW": 352.9,
+    "QLYS": 198.0,
+    "RSP": 213.74,
+    "S": 24.5507,
+    "SLV": 39.65,
+    "SMH": 461.21,
+    "SPY": 724.18,
+    "USO": 133.568,
+    "XLP": 90.61,
+    "ZS": 229.7
+   }
+  },
+  "morning": {
+   "at": "2026-11-24T09:56:10-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "A": 184.14,
+    "AGCO": 104.975,
+    "ALSN": 120.13,
+    "ANF": 172.2301,
+    "BAC": 48.59,
+    "C": 114.065,
+    "CAH": 273.99,
+    "CFG": 60.94,
+    "CI": 274.005,
+    "CIBR": 94.985,
+    "CNC": 64.19,
+    "CNH": 11.16,
+    "CNQ": 44.685,
+    "COR": 343.37,
+    "CRWD": 212.0,
+    "DG": 139.17,
+    "DKS": 152.05,
+    "DLTR": 153.585,
+    "ELV": 385.1351,
+    "FITB": 50.9677,
+    "GATX": 180.62,
+    "GIS": 35.28,
+    "HBAN": 14.77,
+    "HPE": 41.615,
+    "HUM": 398.775,
+    "HWC": 60.28,
+    "IBB": 215.49,
+    "JPM": 317.96,
+    "KBE": 63.71,
+    "KEY": 19.845,
+    "KHC": 25.365,
+    "KIE": 65.3,
+    "LYB": 55.77,
+    "MCK": 1066.33,
+    "MDLZ": 66.165,
+    "MKC": 48.52,
+    "MOH": 204.7999,
+    "MTB": 212.05,
+    "OSCR": 26.18,
+    "OSK": 140.245,
+    "P": 93.54,
+    "PBR": 16.365,
+    "PCAR": 104.52,
+    "PINS": 19.21,
+    "PNC": 218.68,
+    "RF": 27.385,
+    "SAP": 207.18,
+    "SJM": 130.77,
+    "SMCI": 23.01,
+    "SNY": 50.795,
+    "SPY": 718.117,
+    "TEX": 59.1,
+    "TFC": 47.185,
+    "TGT": 174.15,
+    "TTC": 104.3075,
+    "TTE": 85.62,
+    "UNH": 336.81,
+    "USB": 57.77,
+    "UUP": 29.6299,
+    "WAB": 281.11,
+    "WFC": 80.64,
+    "XLC": 104.48,
+    "XLE": 60.58,
+    "XLF": 56.135,
+    "XLI": 161.49,
+    "XLK": 157.6001,
+    "XLP": 91.53,
+    "XLV": 183.0,
+    "XOP": 167.295,
+    "XRT": 89.38,
+    "ZTO": 19.22
+   }
+  },
+  "midday": {
+   "at": "2026-11-24T13:09:07-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "ADI": 315.555,
+    "APLD": 12.095,
+    "BLSH": 19.656,
+    "BMNR": 13.33,
+    "BMRN": 67.11,
+    "BURL": 259.125,
+    "BVN": 19.995,
+    "CBRS": 88.66,
+    "COIN": 103.3,
+    "COPX": 57.39,
+    "CRCL": 48.12,
+    "CRWV": 42.295,
+    "CSIQ": 5.1301,
+    "CVI": 31.42,
+    "DECK": 84.81,
+    "DINO": 86.11,
+    "DK": 55.71,
+    "DOW": 29.035,
+    "DY": 182.24,
+    "EC": 12.961,
+    "ERO": 21.77,
+    "FCX": 47.305,
+    "FSLR": 149.97,
+    "GDX": 71.72,
+    "GLBE": 36.8325,
+    "GLD": 326.39,
+    "GLOB": 50.345,
+    "HALO": 94.46,
+    "HBM": 16.855,
+    "HDB": 27.67,
+    "HOOD": 64.85,
+    "IBIT": 33.9901,
+    "IBN": 35.87,
+    "IREN": 12.655,
+    "ITB": 95.84,
+    "KIE": 65.315,
+    "LULU": 108.055,
+    "MPC": 351.6545,
+    "MSTR": 79.19,
+    "NBIS": 86.49,
+    "NKE": 35.9,
+    "NXT": 69.22,
+    "PARR": 63.01,
+    "PBF": 57.71,
+    "PSX": 235.954,
+    "RL": 395.72,
+    "ROST": 227.31,
+    "SCCO": 137.85,
+    "SHLS": 6.6,
+    "SMH": 427.74,
+    "SPY": 718.57,
+    "TE": 1.0499,
+    "TECK": 50.08,
+    "TGB": 5.445,
+    "TJX": 144.295,
+    "TPR": 129.93,
+    "URA": 27.69,
+    "VALE": 9.41,
+    "VLO": 323.815,
+    "VOYG": 18.36,
+    "WULF": 9.62,
+    "XBI": 155.6,
+    "XLB": 49.995,
+    "XLE": 60.405,
+    "XLU": 43.43,
+    "XLV": 184.695,
+    "XLY": 117.76,
+    "XOP": 166.36,
+    "XRT": 90.27,
+    "XSD": 383.52
+   }
+  }
+ },
+ "exits": [
+  {
+   "trade_id": "2026-11-24-M01",
+   "book": "small",
+   "session_number": 1,
+   "intraday": true,
+   "at": "10:37 AM CT",
+   "pass": null,
+   "reason": "closed by hand: the owner asked to close the $25k book's last trade after that book was stopped on 2026-11-23"
+  },
+  {
+   "trade_id": "2026-11-23-M02",
+   "book": "small",
+   "session_number": 1,
+   "intraday": true,
+   "at": "12:03 PM CT",
+   "pass": null,
+   "reason": "closed by hand: the owner asked to close the $25k book's last trades after that book was stopped on 2026-11-23"
+  },
+  {
+   "trade_id": "2026-11-23-M03",
+   "book": "small",
+   "session_number": 1,
+   "intraday": true,
+   "at": "12:03 PM CT",
+   "pass": null,
+   "reason": "closed by hand: the owner asked to close the $25k book's last trades after that book was stopped on 2026-11-23"
+  }
+ ],
+ "runs": [
+  {
+   "at": "2026-11-23T20:41:08-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-24-S01",
+    "2026-11-24-M01"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-24-S01",
+     "symbol": "USO",
+     "action": "SELL",
+     "shares": 160,
+     "kind": "LMT",
+     "limit": 132.22,
+     "venue": "overnight",
+     "ref_price": 132.88,
+     "priced_on": "gateway bid/ask",
+     "bid": 132.88,
+     "ask": 132.96,
+     "spread_pct": 0.06,
+     "order_id": 130,
+     "status": "Filled",
+     "note": "Warning 2109, reqId 130: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    },
+    {
+     "trade_id": "2026-11-24-M01",
+     "symbol": "USO",
+     "action": "SELL",
+     "shares": 4,
+     "kind": "LMT",
+     "limit": 132.22,
+     "venue": "overnight",
+     "ref_price": 132.88,
+     "priced_on": "gateway bid/ask",
+     "bid": 132.88,
+     "ask": 132.96,
+     "spread_pct": 0.06,
+     "order_id": 132,
+     "status": "Filled",
+     "note": "Warning 2109, reqId 132: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "warnings": [
+    "2026-11-24-S01: SELL 160 USO went in with a message from the gateway: Warning 2109, reqId 130: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed.",
+    "2026-11-24-M01: SELL 4 USO went in with a message from the gateway: Warning 2109, reqId 132: Order Event Warning:Attribute 'Outside Regular Trading Hours' is ignored based on the order type and destination. PlaceOrder is now being processed."
+   ],
+   "takes": {
+    "night": 1
+   },
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-24T09:56:10-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "morning"
+   ],
+   "new": [
+    "2026-11-24-S02",
+    "2026-11-24-S03"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "No price for every leg of 2026-11-20-S04, so its stop wasn't checked this time; the next check tries again.",
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "takes": {
+    "morning": 2
+   },
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T09:57:42-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:01:02-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:04:13-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:07:24-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:10:43-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:13:54-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:17:05-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:20:14-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:23:34-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:26:43-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-24-S02 ANF: no quote for ANF or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try.",
+    "2026-11-24-S03 DKS: no quote for DKS or XRT from the gateway because the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197), so the whole trade waits for the next try."
+   ],
+   "no_quote": {
+    "ANF": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "DKS": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)",
+    "XRT": "the live IBKR login is in use somewhere else, and IBKR gives its quotes to one session at a time (IBKR error 10197)"
+   }
+  },
+  {
+   "at": "2026-11-24T10:29:54-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-24-S02",
+     "symbol": "ANF",
+     "action": "BUY",
+     "shares": 108,
+     "kind": "LMT",
+     "limit": 176.06,
+     "venue": "regular",
+     "ref_price": 176.06,
+     "priced_on": "gateway midpoint",
+     "bid": 175.69,
+     "ask": 176.42,
+     "spread_pct": 0.415,
+     "order_id": 138,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "symbol": "DKS",
+     "action": "BUY",
+     "shares": 140,
+     "kind": "LMT",
+     "limit": 153.21,
+     "venue": "regular",
+     "ref_price": 153.21,
+     "priced_on": "gateway midpoint",
+     "bid": 153.07,
+     "ask": 153.35,
+     "spread_pct": 0.183,
+     "order_id": 139,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "symbol": "DKS",
+     "action": "BUY",
+     "shares": 140,
+     "kind": "LMT",
+     "limit": 153.58,
+     "venue": "regular",
+     "ref_price": 153.35,
+     "priced_on": "gateway bid/ask",
+     "bid": 153.07,
+     "ask": 153.35,
+     "spread_pct": 0.183,
+     "order_id": 143,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S02",
+     "symbol": "XRT",
+     "action": "SELL",
+     "shares": 209,
+     "kind": "LMT",
+     "limit": 89.3,
+     "venue": "regular",
+     "ref_price": 89.43,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.43,
+     "ask": 89.46,
+     "spread_pct": 0.034,
+     "order_id": 146,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "symbol": "XRT",
+     "action": "SELL",
+     "shares": 239,
+     "kind": "LMT",
+     "limit": 89.3,
+     "venue": "regular",
+     "ref_price": 89.43,
+     "priced_on": "gateway bid/ask",
+     "bid": 89.43,
+     "ask": 89.46,
+     "spread_pct": 0.034,
+     "order_id": 147,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-24T13:09:07-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [
+    "midday"
+   ],
+   "new": [
+    "2026-11-24-S04",
+    "2026-11-24-S05"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-24-S04",
+     "symbol": "XSD",
+     "action": "BUY",
+     "shares": 55,
+     "kind": "LMT",
+     "limit": 383.63,
+     "venue": "regular",
+     "ref_price": 383.63,
+     "priced_on": "gateway midpoint",
+     "bid": 383.16,
+     "ask": 384.1,
+     "spread_pct": 0.245,
+     "order_id": 164,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "TGB",
+     "action": "SELL",
+     "shares": 655,
+     "kind": "LMT",
+     "limit": 5.43,
+     "venue": "regular",
+     "ref_price": 5.44,
+     "priced_on": "gateway bid/ask",
+     "bid": 5.44,
+     "ask": 5.45,
+     "spread_pct": 0.184,
+     "order_id": 169,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "symbol": "XSD",
+     "action": "BUY",
+     "shares": 55,
+     "kind": "LMT",
+     "limit": 384.68,
+     "venue": "regular",
+     "ref_price": 384.1,
+     "priced_on": "gateway bid/ask",
+     "bid": 383.16,
+     "ask": 384.1,
+     "spread_pct": 0.245,
+     "order_id": 170,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "symbol": "DY",
+     "action": "SELL",
+     "shares": 117,
+     "kind": "LMT",
+     "limit": 181.99,
+     "venue": "regular",
+     "ref_price": 182.26,
+     "priced_on": "gateway bid/ask",
+     "bid": 182.26,
+     "ask": 182.67,
+     "spread_pct": 0.225,
+     "order_id": 179,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "XLB",
+     "action": "BUY",
+     "shares": 428,
+     "kind": "LMT",
+     "limit": 50.08,
+     "venue": "regular",
+     "ref_price": 50.0,
+     "priced_on": "gateway bid/ask",
+     "bid": 49.99,
+     "ask": 50.0,
+     "spread_pct": 0.02,
+     "order_id": 180,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "FCX",
+     "action": "SELL",
+     "shares": 75,
+     "kind": "LMT",
+     "limit": 47.23,
+     "venue": "regular",
+     "ref_price": 47.3,
+     "priced_on": "gateway bid/ask",
+     "bid": 47.3,
+     "ask": 47.32,
+     "spread_pct": 0.042,
+     "order_id": 181,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "SCCO",
+     "action": "SELL",
+     "shares": 25,
+     "kind": "LMT",
+     "limit": 137.48,
+     "venue": "regular",
+     "ref_price": 137.69,
+     "priced_on": "gateway bid/ask",
+     "bid": 137.69,
+     "ask": 137.95,
+     "spread_pct": 0.189,
+     "order_id": 182,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "TECK",
+     "action": "SELL",
+     "shares": 71,
+     "kind": "LMT",
+     "limit": 49.98,
+     "venue": "regular",
+     "ref_price": 50.06,
+     "priced_on": "gateway bid/ask",
+     "bid": 50.06,
+     "ask": 50.09,
+     "spread_pct": 0.06,
+     "order_id": 183,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "HBM",
+     "action": "SELL",
+     "shares": 211,
+     "kind": "LMT",
+     "limit": 16.83,
+     "venue": "regular",
+     "ref_price": 16.86,
+     "priced_on": "gateway bid/ask",
+     "bid": 16.86,
+     "ask": 16.87,
+     "spread_pct": 0.059,
+     "order_id": 184,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "ERO",
+     "action": "SELL",
+     "shares": 163,
+     "kind": "LMT",
+     "limit": 21.74,
+     "venue": "regular",
+     "ref_price": 21.77,
+     "priced_on": "gateway bid/ask",
+     "bid": 21.77,
+     "ask": 21.78,
+     "spread_pct": 0.046,
+     "order_id": 185,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [],
+   "takes": {
+    "midday": 2
+   },
+   "cancelled_unfilled": 1
+  },
+  {
+   "at": "2026-11-24T13:13:17-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-24-S05",
+     "symbol": "ERO",
+     "action": "SELL",
+     "shares": 163,
+     "kind": "LMT",
+     "limit": 21.65,
+     "venue": "regular",
+     "ref_price": 21.68,
+     "priced_on": "gateway bid/ask",
+     "bid": 21.68,
+     "ask": 21.69,
+     "spread_pct": 0.046,
+     "order_id": 190,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [],
+   "cancelled_unfilled": 0
+  }
+ ],
+ "last_attempt": "2026-11-24T13:13:17-05:00",
+ "last_stop_check": "2026-11-24T15:29:57-05:00",
+ "last_fault": false
+}

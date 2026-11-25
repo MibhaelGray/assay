@@ -1,0 +1,70 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-17-S02",
+   "proposal_id": "2026-11-17-P02",
+   "name": "ACM",
+   "setup": "live_move",
+   "bps": 641.8,
+   "tag": "right_reason",
+   "what_happened": "AECOM held and extended the gap: bought near 77.45 after the report, it closed its fifth session at 80.75 while RSP, the hedge, fell through the worst week for stocks since 2020, for +642 bp. The 11-17 call did what the take said it would: the FY2027 guide ($6.15-6.35) and long-term targets were kept, no new charge or schedule slip on the two legacy construction projects was disclosed (about $500M of cash to finish them, easing by mid-year), and no downgrade was found. None of the wrong_if events happened.",
+   "lesson": "A report that removes the one named fear that had de-rated a cheap stock for a year kept paying for the full five sessions, and the hedge carried it through a market fall. With CTVA (short side) that is two gap trades that worked where the pass could say what the reaction was about; it supports the standing gap lesson as written, nothing to change.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  },
+  {
+   "trade_id": "2026-11-17-S05",
+   "proposal_id": "2026-11-17-P22",
+   "name": "Coatings and specialty chemicals",
+   "setup": "basket_breakout",
+   "bps": 236.8,
+   "tag": "right_reason",
+   "what_happened": "The paint makers gained 237 bp on XLB over five sessions. The driver named in the take ran: crude kept falling (WTI settled 80.17 on 11-23, its lowest close since August, Brent about 20% lower on the month), and none of Sherwin-Williams, PPG or Ecolab cut guidance; the Hormuz talks did not collapse. What cannot be separated from the record is how much of the spread came from the long side and how much from miners dragging XLB while metals fell; on the last session, with gold +3% and miners +6%, the spread was flat.",
+   "lesson": "A basket spread with a live macro driver on both legs (oil for the longs, metals for the fund) worked while both ran; it is the mirror of the Payroll loss, where the hedge leg was the bet and it gapped the wrong way. Before taking a spread against a sector fund, say which leg the belief is about and what is dated on the other. Two trades, one each way; not a standing lesson.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  },
+  {
+   "trade_id": "2026-11-18-S02",
+   "proposal_id": "2026-11-18-P02",
+   "name": "Nvidia after the print",
+   "setup": "catalyst",
+   "bps": 641.9,
+   "tag": "right_luck",
+   "what_happened": "The reasoning was that a strong print would outweigh the scandal because the dated legal events fell after the plan. It did not: on 11-19 California's attorney general served a subpoena and on 11-20 Reuters reported SEC staff examining Nvidia's accounting, Nvidia fell 14% against SMH's 10.6%, and the 11-22 night pass called the thesis broken. The trade made 642 bp only because the board reinstated Huang on 11-23 (8-K dated 11-22) and Nvidia rose 31% against SMH's 15% before the exit went out.",
+   "lesson": "Buying a strong print through an open scandal is a bet on headlines that have no date, not on the print: within two sessions the legal story got worse, and a board decision nobody could forecast paid the trade. The profit says nothing for the reasoning. One trade; not a standing lesson.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  },
+  {
+   "trade_id": "2026-11-18-S05",
+   "proposal_id": "2026-11-18-P34",
+   "name": "TJX",
+   "setup": "earnings_gap_held",
+   "bps": 15.2,
+   "tag": "right_luck",
+   "what_happened": "Every fact the take leaned on held: Ross reported comps of about +8% against a 6-7% guide on 11-19 and kept its holiday guide, no second TJX downgrade came (Barclays trimmed its target and stayed Overweight). But the move the take expected, sellers of the downgrades coming back, did not come: TJX went from about 141.70 to 139.25 over three sessions and the trade finished +15 bp only because XRT fell slightly more. On the last session TJX was -0.3% while XRT rose 1.4% in the relief rally.",
+   "lesson": "A gap that held on confirmed facts still did nothing for three sessions: the facts being right is not the same as someone having to buy. A defensive long against a higher-beta fund also gives back on a relief day. Against ACM (five sessions, a fear removed) this argues for giving a gap-held take its full week, not three sessions. One trade; not a standing lesson.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  },
+  {
+   "trade_id": "2026-11-20-S06",
+   "proposal_id": "2026-11-20-P82",
+   "name": "MTZ",
+   "setup": "breakdown",
+   "bps": -902.5,
+   "tag": "noise",
+   "what_happened": "The short was stopped 26 minutes into its first session: on 11-23 Nvidia's board reinstated Huang, SMH rose 15% and everything tied to the AI build-out was squeezed; MasTec, which builds data-center and power infrastructure, ran 12.7% against PAVE's 3.8% by 8:56 AM CT and closed +10.2% against +4.8%. Nothing in the wrong_if happened: no upgrade, buyback, insider purchase or financing change was found. The reason for the short (a $1.25B debt-funded deal two weeks after shelving deal talks for a buyback) is unchanged; the market stopped caring for a day.",
+   "lesson": "A short in a high-beta name at a 52-week low, taken after the market's worst week in years, is short the relief rally as well as the company, and a sector fund with a lower beta (PAVE) does not cover it. With INTU (stopped in the first half hour on 11-20) that is two fresh-breakdown shorts stopped at the first open after entry; RCAT, CTVA, NTES and IP are the cases that worked. Mixed record; not a standing lesson, but weigh what a market bounce does to the short before taking one off a washout.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  },
+  {
+   "trade_id": "2026-11-23-S01",
+   "proposal_id": "2026-11-23-P04",
+   "name": "ZS",
+   "setup": "live_move",
+   "bps": -62.4,
+   "tag": "thesis_broke",
+   "what_happened": "The deal came the next morning, but not at the price the take assumed. CrowdStrike agreed to buy Zscaler for 1.135 of its own shares (8-K, 11-23); CrowdStrike fell 8.9% to 208.97 on the news, which makes the offer worth about $237 a share at the close, against an entry near 230 in the overnight session. The take's reasoning was that 226 was 'well under any price a founder-led board would take': the board took about 5% more than that, in stock that fell as soon as the deal was known, so the premium left over the entry was about 3% and moved with CrowdStrike. Exited the same morning on the review for -62 bp.",
+   "lesson": "Second time in a week (BILL, -279 bp): a reported deal bought after the first-day pop paid about the deal price, and this one was paid in acquirer stock that fell on the announcement. The pass guessed the price; no outlet had reported one. Added to the standing lessons.",
+   "at": "2026-11-23T20:37:17.423089-05:00"
+  }
+ ]
+}
