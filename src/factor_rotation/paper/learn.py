@@ -277,6 +277,7 @@ def outcomes() -> list[dict]:
     None until it finishes), both outright and hedged replays for apples-to-apples comparison, its door/route,
     and for a take that was traded, the paper result after commissions."""
     from ..screen import route_of
+    from ..universe import cap_tier
 
     props = proposals.every()
     if not props:
@@ -306,7 +307,7 @@ def outcomes() -> list[dict]:
         m = tags.get((r or {}).get("id"))
         out.append({
             "id": p["id"], "session": p["session"], "name": p["name"], "kind": p["kind"], "setup": p["setup"],
-            "door": door, "route": route, "direction": p["direction"],
+            "tier": cap_tier(p["name"], p["kind"]), "door": door, "route": route, "direction": p["direction"],
             "source": p["source"], "pass": p.get("pass"), "verdict": _verdict(p), "decision": p["decision"], "conviction": p["conviction"], "reason": p["reason"],
             "rank": p.get("rank"), "ranked": p.get("ranked"), "recorded_at": p.get("recorded_at"),
             "legs": " / ".join(filter(None, [", ".join(p["long"]) and f"long {', '.join(p['long'])}", ", ".join(p["short"]) and f"short {', '.join(p['short'])}"])),
@@ -433,6 +434,8 @@ def tables(rows: list[dict] | None = None) -> dict:
         "by_door": {f"{door} · {verdict}": s for (door, verdict), s in by(lambda r: (r["door"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "by_route": {f"{route} · {verdict}": s for (route, verdict), s in by(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "so_far_by_route": {f"{route} · {verdict}": s for (route, verdict), s in by_live(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
+        "by_tier": {f"{tier} · {verdict}": s for (tier, verdict), s in by(lambda r: (r.get("tier", "large_mid"), "take" if r["verdict"] == "take" else "not taken")).items()},
+        "so_far_by_tier": {f"{tier} · {verdict}": s for (tier, verdict), s in by_live(lambda r: (r.get("tier", "large_mid"), "take" if r["verdict"] == "take" else "not taken")).items()},
         "by_mode": {"hedged": _mode_table(rows, "hedged"), "outright": _mode_table(rows, "outright")},
         "by_setup": {f"{setup} · {verdict}": s for (setup, verdict), s in by(lambda r: (r["setup"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "paper": _stat([r["paper_bps"] for r in traded]),
@@ -515,6 +518,9 @@ def brief() -> str:
     lines += ["", "By route (settled)"] + ([_line(k, s) for k, s in t["by_route"].items()] or ["  nothing settled yet"])
     if t["so_far_by_route"]:
         lines += ["", "By route (all so far)"] + [_line(k, s) for k, s in t["so_far_by_route"].items()]
+    lines += ["", "By universe tier (settled)"] + ([_line(k, s) for k, s in t["by_tier"].items()] or ["  nothing settled yet"])
+    if t["so_far_by_tier"]:
+        lines += ["", "By universe tier (all so far)"] + [_line(k, s) for k, s in t["so_far_by_tier"].items()]
     lines += ["", "By conviction (settled)"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing settled yet"])
     rk = t["rank"]
     lines += ["", "By rank (1 = the best idea of its pass; settled passes only)"]

@@ -23,6 +23,20 @@ class Tiers(unittest.TestCase):
         self.assertTrue(set(universe.FOREIGN_STOCKS) <= set(universe.screen_universe()))
         self.assertTrue(all(universe.INDEX_STOCK_INFO[s]["usd_volume_20d"] >= 20_000_000 for s in universe.FOREIGN_STOCKS))
 
+    def test_liquid_smallmid_stocks_are_screened(self):
+        self.assertGreater(len(universe.SMALLMID_STOCKS), 100)
+        self.assertTrue(set(universe.SMALLMID_STOCKS) <= set(universe.screen_universe()))
+        self.assertTrue(set(universe.SMALLMID_STOCKS) <= set(universe.bar_universe()))
+        self.assertFalse(set(universe.SMALLMID_STOCKS) & set(universe.CONSTITUENTS))
+        self.assertFalse(set(universe.SMALLMID_STOCKS) & set(universe.ETFS))
+        for s in universe.SMALLMID_STOCKS:
+            info = universe.INDEX_STOCK_INFO[s]
+            self.assertGreaterEqual(info["usd_volume_20d"], 25_000_000)
+            self.assertTrue(600_000_000 <= info["market_cap"] <= 5_000_000_000)
+            self.assertEqual(universe.cap_tier(s, "stock"), "smallmid")
+        self.assertEqual(universe.cap_tier("NVDA", "stock"), "large_mid")
+        self.assertEqual(universe.cap_tier("SPY", "etf"), "etf_basket")
+
     def test_the_added_industry_funds_are_in_the_fund_list(self):
         self.assertTrue(set(universe.MORE_INDUSTRIES) <= set(universe.ETFS))
 
