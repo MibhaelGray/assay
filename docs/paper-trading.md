@@ -35,7 +35,7 @@ Each closed trade gets a post-mortem from the night pass (`fr paper postmortem`)
 - **`fr paper close --flatten --execute`** exits everything at today's close.
 - **`fr paper status`** connects read-only and compares the account's positions with the book; `fr paper report` prints the results.
 
-**Two books, one set of decisions** (since 2026-11-22). `journal/paper/book.json` gives each book its capital: `swing` $1,000,000 and `small` $25,000. The order job enters every take in both, sized on each book's capital; a small-book trade has `"book": "small"` and an id with `M` (`2026-11-23-M01`) where the swing book's has `S`, and its orders carry that id, so the fills stay apart. Passes review swing trades only and `proposals.reviews` applies each decision to the small twin (same `proposal_id`). Each book has its own caps and its own 10% pause (`PAUSE-small`, `fr paper resume --book small`).
+**One book.** A $25,000 twin (`small`) traded the same takes from 2026-11-22 to 11-23. IBKR's $1 minimum commission cost it about 80 bp per round trip on small four-leg pairs, so it was stopped, and its code was removed on 2026-11-24 once its last trade closed. Its trades stay in the journal (ids with `M`, `"book": "small"`) and are kept out of the swing book's figures.
 
 The book is a sub-account of the paper account: its value is its $1,000,000 of capital plus the realized and open profit and loss from its own fills, after commissions. Whatever the account is worth beyond the book is shown as "unassigned"; it should move slowly, and a jump means a position or cost the book doesn't account for.
 

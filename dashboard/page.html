@@ -1330,7 +1330,7 @@
       .on('pointerleave', () => { tip.hide(); cross.style('visibility', 'hidden'); dot.style('visibility', 'hidden'); });
   };
   // ---- Portfolio: one summary strip, the P/L history, open positions by trade or by symbol, and what closed in the latest session.
-  const PF_BOOK = { all: 'Both books', swing: '$1M swing', small: '$25k swing', intraday: 'Intraday' };
+  const PF_BOOK = { all: 'Both books', swing: '$1M swing', intraday: 'Intraday' };
   const pfData = (id) => okData(id);
   const PF_FRAME = { '1D': 'the day', '1W': 'the week', '1M': 'the month', MTD: 'the month to date', '3M': 'three months', YTD: 'the year to date', All: 'all time' };
   const pfUi = { book: 'swing', frame: isLocal ? '1D' : 'All', split: false, bars: {}, loading: {}, failed: {}, view: 'trade', filter: 'all', range: 'day', open: new Set(), closedOpen: new Set(),

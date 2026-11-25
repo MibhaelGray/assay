@@ -1,8 +1,35 @@
 # ETF Factor Rotation
 
-A research and paper-trading project with one book, the swing book. It collects daily bars from Yahoo Finance for the largest ETFs and stocks, turns them into technical and forced-flow signals, and screens about 1,240 names for trade setups. Three times a day a Claude research pass judges the screen and ranks every candidate. A paper book trades only the ideas it has conviction in, and every verdict and its reasoning is kept and scored.
+An AI-run swing trading book on an IBKR paper account. Code screens about 1,240 US-listed stocks and ETFs for unusual events, AI research decides what to trade, and code sizes and sends the orders. Every verdict, taken or passed, is kept and scored, to answer one question: can AI research produce statistically significant alpha?
 
 What the project is for, and the rules it is built by: [PROJECT.md](PROJECT.md). Read that first.
+
+## Architecture
+
+```
+  Yahoo bars + live prices ─┐
+  SEC EDGAR filings ────────┤
+                            ▼
+  1. SCREEN   fr screen --live      two doors: disclosures (filings, earnings) and market moves
+                                     (price/volume shocks, ETF and basket moves, stretched charts)
+                            │  shortlist of up to 25, at most 6 of one setup
+                            ▼
+  2. RESEARCH one Sonnet agent a name (web + filings), checked for depth by fr paper depth
+                            ▼
+  3. JUDGE    Fable judge: verdict, conviction 1–5, rank, stop and time limit for every candidate;
+              reviews every open trade; reads only fr paper desk (no scorecards, no lessons)
+                            │  fr paper propose writes journal/paper/proposals/<day>.json
+                            ▼
+  4. TRADE    order job (fr paper enter, every minute): sizes by risk, checks gateway bid/ask,
+              sends to the IBKR paper account; stops every 10 min, time limits at the close
+                            ▼
+  5. SCORE    fr paper learn (owner only): takes vs passes, by conviction, rank, door/route,
+              hedged vs outright; post-mortems on every closed trade
+```
+
+- **Code and AI have separate jobs.** The passes research, decide and write files. They can't send orders: only `paper/broker.py` does, and only to a paper account.
+- **Everything is a file in `journal/`**, committed to git: screens, research notes, proposals, fills and post-mortems. The dashboard and the scoring both read from there.
+- **The judge stays uninfluenced.** Passes never see the record, lessons or side data, so every verdict tests the research on its own.
 
 ## How it runs
 
@@ -32,8 +59,7 @@ One paper book of $1,000,000 on an IBKR paper account, live since the night of 2
 - Each trade is sized by its risk: it loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5. A typical trade is 3% of the book a side; none is over 6%. The rules are in the `swing-pass` skill and `paper/rules.py`.
 - A trade's hardest-to-fill leg is ordered first; its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own.
 - Every order needs the paper gateway's own bid and ask. Inside a 2% spread an order hits the bid or the ask, and whatever doesn't fill at once is cancelled, so nothing is left resting. If any leg's spread is over 2% when the trade is due, the trade is passed on: it never enters (since 2026-11-18, trades fill at once or not at all). Overnight, a leg with no overnight market is passed on the same way, and the night screen drops names over a 2% overnight spread before the pass researches them. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
-- A $25,000 book (`small`) trades the same takes as the $1,000,000 swing book, sized on its own capital; the dashboard's Portfolio view switches between them.
-- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing` (or `small`). `fr paper halt` stops new entries by hand.
+- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing` `fr paper halt` stops new entries by hand.
 
 ## Safety
 
@@ -49,7 +75,8 @@ uv run fr bars                # backfill five years of daily bars (no IBKR neede
 uv run fr serve               # dashboard at http://localhost:8765, with a Refresh button
 uv run fr dashboard           # or a static copy built from the journal
 uv run fr paper status        # the account against the book (read-only)
-uv run fr paper learn         # the record so far: takes against passes, by conviction, rank and setup
+uv run fr paper learn         # owner's record: takes vs passes by conviction, rank, door/route, hedged vs outright
+uv run fr paper desk          # what a pass reads: open trades, waiting entries, post-mortems due
 uv run fr baskets check       # is every themed basket a real basket?
 uv run python -m unittest discover -s tests
 ```

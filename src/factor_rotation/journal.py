@@ -144,10 +144,6 @@ def _side(idea: dict, side: str) -> list[str]:
     return list(v) if isinstance(v, list) else ([v] if v else [])
 
 
-def _legs(idea: dict) -> list[str]:
-    return [*_side(idea, "long"), *_side(idea, "short")]
-
-
 def _weights(idea: dict) -> dict[str, float]:
     """Each symbol's weight: +1 split evenly over the long side, -1 over the short side."""
     w = {}

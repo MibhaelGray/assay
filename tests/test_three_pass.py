@@ -756,31 +756,3 @@ class IntradayStopReplayTests(unittest.TestCase):
         args = (day, ["AAA"], {"AAA": 1.0}, {"AAA": 100.0}, -6.0, {}, None)
         self.assertEqual(learn._intraday_hit(*args, date(2026, 11, 22))[0], "wait")
         self.assertEqual(learn._intraday_hit(*args, date(2026, 12, 5))[0], "none")
-
-
-class TwoBooks(Taking):
-    """The small book trades the same takes as the swing book, sized on its own capital (the owner, 2026-11-22)."""
-
-    def setUp(self):
-        super().setUp()
-        (book.ROOT).mkdir(parents=True, exist_ok=True)
-        (book.ROOT / "book.json").write_text(json.dumps({"started": "2026-11-08T20:00:00-05:00", "design": "three-pass",
-                                                         "capital": {"swing": 900_000.0, "small": 25_000.0}}))
-
-    def test_each_take_is_entered_in_both_books_at_its_own_size(self):
-        self.night_take(verdict("AAA", 1))
-        b = Broker()
-        self.enter(SUNDAY_NIGHT, b)
-        ts = {t["id"]: t for t in entries.load(DAY)["trades"]}
-        self.assertEqual(sorted(ts), [f"{DAY}-M01", f"{DAY}-S01"])
-        big, small = ts[f"{DAY}-S01"], ts[f"{DAY}-M01"]
-        self.assertEqual((book.book_of(big), book.book_of(small)), ("swing", "small"))
-        self.assertEqual((big["notional"], small["notional"]), (27_000, 750))          # 0.15% of each book over a 5% stop
-        self.assertEqual(book.twins(), {f"{DAY}-M01": f"{DAY}-S01"})
-        # Each book's fills, positions and value are its own.
-        from factor_rotation import portfolio
-        self.assertEqual({f["order_ref"].split("|")[0] for f in portfolio.fills("small")}, {f"{DAY}-M01"})
-        self.assertEqual({f["order_ref"].split("|")[0] for f in portfolio.fills("swing")}, {f"{DAY}-S01"})
-        self.assertEqual(len(portfolio.fills("all")), len(portfolio.fills("small")) + len(portfolio.fills("swing")))
-        # The pass reviews the swing book's trade only, and its decision reaches the twin.
-        self.assertEqual(sorted(daily.to_review(DAY)), [f"{DAY}-S01"])

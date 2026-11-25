@@ -140,24 +140,15 @@ def _avg(fills: list[dict]) -> tuple[int, float | None, float]:
     return int(round(shares)), px, sum(f.get("commission") or 0 for f in fills)
 
 
-# Two books trade the same verdicts on the one paper account (the owner, 2026-11-22): the swing book ($1,000,000)
-# and the small book ($25,000), every rule the same and every size scaled to the book's capital. A trade says
-# which with "book": "small"; anything else is the swing book's (its trades say "dynamic", from the first design).
-# A small trade's id has M where the swing book's has S (2026-11-23-M01), so fills are told apart by their order ref.
-MAIN, SMALL = "swing", "small"
-ID_LETTER = {MAIN: "S", SMALL: "M"}
+# One book, the swing book. A $25,000 twin (the small book) traded the same verdicts from 2026-11-22 to 11-23 and
+# was retired once all its trades closed (removed 2026-11-24). Its trades stay in the journal, marked "book": "small"
+# with an M in their ids (2026-11-23-M01); book_of keeps them out of the swing book's trades, fills and P/L.
+MAIN, RETIRED = "swing", "small"
+ID_LETTER = {MAIN: "S"}
 
 
 def book_of(t: dict) -> str:
-    return SMALL if t.get("book") == SMALL else MAIN
-
-
-def twins() -> dict[str, str]:
-    """A small-book trade's id -> the swing book's trade from the same verdict, where there is one. The passes
-    review the swing book's trades; each decision is carried to its twin (proposals.reviews)."""
-    ts = recorded()
-    main = {t["proposal_id"]: t["id"] for t in ts if book_of(t) == MAIN and t.get("proposal_id")}
-    return {t["id"]: main[t["proposal_id"]] for t in ts if book_of(t) == SMALL and t.get("proposal_id") in main}
+    return RETIRED if t.get("book") == RETIRED else MAIN
 
 
 def recorded() -> list[dict]:
