@@ -209,16 +209,18 @@ class Shortlist(unittest.TestCase):
         n = screen.TOP
         ranked = [cand(f"T{i}", "turn", 3 - i / 1000) for i in range(n)] + [cand(f"S{i}", "stretched", 1 - i / 1000) for i in range(n)]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
-        # The cap is hard: each setup gets its share and the slots left over stay empty.
-        self.assertEqual(len(top), 2 * screen.MAX_PER_SETUP)
-        self.assertEqual(sum(c["setup"] == "stretched" for c in top), screen.MAX_PER_SETUP)
+        # The cap is hard: each setup gets its share (stretched is trimmed to CAP_BY_FAMILY["stretched"]) and leftover slots stay empty.
+        stretched_cap = screen.CAP_BY_FAMILY["stretched"]
+        self.assertEqual(len(top), screen.MAX_PER_SETUP + stretched_cap)
+        self.assertEqual(sum(c["setup"] == "stretched" for c in top), stretched_cap)
         self.assertEqual(sum(c["setup"] == "turn" for c in top), screen.MAX_PER_SETUP)
         self.assertEqual(rest[0]["name"], f"T{screen.MAX_PER_SETUP}")
 
     def test_the_stretched_setups_share_one_cap(self):
         ranked = [cand(f"S{i}", s, 1 - i / 100) for i, s in enumerate(["stretched", "basket_stretched", "factor_stretched"] * 4)]
         top, rest, _ = screen._shortlist(ranked, self.r, {})
-        self.assertEqual((len(top), len(rest)), (screen.MAX_PER_SETUP, 12 - screen.MAX_PER_SETUP))
+        cap = screen.CAP_BY_FAMILY["stretched"]
+        self.assertEqual((len(top), len(rest)), (cap, 12 - cap))
 
     def test_the_list_stops_at_its_limit(self):
         ranked = [cand(f"N{i}", s, 3 - i / 100) for i, s in enumerate(s for s in list(screen.WEIGHTS) for _ in range(3))]

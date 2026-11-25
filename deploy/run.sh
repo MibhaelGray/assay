@@ -23,7 +23,7 @@ export FR_SCHEDULED=1
 if [ -f .env ]; then
   while IFS='=' read -r key value; do
     value="${value%\"}"; value="${value#\"}"
-    case "$key" in FR_*) export "$key=$value" ;; esac
+    case "$key" in FR_*|SEC_USER_AGENT) export "$key=$value" ;; esac
   done < .env
 fi
 

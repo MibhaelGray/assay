@@ -25,7 +25,7 @@ from datetime import date, datetime
 import numpy as np
 import pandas as pd
 
-from . import bars, earnings, journal, live
+from . import bars, earnings, edgar, journal, live
 from .analytics.technicals import atr, rsi
 from .config import NY
 from .market import _regime, basket_library
@@ -54,7 +54,10 @@ HEAVY_VOLUME = 1.5
 # How much each setup counts when ranking, before its strength (0-1) is added. Earnings and relative strength
 # carry the most information; a stretch with no turn is only context.
 WEIGHTS = {
-    "earnings_gap_held": 3.0, "earnings_gap_faded": 2.6, "relative_strength": 2.5, "relative_weakness": 2.5,
+    "edgar_8k": 3.1, "edgar_13d": 3.1, "edgar_late_filing": 3.1, "edgar_insider_buy": 2.9,
+    "earnings_gap_held": 3.0, "earnings_gap_faded": 2.6, "earnings_report": 2.55,
+    "relative_strength": 2.5, "relative_weakness": 2.5,
+    "peer_readthrough": 2.35,
     "basket_breakout": 2.2, "basket_breakdown": 2.2, "breakout": 2.1, "breakdown": 2.1, "turn": 2.0,
     "reclaim_200": 2.0, "lost_200": 2.0, "basket_big_move": 1.8, "factor_turn": 1.6,
     "stretched": 1.0, "basket_stretched": 1.0, "factor_stretched": 1.0, "live_move": 2.4, "overnight_move": 2.4,
@@ -72,7 +75,29 @@ LIVE_HEAVY = 2.0
 REJUDGE_ATR = 1.5
 REJUDGE_SESSIONS = 2
 SLOTS = ("night", "late", "late2", "late3", "late4", "morning", "midday")   # proposals.NEW_PASSES
-EARNINGS_SETUPS = {"earnings_gap_held", "earnings_gap_faded"}
+EDGAR_SETUPS = {"edgar_8k", "edgar_13d", "edgar_late_filing", "edgar_insider_buy"}
+EARNINGS_SETUPS = {"earnings_gap_held", "earnings_gap_faded", "earnings_report"}
+DISCLOSURE_SETUPS = {*EDGAR_SETUPS, *EARNINGS_SETUPS, "peer_readthrough"}
+STRETCHED_SETUPS = {"stretched", "basket_stretched", "factor_stretched"}
+PEER_TRIGGER_SETUPS = {"edgar_8k", "edgar_13d", "edgar_late_filing", "earnings_gap_held", "earnings_gap_faded",
+                       "live_move", "overnight_move"}
+
+
+def route_of(setup: str, kind: str = "stock") -> tuple[str, str]:
+    """(door, route) for a candidate or proposal: Door 1 ('disclosure') vs Door 2 ('market_move')."""
+    if kind == "own":
+        return "own", "own"
+    if setup in EDGAR_SETUPS:
+        return "disclosure", "edgar_filing"
+    if setup in EARNINGS_SETUPS:
+        return "disclosure", "earnings"
+    if setup == "peer_readthrough":
+        return "disclosure", "peer_readthrough"
+    if setup in STRETCHED_SETUPS:
+        return "market_move", "chart_control"
+    if kind in ("etf", "basket", "factor"):
+        return "market_move", "macro_etf_shock"
+    return "market_move", "volume_shock"
 # Two things about the chart behind a breakout or breakdown, recorded on every stock and ETF candidate.
 # Tightness: the average daily range (true range over the prior close) of the 10 sessions before today, over
 # the same for the 50 sessions before those. Under 0.75 the name had gone quiet before it broke.
@@ -101,7 +126,8 @@ BASE_SETUPS = {"breakout", "breakdown"}
 # - A stock's default hedge is the market, sector or industry fund it has moved with most over 60 sessions,
 #   unless its basket's own hedge is within KEEP_BASKET_WITHIN of that. Under MIN_HEDGE_CORR nothing hedges
 #   it: SPY stays as the default and `hedge_fit.weak` says so. A fund is always set against SPY.
-MAX_PER_SETUP = 6    # about a quarter of the list, as 10 was of 40 and 5 of 20
+MAX_PER_SETUP = 6    # default cap per setup family
+CAP_BY_FAMILY = {"stretched": 2, "peer_readthrough": 3, "earnings_report": 5}
 FAMILY = {"basket_stretched": "stretched", "factor_stretched": "stretched", "basket_breakdown": "breakdown",
           "basket_breakout": "breakout"}   # setups that are one kind of idea and share a cap
 RECENT_EXIT = 3
@@ -230,7 +256,8 @@ def _shortlist(ranked: list[dict], r60: pd.DataFrame, in_book: dict[str, str], j
     top, rest, used = [], [], {}
     for c in kept:
         kind = FAMILY.get(c["setup"], c["setup"])
-        if len(top) < TOP and used.get(kind, 0) < MAX_PER_SETUP:
+        cap = CAP_BY_FAMILY.get(kind, MAX_PER_SETUP)
+        if len(top) < TOP and used.get(kind, 0) < cap:
             top.append(c)
             used[kind] = used.get(kind, 0) + 1
         else:
@@ -407,10 +434,10 @@ def _features(df: pd.DataFrame) -> dict | None:
 
 
 def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: float, reports: dict,
-                 days: _Days) -> list[dict]:
+                 days: _Days, edgar_hits: list[dict] | None = None) -> list[dict]:
     hits = []
 
-    def add(setup: str, direction: int, strength: float, why: str) -> None:
+    def add(setup: str, direction: int, strength: float, why: str, primary_links: list[str] | None = None) -> None:
         adjust = {}
         if setup in BASE_SETUPS:
             if f["tightness"] is not None:
@@ -424,11 +451,28 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
                     adjust["breakout_in_downtrend"] = ADJUST["breakout_in_downtrend"]
         if f.get("partial"):  # the session is still trading: nothing has closed yet
             why = why.replace("closed", "trading")
-        hits.append({"setup": setup, "direction": "long" if direction > 0 else "short", "strength": float(abs(strength)), "why": why,
-                     "adjust": adjust})
+        entry = {"setup": setup, "direction": "long" if direction > 0 else "short", "strength": float(abs(strength)), "why": why,
+                 "adjust": adjust}
+        if primary_links:
+            entry["primary_links"] = list(dict.fromkeys(primary_links))
+        hits.append(entry)
 
     ret1, atrp = f["ret_1d"], f["atr_pct_prev"]
-    # Earnings in the last three sessions: gapped and held, or gapped and faded, or the reaction ran against the news.
+    edgar_hits = edgar_hits or []
+    earn_links = [ev["url"] for ev in edgar_hits if ev.get("setup") == "edgar_earnings" and ev.get("url")]
+
+    # Door 1: SEC EDGAR filings (material 8-Ks, initial 13Ds, late-filing notices, Form 4 open-market buys).
+    for ev in edgar_hits:
+        setup = ev.get("setup")
+        if setup not in EDGAR_SETUPS:
+            continue
+        links = ev.get("urls") or ([ev["url"]] if ev.get("url") else [])
+        direction = 1 if ev.get("direction") == "long" else -1
+        strength = min(6.0, float(ev["value"]) / edgar.FORM4_SINGLE_MIN) if setup == "edgar_insider_buy" and ev.get("value") else 2.0
+        add(setup, direction, strength, ev["why"], primary_links=links)
+
+    # Door 1: Earnings in the last three sessions — gapped & held, gapped & faded, OR reported with no move bar.
+    had_earnings_hit = False
     if sym not in ETFS:
         for r in reports.get(sym, []):
             k_day = days.reaction(r)
@@ -449,6 +493,7 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
                    f"day {_pct(day_ret)}, {_pct(rel)} against {hedge}, volume {volr:.1f}x"
             if r.get("surprise_pct") is not None:
                 head += f", EPS surprise {r['surprise_pct']:+.0f}%"
+            gap_hit = False
             if abs(gap_atr) >= 1.5:
                 d = 1 if gap > 0 else -1
                 strong = pos >= 2 / 3 if d > 0 else pos <= 1 / 3
@@ -457,16 +502,35 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
                 held = d * (c[-1] - mid) > 0
                 if strong and volr >= 2 and held:
                     add("earnings_gap_held", d, gap_atr, f"{head}; closed in the {'top' if d > 0 else 'bottom'} third and still "
-                        f"{'above' if d > 0 else 'below'} the middle of that day's range ({mid:,.2f})")
+                        f"{'above' if d > 0 else 'below'} the middle of that day's range ({mid:,.2f})", primary_links=earn_links)
+                    gap_hit = True
                 elif weak:
                     add("earnings_gap_faded", -d, gap_atr, f"{head}; closed in the {'bottom' if d > 0 else 'top'} third, "
-                        f"against the gap")
+                        f"against the gap", primary_links=earn_links)
+                    gap_hit = True
             surprise = r.get("surprise_pct")
             rel_atr = rel / (a[k - 1] / c[k - 1])
             if surprise is not None and surprise > 0 and rel_atr <= -1:
-                add("earnings_gap_faded", -1, rel_atr, f"{head}; beat estimates and still fell against {hedge} (good news sold)")
+                add("earnings_gap_faded", -1, rel_atr, f"{head}; beat estimates and still fell against {hedge} (good news sold)",
+                    primary_links=earn_links)
+                gap_hit = True
             elif surprise is not None and surprise < 0 and rel_atr >= 1:
-                add("earnings_gap_faded", 1, rel_atr, f"{head}; missed estimates and still rose against {hedge} (bad news bought)")
+                add("earnings_gap_faded", 1, rel_atr, f"{head}; missed estimates and still rose against {hedge} (bad news bought)",
+                    primary_links=earn_links)
+                gap_hit = True
+            if not gap_hit and ago <= 1:
+                # Reported recently without a large gap: still surface via Door 1 (no move bar).
+                move_sign = (f["live"]["move"] if f.get("live") and f["live"]["phase"] != "regular" else day_ret)
+                d = -1 if move_sign < 0 else 1
+                add("earnings_report", d, max(0.5, abs(rel_atr)), f"{head}; reported without a large gap", primary_links=earn_links)
+            had_earnings_hit = True
+        # Catch earnings 8-Ks (Item 2.02) even when Yahoo's earnings calendar missed or mistimed the report.
+        if not had_earnings_hit and earn_links:
+            ev = next(e for e in edgar_hits if e.get("setup") == "edgar_earnings")
+            move_sign = (f["live"]["move"] if f.get("live") and f["live"]["phase"] != "regular" else ret1)
+            d = -1 if move_sign < 0 else 1
+            strength = max(0.5, abs(move_sign / atrp) if atrp else 0.5)
+            add("earnings_report", d, strength, f"{ev['why']}; {_pct(ret1)} today ({ret1 / atrp:+.1f} ATR)", primary_links=earn_links)
     heavy = f["vol_ratio"] >= HEAVY_VOLUME
     move_atr = ret1 / atrp
     if heavy and f["close"] > f["hi52_close"]:
@@ -559,9 +623,14 @@ def _names() -> list[str]:
     return sorted({*screen_universe(), *_groups(), *earnings.symbols()} - set(BARS_ONLY))
 
 
-def build() -> dict:
+def build(edgar_events: dict | None = None) -> dict:
     """The nightly screen, on settled daily bars."""
-    return _run(bars.load(_names()))
+    names = _names()
+    frame = bars.load(names)
+    as_of = frame.loc[frame["symbol"] == "SPY", "date"].max().date()
+    if edgar_events is None:
+        edgar_events = edgar.fetch_recent([s for s in names if s not in ETFS], as_of)
+    return _run(frame, edgar_events=edgar_events)
 
 
 def _with_live(frame: pd.DataFrame, snaps: dict[str, dict]) -> tuple[pd.DataFrame, dict[str, dict], dict[str, dict]]:
@@ -764,10 +833,10 @@ def _pct_or_none(x: float | None) -> str | None:
 
 
 def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | None = None, books=None,
-               sweep=None) -> dict:
+               sweep=None, edgar_events: dict | None = None) -> dict:
     """The screen for one of the three daily passes, on the latest prices. `snaps` stands in for the Yahoo pull,
-    `books` for the night screen's overnight quotes (OvernightCheck) and `sweep` for the overnight sweep
-    (a function from symbols to what _gateway_sweep returns)."""
+    `books` for the night screen's overnight quotes (OvernightCheck), `sweep` for the overnight sweep,
+    and `edgar_events` for the SEC EDGAR Door-1 filing pull (pass {} in tests to skip network)."""
     from .paper import proposals
 
     if slot not in SLOTS:
@@ -779,6 +848,8 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
     if "SPY" not in snaps:
         raise RuntimeError("no live prices from Yahoo (SPY is missing), so there is no live screen")
     frame, snaps, partial = _with_live(bars.load(names), snaps)
+    if edgar_events is None:
+        edgar_events = edgar.fetch_recent([s for s in names if s not in ETFS], now.date())
     swept = None
     if slot not in ("morning", "midday"):
         from .paper import entries
@@ -786,7 +857,7 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
             swept = (sweep or _gateway_sweep)(names)
     check = (OvernightCheck(books, swept) if slot == "night" else None)
     payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check,
-                           "sweep": swept})
+                           "sweep": swept}, edgar_events=edgar_events)
     if swept and swept.get("quotes"):
         payload["_sweep_quotes"] = swept
     spy = snaps["SPY"]
@@ -796,7 +867,57 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
     return payload
 
 
-def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
+def _peer_readthroughs(found: list[dict], feats: dict[str, dict], groups: dict[str, list[dict]],
+                       reports: dict, days: _Days, r60: pd.DataFrame) -> list[dict]:
+    """Door 1 peer read-throughs: un-moved comparables in the same vetted basket as a stock with a major
+    disclosure, earnings reaction, or live move."""
+    already = {c["name"] for c in found if c["kind"] == "stock"}
+    triggers = [c for c in found if c["kind"] == "stock" and c["setup"] in PEER_TRIGGER_SETUPS
+                and (c["setup"] not in ("live_move", "overnight_move") or c["strength"] >= 1.5)]
+    triggers.sort(key=lambda c: -_score(c))
+    out, added = [], set()
+    for src in triggers:
+        sym = src["name"]
+        for b in groups.get(sym, []):
+            per_src = 0
+            for m in b["members"]:
+                peer = m["symbol"]
+                if peer == sym or peer in already or peer in added or peer in ETFS or peer not in feats:
+                    continue
+                pf = feats[peer]
+                if pf["usd_volume"] < MIN_DOLLAR_VOLUME or not pf["atr_pct"]:
+                    continue
+                move_atr = pf["ret_1d"] / pf["atr_pct"]
+                if abs(move_atr) >= 1.0:
+                    continue
+                nxt = _next_report(peer, reports, days)
+                if nxt and nxt["sessions_away"] is not None and nxt["sessions_away"] <= 1:
+                    continue
+                hedge, fit = _pick_hedge(peer, r60, b["hedge"])
+                verdict, nums = _verdict(pf)
+                if text := _fit_text(hedge, fit):
+                    verdict += f"; {text}"
+                why = (f"peer {sym} ({b['name']} basket) triggered {src['setup']} ({src['direction']}): {src['why']}; "
+                       f"{peer} has moved only {_pct(pf['ret_1d'])} ({move_atr:+.1f} ATR) so far")
+                cand = {
+                    "name": peer, "kind": "stock", "setup": "peer_readthrough", "direction": src["direction"],
+                    "strength": min(4.0, float(src["strength"])), "why": why, "adjust": {},
+                    "hedge": hedge, "hedge_fit": fit, "baskets": [x["name"] for x in groups.get(peer, [])],
+                    "chart": verdict, "numbers": nums,
+                    "next_earnings": {k: v for k, v in nxt.items() if k != "reacts"} if nxt else None,
+                    "also": [], "peer_of": sym, "peer_basket": b["name"],
+                }
+                if src.get("primary_links"):
+                    cand["primary_links"] = list(src["primary_links"])
+                out.append(cand)
+                added.add(peer)
+                per_src += 1
+                if per_src >= 2:
+                    break
+    return out
+
+
+def _run(frame: pd.DataFrame, live_: dict | None = None, edgar_events: dict | None = None) -> dict:
     groups = _groups()
     baskets = basket_library()["baskets"]
     as_of_ts = frame.loc[frame["symbol"] == "SPY", "date"].max()
@@ -808,6 +929,7 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     quotes = (swept or {}).get("quotes") or {}
     after_close = bool(live_) and snaps["SPY"]["phase"] == "post"
     reports = earnings.load().get("names", {})
+    edgar_by_sym = (edgar_events or {}).get("by_symbol") or {}
     close = frame.pivot_table(index="date", columns="symbol", values="close").sort_index()
     rets = close.pct_change()
     spy_ret1 = float(rets["SPY"].iloc[-1])
@@ -832,11 +954,14 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         if not is_etf and f["usd_volume"] < MIN_DOLLAR_VOLUME:
             continue
         hedge, fit = _pick_hedge(sym, r60, groups[sym][0]["hedge"] if sym in groups else None)
-        hits = _symbol_hits(sym, f, hedge, rets[hedge] if hedge in rets else rets["SPY"], spy_ret1, reports, days)
+        hits = _symbol_hits(sym, f, hedge, rets[hedge] if hedge in rets else rets["SPY"], spy_ret1, reports, days,
+                            edgar_hits=None if is_etf else edgar_by_sym.get(sym))
         if not hits:
             continue
         hits.sort(key=lambda x: -_score(x))
         best = hits[0]
+        # Preserve any primary links gathered across all hits on this symbol (e.g. an 8-K 2.02 link alongside a live move).
+        all_links = list(dict.fromkeys(u for h in hits for u in (h.get("primary_links") or [])))
         verdict, nums = _verdict(f)
         if text := _fit_text(hedge, fit):
             verdict += f"; {text}"
@@ -845,13 +970,17 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
                 "baskets": [b["name"] for b in groups.get(sym, [])], "chart": verdict, "numbers": nums,
                 "next_earnings": {k: v for k, v in nxt.items() if k != "reacts"} if nxt else None,
                 "also": [f"{h['setup']} ({h['direction']})" for h in hits[1:]]}
+        if all_links:
+            cand["primary_links"] = all_links
         # A report dated today after the close is out by the time the night pass runs: the name is judged on its reaction.
         out_already = after_close and nxt and nxt["date"] == as_of.isoformat() and nxt["when"] == "after_close"
-        if nxt and nxt["sessions_away"] is not None and nxt["sessions_away"] <= 1 and best["setup"] not in EARNINGS_SETUPS \
+        if nxt and nxt["sessions_away"] is not None and nxt["sessions_away"] <= 1 and best["setup"] not in DISCLOSURE_SETUPS \
                 and not out_already:
             held_back.append({**cand, "held_back": f"reports {nxt['date']} {nxt['when'].replace('_', ' ')}, inside the next session"})
             continue
         found.append(cand)
+
+    found += _peer_readthroughs(found, feats, groups, reports, days, r60)
 
     for b in baskets:
         members = [m["symbol"] for m in b["members"]]
@@ -881,11 +1010,11 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
                           **hits[0], "chart": f"{p.description}; z {nums['z_50d']:+.1f} vs 50-day, 20-day {_pct(nums['ret_20d'])}",
                           "numbers": journal._records(pd.DataFrame([nums]))[0], "also": []})
 
-    # A stock moving with its flagged basket is folded into the basket, unless its own news (earnings) is the setup.
+    # A stock moving with its flagged basket is folded into the basket, unless Door 1 (disclosure/earnings/peer) is its setup.
     flagged = {c["name"]: c for c in found if c["kind"] == "basket"}
     kept = []
     for c in found:
-        if c["kind"] == "stock" and c["setup"] not in EARNINGS_SETUPS:
+        if c["kind"] == "stock" and c["setup"] not in DISCLOSURE_SETUPS:
             home = next((flagged[b] for b in c["baskets"] if b in flagged and flagged[b]["direction"] == c["direction"]), None)
             if home:
                 home["members_flagged"].append(f"{c['name']}: {c['setup']}")
@@ -894,10 +1023,13 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     for c in kept:
         c["score"] = round(_score(c), 3)
         c["strength"] = round(c["strength"], 2)
+        c["door"], c["route"] = route_of(c["setup"], c["kind"])
     kept.sort(key=lambda c: -c["score"])
     counts: dict[str, int] = {}
+    route_counts: dict[str, int] = {}
     for c in kept:
         counts[c["setup"]] = counts.get(c["setup"], 0) + 1
+        route_counts[c["route"]] = route_counts.get(c["route"], 0) + 1
 
     in_book, judged = _book_names(days.sessions, as_of), (_judged(live_["session"]) if live_ else None)
     check = (live_ or {}).get("check")
@@ -911,6 +1043,9 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         if not new:
             break
         dropped.update(new)
+    dropped_by_cap: dict[str, int] = {}
+    for c in rest:
+        dropped_by_cap[c["route"]] = dropped_by_cap.get(c["route"], 0) + 1
 
     liquid = {s for s, f in feats.items() if s not in ETFS and f["usd_volume"] >= MIN_DOLLAR_VOLUME}
     upcoming = []
@@ -925,6 +1060,7 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
     calendar = json.loads(brief_path.read_text()).get("forced_flows", {}).get("calendar", {}) if brief_path.exists() else {}
     events = [{"event": k, **v} for k, v in calendar.items() if isinstance(v, dict) and v.get("sessions_away", 99) <= 5]
 
+    edgar_meta = ({k: v for k, v in edgar_events.items() if k != "by_symbol"} if edgar_events else None)
     return {
         "as_of": as_of.isoformat(),
         "built_at": datetime.now(NY).isoformat(timespec="seconds"),
@@ -932,15 +1068,18 @@ def _run(frame: pd.DataFrame, live_: dict | None = None) -> dict:
         "next_session": days.next.isoformat(),
         "screened": len(feats),
         "hits_by_setup": counts,
+        "hits_by_route": route_counts,
+        "dropped_by_cap": dropped_by_cap,
         "spy_ret_1d": round(spy_ret1, 5),
         "candidates": top,
-        "more": [{k: c[k] for k in ("name", "kind", "setup", "direction", "score", "why")} for c in rest[:MORE]],
+        "more": [{k: c[k] for k in ("name", "kind", "setup", "door", "route", "direction", "score", "why") if k in c} for c in rest[:MORE]],
         "held_back": held_back,
         "in_book": held,
         "judged_recently": again,
         "earnings_ahead": upcoming[:40],
         "calendar_ahead": events,
         "regime": _regime_notes(as_of),
+        **({"edgar": edgar_meta} if edgar_meta is not None else {}),
         **({"overnight": check.report(dropped)} if check else {}),
         **({"overnight_sweep": _sweep_report(swept, feats, spy_overnight)} if swept is not None else {}),
     }
@@ -1014,7 +1153,18 @@ def summary(payload: dict) -> str:
         lines = [f"Screen for {payload['as_of']} (next session {payload['next_session']}): {payload['screened']} names, "
                  f"{sum(payload['hits_by_setup'].values())} hits"]
     for c in payload["candidates"]:
-        lines.append(f"{c['score']:.2f}  {c['name']:<28} {c['setup']:<20} {c['direction']:<5}  {c['why']}")
+        rt = f"[{c['route']}] " if c.get("route") else ""
+        lines.append(f"{c['score']:.2f}  {c['name']:<28} {rt}{c['setup']:<20} {c['direction']:<5}  {c['why']}")
+    if ed := payload.get("edgar"):
+        if ed.get("ok"):
+            c = ed.get("counts") or {}
+            lines.append(f"EDGAR ({ed['window'][0]}..{ed['window'][1]}): "
+                         f"{c.get('8k_material', 0)} material 8-K, {c.get('8k_earnings', 0)} earnings 8-K, "
+                         f"{c.get('13d', 0)} 13D, {c.get('late', 0)} late-filing, {c.get('form4_buys', 0)} Form 4 buys")
+        else:
+            lines.append(f"EDGAR skipped: {ed.get('error', 'unavailable')}")
+    if dropped_cap := payload.get("dropped_by_cap"):
+        lines.append("Outside the 25-slot cap by route: " + ", ".join(f"{k} {v}" for k, v in sorted(dropped_cap.items())))
     if payload["held_back"]:
         lines.append("Held back (earnings inside the next session): " + ", ".join(c["name"] for c in payload["held_back"]))
     if payload.get("in_book"):

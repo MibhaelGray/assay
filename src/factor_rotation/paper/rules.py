@@ -77,10 +77,12 @@ MAX_EXTENSION = 3          # sessions
 # trade's typical daily move (ATR % for a stock, the spread's daily sd for a basket or factor pair). The
 # earnings horizon matches the drift measured in the gap table (next open through four sessions).
 HORIZON = {
-    "earnings_gap_held": 4, "earnings_gap_faded": 4, "breakout": 5, "breakdown": 5, "reclaim_200": 5,
+    "edgar_8k": 5, "edgar_13d": 5, "edgar_late_filing": 5, "edgar_insider_buy": 5,
+    "earnings_gap_held": 4, "earnings_gap_faded": 4, "earnings_report": 4, "peer_readthrough": 3,
+    "breakout": 5, "breakdown": 5, "reclaim_200": 5,
     "lost_200": 5, "relative_strength": 3, "relative_weakness": 3, "turn": 3, "stretched": 3,
     "basket_breakout": 5, "basket_breakdown": 5, "basket_big_move": 2, "basket_stretched": 3,
-    "factor_turn": 5, "factor_stretched": 3, "live_move": 3,
+    "factor_turn": 5, "factor_stretched": 3, "live_move": 3, "overnight_move": 3,
 }
 STOP_MOVES = 1.5
 STOP_RANGE = (2.0, 8.0)    # percent

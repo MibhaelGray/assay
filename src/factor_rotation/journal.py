@@ -76,8 +76,14 @@ LEVERAGED_ASSETS = JOURNAL / "reference" / "leveraged_assets.json"
 # The setup a proposal came from, kept with it so results can be compared by setup. The screen (`fr screen`)
 # finds the first sixteen, and the live screen adds live_move; "catalyst" and "other" cover the research pass's own ideas.
 SETUPS = {
+    "edgar_8k": "filed a material 8-K item (termination, default, restructuring, impairment, delisting or non-reliance)",
+    "edgar_13d": "filed an initial activist Schedule 13D stake",
+    "edgar_late_filing": "filed a late-filing notice (NT 10-K or NT 10-Q)",
+    "edgar_insider_buy": "open-market Form 4 purchase by officers or directors",
     "earnings_gap_held": "gapped at least 1.5 ATR on earnings, closed strong on heavy volume and held",
     "earnings_gap_faded": "gapped on earnings and closed weak, or good news sold / bad news bought",
+    "earnings_report": "reported earnings since the prior session (no move bar required)",
+    "peer_readthrough": "un-moved comparable in a vetted basket whose peer just had a major disclosure or earnings move",
     "breakout": "closed above its 52-week or 20-day high on heavy volume",
     "breakdown": "closed below its 52-week or 20-day low on heavy volume",
     "reclaim_200": "closed back above its 200-day after a month or more below, on heavy volume",
@@ -93,6 +99,7 @@ SETUPS = {
     "factor_turn": "a stretched factor pair turned against the stretch",
     "factor_stretched": "a factor pair at least 2 standard deviations from its 50-day average",
     "live_move": "moving at least 2 ATR right now: outside regular hours on steady trading, or today on heavy volume",
+    "overnight_move": "moving at least 1.5 ATR net of SPY on IBKR's overnight venue",
     "catalyst": "built around a scheduled event",
     "other": "none of the above",
 }

@@ -162,7 +162,33 @@ def _day_ready(day: date, legs: list[str], close: dict, ix: dict | None, replay:
     return True
 
 
-def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date | None = None) -> dict | None:
+def _outright_and_hedged_legs(p: dict) -> tuple[tuple[list[str], list[str]], tuple[list[str], list[str]] | None]:
+    """(outright_legs, hedged_legs) for a proposal. Factor pairs have no separate hedge."""
+    from . import rules
+
+    longs, shorts = list(p["long"]), list(p["short"])
+    if p.get("kind") == "factor":
+        return (longs, shorts), (longs, shorts)
+    hedge = rules._hedge(longs, shorts)
+    if hedge is None and p.get("kind") == "etf" and p.get("name") != "SPY":
+        if longs == ["SPY"] and shorts:
+            hedge = "SPY"
+        elif shorts == ["SPY"] and longs:
+            hedge = "SPY"
+    outright = ([s for s in longs if s != hedge], [s for s in shorts if s != hedge]) if hedge else (longs, shorts)
+    if longs and shorts:
+        hedged: tuple[list[str], list[str]] | None = (longs, shorts)
+    else:
+        dh = (p.get("signal") or {}).get("hedge")
+        if dh and dh not in longs and dh not in shorts:
+            hedged = (longs, [dh]) if longs else ([dh], shorts)
+        else:
+            hedged = None
+    return outright, hedged
+
+
+def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date | None = None,
+                  override_legs: tuple[list[str], list[str]] | None = None) -> dict | None:
     """The plan result of a verdict from one of the three daily passes: from each leg's price when the order job
     first acted on the pass (entries marks: the same moment for a take and a pass) to the close where its stop
     is hit or its time limit ends, before costs. A morning or midday verdict is already partway through its
@@ -179,7 +205,10 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
     m = entries.marks(session, p["pass"])
     if not m:
         return None
-    legs = [*p["long"], *p["short"]]
+    longs, shorts = override_legs if override_legs is not None else (p["long"], p["short"])
+    legs = [*longs, *shorts]
+    if not legs:
+        return None
     entry = m["prices"]
     if lost := [s for s in [*legs, "SPY"] if s not in entry]:
         return {"status": "unpriced", "note": f"no price for {', '.join(lost)} when the {p['pass']} pass was acted on"}
@@ -188,7 +217,7 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
     days = ([session] if first != session else []) + journal.sessions_from(first, horizon)
     due = days[-1]
     close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in px[px["symbol"].isin([*legs, "SPY"])].groupby("symbol")}
-    w = journal._weights({"long": p["long"] or None, "short": p["short"] or None})
+    w = journal._weights({"long": longs or None, "short": shorts or None})
     stop = p["plan"].get("stop") or {}
     replay = ix is not None and "spread_pct" in stop and session >= INTRADAY_FROM
     today = today or date.today()
@@ -245,27 +274,39 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
 
 def outcomes() -> list[dict]:
     """One row per proposal: the verdict, the result of its own plan on daily bars (`plan_bps`, before costs,
-    None until it finishes), and for a take that was traded, the paper result after commissions."""
+    None until it finishes), both outright and hedged replays for apples-to-apples comparison, its door/route,
+    and for a take that was traded, the paper result after commissions."""
+    from ..screen import route_of
+
     props = proposals.every()
     if not props:
         return []
     paper = {r["proposal_id"]: r for r in book.rows(book.MAIN) if r.get("proposal_id")}
     tags = postmortems()
-    symbols = sorted({s for p in props for s in [*p["long"], *p["short"]]} | {"SPY"})
+    default_hedges = {h for p in props if (h := (p.get("signal") or {}).get("hedge"))}
+    symbols = sorted({s for p in props for s in [*p["long"], *p["short"]]} | default_hedges | {"SPY"})
     px = bars.load(symbols)
-    ix = bars.load_intraday([s for s in symbols if s in set(intraday_symbols())])
+    ix = bars.load_intraday([s for s in symbols if s in set(intraday_symbols()) | default_hedges])
     out = []
     for p in props:
-        plan = None
+        plan = outright = hedged = None
         if p["plan"] and (p["long"] or p["short"]) and not px.empty:
             plan = _mark_outcome(p, px, ix)
+            out_legs, hdg_legs = _outright_and_hedged_legs(p)
+            own_legs = (list(p["long"]), list(p["short"]))
+            outright = plan if out_legs == own_legs else _mark_outcome(p, px, ix, override_legs=out_legs)
+            hedged = plan if hdg_legs == own_legs else (_mark_outcome(p, px, ix, override_legs=hdg_legs) if hdg_legs else None)
         done = bool(plan) and plan["status"] in ("time", "stopped")
+        out_done = bool(outright) and outright["status"] in ("time", "stopped")
+        hdg_done = bool(hedged) and hedged["status"] in ("time", "stopped")
+        door, route = (p["door"], p["route"]) if p.get("door") and p.get("route") else route_of(p["setup"], p["kind"])
         r = paper.get(p["id"])
         reason = (r or {}).get("reason") or ""
         managed = "early exit" if reason.startswith(("review:", "midday check:")) else "extended" if (r or {}).get("extended") else None
         m = tags.get((r or {}).get("id"))
         out.append({
-            "id": p["id"], "session": p["session"], "name": p["name"], "kind": p["kind"], "setup": p["setup"], "direction": p["direction"],
+            "id": p["id"], "session": p["session"], "name": p["name"], "kind": p["kind"], "setup": p["setup"],
+            "door": door, "route": route, "direction": p["direction"],
             "source": p["source"], "pass": p.get("pass"), "verdict": _verdict(p), "decision": p["decision"], "conviction": p["conviction"], "reason": p["reason"],
             "rank": p.get("rank"), "ranked": p.get("ranked"), "recorded_at": p.get("recorded_at"),
             "legs": " / ".join(filter(None, [", ".join(p["long"]) and f"long {', '.join(p['long'])}", ", ".join(p["short"]) and f"short {', '.join(p['short'])}"])),
@@ -276,6 +317,12 @@ def outcomes() -> list[dict]:
             "plan_mature": bool(plan and plan.get("mature")), "plan_due": plan.get("due") if plan else None,
             "plan_so_far_bps": plan["bps"] if plan and not done and "bps" in plan else None,
             "plan_note": plan.get("note") if plan else None, "plan_exit": plan.get("exit_date") if done else None,
+            "outright_bps": outright["bps"] if out_done else None,
+            "outright_mature": bool(outright and outright.get("mature")),
+            "outright_so_far_bps": outright["bps"] if outright and not out_done and "bps" in outright else None,
+            "hedged_bps": hedged["bps"] if hdg_done else None,
+            "hedged_mature": bool(hedged and hedged.get("mature")),
+            "hedged_so_far_bps": hedged["bps"] if hedged and not hdg_done and "bps" in hedged else None,
             "trade_id": r and r["id"], "state": r and r["state"], "paper_bps": r["bps"] if r and r["state"] == "closed" else None,
             "exit_reason": reason or None, "managed": managed, "tag": m and m["tag"], "lesson": m and m["lesson"],
         })
@@ -354,15 +401,26 @@ def rank_table(rows: list[dict] | None = None) -> dict:
     return {"ranked": len(ranked), **_rank_summary(settled_groups), "so_far": _rank_summary(live_groups)}
 
 
+def _mode_table(rows: list[dict], prefix: str) -> dict:
+    settled = [r for r in rows if r.get(f"{prefix}_bps") is not None and r.get(f"{prefix}_mature", True)]
+    live = [(r, v) for r in rows if (v := (r.get(f"{prefix}_bps") if r.get(f"{prefix}_bps") is not None else r.get(f"{prefix}_so_far_bps"))) is not None]
+    return {
+        "settled": {k: _stat([r[f"{prefix}_bps"] for r in settled if r["verdict"] == k]) for k in sorted({r["verdict"] for r in settled})},
+        "so_far": {k: _stat([v for r, v in live if r["verdict"] == k]) for k in sorted({r["verdict"] for r, _ in live})},
+    }
+
+
 def tables(rows: list[dict] | None = None) -> dict:
-    """Averages of the settled proposals' plan results (past their scheduled time limit) by verdict, conviction and
-    setup, plus `so_far` across all priced proposals (open and finished, marked to latest prices), the paper results
-    of the trades taken, the trades the review managed against their original plans, and post-mortem tags."""
+    """Averages of the settled proposals' plan results (past their scheduled time limit) by verdict, conviction,
+    door, route, setup, and hedged vs outright, plus `so_far` across all priced proposals (open and finished,
+    marked to latest prices), the paper results of the trades taken, the trades the review managed against
+    their original plans, and post-mortem tags."""
     rows = outcomes() if rows is None else rows
     done = [r for r in rows if _settled(r)]
     early_stopped = sum(r["plan_bps"] is not None and not _settled(r) for r in rows)
     live = [(r, v) for r in rows if (v := _current_bps(r)) is not None]
     by = lambda key: {k: _stat([r["plan_bps"] for r in done if key(r) == k]) for k in sorted({key(r) for r in done}, key=str)}  # noqa: E731
+    by_live = lambda key: {k: _stat([v for r, v in live if key(r) == k]) for k in sorted({key(r) for r, _ in live}, key=str)}  # noqa: E731
     traded = [r for r in rows if r["paper_bps"] is not None]
     managed = [r for r in traded if r["managed"] and r["plan_bps"] is not None]
     return {
@@ -372,6 +430,10 @@ def tables(rows: list[dict] | None = None) -> dict:
                    "by_verdict": {k: _stat([v for r, v in live if r["verdict"] == k]) for k in sorted({r["verdict"] for r, _ in live})}},
         "by_conviction": by(lambda r: r["conviction"] if r["conviction"] is not None else "none"),
         "rank": rank_table(rows),
+        "by_door": {f"{door} · {verdict}": s for (door, verdict), s in by(lambda r: (r["door"], "take" if r["verdict"] == "take" else "not taken")).items()},
+        "by_route": {f"{route} · {verdict}": s for (route, verdict), s in by(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
+        "so_far_by_route": {f"{route} · {verdict}": s for (route, verdict), s in by_live(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
+        "by_mode": {"hedged": _mode_table(rows, "hedged"), "outright": _mode_table(rows, "outright")},
         "by_setup": {f"{setup} · {verdict}": s for (setup, verdict), s in by(lambda r: (r["setup"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "paper": _stat([r["paper_bps"] for r in traded]),
         "managed": {kind: {"paper": _stat([r["paper_bps"] for r in managed if r["managed"] == kind]),
@@ -388,15 +450,51 @@ def _line(label: str, s: dict) -> str:
             + ("   (small sample)" if s["n"] < SMALL else ""))
 
 
+def _desk_sections() -> list[str]:
+    """Operational book state only: open trades, waiting entries, and closed trades needing a post-mortem."""
+    from . import entries
+
+    lines: list[str] = []
+    if waiting := needs_postmortem():
+        lines += ["", "Closed trades with no post-mortem yet"] + [
+            f"  {r['id']} {r['name']} ({r['setup']}): {r['bps']:+.0f} bp, {r['reason']}" for r in waiting
+        ]
+    open_auto = [r for r in book.rows(book.MAIN) if r["state"] in ("open", "planned")]
+    lines += ["", "Open trades"]
+    if open_auto:
+        for r in open_auto:
+            lines.append(f"  {r['id']} {r['name']} ({r['setup']}, {r['legs']}): session {r['session_number']} of {r['horizon_days']}, "
+                         + (f"{r['bps']:+.0f} bp" if r["bps"] is not None else "no fills yet")
+                         + (f", {r['stop_room_pct']:+.1f}% from its stop" if r["stop_room_pct"] is not None else "")
+                         + (f". Wrong if: {r['wrong_if']}" if r.get("wrong_if") else ""))
+    else:
+        lines.append("  none")
+    if still := entries.waiting(entries.entry_session(datetime.now(NY)), book.MAIN):
+        lines += ["", "Takes still waiting to enter (review each: hold keeps trying, exit stands it down)"]
+        for w in still:
+            got = ", ".join(f"{s} {n}/{next(leg['shares'] for leg in w['legs'] if leg['symbol'] == s)}" for s, n in w["filled"].items())
+            lines.append(f"  {w['id']} {w['name']} ({w['setup']}, from the {w.get('pass')} pass): filled {got}. Wrong if: {w.get('wrong_if')}")
+    return lines
+
+
+def desk() -> str:
+    """What a research pass reads at its start (Folder 2 only): open trades, waiting entries, and closed trades
+    needing a post-mortem. No scorecards, no setup/route win rates, no past post-mortems, and no lessons.md,
+    so the judge stays uninfluenced while the verdict repository builds."""
+    lines = [f"Swing book desk, {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: open trades, waiting entries, and closed trades needing a post-mortem."]
+    lines += _desk_sections()
+    return "\n".join(lines)
+
+
 def brief() -> str:
-    """One page for the start of a research pass: the record so far, the open trades, what's waiting for a
-    post-mortem, and the standing lessons."""
+    """Owner-only report card: the record so far (by verdict, conviction, rank, door/route, hedged vs outright,
+    and setup), post-mortems, open trades, and standing lessons. Research passes run `fr paper desk` instead."""
     rows = outcomes()
     t = tables(rows)
     from .. import portfolio
     three = bool(portfolio.restart())
     waiting_note = f" ({t['early_stopped']} stopped early, waiting for their time limit)" if t["early_stopped"] else ""
-    lines = [f"{'Swing' if three else 'Automatic'} book record, {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} settled{waiting_note}.",
+    lines = [f"{'Swing' if three else 'Automatic'} book record (owner report), {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} settled{waiting_note}.",
              ("Plan result = the proposal's own plan from the price when its pass was acted on to its stop or time limit, before costs. "
               if three else "Plan result = the proposal's own plan on daily bars, first open to its stop or time limit, before costs. ")
              + "Settled tables wait until an idea's time limit has passed, so early stop-outs don't count ahead of surviving peers. The passes are the control: the takes have to beat them.",
@@ -405,6 +503,18 @@ def brief() -> str:
     if t["so_far"]["n"]:
         lines += ["", f"All ideas so far (open + finished, marked to latest price; n={t['so_far']['n']})"]
         lines += [_line(k, s) for k, s in t["so_far"]["by_verdict"].items()]
+    lines += ["", "Hedged vs outright (apples-to-apples, same stop & time limit)"]
+    for mode in ("hedged", "outright"):
+        for scope in ("settled", "so_far"):
+            bucket = t["by_mode"][mode][scope]
+            if bucket:
+                tag = "settled" if scope == "settled" else "all so far"
+                for k, s in bucket.items():
+                    lines.append(_line(f"{mode} ({tag}) · {k}", s))
+    lines += ["", "By door (settled)"] + ([_line(k, s) for k, s in t["by_door"].items()] or ["  nothing settled yet"])
+    lines += ["", "By route (settled)"] + ([_line(k, s) for k, s in t["by_route"].items()] or ["  nothing settled yet"])
+    if t["so_far_by_route"]:
+        lines += ["", "By route (all so far)"] + [_line(k, s) for k, s in t["so_far_by_route"].items()]
     lines += ["", "By conviction (settled)"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing settled yet"])
     rk = t["rank"]
     lines += ["", "By rank (1 = the best idea of its pass; settled passes only)"]
@@ -424,22 +534,7 @@ def brief() -> str:
     recent = sorted(postmortems().values(), key=lambda m: m["at"])[-10:]
     if recent:
         lines += ["", "Latest post-mortems"] + [f"  {m['trade_id']} {m['name']} ({m['setup']}, {m['bps']:+.0f} bp, {m['tag']}): {m['lesson']}" for m in recent]
-    if waiting := needs_postmortem():
-        lines += ["", "Closed trades with no post-mortem yet"] + [f"  {r['id']} {r['name']} ({r['setup']}): {r['bps']:+.0f} bp, {r['reason']}" for r in waiting]
-    open_auto = [r for r in book.rows(book.MAIN) if r["state"] in ("open", "planned")]
-    if open_auto:
-        lines += ["", "Open trades"]
-        for r in open_auto:
-            lines.append(f"  {r['id']} {r['name']} ({r['setup']}, {r['legs']}): session {r['session_number']} of {r['horizon_days']}, "
-                         + (f"{r['bps']:+.0f} bp" if r["bps"] is not None else "no fills yet")
-                         + (f", {r['stop_room_pct']:+.1f}% from its stop" if r["stop_room_pct"] is not None else "")
-                         + (f". Wrong if: {r['wrong_if']}" if r.get("wrong_if") else ""))
-    from . import entries
-    if still := entries.waiting(entries.entry_session(datetime.now(NY)), book.MAIN):
-        lines += ["", "Takes still waiting to enter (review each: hold keeps trying, exit stands it down)"]
-        for w in still:
-            got = ", ".join(f"{s} {n}/{next(leg['shares'] for leg in w['legs'] if leg['symbol'] == s)}" for s, n in w["filled"].items())
-            lines.append(f"  {w['id']} {w['name']} ({w['setup']}, from the {w.get('pass')} pass): filled {got}. Wrong if: {w.get('wrong_if')}")
+    lines += _desk_sections()
     path = proposals.root() / LESSONS
     lines += ["", f"Standing lessons ({path})", path.read_text().strip() if path.exists() else "  none written yet"]
     return "\n".join(lines)

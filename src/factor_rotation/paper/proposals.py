@@ -159,14 +159,16 @@ def pair_stats(longs: list[str], shorts: list[str]) -> dict | None:
 def _signal(c: dict) -> dict:
     """What the screen saw, kept with the verdict so the two can be compared later."""
     return {k: c[k] for k in ("why", "chart", "numbers", "score", "adjust", "hedge", "hedge_fit", "moved_with", "members",
-                                 "next_earnings", "also") if k in c}
+                                 "next_earnings", "also", "door", "route", "primary_links") if k in c}
 
 
 def _from_screen(c: dict, rank: int, screen: dict) -> dict:
+    from ..screen import route_of
     sides = rules._sides(c)
     source = f"live screen {screen['session']} {screen['slot']} #{rank}" if screen.get("live") else f"screen {screen['as_of']} #{rank}"
-    return {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "direction": c["direction"],
-            "source": source, "signal": _signal(c),
+    door, route = (c["door"], c["route"]) if c.get("door") and c.get("route") else route_of(c["setup"], c["kind"])
+    return {"name": c["name"], "kind": c["kind"], "setup": c["setup"], "door": door, "route": route,
+            "direction": c["direction"], "source": source, "signal": _signal(c),
             "long": sides[0] if sides else [], "short": sides[1] if sides else [], "plan": rules.default_plan(c) if sides else None}
 
 
@@ -184,8 +186,8 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
     else:
         if not _text(raw.get("name")) or raw.get("setup") not in journal.SETUPS or raw.get("direction") not in ("long", "short"):
             raise ValueError(f"{who}: an own idea needs name, direction (long or short) and setup, one of: {', '.join(journal.SETUPS)}")
-        p = {"name": raw["name"].strip(), "kind": "own", "setup": raw["setup"], "direction": raw["direction"], "source": "own",
-             "signal": None, "long": [], "short": [], "plan": None}
+        p = {"name": raw["name"].strip(), "kind": "own", "setup": raw["setup"], "door": "own", "route": "own",
+             "direction": raw["direction"], "source": "own", "signal": None, "long": [], "short": [], "plan": None}
     if raw.get("decision") not in DECISIONS:
         raise ValueError(f"{who}: decision must be take or pass")
     c = raw.get("conviction")

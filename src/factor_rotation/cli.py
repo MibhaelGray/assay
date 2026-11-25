@@ -75,7 +75,7 @@ def main(argv: list[str] | None = None) -> None:
                    help="a job that sends orders only looks when it is run by hand: it prints what it would send "
                         "and sends nothing. This makes it count, as the scheduled job does")
     c.add_argument("job", choices=["enter", "close", "sync", "status", "report", "halt", "resume",
-                                   "propose", "postmortem", "learn", "hedges", "side", "holds", "depth"])
+                                   "propose", "postmortem", "desk", "learn", "hedges", "side", "holds", "depth"])
     c.add_argument("args", nargs="*", help="propose, postmortem: the draft JSON file; hedges: the symbols on one side; "
                                            "side: `report` to score the side facts instead of pulling them")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
@@ -292,6 +292,8 @@ def _research(a) -> None:
             sys.exit(f'fr paper propose refused: the draft needs "pass": one of {", ".join(proposals.NEW_PASSES)}')
         elif a.job == "postmortem":
             print(learn.record_postmortems(draft()))
+        elif a.job == "desk":
+            print(learn.desk())
         elif a.job == "learn":
             print(learn.brief())
         elif a.job == "hedges":
@@ -308,7 +310,7 @@ def _paper(a) -> None:
     from .paper import book
     from .paper.broker import IBPaper, PaperSettings
 
-    if a.job in ("propose", "postmortem", "learn", "hedges"):
+    if a.job in ("propose", "postmortem", "desk", "learn", "hedges"):
         return _research(a)
     if a.job == "depth":
         # How much research each candidate got, from this session's transcripts (paper/depth.py). `args`: a session id.

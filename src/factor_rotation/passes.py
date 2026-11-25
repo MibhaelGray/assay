@@ -35,7 +35,7 @@ SHADOW = Path("data/shadow-journal")
 LOGS = Path("data/pass-logs")
 APP_BUILDS = Path.home() / "Library" / "Application Support" / "Claude" / "claude-code"
 READING = ["Read", "Glob", "Grep", "WebSearch", "WebFetch", "Agent", "Skill",
-           f"Write({DRAFTS}/**)", f"Edit({DRAFTS}/**)", "Bash(uv run fr trading-day)", "Bash(uv run fr paper learn)",
+           f"Write({DRAFTS}/**)", f"Edit({DRAFTS}/**)", "Bash(uv run fr trading-day)", "Bash(uv run fr paper desk)",
            "Bash(uv run fr quotes:*)"]
 # What each pass may run on top of the reading tools. Each leaves the session's proposals file rewritten
 # (paper/daily.py). Headless since 2026-11-16 so the judge is always Fable 5.2 at high effort: a pass scheduled in
@@ -54,8 +54,8 @@ Running as a background job, not in the Claude app (the owner's setup, 2026-11-1
   `uv run fr quotes SPY QQQ IWM ^VIX ^TNX CL=F ES=F NQ=F`), Yahoo prices.
 - Write every draft under `{DRAFTS}/`: the pass's draft as `{DRAFTS}/<pass>.json` (night.json, late.json, morning.json
   or midday.json) and post-mortems as `{DRAFTS}/postmortem.json`. Those are the only paths the record commands accept.
-- The research note goes in `$FR_JOURNAL_DIR/research/<session>-<pass>.md`, and lessons in
-  `$FR_JOURNAL_DIR/paper/lessons.md`; FR_JOURNAL_DIR is set for you. Commands not listed for this pass are refused.
+- The research note goes in `$FR_JOURNAL_DIR/research/<session>-<pass>.md`; FR_JOURNAL_DIR is set for you.
+  Never run `fr paper learn` or read/edit `journal/paper/lessons.md`: scorecards and lessons are owner-only while the repository builds. Commands not listed for this pass are refused.
 """
 
 # Put before the late pass's prompt when the session already has one.
@@ -133,8 +133,7 @@ def _run(name: str, shadow: bool = False) -> dict:
     env = {**os.environ, "CLAUDE_CODE_OAUTH_TOKEN": token, "FR_JOURNAL_DIR": str(root.resolve()),
            "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL, "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
-    writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)",   # "//" marks an absolute path
-              f"Edit(/{root.resolve()}/paper/lessons.md)"]
+    writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)"]   # "//" marks an absolute path
     cmd = [exe, "-p", "--model", MODEL, "--effort", EFFORT, "--output-format", "json", "--permission-mode", "dontAsk",
            "--allowedTools", *READING, *spec["allow"], *writes]
     prompt = (PROMPTS / spec["prompt"]).read_text() + HEADLESS
