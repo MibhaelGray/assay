@@ -75,27 +75,10 @@ CONSTITUENTS = [
 # sub-industry (index_stocks.json).
 # Since 2026-11-18 also big foreign companies listed in the US that neither index holds, such as TSMC
 # (foreign_stocks.json, "index": "foreign"), on the same $20M floor.
-# Since 2026-11-24 also US-listed operating companies in the $600M-$5B market-cap range with a 20-day median
-# daily dollar volume >= $25M and close >= $5 (smallmid_stocks.json, "index": "smallmid").
-_smallmid_path = Path(__file__).with_name("smallmid_stocks.json")
-INDEX_STOCK_INFO: dict[str, dict] = {
-    **json.loads((Path(__file__).with_name("index_stocks.json")).read_text())["stocks"],
-    **json.loads((Path(__file__).with_name("foreign_stocks.json")).read_text())["stocks"],
-    **(json.loads(_smallmid_path.read_text())["stocks"] if _smallmid_path.exists() else {}),
-}
+INDEX_STOCK_INFO: dict[str, dict] = {**json.loads((Path(__file__).with_name("index_stocks.json")).read_text())["stocks"],
+                                     **json.loads((Path(__file__).with_name("foreign_stocks.json")).read_text())["stocks"]}
 FOREIGN_STOCKS = sorted(s for s, i in INDEX_STOCK_INFO.items() if i["index"] == "foreign")
-SMALLMID_STOCKS = sorted(s for s, i in INDEX_STOCK_INFO.items() if i["index"] == "smallmid")
 INDEX_STOCKS = sorted(s for s in INDEX_STOCK_INFO if s not in CONSTITUENTS)
-
-
-def cap_tier(name: str, kind: str = "stock") -> str:
-    """Universe tier for scoring: smallmid ($600M-$5B tier), large_mid (S&P 500/400 + large ADRs), or etf_basket."""
-    if kind in ("etf", "basket", "factor"):
-        return "etf_basket"
-    info = INDEX_STOCK_INFO.get(name)
-    if info and info.get("index") == "smallmid":
-        return "smallmid"
-    return "large_mid"
 
 
 @dataclass(frozen=True)
