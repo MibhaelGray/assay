@@ -71,17 +71,14 @@ DRIFT_GUARD_AFTER = timedelta(minutes=5)  # apply the chasing guard once entry i
 PREMARKET_END = time(9, 10)       # New York: the last pre-market order, good until GOOD_TILL so it never meets the open
 GOOD_TILL = "09:25:00"
 SETTLE = 3                        # seconds after sending before the fills are pulled
-STOP_EVERY = timedelta(minutes=10)      # regular-session stop check cadence after the opening half-hour
-OPEN_STOP_EVERY = timedelta(minutes=2)  # first 30 minutes of the regular session (9:30-10:00 AM ET / 8:30-9:00 AM CT)
-OPEN_WINDOW_END = time(10, 0)
+# Regular-session stop checks, all day (the owner, 2026-11-26). From 2026-11-23 the opening half-hour was checked
+# every 2 minutes to cut overshoot, but replaying every verdict at 5, 10, 30 and 60 minutes moved the average result
+# by a few bp and the overshoot hardly at all, the early overshoots traced to quotes being refused (10197), not to
+# the cadence, and the scoring replay (learn._checks) uses this same step, so takes and passes are checked alike.
+STOP_EVERY = timedelta(minutes=10)
 NO_FILL_TRIES = 3                 # tries that hit the bid or ask and filled nothing before deferring (overnight) or passing on
 WIDE_SPREAD_TRIES = 3             # regular-hours tries on a wide spread before standing down, in case the book tightens
 STOP_SLACK = timedelta(seconds=15) # launchd's minute is not exact; a check due in a few seconds counts as due
-
-
-def stop_interval(now: datetime) -> timedelta:
-    """Every 2 minutes during the opening half-hour (where most stop overshoots occur), then every 10 minutes."""
-    return OPEN_STOP_EVERY if time(9, 30) <= now.time() < OPEN_WINDOW_END else STOP_EVERY
 
 
 def spread_limit(where: str) -> float:
@@ -431,11 +428,11 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     just_ready = any(t.get("defer_regular") for t in ready_active)
     every = FOLLOW if part_in else (RETRY_FAULT if state.get("last_fault") or state.get("last_wide") else RETRY)
     retry_due = just_ready or last is None or now - last >= every
-    # Stops: every 2 minutes in the opening half-hour (9:30-10:00 AM ET), then every 10 minutes; quoted from
-    # IBKR's paper gateway first, falling back to Yahoo only if IBKR misses a symbol.
+    # Stops: every STOP_EVERY through the regular session; quoted from IBKR's paper gateway first, falling back
+    # to Yahoo only if IBKR misses a symbol.
     stops: list[tuple[dict, str]] = []
     checked = state.get("last_stop_check")
-    stop_due = where == "regular" and (not checked or now - datetime.fromisoformat(checked) >= stop_interval(now) - STOP_SLACK)
+    stop_due = where == "regular" and (not checked or now - datetime.fromisoformat(checked) >= STOP_EVERY - STOP_SLACK)
     if stop_due:
         entering = {t["id"] for t, _, _ in left_of(active)}
         skip_ids = exiting | entering | {t["id"] for t in wants_out}

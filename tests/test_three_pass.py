@@ -618,12 +618,13 @@ class Enter(Taking):
         again = self.enter(MORNING + entries.STOP_EVERY, Broker(), marks={"AAA": 94.0})
         self.assertEqual([e["trade_id"] for e in again["exits"]], ["T1"])
 
-    def test_stops_check_every_two_minutes_during_the_opening_half_hour(self):
+    def test_stops_check_every_ten_minutes_in_the_opening_half_hour_too(self):
+        # The same step all day (2026-11-26): the opening half-hour was every two minutes from 11-23 to 11-25.
         self.held_trade()
         t0 = datetime(2026, 11, 9, 9, 32, tzinfo=NY)
         self.enter(t0, Broker(), marks={"AAA": 96.0})
-        self.assertEqual(self.enter(t0 + timedelta(minutes=1), Broker(), marks={"AAA": 90.0})["exits"], [])
-        later = self.enter(t0 + timedelta(minutes=2), Broker(), marks={"AAA": 90.0})
+        self.assertEqual(self.enter(t0 + timedelta(minutes=2), Broker(), marks={"AAA": 90.0})["exits"], [])
+        later = self.enter(t0 + entries.STOP_EVERY, Broker(), marks={"AAA": 90.0})
         self.assertEqual([e["trade_id"] for e in later["exits"]], ["T1"])
 
     def test_stops_use_gateway_quotes_first_and_fall_back_to_yahoo(self):
