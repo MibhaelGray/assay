@@ -1,0 +1,383 @@
+{
+ "session": "2026-11-25",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-24T20:47:59.453039-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "exit",
+     "thesis": "weakened",
+     "reason": "Its time limit ended at the close on 11-24 and the book still shows it open with no exit recorded for the day, so close it at the next open instead of carrying an unplanned session. No wrong-if event (a 12-9 hike is priced at 91-98%); AGNC rose 2.6% against TLT -0.2% on Tuesday and the move the take expected did not come inside the window."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "exit",
+     "thesis": "weakened",
+     "reason": "Its time limit ended at the close on 11-24 and the book still shows it open, so close it at the next open. Nike rose 5.9% on Tuesday after Dick's said the Nike brand is performing well at Foot Locker and Jefferies kept its Buy (Yahoo, Benzinga, 11-24); one outlet mentions an upgrade, unverified. That is news against the short and no reason to stay past the plan."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "Its time limit ended at the close on 11-24 with the trade well in profit (Target +4.7% against XRT +2.3% on Tuesday) and the book still shows it open; nothing of Target's own is dated ahead, so close it at the next open."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "Its time limit ended at the close on 11-24 in profit (GDX -2.0%, gold -2.7% on Tuesday) and the book still shows it open; the 10-year is 4.90%, on the wrong-if line, and PCE at 7:30 AM CT is a coin toss the midday pass declined to extend through, so close it at the next open."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade dated since the print and no change to the guide, dividend or buyback found; Doomsday presales were reported at $16.5M on their first day (Variety, via search). Disney +1.9% against XLC +0.8% on Tuesday. Wednesday is its last session."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "The 3-2-1 crack is reported near $37.60, well under the $50 line, and Marathon, Valero and Phillips 66 fell a seventh straight day against XLE +1.0% (Benzinga, 11-24); no upgrades found. The EIA report on 11-25 is the remaining test and Wednesday is its last session."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "SQM made a new 52-week low (46.71 intraday, -3.8% on the day) on its own warning about Q4 prices; no upgrades or producer statement on higher contract prices found. Chinese lithium futures since 11-18 still could not be found, so that test stays unverified. Wednesday is its last session."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Barclays cut its target to $124 and UOB Kay Hian went to Hold; the only buyback news is routine daily repurchases of about $1M, not a step-up; no launch change found. NetEase -2.7% against FXI -0.6% on Tuesday. Wednesday is its last session."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Quebecor's proposal stands and its chief executive called the 11-23 talks encouraging (Globe and Mail, Bloomberg); the Globe also reports BCE has hired advisers and opened talks with TELUS and that Ottawa is open to three players. No withdrawal, rejection or block. TELUS +2.9% on Tuesday."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still only the 11-11 Betaville talk of a European approach, unconfirmed by Clorox or a major outlet; no upgrades or guide raise found. Clorox +2.6% against XLP +1.7% on a staples-led day."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No covering broker has downgraded (Wall Street Zen's 11-22 cut is a ratings service, and Jefferies raised its target to $38); no Spotify breakdown or outlook cut found. Warner -1.1% on Tuesday, 3% from its stop."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Accenture +4.5% with Cognizant +4.4% on a day SMH fell 7.3%: the rotation the take was about, with no company news reported (GuruFocus). No lab launch aimed at consulting, downgrade or guide change found."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety action, launch delay, guidance change or downgrade found tonight (search turned up nothing dated 11-24); Takeda +2.4% against XLV +3.0% on Tuesday, so it lagged the hedge on a strong health-care day."
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No denial, asset sale, financing or rescue investor reported; Canadian Solar fell another 14.9% to 4.84 against TAN -2.5% with no new item found. Its Q3 call is 12-3, after the time limit."
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event: the board approved a spin-off of the European business (0.36 DS Smith ADS a share, record date 12-3, completion 12-7), not a sale, and no guide reaffirmation, DOJ closure or upgrade was found (Argus cut it to Hold on 11-19). But International Paper rose 5.7% against XLB +0.5% on the firm spin date and the stop is under 3% away."
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "WTI settled +2.3% at 82.05 after three ships were hit by projectiles and Iran's Guards targeted a container ship; traffic was not reported halted. One roundup cites a DW report on 11-24 of fresh US strikes on Iranian assets near Hormuz, unverified, and CENTCOM denied the last such claim; if a strike is confirmed that is the wrong-if and the morning pass should exit. Crude is -0.5% tonight and the EIA report is Wednesday."
+    },
+    {
+     "trade_id": "2026-11-24-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No broker downgrade, target under $160 or trim to the Q4 guide found. Abercrombie closed +19.7% at 168.10 after trading near 176 at midday, so the entry is under water against XRT +2.3%; Black Friday reads start 11-27."
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade or target cut found; Dick's raised its full-year EPS guide and said Foot Locker's US comps rose more than 4% with Nike performing well there, the opposite of the wrong-if. Closed +14.6% at 153.17."
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Dycom closed -18.0% at 179.01 after saying several large customers are moderating fiber builds and fiscal 2028 fiber revenue will fall. Brokers cut targets and kept ratings (Wells Fargo to $300 from $550); no upgrades, no customer statement that builds are unchanged, no added buyback found."
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "LME copper fell about 5% to $11,860 on Tuesday on AI-demand doubts and fading US stockpiling (Fastmarkets); no supply shock or China measure reported and a hike is still priced above 90%. Freeport -4.0%, Southern Copper -4.5%, Teck -3.5% against XLB +0.5%. PCE at 7:30 AM CT is the next test."
+    }
+   ]
+  },
+  {
+   "pass": "morning",
+   "at": "2026-11-25T09:56:52.460341-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-17-S06",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "The night pass recorded an exit for the open and the book still shows it open; its time limit is spent. No wrong-if event (a 12-9 hike is priced near 98%). This morning TLT is +1.2% and AGNC -0.9% on the haven bid, which puts it in profit: close it now."
+    },
+    {
+     "trade_id": "2026-11-18-S01",
+     "action": "exit",
+     "thesis": "weakened",
+     "reason": "The night pass recorded an exit for the open and the book still shows it open; its time limit is spent and Tuesday's news ran against the short (Dick's said Nike is performing well at Foot Locker, Jefferies kept Buy). Nike is -0.4% against XRT -1.8% this morning; close it now."
+    },
+    {
+     "trade_id": "2026-11-18-S03",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "The night pass recorded an exit for the open and the book still shows it open; its time limit is spent with the trade in profit and nothing of Target's own dated ahead. Close it now."
+    },
+    {
+     "trade_id": "2026-11-18-S04",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "The night pass recorded an exit for the open and the book still shows it open. GDX is down another 4.6% this morning with gold -2.9%, and the 10-year is 4.83% at 8:35 AM CT (Yahoo), under the 4.9% wrong-if line: yields are falling on a haven bid, so the rate reason for the short is gone while the gain is at its largest. Close it now."
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; the close job ends it today. No downgrade, guide change or weak Doomsday tracking found; Disney is -1.1% against XLC -2.5% this morning."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; the close job ends it today. Marathon -2.7% and Valero -1.7% against XLE flat, an eighth straight fall, and reports this morning cite weak fuel margins (Investing.com, Angel One). Today's EIA product numbers could not be found, so that test is unverified."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; the close job ends it today. SQM is at a new low (45.09, -3.9%) and Albemarle flagged softer Q4 lithium pricing; no upgrades found. Chinese lithium futures still unverified."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; the close job ends it today. No buyback step-up, upgrade or launch change found; NetEase is -0.8% against FXI -3.1% this morning on the new tariff proposals, which is the hedge falling, not news on NetEase."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No withdrawal, rejection or block reported; TELUS is +0.9% on a -3% day."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No confirmed approach, upgrade or guide raise found; Clorox +0.4% against XLP +0.1%."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No broker downgrade, Spotify breakdown or outlook cut found; Warner is -0.6% on a morning SPY is -3%, 2.5% from its stop, which code checks."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Accenture is +1.3% while chips fall again (XSD -6.5%): the rotation the take was about. No lab launch aimed at consulting, downgrade or guide change found."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety action, guidance change or downgrade found; Takeda +1.2% against XLV -1.4% this morning."
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No denial, asset sale, financing or rescue investor reported; Canadian Solar is down another 8.8% to 4.42 against TAN -2.8%."
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event found (no sale of the European business, guide reaffirmation, DOJ closure or upgrade), but it is 2.5% from its stop after Tuesday's rise on the firm spin-off date; International Paper -0.8% against XLB -1.3% this morning."
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No US or Israeli strike is confirmed: reports this morning say a tanker hit a mine on Tuesday, officials are weighing options and Trump has held off, with Hormuz flows near 49% of normal (Angel One, Yahoo, 11-25). WTI is +0.9% and USO +2.0% while everything else sells, 3% from the stop. Today's EIA crude number could not be found, so that test is unverified."
+    },
+    {
+     "trade_id": "2026-11-24-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade, target under $160 or guide trim found; Abercrombie -0.3% against XRT -1.8% this morning. Black Friday reads start 11-27."
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade or target cut found; Dick's +1.8% against XRT -1.8% this morning."
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No customer statement, upgrade, added buyback or insider buy found; Dycom -6.7% this morning with XSD -6.5%."
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No supply shock or China measure reported; a hike is priced near 98% after core PCE of 3.3%, and new tariff proposals on China lean against copper. Freeport -4.4% against XLB -1.3%."
+    },
+    {
+     "trade_id": "2026-11-25-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled. Maximus is -0.9% at 58.69 against KIE flat, well under one ATR since the verdict; no new federal contract, guide change or upgrade found (a $62M Pennsylvania award on an undated page is state work and small)."
+    },
+    {
+     "trade_id": "2026-11-25-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Still unfilled. Texas Pacific Land is +1.1% at 254.02 against XOP +0.2%, so it has not run away from the entry; no definitive data-center agreement, lifting of the Texas pause, buyback or upgrade found."
+    }
+   ]
+  },
+  {
+   "pass": "midday",
+   "at": "2026-11-25T13:29:46.251409-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; no downgrade, guide or buyback change found, brokers raised targets after the print, and Disney is +1.8% against XLC +0.6% today. Nothing dated in the next three sessions to extend for; it closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; today's EIA report (week to 11-20) showed gasoline +1.7M and distillate +0.7M barrels, builds not draws, with refinery runs at 97.5%; no crack-spread recovery or upgrades found, and MPC is -2.3% against XLE +1.0%. It closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; no upgrades after the print, SQM itself said Q4 realized prices could be substantially lower, and no lithium futures quote was found. It closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Last session; no buyback step-up, special dividend, upgrade or launch change found (brokers cut targets after the miss). NetEase is +2.4% against FXI -1.2% today with no news; it closes on its time limit."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No withdrawal, rejection, BCE denial or regulator statement found; the special committee is still reviewing and nothing dated after 11-19 turned up. TELUS is +1.6% today."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No confirmed approach from Clorox or a major outlet, no upgrade or target above $110 and no guide raise found; the only bid talk is an unconfirmed 11-11 report. But Clorox is +3.6% at 110.67 against XLP +0.8% and the stop is close."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade, target under $33, Spotify breakdown or outlook cut found; Warner is +0.5% at 32.55 on a day the Nasdaq is -1.5%."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No frontier-lab launch aimed at services, downgrade or guide trim found; Wedbush started coverage at Outperform ($266) this morning and Accenture is +4.9% as chips fall 3%, the rotation the trade is for."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety action, guidance cut, downgrade or change to the 12-11 Capital Markets Day found; Takeda is +2.1% against XLV -0.1%."
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No denial, asset sale, financing or rescue investor found for Canadian Solar; it is +7.6% today against TAN +1.0% with no news, which gives back part of the gain."
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event: the European business is being spun off on 12-7 (8-K of 11-23), not sold, and no guide reaffirmation, DOJ closure or upgrade was found. But International Paper is +4.5% today after +5.7% Tuesday on the firm spin date, and it is at its stop."
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No wrong-if event: today's EIA report showed a crude build of 1.1M barrels, not a draw; no strike, failed-talks statement, Hormuz halt or OPEC+ cut report was found. But tanker attacks are mounting (two ships hit mines today, 40 attacks in ten days by Iran's count) and WTI is +2.0% at $83.73, close to the stop."
+    },
+    {
+     "trade_id": "2026-11-24-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade, low target, weak holiday read or guide trim found (no Black Friday data yet); Abercrombie is +3.6% against XRT flat."
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade or Foot Locker reversal found; Foot Locker's guide is unchanged and Dick's is +4.8% against XRT flat."
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Brokers cut targets (Cantor, JPMorgan and KeyBanc to $304-385, Wells Fargo to $275) and kept ratings; no carrier statement, upgrade, added buyback or insider buying found. Dycom is -2.7% against XSD -1.6%."
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No supply shock, China stimulus or Anglo-Teck approval found; PCE came in hot and a 12-9 hike is reported priced near 98%; LME copper is under $12,000, its low for the year (ING). Freeport is -0.2% against XLB +2.1%."
+    },
+    {
+     "trade_id": "2026-11-25-S01",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No new contract, VA incentive change, guide raise, receivables filing, buyback or insider buying found; Maximus is +2.5% against KIE +1.2% with no news."
+    },
+    {
+     "trade_id": "2026-11-25-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No definitive agreement, change to the Texas interconnection pause, buyback or upgrade found; Texas Pacific Land is +3.0% against XOP +1.3% with no news."
+    }
+   ]
+  }
+ ]
+}
