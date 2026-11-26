@@ -18,7 +18,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from . import journal
+from . import journal, transcripts
 from .config import NY  # importing config also loads FR_* settings from .env, the token among them
 
 log = logging.getLogger(__name__)
@@ -108,6 +108,22 @@ def run(name: str, shadow: bool = False) -> dict:
     return out
 
 
+def _keep(session_id: str | None, root: Path, label: str) -> str | None:
+    """Copy the judge's own record of the pass into the journal (transcripts.py), where the nightly job commits it.
+    Whatever goes wrong here, the pass itself has already run: say so in the log and carry on."""
+    try:
+        source = transcripts.find(session_id)
+        if not source:
+            return None
+        dest = root / transcripts.DIR / f"{label}.jsonl.gz"
+        session, _, name = label.rpartition("-")
+        transcripts.archive(source, dest, {"session": session, "pass": name, "session_id": session_id, "code": transcripts.code_version()})
+        return str(dest)
+    except Exception as e:   # noqa: BLE001
+        log.warning("could not keep the pass transcript: %s: %s", type(e).__name__, e)
+        return None
+
+
 def _run(name: str, shadow: bool = False) -> dict:
     from .paper import proposals
 
@@ -150,6 +166,6 @@ def _run(name: str, shadow: bool = False) -> dict:
            "ok": not reply.get("is_error") and after is not None and after != before, "recorded": str(root / leaves) if after and after != before else None,
            "turns": reply.get("num_turns"), "agents": (reply.get("subagent_stats") or {}).get("spawned"),
            "refused": [f"{d.get('tool_name')}: {str(d.get('tool_input'))[:120]}" for d in reply.get("permission_denials", [])],
-           "message": reply.get("result")}
+           "message": reply.get("result"), "transcript": _keep(reply.get("session_id"), root, f"{session}-{name}")}
     (LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json").write_text(json.dumps(out, indent=1) + "\n")
     return out
