@@ -627,6 +627,197 @@ class Enter(Taking):
         later = self.enter(t0 + entries.STOP_EVERY, Broker(), marks={"AAA": 90.0})
         self.assertEqual([e["trade_id"] for e in later["exits"]], ["T1"])
 
+    def test_an_exit_that_fills_in_part_is_finished_a_minute_later_not_left_for_the_close(self):
+        # The owner, 2026-11-27: a position due out at the open is closed at the open. Until then the rest of a
+        # part-filled exit waited for the close job, which didn't run that day and left five trades part closed.
+        self.held_trade()
+        b = Slow({"AAA": 10})                                         # 10 shares of AAA fill on each try
+        r = self.enter(MORNING, b, marks={"AAA": 94.0})
+        self.assertEqual([e["trade_id"] for e in r["exits"]], ["T1"])
+        self.assertIn("the rest is tried again every minute", " ".join(r["warnings"]))
+        self.assertEqual(self.state("T1"), "closing")
+        b._positions = {"AAA": 15}                                    # what the account holds after the first try
+        r = self.enter(MORNING + timedelta(minutes=1), b, marks={"AAA": 94.0})
+        self.assertEqual([(o["symbol"], o["action"], o["shares"]) for o in r["orders"]], [("AAA", "SELL", 15)])
+        self.assertEqual((r["retried_exits"], r["exits"]), (["T1"], []))   # the exit is recorded once
+        b._positions = {"AAA": 5}
+        r = self.enter(MORNING + timedelta(minutes=2), b, marks={"AAA": 94.0})
+        self.assertEqual([(o["symbol"], o["shares"]) for o in r["orders"]], [("AAA", 5)])
+        self.assertEqual(self.state("T1"), "closed")
+        self.assertEqual(len(entries.load(DAY)["exits"]), 1)
+        after = self.enter(MORNING + timedelta(minutes=3), b, marks={"AAA": 94.0})
+        self.assertEqual(after["orders"], [])
+
+    def part_closed_yesterday(self):
+        """T1's exit went out on the session before DAY and filled only 10 of its 25 AAA."""
+        friday = date(2026, 11, 6)
+        self.write("entries", friday, {"trades": [take_trade("T1")],
+                                       "exits": [{"trade_id": "T1", "book": "dynamic", "session_number": 1, "intraday": True,
+                                                  "at": "10:00 AM CT", "pass": None, "reason": "stopped: down 6.0%"}]})
+        self.write("fills", friday, {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25),
+                                               fill("T1", "AAA", "SLD", 10, n=1), fill("T1", "HHH", "BOT", 25, n=1)]})
+
+    def test_the_rest_of_an_exit_from_an_earlier_session_goes_out_at_the_next_open(self):
+        self.part_closed_yesterday()
+        b = Broker(positions={"AAA": 15})
+        self.assertEqual(self.enter(SUNDAY_NIGHT, b)["orders"], [])    # the regular session only
+        r = self.enter(datetime(2026, 11, 9, 9, 30, tzinfo=NY), b)
+        self.assertEqual([(o["symbol"], o["action"], o["shares"], o["venue"]) for o in r["orders"]], [("AAA", "SELL", 15, "regular")])
+        self.assertEqual(self.state("T1"), "closed")
+
+    def test_the_rest_of_an_exit_is_not_sent_when_the_account_does_not_hold_it(self):
+        self.part_closed_yesterday()
+        r = self.enter(MORNING, Broker(positions={}))                  # the account is flat: the fills were missed
+        self.assertEqual(r["orders"], [])
+        self.assertIn("the account's positions don't match the books for AAA", " ".join(r["warnings"]))
+
+    def test_the_rest_of_an_exit_waits_a_minute_for_a_quote(self):
+        self.part_closed_yesterday()
+        b = Broker(positions={"AAA": 15})
+        r = self.enter(MORNING, b, books={"HHH": (99.95, 100.05)})     # no quote for AAA
+        self.assertEqual(r["orders"], [])
+        self.assertIn("the rest of its exit waits a minute for AAA", " ".join(r["warnings"]))
+        r = self.enter(MORNING + timedelta(minutes=1), b)
+        self.assertEqual([(o["symbol"], o["shares"]) for o in r["orders"]], [("AAA", 15)])
+
+    def overdue_trade(self):
+        """T1's one-session time limit ended at the close before DAY, and no close job recorded its exit."""
+        self.write("entries", date(2026, 11, 6), {"trades": [{**take_trade("T1"), "horizon_days": 1}]})
+        self.write("fills", date(2026, 11, 6), {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)]})
+
+    def test_a_trade_whose_time_limit_ended_with_no_close_job_goes_out_at_the_next_open(self):
+        self.overdue_trade()
+        b = Broker()
+        self.assertEqual(self.enter(SUNDAY_NIGHT, b)["orders"], [])
+        r = self.enter(datetime(2026, 11, 9, 9, 30, tzinfo=NY), b)
+        self.assertEqual([(e["trade_id"], e["reason"]) for e in r["exits"]],
+                         [("T1", "time limit: it ended at the close on 11-06 with the trade still open, so it goes out at the next open")])
+        self.assertEqual(sorted((o["symbol"], o["action"], o["shares"]) for o in r["orders"]), [("AAA", "SELL", 25), ("HHH", "BUY", 25)])
+        self.assertEqual(self.state("T1"), "closed")
+
+    def test_an_overdue_exit_with_no_quote_is_tried_again_a_minute_later(self):
+        self.overdue_trade()
+        b = Broker()
+        r = self.enter(MORNING, b, books={"HHH": (99.95, 100.05)})
+        self.assertEqual((r["exits"], r["orders"]), ([], []))
+        self.assertIn("its overdue exit wasn't sent", " ".join(r["warnings"]))
+        r = self.enter(MORNING + timedelta(minutes=1), b)
+        self.assertEqual([e["trade_id"] for e in r["exits"]], ["T1"])
+
+    def test_a_trade_inside_its_time_limit_or_given_more_time_by_a_pass_is_not_overdue(self):
+        self.held_trade()                                              # four sessions, of which DAY is the second
+        self.prices.update({"AAA": 100.0})
+        self.assertEqual(self.enter(MORNING, Broker())["orders"], [])
+        t = {**take_trade("T2"), "horizon_days": 1}
+        self.assertIn("time limit", entries.overdue({**t, "first_session": "2026-11-06"}, DAY, {}))
+        for action in ("extend", "exit"):
+            self.assertIsNone(entries.overdue({**t, "first_session": "2026-11-06"}, DAY, {"T2": {"action": action}}))
+
+    def test_an_exit_a_pass_asked_for_with_no_quote_is_tried_again_a_minute_later(self):
+        self.held_trade()
+        self.prices.update({"AAA": 100.0})
+        self.screen("morning")
+        self.record("morning", MORNING, reviews=[{"trade_id": "T1", "action": "exit", "thesis": "broken", "reason": "the guide was cut"}])
+        b = Broker()
+        r = self.enter(MORNING, b, books={"HHH": (99.95, 100.05), "SPY": (499.95, 500.05)})
+        self.assertEqual(r["exits"], [])
+        self.assertIn("it is tried again in a minute", " ".join(r["warnings"]))
+        r = self.enter(MORNING + timedelta(minutes=1), b)             # not the 15 minutes an entry waits
+        self.assertEqual([e["trade_id"] for e in r["exits"]], ["T1"])
+
+    def test_regular_exits_use_wider_exit_slip_and_work_in_final_20_minutes(self):
+        self.part_closed_yesterday()
+        b = Broker(positions={"AAA": 15})
+        # 15:45 ET on a full day: venue() is None (no new entries), but regular_open() is True so exits STILL run!
+        late_day = datetime(2026, 11, 9, 15, 45, tzinfo=NY)
+        self.assertIsNone(entries.venue(late_day))
+        self.assertTrue(entries.regular_open(late_day))
+        r = self.enter(late_day, b, books={"AAA": (99.95, 100.05), "HHH": (99.95, 100.05)})
+        self.assertEqual([(o["symbol"], o["action"], o["shares"], o["limit"]) for o in r["orders"]],
+                         [("AAA", "SELL", 15, 99.45)])   # 99.95 * (1 - 0.005) = 99.45, NOT 0.15%
+        self.assertEqual(self.state("T1"), "closed")
+
+    def test_live_today_moc_orders_are_never_cancelled_or_double_exited_in_final_20_minutes(self):
+        self.held_trade()
+        # Simulate paper-close already having placed MOC orders at 15:41 ET for T1
+        self.write("exits", DAY, {
+            "exits": [{"trade_id": "T1", "book": "dynamic", "session_number": 2, "reason": "time limit"}],
+            "orders": [
+                {"trade_id": "T1", "symbol": "AAA", "action": "SELL", "shares": 25, "kind": "MOC", "status": "PreSubmitted"},
+                {"trade_id": "T1", "symbol": "HHH", "action": "BUY", "shares": 25, "kind": "MOC", "status": "PreSubmitted"},
+            ],
+        })
+        self.assertEqual(self.state("T1"), "closing")
+        cancelled_sets = []
+
+        class TrackCancelBroker(Broker):
+            async def cancel(self, trade_ids):
+                cancelled_sets.append(set(trade_ids))
+                return 0
+
+        b = TrackCancelBroker(positions={"AAA": 25, "HHH": -25})
+        r = self.enter(datetime(2026, 11, 9, 15, 45, tzinfo=NY), b, marks={"AAA": 80.0})
+        self.assertEqual(r["orders"], [])
+        self.assertEqual(b.sent, [])
+        for s in cancelled_sets:
+            self.assertNotIn("T1", s)
+
+    def test_final_nine_minute_close_failsafe_closes_due_trades_if_paper_close_missed(self):
+        # T1 is on its last session today (horizon_days=2, first_session=2026-11-06 -> DAY 2026-11-09 is session 2 of 2)
+        self.write("entries", date(2026, 11, 6), {"trades": [{**take_trade("T1"), "horizon_days": 2}]})
+        self.write("fills", date(2026, 11, 6), {"fills": [fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25)]})
+        b = Broker(positions={"AAA": 25, "HHH": -25})
+        # At 15:48 ET (before 15:50 MOC cutoff): failsafe stays quiet so paper-close can send MOC
+        r_early = self.enter(datetime(2026, 11, 9, 15, 48, tzinfo=NY), b, marks={"AAA": 100.0})
+        self.assertEqual(r_early["orders"], [])
+        # At 15:52 ET (after 15:50 MOC cutoff, still no exits/2026-11-09.json): failsafe closes T1 before the bell!
+        r_late = self.enter(datetime(2026, 11, 9, 15, 52, tzinfo=NY), b, marks={"AAA": 100.0})
+        self.assertEqual([e["trade_id"] for e in r_late["exits"]], ["T1"])
+        self.assertIn("close job missed the MOC cutoff", r_late["exits"][0]["reason"])
+        self.assertEqual(self.state("T1"), "closed")
+
+    def test_blocked_stop_exit_retries_one_minute_later(self):
+        self.held_trade()
+        b = Broker()
+        r1 = self.enter(MORNING, b, marks={"AAA": 94.0}, books={"HHH": (99.95, 100.05)})
+        self.assertEqual(r1["exits"], [])
+        self.assertTrue(entries.load(DAY)["stop_retry"])
+        # One minute later (NOT 10 minutes later): retries and closes immediately
+        r2 = self.enter(MORNING + timedelta(minutes=1), b, marks={"AAA": 94.0})
+        self.assertEqual([e["trade_id"] for e in r2["exits"]], ["T1"])
+        self.assertFalse(entries.load(DAY)["stop_retry"])
+
+    def test_minute_exit_retries_do_not_hammer_waiting_entries_or_reset_last_attempt(self):
+        self.part_closed_yesterday()
+        self.screen("morning", "BBB")
+        self.record("morning", MORNING, verdict("BBB", 1, hedge=None))
+        b = Slow({"AAA": 5, "BBB": 0})
+        # Run 1 at 11:00: BBB tries to enter (fills 0 -> empty_tries=1), AAA retries partial exit (fills 5)
+        b._positions = {"AAA": 15}
+        self.enter(MORNING, b, books={"AAA": (99.95, 100.05), "BBB": (19.98, 20.02), "HHH": (99.95, 100.05)})
+        t0_attempt = entries.load(DAY)["last_attempt"]
+        # Run 2 at 11:01 (1 min later): AAA retries partial exit, BBB MUST NOT be tried (waits 15 min) and last_attempt MUST NOT reset!
+        b._positions = {"AAA": 10}
+        b.sent.clear()
+        r2 = self.enter(MORNING + timedelta(minutes=1), b, books={"AAA": (99.95, 100.05), "BBB": (19.98, 20.02), "HHH": (99.95, 100.05)})
+        self.assertEqual([o["symbol"] for o in r2["orders"]], ["AAA"])
+        self.assertEqual(entries.load(DAY)["last_attempt"], t0_attempt)
+        self.assertEqual(entries.load(DAY)["trades"][0]["empty_tries"], 1)
+
+    def test_already_flat_trade_with_missing_exit_record_closes_cleanly(self):
+        # Simulate crash right after exit fills arrived but before state["exits"] was written
+        self.write("entries", date(2026, 11, 6), {"trades": [{**take_trade("T1"), "horizon_days": 1}]})
+        self.write("fills", date(2026, 11, 6), {"fills": [
+            fill("T1", "AAA", "BOT", 25), fill("T1", "HHH", "SLD", 25),
+            fill("T1", "AAA", "SLD", 25, n=1), fill("T1", "HHH", "BOT", 25, n=1),
+        ]})
+        self.assertEqual(self.state("T1"), "open")
+        b = Broker()
+        r = self.enter(MORNING, b)
+        self.assertEqual(r["orders"], [])
+        self.assertEqual([e["trade_id"] for e in r["exits"]], ["T1"])
+        self.assertEqual(self.state("T1"), "closed")
+
     def test_stops_use_gateway_quotes_first_and_fall_back_to_yahoo(self):
         self.held_trade()
         # Gateway quotes AAA at 93.90/94.10 (mid 94.0, past 5% stop) and misses HHH -> Yahoo fills HHH at 100.0

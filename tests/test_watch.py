@@ -1,12 +1,14 @@
 import json
+import os
 import tempfile
 import unittest
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from unittest import mock
 
-from factor_rotation import watch
+from factor_rotation import journal, watch
 from factor_rotation.config import NY
+from factor_rotation.paper import book, entries
 
 
 def at(text: str) -> datetime:
@@ -16,24 +18,53 @@ def at(text: str) -> datetime:
 class Passes(unittest.TestCase):
     def setUp(self):
         self.dir = tempfile.TemporaryDirectory()
-        self.logs = Path(self.dir.name)
-        patcher = mock.patch.object(watch, "PASS_LOGS", self.logs)
-        patcher.start()
-        self.addCleanup(patcher.stop)
+        self.logs = Path(self.dir.name) / "pass-logs"
+        self.logs.mkdir()
+        self.journal = Path(self.dir.name) / "journal"
+        for target, attr, val in ((watch, "PASS_LOGS", self.logs), (journal, "JOURNAL", self.journal)):
+            p = mock.patch.object(target, attr, val)
+            p.start()
+            self.addCleanup(p.stop)
         self.addCleanup(self.dir.cleanup)
 
-    def log(self, name: str, kind: str, started: str, ok: bool = True):
-        (self.logs / name).write_text(json.dumps({"pass": kind, "started": at(started).isoformat(), "ok": ok}))
+    def log(self, name: str, kind: str, started: str, ok: bool = True, **extra):
+        (self.logs / name).write_text(json.dumps({"pass": kind, "started": at(started).isoformat(), "ok": ok, **extra}))
 
     def test_a_recorded_pass_raises_nothing(self):
         self.log("2026-11-17-midday.json", "midday", "2026-11-17T13:00:07")
         found = watch.missing_passes(at("2026-11-17T14:30"), trading=lambda d: True)
-        self.assertFalse([k for k, *_ in found if k.startswith("pass:midday")])
+        self.assertFalse([k for k, *_ in found if "midday" in k])
 
-    def test_a_missing_pass_is_reported_after_pass_late_not_before(self):
-        self.assertFalse([k for k, *_ in watch.missing_passes(at("2026-11-17T14:25"), trading=lambda d: True) if "midday" in k])
+    def test_a_missing_pass_alerts_after_start_late_and_escalates_after_pass_late(self):
+        # 10 min after 13:00 -> not late yet
+        self.assertFalse([k for k, *_ in watch.missing_passes(at("2026-11-17T13:10"), trading=lambda d: True) if "midday" in k])
+        # 20 min after 13:00 with no running sentinel -> fast start alert
+        early = watch.missing_passes(at("2026-11-17T13:20"), trading=lambda d: True)
+        self.assertIn("pass-start:midday:2026-11-17", [k for k, *_ in early])
+        # 100 min after 13:00 -> missing pass alert
         found = watch.missing_passes(at("2026-11-17T14:40"), trading=lambda d: True)
         self.assertIn("pass:midday:2026-11-17", [k for k, *_ in found])
+
+    def test_a_running_pass_with_live_pid_does_not_false_alarm_until_stuck(self):
+        self.log("2026-11-17-night.json", "night", "2026-11-17T20:30:05", ok=False, status="running", pid=os.getpid())
+        # 110 minutes in, PID alive -> NO night alert (unlike before when a 125-min night pass false-alarmed at 95 min)
+        self.assertEqual([k for k, *_ in watch.missing_passes(at("2026-11-17T22:20"), trading=lambda d: True) if "night" in k], [])
+        # 160 minutes in, still running -> hung alert
+        stuck = watch.missing_passes(at("2026-11-17T23:10"), trading=lambda d: True)
+        self.assertIn("The night pass appears hung", [t for _, t, _ in stuck])
+
+    def test_a_running_pass_with_dead_pid_alerts_crashed(self):
+        self.log("2026-11-17-morning.json", "morning", "2026-11-17T09:45:05", ok=False, status="running", pid=999999)
+        with mock.patch.object(watch, "_pid_alive", return_value=False):
+            found = watch.missing_passes(at("2026-11-17T10:05"), trading=lambda d: True)
+        self.assertIn("The morning pass crashed", [t for _, t, _ in found])
+
+    def test_a_pass_recorded_in_proposals_raises_nothing_even_without_log(self):
+        prop_path = self.journal / "paper" / "proposals" / "2026-11-17.json"
+        prop_path.parent.mkdir(parents=True, exist_ok=True)
+        prop_path.write_text(json.dumps({"session": "2026-11-17", "passes": [{"pass": "morning", "at": at("2026-11-17T10:05").isoformat()}], "proposals": []}))
+        found = watch.missing_passes(at("2026-11-17T11:30"), trading=lambda d: True)
+        self.assertFalse([k for k, *_ in found if "morning" in k])
 
     def test_a_failed_pass_is_reported(self):
         self.log("2026-11-17-morning.json", "morning", "2026-11-17T09:45:05", ok=False)
@@ -139,7 +170,10 @@ class Sending(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d, \
                 mock.patch.object(watch, "STATE", Path(d) / "watch.json"), \
                 mock.patch.object(watch, "failed_jobs", return_value=[("job:nightly:1", "Job failed: nightly", "x")]), \
+                mock.patch.object(watch, "stopped_clock", return_value=[]), \
                 mock.patch.object(watch, "missing_passes", return_value=[]), \
+                mock.patch.object(watch, "missing_close", return_value=[]), \
+                mock.patch.object(watch, "stuck_closing", return_value=[]), \
                 mock.patch.object(watch, "refused_quotes", return_value=[]), \
                 mock.patch.object(watch, "gateway", return_value=[]), \
                 mock.patch.object(watch, "lost_quotes", return_value=[]), \
@@ -171,21 +205,80 @@ class Sending(unittest.TestCase):
             op.assert_not_called()
 
 
+class ClockAndCloseWatch(unittest.TestCase):
+    def test_stopped_clock_errors_and_missed_critical_jobs_alert(self):
+        now = datetime(2026, 11, 27, 13, 30, tzinfo=NY)
+        with tempfile.TemporaryDirectory() as d:
+            clk = Path(d) / "clock.json"
+            with mock.patch.object(watch, "CLOCK", clk):
+                self.assertEqual(watch.stopped_clock(now), [])
+                clk.write_text(json.dumps({"day": "2026-11-27", "tick": (now - timedelta(minutes=2)).isoformat()}))
+                self.assertEqual(watch.stopped_clock(now), [])
+                clk.write_text(json.dumps({
+                    "day": "2026-11-27",
+                    "tick": (now - timedelta(minutes=25)).isoformat(),
+                    "errors": {"pass-morning 09:45": {"error": "launchctl exited 113"}},
+                    "missed": {
+                        "paper-close 12:41": "skipped past window",
+                        "paper-close 15:41": "full-day slot on a half day",
+                        "pass-midday 13:00": "full-day pass on a half day",
+                        "pass-night 20:30": "friday night, tomorrow closed",
+                        "gateway-preflight 09:35": "skipped",
+                    },
+                }))
+                with mock.patch.object(book, "ROOT", Path(d) / "paper"):
+                    found = {k: text for k, _, text in watch.stopped_clock(now)}
+                self.assertIn("clock:stopped", found)
+                self.assertIn("25 minutes", found["clock:stopped"])
+                self.assertIn("clock:err:2026-11-27:pass-morning 09:45", found)
+                self.assertIn("clock:missed:2026-11-27:paper-close 12:41", found)
+                # Full-day close, midday on half day, Friday night pass, and preflight must NOT spam
+                self.assertNotIn("clock:missed:2026-11-27:paper-close 15:41", found)
+                self.assertNotIn("clock:missed:2026-11-27:pass-midday 13:00", found)
+                self.assertNotIn("clock:missed:2026-11-27:pass-night 20:30", found)
+                self.assertNotIn("clock:missed:2026-11-27:gateway-preflight 09:35", found)
+
+    def test_missing_close_alerts_on_half_day_and_full_day_and_dead_orders(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "paper"
+            with mock.patch.dict("os.environ", {"FR_PAPER_ACCOUNT": "DU0000000"}), \
+                    mock.patch.object(book, "ROOT", root), \
+                    mock.patch.object(journal, "JOURNAL", Path(d)):
+                # Half day (Black Friday 2026-11-27, closes 13:00 ET): silent at 12:45, alerts at 12:52!
+                self.assertEqual(watch.missing_close(at("2026-11-27T12:45")), [])
+                found = watch.missing_close(at("2026-11-27T12:52"))
+                self.assertEqual(len(found), 1)
+                self.assertEqual(found[0][0], "close:2026-11-27")
+                # Once clean exits file is written, alert clears
+                book._write(root / "exits" / "2026-11-27.json", {"session": "2026-11-27", "exits": [{"trade_id": "T1"}],
+                                                                  "orders": [{"trade_id": "T1", "symbol": "AAA", "kind": "MOC", "status": "PreSubmitted"}]})
+                self.assertEqual(watch.missing_close(at("2026-11-27T12:55")), [])
+                # DEAD order in exits file STILL alerts
+                book._write(root / "exits" / "2026-11-27.json", {"session": "2026-11-27", "exits": [{"trade_id": "T1"}],
+                                                                  "orders": [{"trade_id": "T1", "symbol": "AAA", "kind": "MOC", "status": "Cancelled"}]})
+                dead_found = watch.missing_close(at("2026-11-27T12:55"))
+                self.assertEqual(len(dead_found), 1)
+                self.assertIn("rejected/dead", dead_found[0][2])
+
+    def test_stuck_closing_alerts_after_15_min_but_ignores_pending_today_moc(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d) / "paper"
+            with mock.patch.dict("os.environ", {"FR_PAPER_ACCOUNT": "DU0000000"}), \
+                    mock.patch.object(book, "ROOT", root), \
+                    mock.patch.object(journal, "JOURNAL", Path(d)):
+                t = {"id": "T1", "book": "dynamic", "name": "AAA", "entry_date": "2026-11-25", "horizon_days": 3,
+                     "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 10.0}], "notional": 1000, "stop": {}}
+                book._write(root / "entries" / "2026-11-25.json", {"session": "2026-11-25", "trades": [t], "exits": [], "runs": []})
+                book._write(root / "fills" / "2026-11-25.json", {"session": "2026-11-25", "fills": [
+                    {"order_ref": "T1|AAA", "symbol": "AAA", "side": "BOT", "shares": 100.0, "price": 10.0, "commission": 1.0, "exec_id": "E1"}
+                ]})
+                # Live MOC order placed at 12:41 on half day -> NOT stuck at 12:55!
+                book._write(root / "exits" / "2026-11-27.json", {"session": "2026-11-27", "exits": [{"trade_id": "T1"}],
+                                                                  "orders": [{"trade_id": "T1", "symbol": "AAA", "kind": "MOC", "status": "PreSubmitted"}]})
+                self.assertEqual(watch.stuck_closing(at("2026-11-27T12:55")), [])
+                # Still unfilled 25 minutes AFTER the 13:00 close -> stuck!
+                self.assertEqual(len(watch.stuck_closing(at("2026-11-27T13:25"))), 1)
+
+
 if __name__ == "__main__":
     unittest.main()
-
-
-def test_stopped_clock_alerts_after_ten_minutes(tmp_path, monkeypatch):
-    """The clock (deploy/launchd/clock.py) starts every timed job, so the watchdog says when it stops ticking."""
-    import json
-    from datetime import datetime, timedelta
-    from factor_rotation import watch
-    from factor_rotation.config import NY
-    now = datetime(2026, 11, 27, 13, 30, tzinfo=NY)
-    monkeypatch.setattr(watch, "CLOCK", tmp_path / "clock.json")
-    assert watch.stopped_clock(now) == []                      # never installed
-    watch.CLOCK.write_text(json.dumps({"tick": (now - timedelta(minutes=2)).isoformat()}))
-    assert watch.stopped_clock(now) == []
-    watch.CLOCK.write_text(json.dumps({"tick": (now - timedelta(minutes=25)).isoformat()}))
-    (key, title, text), = watch.stopped_clock(now)
-    assert key == "clock:stopped" and "25 minutes" in text

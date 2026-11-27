@@ -3,17 +3,51 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 # The schedule's clock (deploy/launchd/clock.py), every 30 seconds: it starts each timed job below when its New York
-# time comes, whatever time zone the Mac is set to. It needs no lock, no .env and no caffeinate.
+# time comes, whatever time zone the Mac is set to. It has its own flock, and needs no .env and no caffeinate.
 if [ "${1:-}" = clock ]; then exec python3 deploy/launchd/clock.py; fi
 
-# One job of a kind at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
-# use the paper gateway and have their own lock, so a long data job can't make the 3:45 PM exits miss the
-# market-on-close cutoff.
-case "${1:-}" in keep-awake) lock=/tmp/fr-awake.lock ;; watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*|gateway-preflight) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
+# Keep-awake needs no lockf or wrapper caffeinate: launchd kickstarts it with -k (replacing any prior instance),
+# it records its own PID (preserved across exec) so clock.py can self-heal it after a reboot or crash, and it
+# prevents idle sleep across the active trading week (Sun 19:55 ET through Fri 20:00 ET).
+# Note: a closed lid without an external display still sleeps the Mac, and so does a flat battery.
+if [ "${1:-}" = keep-awake ]; then
+  mkdir -p data
+  secs=$(python3 -c 'from datetime import datetime, timedelta; from zoneinfo import ZoneInfo
+n = datetime.now(ZoneInfo("America/New_York"))
+if n.weekday() < 5 and (9, 0) <= (n.hour, n.minute) < (16, 30):
+    e = n.replace(hour=16, minute=45, second=0, microsecond=0)
+elif n.weekday() == 4 and (n.hour, n.minute) >= (16, 30):
+    e = n.replace(hour=20, minute=0, second=0, microsecond=0)
+else:
+    e = n.replace(hour=9, minute=30, second=0, microsecond=0)
+    if e <= n:
+        e += timedelta(days=1)
+print(max(60, int((e - n).total_seconds())))')
+  printf '%s\n' "$$" > data/.keep-awake.pid
+  exec caffeinate -i -t "$secs"
+fi
+
+# One job of a kind at a time. Paper jobs share /tmp/fr-paper.lock so gateway-preflight can't restart Docker in the
+# middle of an order run, and paper-enter uses a non-blocking lock (exiting 0 if busy) so minute ticks never pile up
+# behind gateway-preflight and starve paper-close before the MOC cutoff.
+case "${1:-}" in watch) lock=/tmp/fr-watch.lock ;; publish) lock=/tmp/fr-publish.lock ;; paper-*|gateway-preflight) lock=/tmp/fr-paper.lock ;; pass-*) lock=/tmp/fr-pass.lock ;; side-*) lock=/tmp/fr-side.lock ;; *) lock=/tmp/fr-ib.lock ;; esac
 if [ -z "${FR_LOCKED:-}" ]; then
   export FR_LOCKED=1
-  if command -v flock >/dev/null; then exec flock "$lock" "$0" "$@"; fi
-  exec lockf -k "$lock" "$0" "$@"
+  if [ "${1:-}" = paper-enter ]; then
+    if command -v flock >/dev/null; then
+      rc=0; flock -n -E 75 "$lock" "$0" "$@" || rc=$?
+    else
+      rc=0; lockf -k -t 0 "$lock" "$0" "$@" || rc=$?
+    fi
+    [ "$rc" -eq 75 ] && exit 0
+    exit "$rc"
+  elif [ "${1:-}" = paper-close ]; then
+    if command -v flock >/dev/null; then exec flock -w 120 "$lock" "$0" "$@"; fi
+    exec lockf -k -t 120 "$lock" "$0" "$@"
+  else
+    if command -v flock >/dev/null; then exec flock "$lock" "$0" "$@"; fi
+    exec lockf -k "$lock" "$0" "$@"
+  fi
 fi
 
 # Keep the Mac awake until this job ends.
@@ -49,11 +83,16 @@ case "$1" in
     # Nothing to do until the paper account is set up in .env (docs/operations.md).
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
     if [ "$1" = paper-close ]; then
-      # Started at 3:45 PM and 12:45 PM ET; only the run in the 30 minutes before today's close goes on, so a
-      # half day (1:00 PM ET close) exits at 12:45 PM ET and a full day at 3:45 PM ET.
+      # Started at 12:41/12:46 ET and 15:41/15:46 ET; only runs in the 30 minutes before today's close, so a
+      # half day (1:00 PM ET close) exits at 12:41/12:46 ET and a full day at 15:41/15:46 ET.
       uv run fr trading-day --closing || exit 0
     else
-      uv run fr trading-day || exit 0
+      hm=$((10#$(TZ=America/New_York date +%H%M)))
+      if [ "$hm" -lt 1500 ]; then
+        uv run fr trading-day --half || exit 0
+      else
+        uv run fr trading-day || exit 0
+      fi
     fi
     exec uv run fr paper "${1#paper-}" ;;
   paper-enter)
@@ -62,25 +101,24 @@ case "$1" in
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
     exec uv run fr paper enter ;;
   gateway-preflight)
-    # Deterministic gateway check 10 minutes before each scheduled pass and 5 minutes before paper-close.
+    # Deterministic gateway check 10 minutes before each scheduled pass and 9 minutes before paper-close.
     # Auto-restarts a hung/disconnected gateway silently; pings Telegram only if the phone app (10197) is holding
     # quotes or if a restart couldn't recover it.
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || exit 0
     hm=$((10#$(TZ=America/New_York date +%H%M)))
-    wd=$(TZ=America/New_York date +%u)
     if [ "$hm" -ge 900 ] && [ "$hm" -le 1015 ]; then
       uv run fr trading-day || exit 0
       exec uv run fr paper preflight "Morning pass"
     elif [ "$hm" -ge 1105 ] && [ "$hm" -le 1130 ]; then
       uv run fr trading-day || exit 0
       exec uv run fr paper preflight "Mid-morning check"
-    elif [ "$hm" -ge 1225 ] && [ "$hm" -le 1244 ]; then
+    elif [ "$hm" -ge 1225 ] && [ "$hm" -le 1245 ]; then
       uv run fr trading-day --closing || exit 0
       exec uv run fr paper preflight --no-quotes "Paper close"
-    elif [ "$hm" -ge 1245 ] && [ "$hm" -le 1315 ]; then
+    elif [ "$hm" -ge 1246 ] && [ "$hm" -le 1315 ]; then
       uv run fr trading-day --full || exit 0
       exec uv run fr paper preflight "Midday pass"
-    elif [ "$hm" -ge 1525 ] && [ "$hm" -le 1544 ]; then
+    elif [ "$hm" -ge 1525 ] && [ "$hm" -le 1545 ]; then
       uv run fr trading-day --closing || exit 0
       exec uv run fr paper preflight --no-quotes "Paper close"
     elif [ "$hm" -ge 2000 ] && [ "$hm" -le 2045 ]; then
@@ -92,7 +130,7 @@ case "$1" in
     # The public site (publish.py): pull today's prices and the paper account, push the page if it changed.
     exec uv run fr publish --pull ;;
   watch)
-    # The watchdog (watch.py): phone alerts when a pass, a job or the paper gateway breaks. Every five minutes.
+    # The watchdog (watch.py): phone alerts when a pass, a job, a close or the schedule clock breaks. Every five minutes.
     exec uv run fr watch ;;
   side-facts)
     # Facts recorded beside the night's verdicts, which no research pass reads (paper/side.py). Yahoo only.
@@ -110,13 +148,6 @@ case "$1" in
     # Not on a half day: the market closes at 1:00 PM ET, when this pass would start.
     uv run fr trading-day --full || exit 0
     exec uv run fr pass midday ;;
-  keep-awake)
-    # Hold off idle sleep until 9:40 AM New York time, so the order job and the night pass run all night.
-    # A closed lid still sleeps the Mac, and so does a flat battery.
-    secs=$(python3 -c 'from datetime import datetime, timedelta; from zoneinfo import ZoneInfo
-n = datetime.now(ZoneInfo("America/New_York")); e = n.replace(hour=9, minute=40, second=0, microsecond=0)
-e += timedelta(days=1) if e <= n else timedelta(); print(int((e - n).total_seconds()))')
-    exec caffeinate -i -t "$secs" ;;
   nightly)
     uv run fr trading-day || exit 0
     # The repo may be a working checkout with edits in progress: stash them around the pull, and commit only

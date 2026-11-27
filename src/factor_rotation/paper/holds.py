@@ -110,7 +110,7 @@ def _path(p: dict, px: dict, settled, trade: dict | None = None,
     entry_px, hold_days, mark_at, source = info
     session = date.fromisoformat(p["session"])
     stop_pct = ((p.get("plan") or {}).get("stop") or {}).get("spread_pct")
-    today = today or date.today()
+    today = today or datetime.now(NY).date()
     legs = list(w)
     replay = bool(ix) and stop_pct is not None and session >= learn.INTRADAY_FROM and p.get("pass") is not None
 

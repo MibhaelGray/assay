@@ -26,17 +26,22 @@ LOGS = Path.home() / "Library" / "Logs" / "factor-rotation"
 LABEL = "com.factor-rotation.{}"
 
 # job -> times on NYSE weekdays, New York time. The data jobs, the three passes (passes.py: headless, so the judge
-# is always Fable 5.2 at high effort whatever the Claude app is set to), the close job for stops and time limits,
-# the sync, and the side facts about an hour and a half after each pass starts.
+# is always Fable 5.2 at high effort whatever the Claude app is set to), the close job for stops and time limits
+# (primary 19 min before close and backup 14 min before close, both well before the 10-min MOC cutoff), the sync,
+# continuous trading-week keep-awake (daytime + overnight), and the side facts about an hour and a half after each pass starts.
 SCHEDULE = {
     "bars": ["16:30"],
     "nightly": ["19:00"],
-    "paper-close": ["15:45", "12:45"],   # the second is for half days (run.sh lets the one before the close run)
-    "paper-sync": ["16:20"],
+    # Primary at close - 19m (9 min before MOC cutoff) + idempotent backup at close - 14m (4 min before cutoff).
+    # run.sh gates on `fr trading-day --closing`, so half days (1:00 PM ET) run at 12:41/12:46 and full days at 15:41/15:46.
+    "paper-close": ["12:41", "12:46", "15:41", "15:46"],
+    # Half days sync at 13:20 ET (run.sh gates on --half); full days sync at 16:20 ET.
+    "paper-sync": ["13:20", "16:20"],
     "side-facts": ["22:15", "23:45", "11:15", "14:15"],
-    "keep-awake": ["16:40"],
-    # 10 min before each pass (7:20 PM, 8:35 AM, 11:50 AM CT), mid-morning (10:15 AM CT), and 5 min before close (2:40 PM / 11:40 AM CT).
-    "gateway-preflight": ["09:35", "11:15", "12:40", "12:50", "15:40", "20:20"],
+    # Daytime (09:20 -> 16:45 ET) + overnight Sun-Thu (16:40/19:55 -> 09:30 ET next day) + Fri evening (-> 20:00 ET).
+    "keep-awake": ["09:20", "16:40"],
+    # 10 min before each pass (7:20 PM, 8:35 AM, 11:50 AM CT), mid-morning (10:15 AM CT), and 9 min before paper-close (12:32 / 15:32 ET).
+    "gateway-preflight": ["09:35", "11:15", "12:32", "12:50", "15:32", "20:20"],
     # 7:30 PM, 8:45 AM and 12:00 PM Central.
     "pass-night": ["20:30"],
     "pass-morning": ["09:45"],

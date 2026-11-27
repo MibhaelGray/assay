@@ -4,8 +4,8 @@ A pass (night, morning or midday) records its verdicts with `fr paper propose`. 
 a minute, and trades them: the takes go in, and the open trades the pass said to exit come out. The pass never
 sends an order itself; this is the only place its decisions become orders. In the regular session it also checks
 every open trade against its stop every STOP_EVERY (the owner, 2026-11-18) and takes a trade past it out at once,
-with a quote like any other order; until then stops were checked only at the close. Time limits, and any stop exit
-that couldn't be sent during the day, stay with the 3:45 PM ET close job (book.close_session).
+with a quote like any other order; until then stops were checked only at the close. Time limits stay with the
+3:45 PM ET close job (book.close_session), which also sends whatever of a day's exits is still held then.
 
     journal/paper/entries/<session>.json
         trades   every trade made from the session's takes, written before its first order goes out
@@ -35,9 +35,13 @@ trade is part of the way in, until the session's entry window ends (entry_end: 2
 The one exception to the quote rule is the close job's exits for stops and time limits, which go into the closing
 auction whatever the gateway says: a trade past its stop must not be left open for want of a quote.
 
-An exit a pass asks for is sent here in the regular session only, with a quote like any other order. If it can't
-be sent, or doesn't fill, the close job sends it into the closing auction. A take a pass stands down before any
-of it has filled is cancelled and never enters.
+An exit a pass asks for is sent here in the regular session only, with a quote like any other order. An exit that
+is due is finished here, not left for the close (the owner, 2026-11-27: a position due out at the open is closed
+at the open): one that couldn't be sent, or filled only in part, is tried again on every run, a minute apart,
+until the trade is flat, and so is the rest of an exit an earlier close left part filled. A trade whose time limit
+ended at an earlier close with no exit recorded (the close job didn't run, as on 2026-11-27) goes out the same
+way at the next open. The close job still sends whatever is left into the closing auction. A take a pass stands
+down before any of it has filled is cancelled and never enters.
 
 A trade entered by the night pass counts its sessions from the session it was entered for. One entered by the
 morning or midday pass is already hours into its session, so its time limit counts from the next session; its
@@ -62,7 +66,8 @@ FOLLOW = timedelta(seconds=50)    # ... and every run (a minute) while a trade i
 PASS_MAX_NEW: int | None = None   # takes entered per pass: every one (the owner, 2026-11-16; three before that).
                                   # The book's own limits still hold: its capital, 60 open trades, 10% in one symbol
 LIMIT_SLIP = 0.005                # extended/overnight: how far past the bid or ask the limit sits
-LIMIT_SLIP_REGULAR = 0.0015       # regular hours: tight slip so fast morning stocks don't sweep thin levels (2026-11-23)
+LIMIT_SLIP_REGULAR = 0.0015       # regular-hours entries: tight slip so fast morning stocks don't sweep thin levels (2026-11-23)
+EXIT_LIMIT_SLIP = 0.005           # regular-hours exits: wider cushion so covering/exiting sweeps depth instead of leaving naked legs
 MID_WAIT = 10                     # seconds to try a midpoint limit in regular hours before stepping to the bid/ask
 MIN_MID_SPREAD = 0.02             # only try midpoint when the book is at least this wide in dollars
 REGULAR_ENTRY_START = time(9, 35) # New York (8:35 AM CT): when deferred overnight takes enter, after opening auctions settle
@@ -109,6 +114,50 @@ def entry_end(day: date) -> time:
     """The last moment of the regular session an entry may go out: 20 minutes before the close (3:40 PM ET, or
     12:40 PM ET on a half day)."""
     return (datetime.combine(day, journal.close_time(day)) - ENTRY_GAP).time()
+
+
+def regular_open(now: datetime) -> bool:
+    """Whether the regular session is open for exits and stop checks (9:30 AM until 1 minute before close).
+    Unlike `venue(now)`, exits do not stop 20 minutes before the close."""
+    today, t = now.date(), now.time()
+    if not journal.is_trading_day(today):
+        return False
+    end = (datetime.combine(today, journal.close_time(today)) - timedelta(minutes=1)).time()
+    return time(9, 30) <= t < end
+
+
+def _today_moc_exits(session: date) -> set[str]:
+    """Trade ids that already have a live (non-DEAD) MOC exit order in today's close file (`exits/<session>.json`).
+    `paper-enter` must neither cancel nor double-exit these while they wait for the closing auction."""
+    doc = book._read(book.ROOT / "exits" / f"{session}.json")
+    if not doc or doc.get("late_limit"):
+        return set()
+    orders = doc.get("orders") or []
+    live_moc = {o["trade_id"] for o in orders if o.get("kind") == "MOC" and o.get("status") not in book.DEAD}
+    return live_moc
+
+
+def close_fallback_due(now: datetime, session: date, t: dict, reviews: dict) -> str | None:
+    """Final-9-minute failsafe: if today's close job missed the 10-minute MOC cutoff (no exits/<session>.json by
+    close - 9m), close trades whose time limit ends today or that are broken before the closing bell."""
+    if not regular_open(now) or now.date() != session:
+        return None
+    close_dt = datetime.combine(session, journal.close_time(session), NY)
+    if now < close_dt - timedelta(minutes=9):
+        return None
+    if (book.ROOT / "exits" / f"{session}.json").exists():
+        return None
+    if date.fromisoformat(t["entry_date"]) > session:
+        return None
+    if (reviews.get(t["id"]) or {}).get("action") in ("exit", "extend"):
+        return None
+    filled = {h["symbol"] for h in t["held"]}
+    if filled != {leg["symbol"] for leg in t["legs"]}:
+        missing = sorted({leg["symbol"] for leg in t["legs"]} - filled)
+        return f"broken: {', '.join(missing)} never filled; close job missed the MOC cutoff, closing before the bell"
+    if book._session(t, session) >= t["horizon_days"]:
+        return f"time limit: session {book._session(t, session)} of {t['horizon_days']} (close job missed the MOC cutoff, closing before the bell)"
+    return None
 
 
 def books_running() -> tuple[str, ...]:
@@ -171,8 +220,8 @@ def crossing(action: str, book_: tuple[float, float] | None) -> float | None:
     return book_[1] if action == "BUY" else book_[0]
 
 
-def limit_price(action: str, price: float, where: str = "extended") -> float:
-    slip = LIMIT_SLIP_REGULAR if where == "regular" else LIMIT_SLIP
+def limit_price(action: str, price: float, where: str = "extended", is_exit: bool = False) -> float:
+    slip = EXIT_LIMIT_SLIP if is_exit else (LIMIT_SLIP_REGULAR if where == "regular" else LIMIT_SLIP)
     return round(price * (1 + slip) if action == "BUY" else price * (1 - slip), 2)
 
 
@@ -274,10 +323,10 @@ def waiting(session: date, which: str | None = None) -> list[dict]:
 
 
 def _order(trade_id: str, symbol: str, action: str, shares: int, book_: tuple[float, float], where: str, now: datetime,
-           session: date) -> dict:
+           session: date, is_exit: bool = False) -> dict:
     px = crossing(action, book_)
     o = {"trade_id": trade_id, "symbol": symbol, "action": action, "shares": shares, "kind": "LMT",
-         "limit": limit_price(action, px, where), "venue": where, "ref_price": round(px, 4), "priced_on": "gateway bid/ask",
+         "limit": limit_price(action, px, where, is_exit=is_exit), "venue": where, "ref_price": round(px, 4), "priced_on": "gateway bid/ask",
          **book_fields(book_)}
     if where == "extended" and now.time() < PREMARKET_END:
         o["good_till"] = f"{session:%Y%m%d} {GOOD_TILL} US/Eastern"
@@ -291,6 +340,30 @@ async def _gateway_stop_prices(symbols: list[str], quotes_fn=None) -> dict[str, 
     if missing := [s for s in symbols if s not in px]:
         px.update(await asyncio.to_thread(book.quotes, missing))
     return px
+
+
+def overdue(t: dict, session: date, reviews: dict) -> str | None:
+    """Why an open trade goes out at this session's open: its time limit ended at an earlier close and no exit was
+    recorded for it, because the close job didn't run that day. None while the limit hasn't passed, and when a
+    pass has spoken: an exit it asked for goes out as a review's, and an extension is the close job's to grant."""
+    if (reviews.get(t["id"]) or {}).get("action") in ("exit", "extend"):
+        return None
+    if book._session(t, session) <= t["horizon_days"]:
+        return None
+    last = journal.sessions_from(book._first(t), t["horizon_days"])[-1]
+    return f"time limit: it ended at the close on {last:%m-%d} with the trade still open, so it goes out at the next open"
+
+
+def _exit_left(t: dict, fills_map: dict) -> list[tuple[dict, int]]:
+    """(held leg, shares still to exit) for a trade on its way out, counting the exit fills pulled a moment ago
+    as well as the ones the trade was read with, so a retry never sends for shares that have just filled."""
+    out = []
+    for h in t["held"]:
+        side = "SLD" if h["side"] == "long" else "BOT"
+        done = int(round(sum(f["shares"] for f in fills_map.get((t["id"], h["symbol"]), []) if f["side"] == side)))
+        if (n := h["shares"] - max(h["exit_shares"], done)) > 0:
+            out.append((h, n))
+    return out
 
 
 def stopped(now: datetime, skip: set[str], prices=None) -> tuple[list[tuple[dict, str]], list[str]]:
@@ -419,24 +492,33 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     def ready_now(t: dict) -> bool:
         return not t.get("defer_regular") or (where == "regular" and now.time() >= REGULAR_ENTRY_START)
 
+    can_exit = regular_open(now)
+    moc_today = _today_moc_exits(session) if can_exit else set()
     active = [t for t in state["trades"] if not t.get("stood_down")]
     ready_active = [t for t in active if ready_now(t)]
-    exiting = {e["trade_id"] for e in state["exits"]}
+    exiting = {e["trade_id"] for e in state["exits"]} | moc_today
     wants_out = [t for t in book.open_trades() if (reviews.get(t["id"]) or {}).get("action") == "exit" and t["id"] not in exiting]
+    # Exits owed now, throughout the regular session (including the final 20 minutes), and tried on every run until
+    # the trade is flat. `part_out`: an exit already recorded that filled only in part (excluding live today MOCs).
+    # `late`: overdue from a prior missed close, OR due today after the close job missed the 10-minute MOC cutoff.
+    part_out = [t for t in book.trades() if t["state"] == "closing" and t["id"] not in moc_today
+                and any(h["shares"] > h["exit_shares"] for h in t["held"])] if can_exit else []
+    late = [(t, why) for t in book.open_trades() if t["id"] not in exiting
+            and (why := overdue(t, session, reviews) or close_fallback_due(now, session, t, reviews))] if can_exit else []
     last = datetime.fromisoformat(state["last_attempt"]) if state["last_attempt"] else None
     part_in = any(any(entered(t, fills_map).values()) for t in {u["id"]: u for u, _, _ in left_of(ready_active)}.values())
     just_ready = any(t.get("defer_regular") for t in ready_active)
     every = FOLLOW if part_in else (RETRY_FAULT if state.get("last_fault") or state.get("last_wide") else RETRY)
     retry_due = just_ready or last is None or now - last >= every
-    # Stops: every STOP_EVERY through the regular session; quoted from IBKR's paper gateway first, falling back
-    # to Yahoo only if IBKR misses a symbol.
+    # Stops: every STOP_EVERY through the regular session (and immediately next minute if a stop exit was blocked);
+    # quoted from IBKR's paper gateway first, falling back to Yahoo only if IBKR misses a symbol.
     stops: list[tuple[dict, str]] = []
     checked = state.get("last_stop_check")
-    stop_due = where == "regular" and (not checked or now - datetime.fromisoformat(checked) >= STOP_EVERY - STOP_SLACK)
+    stop_due = can_exit and (bool(state.get("stop_retry")) or not checked or now - datetime.fromisoformat(checked) >= STOP_EVERY - STOP_SLACK)
     if stop_due:
         # Only skip trades with zero filled shares (nothing to stop); partially-filled trades ARE checked.
         entering = {t["id"] for t in active if not any(entered(t, fills_map).values())}
-        skip_ids = exiting | entering | {t["id"] for t in wants_out}
+        skip_ids = exiting | entering | {t["id"] for t in wants_out} | {t["id"] for t, _ in late}
         if stop_prices is not None:
             stops, unchecked = await asyncio.to_thread(stopped, now, skip_ids, stop_prices)
         else:
@@ -445,12 +527,15 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             px_stop = await _gateway_stop_prices(need_syms, quotes) if need_syms else {}
             stops, unchecked = stopped(now, skip_ids, lambda _: px_stop)
         state["last_stop_check"] = now.isoformat(timespec="seconds")
+        state["stop_retry"] = False
         if unchecked:
             record["warnings"].append(f"No price for every leg of {', '.join(unchecked)}, so {'its' if len(unchecked) == 1 else 'their'} "
                                       "stop wasn't checked this time; the next check tries again.")
-    work = bool(left_of(ready_active)) or (where == "regular" and bool(wants_out))
+    entry_work = bool(left_of(ready_active))
+    work = entry_work or (can_exit and bool(wants_out))
+    owed = can_exit and bool(wants_out or part_out or late)   # an exit that is due doesn't wait for the next try
     has_deferred = any(t.get("defer_regular") for t in active)
-    if not fresh_passes and not ((work and retry_due or stops) and where):
+    if not fresh_passes and not ((entry_work and retry_due and where) or (can_exit and (stops or owed))):
         if stop_due and not dry:
             if record["warnings"]:
                 _save(session, state, record)
@@ -489,7 +574,7 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
     blocked_why = halted or ((why := drawdown.paused(book.MAIN)) and f"paused: {why}")   # the swing book's, for the phone note
     mine = {t["id"] for t in state["trades"]}
     held = [t for t in book.open_trades() if t["id"] not in mine]
-    leaving = exiting | {t["id"] for t in wants_out} | {t["id"] for t, _ in stops}
+    leaving = exiting | {t["id"] for t in wants_out} | {t["id"] for t, _ in stops} | {t["id"] for t, _ in late}
     for kind in fresh_passes:
         takes = [p for p in doc["proposals"] if p.get("pass") == kind and p["decision"] == "take"]
         record.setdefault("takes", {})[kind] = len(takes)
@@ -501,30 +586,42 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
 
     ready_active = [t for t in active if ready_now(t)]
     left = left_of(ready_active)
-    # Why each exit goes: a pass's review, or a stop the check above found. Both only in the regular session.
+    do_entries = bool(where) and bool(left) and (bool(fresh_passes) or retry_due)
+    # Why each exit goes: a pass's review, an overdue/fallback time limit, or a stop. Regular session only.
     why_out = {t["id"]: (f"review: {reviews[t['id']]['reason']}", reviews[t["id"]].get("pass")) for t in wants_out}
-    why_out.update({t["id"]: (reason, None) for t, reason in stops})
-    send_exits = [*wants_out, *(t for t, _ in stops)] if where == "regular" else []
+    why_out.update({t["id"]: (reason, None) for t, reason in [*late, *stops]})
+    again = {t["id"] for t in part_out}   # already recorded as exiting: only the rest is sent
+    send_exits = [*wants_out, *(t for t, _ in stops), *(t for t, _ in late), *part_out] if can_exit else []
     no_overnight: set[str] = set()
     wide_retry = False
-    if where and (left or send_exits or record["stood_down"]):
+    stop_retry = False
+    if do_entries or (can_exit and send_exits) or (where and record["stood_down"]):
         async with (broker or book._broker(dry=dry)) as b:
-            record["cancelled"] = await b.cancel({t["id"] for t in state["trades"]})
+            cancel_ids = ({t["id"] for t in state["trades"]} | {t["id"] for t in send_exits}) - moc_today
+            record["cancelled"] = await b.cancel(cancel_ids)
             if not dry:
                 await asyncio.sleep(1)
                 await book._pull_fills(b, session)
                 fills_map = book._fills_by_ref()
-            left = left_of(ready_active)
-            symbols = sorted({leg["symbol"] for _, leg, _ in left} | {h["symbol"] for t in send_exits for h in t["held"]})
-            asked = sorted({*symbols, CANARY}) if where == "overnight" and symbols else symbols
-            books, missing = await (quotes or gateway_books)(asked, where == "overnight") if symbols else ({}, {})
+            left = left_of(ready_active) if do_entries else []
+            # The rest of an exit is sent only while the account holds what the books say (as at the close,
+            # book._close_once): if it doesn't, fills were missed, and sending again would open a new position.
+            off: set[str] = set()
+            if part_out and not dry and hasattr(b, "positions"):
+                off = set(book._gaps(await b.positions()))
+            entry_syms = {leg["symbol"] for _, leg, _ in left}
+            exit_syms = {h["symbol"] for t in send_exits for h in t["held"]}
+            symbols = sorted(entry_syms | exit_syms)
+            use_overnight = where == "overnight" and bool(entry_syms)
+            asked = sorted({*symbols, CANARY}) if use_overnight else symbols
+            books, missing = await (quotes or gateway_books)(asked, use_overnight) if symbols else ({}, {})
             missing = {x: missing.get(x) or "the gateway gave no bid and ask" for x in symbols if rules.spread_pct(books.get(x)) is None}
             # Overnight, with SPY quoted the gateway works: a name it sent nothing for has no overnight market.
-            no_overnight = {x for x, why in missing.items() if where == "overnight" and x != CANARY
+            no_overnight = {x for x, why in missing.items() if use_overnight and x != CANARY
                             and rules.spread_pct(books.get(CANARY)) is not None and no_market(why)}
             if missing:
                 record["no_quote"] = missing
-            entry_limit = spread_limit(where)
+            entry_limit = spread_limit(where or "regular")
             usable_entry = lambda x: x not in missing and rules.crossable(books[x], entry_limit)  # noqa: E731
             usable_exit = lambda x: x not in missing and rules.crossable(books[x], rules.MAX_CROSS_SPREAD)  # noqa: E731
             mid_orders, cross_orders, committed = [], [], {}
@@ -533,8 +630,8 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
             pending_exits: list[tuple[dict, dict]] = []
             # Entries. Overnight uses a 0.5% cap and queues wider/illiquid trades for 8:35 AM CT instead of killing
             # them; regular hours uses 0.5% too, retries briefly if a book flashes wide, tries midpoint first, then
-            # crosses at bid/ask.
-            for t in ready_active:
+            # crosses at bid/ask. Only runs when entries are actually due (never hammered by 1-minute exit retries).
+            for t in (ready_active if do_entries else []):
                 mine_left = [(leg, n) for u, leg, n in left if u["id"] == t["id"]]
                 if not mine_left:
                     continue
@@ -596,25 +693,50 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                         mid_target[(t["id"], leg["symbol"])] = got[leg["symbol"]] + n
                     else:
                         cross_orders.append(_order(t["id"], leg["symbol"], action, n, books[leg["symbol"]], where, now, session))
-            # Exits a pass asked for, and trades past their stop: always cross immediately (never wait at midpoint).
+            # Exits (review, stop, overdue/close-fallback, partial-exit remainder): always cross immediately with EXIT_LIMIT_SLIP.
+            close_ct = (datetime.combine(session, journal.close_time(session), NY) - timedelta(minutes=19)).astimezone(CT)
+            close_lbl = f"{close_ct:%-I:%M %p} CT"
             for t in send_exits:
-                legs = [h for h in t["held"] if h["shares"] > h["exit_shares"]]
-                bad = [h["symbol"] for h in legs if not usable_exit(h["symbol"])]
-                reason, by_pass = why_out[t["id"]]
-                if bad:
-                    what = "the exit a pass asked for" if reason.startswith("review") else "its stop exit"
-                    then = ("the next stop check tries again, and " if not reason.startswith("review") else "") + \
-                        "the 2:45 PM CT close job sends it into the closing auction"
-                    record["warnings"].append(f"{t['id']} {t['name']}: {what} wasn't sent ({_why_blocked(bad, books, missing)}); {then}.")
+                legs = _exit_left(t, fills_map)
+                bad = [h["symbol"] for h, _ in legs if not usable_exit(h["symbol"])]
+                if t["id"] in again:
+                    # One side is already out, so each leg that can go goes; the others are tried again in a minute.
+                    if wrong := sorted({h["symbol"] for h, _ in legs} & off):
+                        record["warnings"].append(f"{t['id']} {t['name']}: the rest of its exit wasn't sent: the account's positions don't "
+                                                  f"match the books for {', '.join(wrong)}. Run fr paper status.")
+                        continue
+                    if bad:
+                        record["warnings"].append(f"{t['id']} {t['name']}: the rest of its exit waits a minute for {', '.join(bad)} "
+                                                  f"({_why_blocked(bad, books, missing)}).")
+                    go = [(h, n) for h, n in legs if h["symbol"] not in bad]
+                    if go:
+                        record.setdefault("retried_exits", []).append(t["id"])
+                    cross_orders += [_order(t["id"], h["symbol"], "SELL" if h["side"] == "long" else "BUY", n,
+                                            books[h["symbol"]], "regular", now, session, is_exit=True)
+                                     for h, n in go]
                     continue
+                reason, by_pass = why_out[t["id"]]
                 ex_rec = {"trade_id": t["id"], "book": t["book"], "session_number": book._session(t, session), "intraday": True,
                           "at": f"{now.astimezone(CT):%-I:%M %p} CT", "pass": by_pass, "reason": reason}
+                if not legs:
+                    # Every share is already flat in fills (e.g. a prior run crashed after filling before recording).
+                    record["exits"].append(ex_rec)
+                    if not dry:
+                        state["exits"].append(ex_rec)
+                    continue
+                if bad:
+                    what = "the exit a pass asked for" if reason.startswith("review") else "its stop exit" if reason.startswith("stopped") else "its overdue exit"
+                    if reason.startswith("stopped"):
+                        stop_retry = True
+                    record["warnings"].append(f"{t['id']} {t['name']}: {what} wasn't sent ({_why_blocked(bad, books, missing)}); "
+                                              f"it is tried again in a minute, and the {close_lbl} close job sends it into the closing auction.")
+                    continue
                 if dry:
                     record["exits"].append(ex_rec)
                 else:
                     pending_exits.append((t, ex_rec))
-                cross_orders += [_order(t["id"], h["symbol"], "SELL" if h["side"] == "long" else "BUY", h["shares"] - h["exit_shares"],
-                                        books[h["symbol"]], where, now, session) for h in legs]
+                cross_orders += [_order(t["id"], h["symbol"], "SELL" if h["side"] == "long" else "BUY", n,
+                                        books[h["symbol"]], "regular", now, session, is_exit=True) for h, n in legs]
             # Regular-hours midpoint attempt: try inside the spread for MID_WAIT seconds, cancel unfilled, then step to bid/ask.
             if mid_orders:
                 state["last_attempt"] = now.isoformat(timespec="seconds")
@@ -654,7 +776,8 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                             cross_orders.append(_order(t["id"], leg["symbol"], action, rem, books[leg["symbol"]], where, now, session))
             if cross_orders:
                 if not dry:  # on disk before anything goes
-                    state["last_attempt"] = now.isoformat(timespec="seconds")
+                    if do_entries or fresh_passes:
+                        state["last_attempt"] = now.isoformat(timespec="seconds")
                     _save(session, state, {**record, "orders": [*record["orders"], *cross_orders], "note": "sending"})
                 sent = await b.place(cross_orders)
                 record["orders"] += sent
@@ -696,8 +819,10 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
                         record["exits"].append(ex_rec)
                         state["exits"].append(ex_rec)
                         if not all_done:
-                            record["warnings"].append(f"{t['id']} {t['name']}: intraday exit only partially filled; remaining shares will close at the close job.")
+                            record["warnings"].append(f"{t['id']} {t['name']}: its exit filled only in part; the rest is tried again every minute until it is out.")
                     else:
+                        if ex_rec["reason"].startswith("stopped"):
+                            stop_retry = True
                         record["warnings"].append(f"{t['id']} {t['name']}: intraday exit filled nothing, so the trade stays open and will retry.")
                 # A quote that never fills isn't chased: overnight it queues for 8:35 AM CT; in regular hours it is passed on.
                 tried = {o["trade_id"] for o in record["orders"]} & set(committed)
@@ -722,13 +847,22 @@ async def run(now: datetime | None = None, broker=None, dry: bool = False, quote
         record["warnings"].append(f"{len({t['id'] for t, _, _ in left})} trade(s) are waiting to enter; no session is trading at "
                                   f"{now.astimezone(CT):%-I:%M %p} CT.")
     non_market = [w for s, w in (record.get("no_quote") or {}).items() if s not in no_overnight]
-    state["last_fault"] = bool(non_market) and all(_is_transient_fault(w) for w in non_market)
-    state["last_wide"] = wide_retry
-    state["last_attempt"] = now.isoformat(timespec="seconds")
+    if do_entries or fresh_passes:
+        state["last_fault"] = bool(non_market) and all(_is_transient_fault(w) for w in non_market)
+        state["last_wide"] = wide_retry
+        state["last_attempt"] = now.isoformat(timespec="seconds")
+    state["stop_retry"] = stop_retry
     if not dry:
         _save(session, state, record)
         for kind in record["passes"]:
             _tell(kind, record, state, where, blocked_why)
+        if fallback := [e for e in record["exits"] if "close job missed the MOC cutoff" in e.get("reason", "")]:
+            try:
+                from .. import watch
+                watch.send("Close failsafe exited trades",
+                           f"paper-close missed the MOC cutoff on {session}; paper-enter closed {len(fallback)} due trade(s) before the bell.")
+            except Exception as e:  # noqa: BLE001
+                log.warning("fallback_alert_failed %r", e)
     return record
 
 

@@ -31,10 +31,14 @@ from .config import NY
 
 STATE = Path("data/watch.json")
 REPEAT = timedelta(hours=3)
-PASS_LATE = timedelta(minutes=95)
+PASS_START_LATE = timedelta(minutes=15)   # alert quickly if a scheduled pass never even started
+PASS_LATE = timedelta(minutes=95)         # legacy finished-log deadline when no running sentinel exists
+PASS_STUCK = timedelta(minutes=155)       # past passes.TIMEOUT (150 min) while still marked running
 PASS_LOGS = Path("data/pass-logs")
 CLOCK = Path("data/clock.json")     # written by deploy/launchd/clock.py on every tick, 30 seconds apart
 CLOCK_LATE = timedelta(minutes=10)
+CLOCK_CRITICAL = {"pass-morning", "pass-midday", "pass-night", "paper-close"}
+CLOSING_STUCK = timedelta(minutes=15)
 LABEL = "com.factor-rotation."
 # The scheduled passes, New York time: (pass, start, which days). Night runs Sunday to Thursday; the other two on
 # trading days. Kept beside deploy/launchd/install.py, which starts them.
@@ -135,18 +139,86 @@ def failed_jobs() -> list[tuple[str, str, str]]:
     return found
 
 
-def stopped_clock(now: datetime) -> list[tuple[str, str, str]]:
-    """The clock that starts the timed jobs has stopped ticking. No file means it was never installed here."""
+def _missed_slot_matters(slot: str, day: date, trading) -> bool:
+    """Whether a critical slot marked missed by clock.py was actually due to run on `day` and still hasn't completed."""
+    from . import journal
+    from .paper import book
+
+    parts = slot.split()
+    job = parts[0]
+    hhmm = parts[1] if len(parts) > 1 else ""
+    if job not in CLOCK_CRITICAL:
+        return False
+    if job == "paper-close":
+        if not trading(day):
+            return False
+        half = journal.is_half_day(day)
+        if hhmm.startswith("12:") and not half:
+            return False
+        if hhmm.startswith("15:") and half:
+            return False
+        return not book.close_complete(day)[0]
+    kind = job.removeprefix("pass-")
+    days_kind = {"night": "sun-thu", "morning": "trading", "midday": "full"}.get(kind, "trading")
+    if not _pass_days(days_kind, day, trading):
+        return False
+    return not _pass_recorded(kind, day, trading)
+
+
+def stopped_clock(now: datetime, trading=None) -> list[tuple[str, str, str]]:
+    """The clock that starts the timed jobs has stopped ticking, failed to kickstart a job, or skipped a critical
+    job past its catch-up window. No file means it was never installed here."""
     try:
-        tick = datetime.fromisoformat(json.loads(CLOCK.read_text())["tick"])
+        doc = json.loads(CLOCK.read_text())
+        tick = datetime.fromisoformat(doc["tick"])
     except (OSError, ValueError, KeyError):
         return []
-    if now - tick <= CLOCK_LATE:
-        return []
-    return [("clock:stopped", "The schedule's clock has stopped",
-             f"No timed job (passes, close, nightly) will start until it runs again. It last ticked "
-             f"{int((now - tick).total_seconds() // 60)} minutes ago. Reinstall it with "
-             "`python3 deploy/launchd/install.py clock`; its log is ~/Library/Logs/factor-rotation/clock.log.")]
+    if trading is None:
+        from .journal import is_trading_day as trading
+    found: list[tuple[str, str, str]] = []
+    if now - tick > CLOCK_LATE:
+        found.append(("clock:stopped", "The schedule's clock has stopped",
+                      f"No timed job (passes, close, nightly) will start until it runs again. It last ticked "
+                      f"{int((now - tick).total_seconds() // 60)} minutes ago. Reinstall it with "
+                      "`python3 deploy/launchd/install.py clock`; its log is ~/Library/Logs/factor-rotation/clock.log."))
+    today = now.date().isoformat()
+    if doc.get("day") == today:
+        for slot, err in (doc.get("errors") or {}).items():
+            job = slot.split()[0]
+            msg = err.get("error") if isinstance(err, dict) else str(err)
+            found.append((f"clock:err:{today}:{slot}", f"Schedule failed to start {job}",
+                          f"The clock couldn't start {slot}: {msg}. Check ~/Library/Logs/factor-rotation/clock.log."))
+        for slot, why in (doc.get("missed") or {}).items():
+            if _missed_slot_matters(slot, now.date(), trading):
+                job = slot.split()[0]
+                found.append((f"clock:missed:{today}:{slot}", f"Missed scheduled job: {job}",
+                              f"The clock missed {slot} ({why}). Check ~/Library/Logs/factor-rotation/clock.log."))
+    return found
+
+
+def _pid_alive(pid) -> bool:
+    if not isinstance(pid, int) or pid <= 0:
+        return False
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except PermissionError:
+        return True
+
+
+def _pass_recorded(kind: str, day: date, trading) -> bool:
+    """True if `kind` actually recorded in `journal/paper/proposals/<session>.json`."""
+    from .paper import proposals
+    if kind == "night":
+        session = day + timedelta(days=1)
+        if not trading(session):
+            return False
+    else:
+        session = day
+    doc = proposals.load(session)
+    return bool(doc and any(p.get("pass") == kind for p in doc.get("passes", [])))
 
 
 def _pass_days(kind: str, day: date, trading) -> bool:
@@ -159,7 +231,7 @@ def _pass_days(kind: str, day: date, trading) -> bool:
 
 
 def missing_passes(now: datetime, trading=None) -> list[tuple[str, str, str]]:
-    """A scheduled pass that hasn't recorded PASS_LATE after its start, or whose log says it failed."""
+    """A scheduled pass that never started (`PASS_START_LATE`), crashed/hung while running, or finished with ok=False."""
     if trading is None:
         from .journal import is_trading_day as trading
     logs = []
@@ -175,18 +247,107 @@ def missing_passes(now: datetime, trading=None) -> list[tuple[str, str, str]]:
         for back in (0, 1):   # tonight's night pass, and last night's if it ran past midnight
             day = now.date() - timedelta(days=back)
             begin = datetime.combine(day, start, NY)
-            if not (begin + PASS_LATE <= now < begin + timedelta(hours=12)) or not _pass_days(days, day, trading):
+            if not (begin + PASS_START_LATE <= now < begin + timedelta(hours=12)) or not _pass_days(days, day, trading):
+                continue
+            if _pass_recorded(kind, day, trading):
                 continue
             mine = [d for p, at, d in logs if p == kind and begin - timedelta(minutes=10) <= at <= begin + timedelta(hours=3)]
             when = begin.astimezone(_ct()).strftime("%-I:%M %p CT")
+            if any(d.get("ok") for d in mine):
+                continue
             if not mine:
-                late_min = int(PASS_LATE.total_seconds() // 60)
-                found.append((f"pass:{kind}:{day}", f"No {kind} pass",
-                              f"The {kind} pass due at {when} has no log {late_min} minutes later. Check ~/Library/Logs/factor-rotation/pass-{kind}.log."))
-            elif not any(d.get("ok") for d in mine):
+                elapsed_min = int((now - begin).total_seconds() // 60)
+                if now >= begin + PASS_LATE:
+                    late_min = int(PASS_LATE.total_seconds() // 60)
+                    found.append((f"pass:{kind}:{day}", f"No {kind} pass",
+                                  f"The {kind} pass due at {when} has no log {late_min} minutes later. Check ~/Library/Logs/factor-rotation/pass-{kind}.log."))
+                else:
+                    found.append((f"pass-start:{kind}:{day}", f"{kind.capitalize()} pass did not start",
+                                  f"The {kind} pass due at {when} has not started after {elapsed_min} minutes. Check clock.log and pass-{kind}.log."))
+                continue
+            latest = max(mine, key=lambda d: d["started"])
+            if latest.get("status") == "running":
+                pid = latest.get("pid")
+                started_at = datetime.fromisoformat(latest["started"])
+                if pid and not _pid_alive(pid):
+                    found.append((f"pass:{kind}:{day}", f"The {kind} pass crashed",
+                                  f"The {kind} pass that started at {when} (pid {pid}) exited without finishing. Check pass-{kind}.log."))
+                elif now - started_at > PASS_STUCK:
+                    mins = int((now - started_at).total_seconds() // 60)
+                    found.append((f"pass:{kind}:{day}", f"The {kind} pass appears hung",
+                                  f"The {kind} pass that started at {when} is still running after {mins} minutes. Check pass-{kind}.log."))
+            else:
+                why = latest.get("error") or "it did not record"
                 found.append((f"pass:{kind}:{day}", f"The {kind} pass failed",
-                              f"The {kind} pass that started at {when} did not record. Its log is in data/pass-logs."))
+                              f"The {kind} pass that started at {when} failed: {why[:160]}. Its log is in data/pass-logs."))
     return found
+
+
+def missing_close(now: datetime, trading=None) -> list[tuple[str, str, str]]:
+    """Alert if today's close job hasn't completed cleanly by the 10-minute MOC cutoff (15:50 ET full, 12:50 ET half)."""
+    from . import journal
+    from .paper import book
+
+    if not os.environ.get("FR_PAPER_ACCOUNT"):
+        return []
+    today = now.date()
+    is_open = trading(today) if trading is not None else journal.is_trading_day(today)
+    if not is_open:
+        return []
+    close_dt = datetime.combine(today, journal.close_time(today), NY)
+    deadline = close_dt - timedelta(minutes=10)
+    if not (deadline <= now < close_dt + timedelta(hours=4)):
+        return []
+    ok, why = book.close_complete(today)
+    if ok:
+        return []
+    # If the book has no open or closing trades AND exits file isn't there, still alert because paper-close should always write exits/<today>.json.
+    when_ct = close_dt.astimezone(_ct()).strftime("%-I:%M %p CT")
+    return [(f"close:{today}", "Paper close missed or failed",
+             f"Today's close job (market closes {when_ct}) has not completed cleanly: {why}. Check ~/Library/Logs/factor-rotation/paper-close.log.")]
+
+
+def stuck_closing(now: datetime, trading=None) -> list[tuple[str, str, str]]:
+    """Alert if any trade sits in `closing` state with unexited shares past CLOSING_STUCK (excluding live today MOCs
+    waiting for the closing auction)."""
+    from . import journal
+    from .paper import book, entries
+
+    if not os.environ.get("FR_PAPER_ACCOUNT"):
+        return []
+    today = now.date()
+    is_open = trading(today) if trading is not None else journal.is_trading_day(today)
+    if not is_open:
+        return []
+    close_dt = datetime.combine(today, journal.close_time(today), NY)
+    moc_today = entries._today_moc_exits(today) if now < close_dt + timedelta(minutes=20) else set()
+    stuck = []
+    for t in book.trades():
+        if t["state"] != "closing" or t["id"] in moc_today:
+            continue
+        if not any(h["shares"] > h["exit_shares"] for h in t["held"]):
+            continue
+        ex = t.get("exit") or {}
+        ex_session = ex.get("session")
+        if ex_session and ex_session < today.isoformat():
+            # Stuck from an earlier day: alert once market is open past 9:45 AM ET or after close
+            if now.time() >= time(9, 45):
+                stuck.append(t["id"])
+        else:
+            # Today's exit: alert if after close + 20m, or if an intraday exit has been closing for > CLOSING_STUCK
+            if now >= close_dt + timedelta(minutes=20):
+                stuck.append(t["id"])
+            elif ex.get("intraday"):
+                # Check latest entry run mentioning this exit or any run > CLOSING_STUCK old
+                doc = entries.load(today) or {}
+                first_at = next((datetime.fromisoformat(r["at"]) for r in doc.get("runs", [])
+                                 if any(e.get("trade_id") == t["id"] for e in r.get("exits", []))), None)
+                if first_at and now - first_at >= CLOSING_STUCK:
+                    stuck.append(t["id"])
+    if not stuck:
+        return []
+    return [(f"closing:stuck:{today}:{','.join(sorted(stuck))}", "Trades stuck closing",
+             f"{len(stuck)} trade(s) still have unexited shares in closing state. Check paper-enter.log and fr paper report.")]
 
 
 def _ct():
@@ -282,7 +443,7 @@ def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_prob
     # Gateway connectivity and 10197 quote checks moved to scheduled pre-flight checks before each pass and close
     # (paper/gateway.py:preflight) so the watchdog isn't polling the gateway every 5 minutes while the owner trades
     # on their phone. Pass check_gateway=True (or probe/quote_probe) to run them here explicitly.
-    found = [*failed_jobs(), *stopped_clock(now), *missing_passes(now), *refused_quotes(now)]
+    found = [*failed_jobs(), *stopped_clock(now), *missing_passes(now), *missing_close(now), *stuck_closing(now), *refused_quotes(now)]
     if check_gateway or probe is not None:
         found += gateway(now, state, probe)
     if (check_gateway or quote_probe is not None) and not any(k.startswith("quotes:") for k, _, _ in found):

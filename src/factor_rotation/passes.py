@@ -15,6 +15,7 @@ import os
 import re
 import shutil
 import subprocess
+import time
 from datetime import datetime
 from pathlib import Path
 
@@ -101,14 +102,39 @@ def _shadow_journal() -> Path:
     return SHADOW
 
 
+def _is_recorded(root: Path, session, name: str) -> bool:
+    """True when `name` is already recorded in `proposals/<session>.json` under `root`."""
+    path = root / "paper" / "proposals" / f"{session}.json"
+    if not path.exists():
+        return False
+    try:
+        doc = json.loads(path.read_text())
+    except (OSError, ValueError):
+        return False
+    return any(p.get("pass") == name for p in doc.get("passes", []))
+
+
 def run(name: str, shadow: bool = False) -> dict:
     """Run a pass, telling the owner's phone when a real one starts and at once if it fails (watch.py, since
-    2026-11-17, the owner's request). A shadow run says nothing."""
+    2026-11-17, the owner's request). A shadow run or an already-recorded pass says nothing."""
     from . import watch
     from .config import CT
+    from .paper import proposals
 
     if shadow:
         return _run(name, shadow)
+    now = datetime.now(NY)
+    # Idempotency guard BEFORE sending a phone alert or spending tokens on a duplicate run.
+    if name != "late":
+        try:
+            sess = proposals.pass_session(name, now)
+            if _is_recorded(journal.JOURNAL, sess, name):
+                leaves = f"paper/proposals/{sess}.json"
+                return {"pass": name, "ok": True, "already_recorded": True, "shadow": False,
+                        "started": now.isoformat(timespec="seconds"), "minutes": 0.0,
+                        "recorded": str(journal.JOURNAL / leaves), "message": f"The {name} pass for {sess} is already recorded."}
+        except ValueError:
+            pass
     start = datetime.now(CT)
     label = "late" if name.startswith("late") else name
     watch.send(f"{label.capitalize()} pass started", f"The {label} pass started at {start:%-I:%M %p} CT. It usually takes 15 to 90 minutes.")
@@ -118,8 +144,9 @@ def run(name: str, shadow: bool = False) -> dict:
         out = {"pass": name, "ok": False, "error": f"{type(e).__name__}: {str(e)[:200]}"}
     took = round((datetime.now(CT) - start).total_seconds() / 60)
     if out.get("ok"):
-        watch.send(f"{label.capitalize()} pass recorded", f"The {label} pass recorded after {took} minutes; "
-                   "its takes go to the order job now.")
+        if not out.get("already_recorded"):
+            watch.send(f"{label.capitalize()} pass recorded", f"The {label} pass recorded after {took} minutes; "
+                       "its takes go to the order job now.")
     else:
         why = out.get("error") or "it ended without recording its verdicts"
         watch.send(f"{label.capitalize()} pass FAILED", f"The {label} pass that started at {start:%-I:%M %p} CT failed after {took} minutes: {why[:200]}. Log: data/pass-logs.")
@@ -142,28 +169,44 @@ def _keep(session_id: str | None, root: Path, label: str) -> str | None:
         return None
 
 
+TRANSIENT_RETRY_MAX_MIN = 3.0   # retry once if Claude Code crashes/fails quickly without recording
+TRANSIENT_RETRY_WAIT = 30       # seconds before retrying a quick crash
+
+
 def _run(name: str, shadow: bool = False) -> dict:
     from .paper import proposals
 
     now = datetime.now(NY)
+    LOGS.mkdir(parents=True, exist_ok=True)
+    log_path = LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json"
+
+    def fail(error: str) -> dict:
+        out = {"pass": name, "ok": False, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
+               "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1), "error": error}
+        if not shadow:
+            storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
+        return out
+
     if name == "late":   # a late pass can run more than once a session: each run takes the next free name
         try:
             name = proposals.next_late(now)
+            log_path = LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json"
         except ValueError as e:
-            return {"pass": name, "ok": False, "error": str(e)}
+            return fail(str(e))
     spec = PASSES[name]
     exe, token = binary(), os.environ.get("FR_CLAUDE_TOKEN")
     if not exe or not token:
-        return {"pass": name, "ok": False, "error": "Claude Code not found" if not exe else "FR_CLAUDE_TOKEN is not set in .env"}
+        return fail("Claude Code not found" if not exe else "FR_CLAUDE_TOKEN is not set in .env")
     try:
         session = proposals.pass_session(name, now)   # a pass leaves the proposals file of the session it is for
     except ValueError as e:
-        return {"pass": name, "ok": False, "error": f"not the time for a {name} pass: {e}"}
+        return fail(f"not the time for a {name} pass: {e}")
     leaves = f"paper/proposals/{session}.json"
     root = _shadow_journal() if shadow else journal.JOURNAL
-    before = (root / leaves).stat().st_mtime if (root / leaves).exists() else None
+    if not shadow and _is_recorded(root, session, name):
+        return {"pass": name, "ok": True, "already_recorded": True, "shadow": shadow,
+                "started": now.isoformat(timespec="seconds"), "minutes": 0.0, "recorded": str(root / leaves)}
     DRAFTS.mkdir(parents=True, exist_ok=True)
-    LOGS.mkdir(parents=True, exist_ok=True)
     env = {**os.environ, "CLAUDE_CODE_OAUTH_TOKEN": token, "FR_JOURNAL_DIR": str(root.resolve()),
            "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL, "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
@@ -174,24 +217,52 @@ def _run(name: str, shadow: bool = False) -> dict:
     prompt = (PROMPTS / spec["prompt"]).read_text() + HEADLESS
     if name in proposals.LATE[1:]:
         prompt = AGAIN.format(name=name) + prompt
-    log_path = LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json"
-    done = None
-    try:
-        done = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=TIMEOUT, env=env)
-        reply = json.loads(done.stdout)
-    except (OSError, subprocess.TimeoutExpired, ValueError) as e:
-        stderr_tail = (getattr(done, "stderr", "") or getattr(e, "stderr", "") or "")[-400:].strip()
-        out = {"pass": name, "ok": False, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
+
+    # Write a running sentinel immediately so watch.py knows the pass started and tracks its PID.
+    storage.atomic_write_text(log_path, json.dumps({
+        "pass": name, "session": session.isoformat(), "shadow": shadow, "status": "running",
+        "pid": os.getpid(), "started": now.isoformat(timespec="seconds"),
+    }, indent=1) + "\n")
+
+    for attempt in (1, 2):
+        done = None
+        attempt_start = datetime.now(NY)
+        try:
+            done = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=TIMEOUT, env=env)
+            reply = json.loads(done.stdout)
+        except (OSError, subprocess.TimeoutExpired, ValueError) as e:
+            elapsed = (datetime.now(NY) - attempt_start).total_seconds() / 60
+            if attempt == 1 and elapsed < TRANSIENT_RETRY_MAX_MIN and not _is_recorded(root, session, name):
+                try:
+                    proposals.pass_session(name, datetime.now(NY))
+                    log.warning("pass_quick_crash_retry pass=%s attempt=1 error=%r", name, e)
+                    time.sleep(TRANSIENT_RETRY_WAIT)
+                    continue
+                except ValueError:
+                    pass
+            stderr_tail = (getattr(done, "stderr", "") or getattr(e, "stderr", "") or "")[-400:].strip()
+            out = {"pass": name, "session": session.isoformat(), "ok": False, "shadow": shadow,
+                   "started": now.isoformat(timespec="seconds"),
+                   "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
+                   "error": repr(e)[:300], **({"stderr": stderr_tail} if stderr_tail else {})}
+            storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
+            return out
+        recorded = _is_recorded(root, session, name)
+        elapsed = (datetime.now(NY) - attempt_start).total_seconds() / 60
+        if attempt == 1 and reply.get("is_error") and not recorded and elapsed < TRANSIENT_RETRY_MAX_MIN:
+            try:
+                proposals.pass_session(name, datetime.now(NY))
+                log.warning("pass_quick_error_retry pass=%s attempt=1 result=%r", name, str(reply.get("result"))[:120])
+                time.sleep(TRANSIENT_RETRY_WAIT)
+                continue
+            except ValueError:
+                pass
+        out = {"pass": name, "session": session.isoformat(), "shadow": shadow, "started": now.isoformat(timespec="seconds"),
                "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
-               "error": repr(e)[:300], **({"stderr": stderr_tail} if stderr_tail else {})}
+               "ok": recorded and not reply.get("is_error"), "recorded": str(root / leaves) if recorded else None,
+               "turns": reply.get("num_turns"), "agents": (reply.get("subagent_stats") or {}).get("spawned"),
+               "refused": [f"{d.get('tool_name')}: {str(d.get('tool_input'))[:120]}" for d in reply.get("permission_denials", [])],
+               "message": reply.get("result"), "transcript": _keep(reply.get("session_id"), root, f"{session}-{name}")}
         storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
         return out
-    after = (root / leaves).stat().st_mtime if (root / leaves).exists() else None
-    out = {"pass": name, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
-           "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
-           "ok": not reply.get("is_error") and after is not None and after != before, "recorded": str(root / leaves) if after and after != before else None,
-           "turns": reply.get("num_turns"), "agents": (reply.get("subagent_stats") or {}).get("spawned"),
-           "refused": [f"{d.get('tool_name')}: {str(d.get('tool_input'))[:120]}" for d in reply.get("permission_denials", [])],
-           "message": reply.get("result"), "transcript": _keep(reply.get("session_id"), root, f"{session}-{name}")}
-    storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
-    return out
+    raise RuntimeError("unreachable")

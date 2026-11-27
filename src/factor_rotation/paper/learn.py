@@ -107,7 +107,7 @@ def _verdict(p: dict) -> str:
 def intraday_symbols(today: date | None = None) -> list[str]:
     """The legs of every verdict whose plan may still need 5-minute bars: recorded since the restart, within
     the last 60 days. `fr bars --intraday` pulls them."""
-    today = today or date.today()
+    today = today or datetime.now(NY).date()
     since = max(INTRADAY_FROM, today - timedelta(days=60)).isoformat()
     return sorted({s for p in proposals.every() if p["session"] >= since for s in [*p["long"], *p["short"]]})
 
@@ -303,7 +303,7 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
     w = journal._weights({"long": longs or None, "short": shorts or None})
     stop = plan_cfg.get("stop") or {}
     replay = ix is not None and "spread_pct" in stop and session >= INTRADAY_FROM
-    today = today or date.today()
+    today = today or datetime.now(NY).date()
     at = datetime.fromisoformat(m["at"]).astimezone(NY) if m.get("at") else None
     path, status, note, intraday = [], "open", "", "replayed" if replay else None
     for d in days:

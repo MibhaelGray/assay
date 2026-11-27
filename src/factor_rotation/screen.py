@@ -45,7 +45,7 @@ OVERNIGHT_MOVE_ATR = 1.5
 # prints, and XLU showed a 0.6% spread all evening on 209 shares and filled nothing in 12 tries. A name counts as
 # trading with a usable price (above) and this many dollars traded on the overnight venue so far.
 MIN_OVERNIGHT_DOLLARS = 25_000
-GATEWAY_RETRY_WAIT = 20  # seconds before the night screen asks the gateway a second time
+GATEWAY_RETRY_WAIT = 10  # seconds before the night screen asks the gateway a second time
 HEDGES_SHOWN = 30       # funds trading overnight that the night screen lists for the judge to hedge with
 TOP = 25   # 40 from 2026-11-16 to 11-22 (20 before): at 40, most names came back thinly researched, so fewer are
            # judged and each is researched properly (the owner, 2026-11-22)
@@ -704,7 +704,7 @@ def _gateway_overnight(symbols: list[str]) -> tuple[dict, dict]:
             return m.books, m.missing
     for attempt in (1, 2):   # one more try after a pause: on 2026-11-20 a timeout left a night's screen unchecked
         try:
-            return asyncio.run(ask())
+            return asyncio.run(asyncio.wait_for(ask(), 90))
         except Exception as e:  # noqa: BLE001 - no check means nothing dropped, said in the screen
             if attempt == 2:
                 return {}, {s: f"the gateway couldn't be asked ({type(e).__name__})" for s in symbols}
@@ -715,14 +715,14 @@ def _gateway_sweep(symbols: list[str]) -> dict:
     """{"at", "quotes": symbol -> bid, ask, last, volume} from IBKR's overnight venue; {"why"} when it can't be had."""
     import asyncio
 
-    from .paper.gateway import IBMarket
+    from .paper.gateway import IBMarket, SWEEP_TIMEOUT
 
     async def ask():
         async with IBMarket(client_id=SWEEP_CLIENT) as m:
             return await m.sweep(symbols)
     for attempt in (1, 2):
         try:
-            return {"at": datetime.now(NY).isoformat(timespec="seconds"), "quotes": asyncio.run(ask())}
+            return {"at": datetime.now(NY).isoformat(timespec="seconds"), "quotes": asyncio.run(asyncio.wait_for(ask(), SWEEP_TIMEOUT))}
         except Exception as e:  # noqa: BLE001 - no sweep means no overnight movers, said in the screen
             if attempt == 2:
                 return {"why": f"the gateway couldn't be asked ({type(e).__name__})"}

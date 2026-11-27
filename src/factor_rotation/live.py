@@ -95,7 +95,7 @@ def fetch(symbols: list[str]) -> dict[str, dict]:
     try:
         with bars._yahoo:
             data = yf.download(list(tickers), period="1d", interval="5m", prepost=True, auto_adjust=False, group_by="ticker",
-                               threads=bars.PULL_THREADS, progress=False)
+                               threads=bars.PULL_THREADS, timeout=15, progress=False)
     except Exception as e:  # no network yet, or Yahoo refusing
         log.warning("live_prices_failed error=%r", e)
         return {}

@@ -262,7 +262,7 @@ def collect(symbols: list[str], period: str = "5y") -> dict:
         tickers = {_ticker(s): s for s in chunk}
         with _yahoo:
             data = yf.download(list(tickers), period=period, interval="1d", auto_adjust=False, group_by="ticker",
-                               threads=True, progress=False)
+                               threads=True, timeout=15, progress=False)
         for ticker, symbol in tickers.items():
             df = pd.DataFrame()
             if ticker in data.columns.get_level_values(0):
@@ -291,7 +291,7 @@ def collect_intraday(symbols: list[str], days: int = 5) -> dict:
         tickers = {_ticker(s): s for s in chunk}
         with _yahoo:
             data = yf.download(list(tickers), period=f"{min(days, 59)}d", interval="5m", prepost=False, auto_adjust=False,
-                               group_by="ticker", threads=PULL_THREADS, progress=False)
+                               group_by="ticker", threads=PULL_THREADS, timeout=15, progress=False)
         for ticker, symbol in tickers.items():
             close = data[ticker]["Close"].dropna() if ticker in data.columns.get_level_values(0) else pd.Series(dtype=float)
             if close.empty:
@@ -326,7 +326,7 @@ def intraday_closes(symbols: list[str], sessions: int = 5) -> dict[str, pd.Serie
     tickers = {_ticker(s): s for s in symbols}
     with _yahoo:
         data = yf.download(list(tickers), period=f"{sessions}d", interval="15m", prepost=False, auto_adjust=False,
-                           group_by="ticker", threads=PULL_THREADS, progress=False)
+                           group_by="ticker", threads=PULL_THREADS, timeout=15, progress=False)
     out = {}
     for ticker, symbol in tickers.items():
         if ticker not in data.columns.get_level_values(0):

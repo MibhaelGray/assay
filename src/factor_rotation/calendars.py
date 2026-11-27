@@ -4,16 +4,18 @@ A lookup through pandas_market_calendars costs about a tenth of a second, and on
 This holds every session from 2018 to three years ahead and slices it. A date outside that goes to the library.
 """
 
-from datetime import date, time, timedelta
+from datetime import date, datetime, time, timedelta
 from functools import lru_cache
 
 import pandas as pd
 import pandas_market_calendars as mcal
 
+from .config import NY
+
 
 @lru_cache(maxsize=1)
 def _sessions() -> pd.DatetimeIndex:
-    return mcal.get_calendar("XNYS").valid_days(date(2018, 1, 1), date.today() + timedelta(days=3 * 365))
+    return mcal.get_calendar("XNYS").valid_days(date(2018, 1, 1), datetime.now(NY).date() + timedelta(days=3 * 365))
 
 
 class _NYSE:
@@ -34,7 +36,7 @@ CLOSE = time(16, 0)   # New York: the regular close
 def _early() -> dict[date, time]:
     """Sessions that close early (the day after Thanksgiving, Christmas Eve, some July 3rds) -> their close, New York."""
     cal = mcal.get_calendar("XNYS")
-    closes = cal.early_closes(cal.schedule(date(2018, 1, 1), date.today() + timedelta(days=3 * 365)))["market_close"]
+    closes = cal.early_closes(cal.schedule(date(2018, 1, 1), datetime.now(NY).date() + timedelta(days=3 * 365)))["market_close"]
     return {ts.date(): ts.tz_convert("America/New_York").time() for ts in closes}
 
 

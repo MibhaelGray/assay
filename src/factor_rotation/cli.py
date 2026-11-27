@@ -16,12 +16,13 @@ def _today() -> date:
     return datetime.now(NY).date()
 
 
-def _trading_day(full: bool = False, closing: bool = False, now: datetime | None = None) -> bool:
-    """`fr trading-day`: a trading day, and with `full` not a half day, and with `closing` now within the 30 minutes
-    before today's close. The close job is started at 3:45 PM ET and at 12:45 PM ET; this lets the one that fits run."""
+def _trading_day(full: bool = False, half: bool = False, closing: bool = False, now: datetime | None = None) -> bool:
+    """`fr trading-day`: a trading day, with `full` not a half day, with `half` only a half day, and with `closing`
+    now within the 30 minutes before today's close. The close job is started at 15:41/15:46 and 12:41/12:46 ET; this
+    lets the one that fits run."""
     now = now or datetime.now(NY)
     today = now.date()
-    if not journal.is_trading_day(today) or (full and journal.is_half_day(today)):
+    if not journal.is_trading_day(today) or (full and journal.is_half_day(today)) or (half and not journal.is_half_day(today)):
         return False
     if closing:
         close = datetime.combine(today, journal.close_time(today), NY)
@@ -51,6 +52,7 @@ def main(argv: list[str] | None = None) -> None:
 
     c = sub.add_parser("trading-day", help="exit 0 if today is an NYSE trading day, else 1")
     c.add_argument("--full", action="store_true", help="and not a half day (the midday pass)")
+    c.add_argument("--half", action="store_true", help="and today IS a half day (1:00 PM ET close)")
     c.add_argument("--closing", action="store_true",
                    help="and now is in the close job's window, the 30 minutes before today's close (4:00 PM or 1:00 PM ET)")
     c.add_argument("--tomorrow", action="store_true",
@@ -165,7 +167,7 @@ def main(argv: list[str] | None = None) -> None:
     elif a.cmd == "trading-day":
         if a.tomorrow:
             sys.exit(0 if journal.is_trading_day(_today() + timedelta(days=1)) else 1)
-        sys.exit(0 if _trading_day(a.full, a.closing) else 1)
+        sys.exit(0 if _trading_day(a.full, a.half, a.closing) else 1)
     elif a.cmd == "serve":
         from . import serve
         serve.run(a.port)
@@ -394,11 +396,29 @@ def _paper(a) -> None:
     # Dry runs ("a look") are still allowed at any time of day so the operator can inspect pending exits.
     now_dt = datetime.now(NY)
     close_dt = datetime.combine(today, journal.close_time(today), NY)
-    if a.job == "close" and not looking and not (close_dt - timedelta(minutes=30) <= now_dt <= close_dt - timedelta(minutes=10, seconds=1)) and PaperSettings().send:
-        from .config import CT
-        lo, hi = (close_dt - timedelta(minutes=30)).astimezone(CT), (close_dt - timedelta(minutes=11)).astimezone(CT)
-        print(f"paper close: {now_dt.astimezone(CT):%-I:%M %p} CT is outside {lo:%-I:%M %p}-{hi:%-I:%M %p} CT, so nothing was sent")
-        sys.exit(1)
+    late_limit = False
+    if a.job == "close" and not looking:
+        # Idempotent for the scheduled backup trigger (15:46 / 12:46 ET): if today's exits file already exists,
+        # exit 0 cleanly instead of crashing with FileExistsError (any rejected/unexited shares are swept by paper-enter).
+        if not a.flatten and (book.ROOT / "exits" / f"{today}.json").exists():
+            ok, why = book.close_complete(today)
+            if ok:
+                print(f"paper close {today}: already completed")
+            else:
+                print(f"paper close {today}: exits file already exists ({why}); remaining unexited shares are handled by paper-enter")
+            return
+        if PaperSettings().send:
+            moc_end = close_dt - timedelta(minutes=10, seconds=1)
+            late_end = close_dt - timedelta(minutes=1)
+            if close_dt - timedelta(minutes=30) <= now_dt <= moc_end:
+                late_limit = False
+            elif moc_end < now_dt <= late_end:
+                late_limit = True
+            else:
+                from .config import CT
+                lo, hi = (close_dt - timedelta(minutes=30)).astimezone(CT), late_end.astimezone(CT)
+                print(f"paper close: {now_dt.astimezone(CT):%-I:%M %p} CT is outside {lo:%-I:%M %p}-{hi:%-I:%M %p} CT, so nothing was sent")
+                sys.exit(1)
     if a.job == "enter":
         # The three-pass book's order job (paper/entries.py): trades a pass's takes and exits once it has recorded.
         from .paper import entries
@@ -426,12 +446,25 @@ def _paper(a) -> None:
             print(f"  skipped {k['name']}: {k['reason']}")
         _notify("enter", r["warnings"])
     elif a.job == "close":
-        out = asyncio.run(book.close_session(today, flatten=a.flatten, dry=looking))
+        from . import watch
+        try:
+            out = asyncio.run(book.close_session(today, flatten=a.flatten, dry=looking, late_limit=late_limit))
+        except Exception as e:
+            if not looking:
+                watch.send("Paper close FAILED", f"paper-close failed on {today}: {type(e).__name__}: {str(e)[:180]}. Check paper-close.log.")
+            raise
         tag = _dry_tag(out["dry_run"], looking)
-        print(f"paper close {today}{tag}: {len(out['exits'])} exits, {len(out['orders'])} orders")
+        mode = " (late crossing limit)" if late_limit else ""
+        print(f"paper close {today}{mode}{tag}: {len(out['exits'])} exits, {len(out['orders'])} orders")
         for e in [*out["exits"], *out["retried"]]:
             print(f"  {e['trade_id']}: {e['reason']}")
         _notify("close", out["warnings"])
+        if not looking:
+            dead = [o for o in out.get("orders", []) if o.get("status") in book.DEAD]
+            if dead:
+                watch.send("Paper close order rejected", f"{len(dead)} close order(s) were not accepted on {today}; check paper-close.log.")
+            elif late_limit and out.get("orders"):
+                watch.send("Paper close ran late (limit fallback)", f"MOC cutoff passed on {today}; sent {len(out['orders'])} crossing limit exit orders before the bell.")
     elif a.job == "sync":
         out = asyncio.run(book.sync(today))
         print(f"paper sync {today}: {len(out['fills'])} fills, {len(out['positions'])} positions, net liquidation {out['net_liquidation']}")

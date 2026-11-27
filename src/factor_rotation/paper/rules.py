@@ -332,13 +332,13 @@ def stop_reason(trade: dict, held: list[dict], prices: dict[str, float], when: s
     return None
 
 
-def exit_reason(trade: dict, session: int, held: list[dict], prices: dict[str, float]) -> str | None:
+def exit_reason(trade: dict, session: int, held: list[dict], prices: dict[str, float], when: str = "2:45 PM CT") -> str | None:
     """Why this trade exits at today's close, or None to keep holding. `session` is 1 on the entry day."""
     filled = {leg["symbol"] for leg in held}
     if filled != {leg["symbol"] for leg in trade["legs"]}:
         missing = sorted({leg["symbol"] for leg in trade["legs"]} - filled)
         return f"broken: {', '.join(missing)} never filled"
-    if reason := stop_reason(trade, held, prices, "2:45 PM CT"):
+    if reason := stop_reason(trade, held, prices, when):
         return reason
     if session >= trade["horizon_days"]:
         return f"time limit: session {session} of {trade['horizon_days']}"

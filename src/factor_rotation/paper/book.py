@@ -28,16 +28,15 @@ from time import sleep
 import pandas as pd
 
 from .. import bars, journal, storage
-from ..config import NY
+from ..config import CT, NY
 from . import proposals, rules
 from .broker import DryRun, IBPaper, PaperSettings, unref
 
 log = logging.getLogger(__name__)
 ROOT = journal.JOURNAL / "paper"
 HALT = ROOT / "HALT"
-# Price pulls: (tries, seconds between). The Mac may have just woken for the job with no network yet. The
-# paper gateway can't stand in: it has no market data while the live session is logged in.
-CLOSE_QUOTES = (3, 15)     # the 3:45 PM job must send by 3:49 PM
+# Price pulls: (tries, seconds between). Kept short so paper-close never stalls past the 10-minute MOC cutoff.
+CLOSE_QUOTES = (2, 5)
 # An order that will never fill. A market-on-close order sent before the close sits at "PendingSubmit", so
 # that status is no cause for alarm; a message from the gateway always is worth reading.
 DEAD = {"Cancelled", "ApiCancelled", "Inactive", "not sent"}
@@ -76,7 +75,8 @@ def _yahoo(symbols: list[str]) -> dict[str, float]:
 
     tickers = {bars._ticker(s): s for s in symbols}
     try:
-        data = yf.download(list(tickers), period="1d", interval="1m", prepost=True, group_by="ticker", progress=False, threads=True)
+        data = yf.download(list(tickers), period="1d", interval="1m", prepost=True, group_by="ticker",
+                           progress=False, threads=True, timeout=10)
     except Exception as e:  # no network yet, or Yahoo refusing
         log.warning("quotes_failed error=%r", e)
         return {}
@@ -336,8 +336,51 @@ def reconcile(positions: dict[str, float]) -> list[str]:
     return [f"{s}: account {a:g}, books {b:g}" for s, (a, b) in _gaps(positions).items()]
 
 
-async def close_session(today: date, flatten: bool = False, broker=None, dry: bool = False) -> dict:
-    """Check each open trade at 3:45 PM ET (12:45 PM ET on a half day) and send market-on-close exits for those leaving today."""
+async def _pull_for_close(b, today: date) -> dict:
+    """Fast fills+positions pull for close_session: skips net_liquidation() and marks() so slow account-summary
+    RPCs (which crashed paper-close on 2026-11-24) can never delay or fail closing exits before the MOC cutoff."""
+    path = ROOT / "fills" / f"{today}.json"
+    new = await b.fills()
+    positions = await b.positions()
+    with _fills_lock():
+        existing = _read(path) or {}
+        old = existing.get("fills", [])
+        seen = {f["exec_id"] for f in new}
+        payload = {
+            "session": today.isoformat(),
+            "pulled_at": existing.get("pulled_at") or datetime.now(NY).isoformat(),
+            "fills_pulled_at": datetime.now(NY).isoformat(),
+            "fills": [*[f for f in old if f["exec_id"] not in seen], *new],
+            "positions": positions,
+            "net_liquidation": existing.get("net_liquidation"),
+            "marks": existing.get("marks", {}),
+        }
+        _write(path, payload)
+    payload["mismatches"] = reconcile(positions)
+    return payload
+
+
+def close_complete(today: date) -> tuple[bool, str | None]:
+    """Whether today's close job already completed cleanly (exists, no DEAD orders, and didn't crash before placing)."""
+    doc = _read(ROOT / "exits" / f"{today}.json")
+    if not doc:
+        return False, "no exits file yet"
+    orders = doc.get("orders") or []
+    wanted = bool(doc.get("exits") or doc.get("retried"))
+    if wanted and not orders:
+        return False, "exits were recorded but no orders were saved (previous run may have died mid-place)"
+    dead = [o for o in orders if o.get("status") in DEAD]
+    if dead:
+        syms = ", ".join(sorted({o["symbol"] for o in dead}))
+        return False, f"{len(dead)} close order(s) rejected/dead ({syms})"
+    return True, None
+
+
+async def close_session(today: date, flatten: bool = False, broker=None, dry: bool = False,
+                        late_limit: bool = False) -> dict:
+    """Check each open trade before the close (3:41 PM ET full day, 12:41 PM ET half day) and send market-on-close
+    exits for those leaving today. When `late_limit=True` (after the 10-minute MOC cutoff while the regular session
+    is still open), exits go as regular-session crossing limit orders instead of MOC so due trades still close."""
     from . import gateway
 
     path = ROOT / "exits" / f"{today}.json"
@@ -347,7 +390,7 @@ async def close_session(today: date, flatten: bool = False, broker=None, dry: bo
     dry = dry or (broker is None and not s.send)
     for attempt in (1, 2):
         try:
-            return await _close_once(today, path, flatten=flatten, broker=broker, dry=dry)
+            return await _close_once(today, path, flatten=flatten, broker=broker, dry=dry, late_limit=late_limit)
         except (TimeoutError, ConnectionError, OSError) as e:
             if attempt == 2 or dry or broker is not None or path.exists():
                 raise
@@ -360,27 +403,34 @@ async def close_session(today: date, flatten: bool = False, broker=None, dry: bo
     raise RuntimeError("unreachable")
 
 
-async def _close_once(today: date, path: Path, flatten: bool = False, broker=None, dry: bool = False) -> dict:
+async def _close_once(today: date, path: Path, flatten: bool = False, broker=None, dry: bool = False,
+                      late_limit: bool = False, quotes_fn=None) -> dict:
+    from . import entries
+    from .gateway import gateway_books
+
     exits, extended, retried, unchecked, orders, warnings = [], [], [], [], [], []
     review = {} if flatten else proposals.reviews(today)
+    now_ny = datetime.now(NY)
+    when_ct = f"{now_ny.astimezone(CT):%-I:%M %p} CT"
     moc = lambda t: [{"trade_id": t["id"], "symbol": h["symbol"], "action": "SELL" if h["side"] == "long" else "BUY",  # noqa: E731
                       "shares": h["shares"] - h["exit_shares"], "kind": "MOC"} for h in t["held"] if h["shares"] > h["exit_shares"]]
     async with (broker or _broker(dry=dry)) as b:
         off: set[str] = set()
         if not dry:
-            synced = await _pull(b, today)  # today's entry fills, so day-one stops and broken pairs are seen
+            synced = await _pull_for_close(b, today)  # fast fills+positions only, no slow NAV/marks RPCs
             off = set(_gaps(synced["positions"]))
         held = open_trades()
         stop_of = lambda t: t.get("stop") or {}  # noqa: E731
         symbols = sorted({h["symbol"] for t in held for h in t["held"]} | {r["symbol"] for t in held for r in stop_of(t).get("rules", [])})
         prices = await asyncio.to_thread(quotes, symbols, *CLOSE_QUOTES) if symbols else {}
+        to_close: list[dict] = []
         for t in held:
             k = _session(t, today)
             if k == 0 and not flatten and date.fromisoformat(t["entry_date"]) > today:
                 continue   # filled early for a later session; its stop and time limit start there
             # k is also 0 for a trade the morning or midday pass entered today: its time limit starts tomorrow,
             # but its stop and a leg that never filled are checked at this close like any other trade's.
-            reason = "flatten: every trade closed by hand" if flatten else rules.exit_reason(t, k, t["held"], prices)
+            reason = "flatten: every trade closed by hand" if flatten else rules.exit_reason(t, k, t["held"], prices, when=when_ct)
             if not reason and t.get("stood_down") and not flatten:   # the entry job would have closed it at the open
                 reason = f"stood down after filling early ({t['stood_down']}); the entry job didn't close it at the open"
             # Stops, broken pairs and the time limit come first. The review only adds an earlier exit, or lets
@@ -400,8 +450,9 @@ async def _close_once(today: date, path: Path, flatten: bool = False, broker=Non
                 if need - set(prices):
                     unchecked.append(t["id"])
                 continue
-            exits.append({"trade_id": t["id"], "book": t["book"], "session_number": k, "reason": reason})
-            orders += moc(t)
+            exits.append({"trade_id": t["id"], "book": t["book"], "session_number": k, "reason": reason,
+                          **({"intraday": True, "late_limit": True} if late_limit else {})})
+            to_close.append(t)
         # An exit sent earlier whose fills never arrived leaves its trade "closing" for good. Send it again, but
         # only if the account still holds what the books say: if it doesn't, the fills were missed, not the exit.
         for t in ([] if dry else [t for t in trades() if t["state"] == "closing"]):
@@ -411,12 +462,32 @@ async def _close_once(today: date, path: Path, flatten: bool = False, broker=Non
                 continue
             retried.append({"trade_id": t["id"], "reason": f"the exit sent {t['exit']['session']} never filled; sent again"})
             warnings.append(f"{t['id']} {t['name']}: the exit sent {t['exit']['session']} never filled, so it was sent again for today's close.")
-            orders += moc(t)
+            to_close.append(t)
+        if late_limit and to_close:
+            warnings.append("Close job ran past the 10-minute MOC cutoff; sending regular-session crossing limit exits before the bell.")
+            close_syms = sorted({h["symbol"] for t in to_close for h in t["held"] if h["shares"] > h["exit_shares"]})
+            books, missing = await (quotes_fn or gateway_books)(close_syms, False) if close_syms else ({}, {})
+            for t in to_close:
+                for h in t["held"]:
+                    rem = h["shares"] - h["exit_shares"]
+                    if rem <= 0:
+                        continue
+                    b_quote = books.get(h["symbol"])
+                    if not rules.crossable(b_quote, rules.MAX_CROSS_SPREAD):
+                        why = (missing.get(h["symbol"]) or "the gateway gave no bid and ask") if rules.spread_pct(b_quote) is None else f"spread {rules.spread_pct(b_quote):.1%} > {rules.MAX_CROSS_SPREAD:.0%}"
+                        warnings.append(f"{t['id']} {t['name']}: late-close limit exit for {h['symbol']} skipped ({why}); paper-enter will retry.")
+                        continue
+                    action = "SELL" if h["side"] == "long" else "BUY"
+                    orders.append(entries._order(t["id"], h["symbol"], action, rem, b_quote, "regular", now_ny, today, is_exit=True))
+        else:
+            for t in to_close:
+                orders += moc(t)
         if unchecked:
-            missing = sorted(set(symbols) - set(prices))
-            warnings.append(f"No price for {', '.join(missing)} after {CLOSE_QUOTES[0]} tries, so the stop on {len(unchecked)} "
+            missing_p = sorted(set(symbols) - set(prices))
+            warnings.append(f"No price for {', '.join(missing_p)} after {CLOSE_QUOTES[0]} tries, so the stop on {len(unchecked)} "
                             f"trade{'' if len(unchecked) == 1 else 's'} wasn't checked today: {', '.join(unchecked)}.")
-        payload = {"session": today.isoformat(), "built_at": datetime.now(NY).isoformat(), "dry_run": dry, "prices": prices,
+        payload = {"session": today.isoformat(), "built_at": datetime.now(NY).isoformat(), "dry_run": dry,
+                   **({"late_limit": True} if late_limit else {}), "prices": prices,
                    "exits": exits, "extended": extended, "retried": retried, "stops_not_checked": unchecked, "reviewed": sorted(review),
                    "orders": [], "warnings": warnings}
         if orders:
@@ -424,6 +495,12 @@ async def _close_once(today: date, path: Path, flatten: bool = False, broker=Non
                 _write(path, payload)  # on disk before anything is sent, so a job that dies while sending can't send twice
             payload["orders"] = await b.place(orders)
             payload["warnings"] += _order_warnings(payload["orders"])
+            if late_limit and not dry:
+                await asyncio.sleep(entries.SETTLE)
+                await _pull_fills(b, today)
+                if await b.cancel({o["trade_id"] for o in payload["orders"]}):
+                    await asyncio.sleep(1)
+                    await _pull_fills(b, today)
     if not dry:
         _write(path, payload)
     return payload

@@ -199,6 +199,19 @@ class Close(Case):
         self.assertEqual((b.sent, out["retried"]), ([], []))
         self.assertIn("wasn't sent again", out["warnings"][0])
 
+    def test_close_complete_and_late_limit_fallback_mode(self):
+        self.assertFalse(book.close_complete(DAY)[0])
+        b = self.held(horizon=1)
+        async def q(syms, overnight):
+            return {s: (99.95, 100.05) for s in syms}, {}
+        with mock.patch.object(book, "quotes", lambda symbols, *a: {"AAA": 100.0, "HHH": 100.0}), \
+                mock.patch("factor_rotation.paper.gateway.gateway_books", q):
+            out = asyncio.run(book.close_session(DAY, broker=b, late_limit=True))
+        self.assertTrue(out["late_limit"])
+        self.assertEqual({o["kind"] for o in b.sent}, {"LMT"})
+        self.assertEqual(self.state("T1"), "closed")
+        self.assertTrue(book.close_complete(DAY)[0])
+
 
 # ---- The research gate ------------------------------------------------------------------------------------
 from datetime import datetime  # noqa: E402

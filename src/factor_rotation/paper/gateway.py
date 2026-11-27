@@ -25,6 +25,8 @@ DATA_CLIENT_ID = 77         # the gateway quotes' own connection
 PREFLIGHT_CLIENT_ID = 76    # pre-flight health check's own connection
 QUOTE_TRIES = 3             # asks of the gateway for a bid and ask before a leg is left to wait
 SNAPSHOT_BATCH = 50
+QUALIFY_TIMEOUT = 15        # seconds per 50-symbol batch (was 60s, which could stall a sweep for 26+ minutes)
+SWEEP_TIMEOUT = 180         # hard wall-clock budget for the full overnight sweep
 GATEWAY_LOST_CODES = {1100, 2110}
 RESTART_WAIT = 15           # seconds after docker restart for IBC to log back in (~5 s in practice)
 
@@ -56,13 +58,24 @@ class IBMarket:
         if self.ib:
             self.ib.disconnect()
 
-    async def _contracts(self, symbols: list[str], overnight: bool) -> dict:
+    async def _contracts(self, symbols: list[str], overnight: bool, max_timeouts: int = 2) -> dict:
         from ib_async import Contract, Stock
         by_ib = {s.replace(".", " "): s for s in symbols}
         out = {}
+        timeouts = 0
         for i in range(0, len(symbols), SNAPSHOT_BATCH):
             chunk = [Stock(s.replace(".", " "), "SMART", "USD") for s in symbols[i:i + SNAPSHOT_BATCH]]
-            for c in await asyncio.wait_for(self.ib.qualifyContractsAsync(*chunk), 60):
+            try:
+                got = await asyncio.wait_for(self.ib.qualifyContractsAsync(*chunk), QUALIFY_TIMEOUT)
+                timeouts = 0
+            except asyncio.TimeoutError:
+                timeouts += 1
+                log.warning("qualify_timeout batch=%d/%d consecutive=%d", i // SNAPSHOT_BATCH + 1,
+                            (len(symbols) + SNAPSHOT_BATCH - 1) // SNAPSHOT_BATCH, timeouts)
+                if timeouts >= max_timeouts:
+                    raise TimeoutError(f"gateway timed out qualifying contracts {timeouts} batches in a row") from None
+                continue
+            for c in got:
                 if c and getattr(c, "conId", 0):
                     out[by_ib.get(c.symbol, c.symbol)] = Contract(conId=c.conId, exchange="OVERNIGHT") if overnight else c
         return out

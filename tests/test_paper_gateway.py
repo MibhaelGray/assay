@@ -70,6 +70,24 @@ class QuoteReasons(unittest.TestCase):
         self.assertIn("ConnectionRefusedError: nothing is listening on 4002", missing["AAA"])
         self.assertEqual(set(missing), {"AAA", "HHH"})
 
+    def test_contracts_aborts_early_after_consecutive_timeouts(self):
+        calls = 0
+
+        class SlowIB:
+            async def qualifyContractsAsync(self, *contracts):
+                nonlocal calls
+                calls += 1
+                await asyncio.sleep(5)
+                return []
+
+        m = gateway.IBMarket.__new__(gateway.IBMarket)
+        m.ib = SlowIB()
+        syms = [f"S{i}" for i in range(gateway.SNAPSHOT_BATCH * 4)]
+        with mock.patch.object(gateway, "QUALIFY_TIMEOUT", 0.01):
+            with self.assertRaises(TimeoutError):
+                asyncio.run(m._contracts(syms, overnight=True, max_timeouts=2))
+        self.assertEqual(calls, 2)
+
 
 class Preflight(unittest.TestCase):
     def test_healthy_gateway_is_silent_and_does_not_restart(self):

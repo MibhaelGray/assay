@@ -8,3 +8,4 @@ dashboard/local.html
 market.json
 reports/
 research_notes/
+*.lock

@@ -18,7 +18,7 @@ LOGS = Path.home() / "Library" / "Logs" / "factor-rotation"
 STEPS = [
     ("pass-morning", time(9, 45), "Morning pass", "Judges the pre-market and the first minutes of trading. Its takes trade as soon as it records.", "research", "session", 120),
     ("pass-midday", time(13, 0), "Midday pass", "Judges the morning's trading and reviews every open trade.", "research", "full", 120),
-    ("paper-close", time(15, 45), "Paper close", "Enforces stops and time limits; exits go as market-on-close orders.", "job", "session", 15),
+    ("paper-close", time(15, 41), "Paper close", "Enforces stops and time limits; exits go as market-on-close orders.", "job", "session", 20),
     ("paper-sync", time(16, 20), "Paper sync", "Pulls the day's fills, positions and account value.", "job", "session", 20),
     ("bars", time(16, 30), "Bars", "Five years of daily prices for every name.", "job", "session", 30),
     ("nightly", time(19, 0), "Nightly job", "Brief, earnings dates, scan and screen.", "job", "session", 60),
@@ -122,7 +122,12 @@ def check(day: date, now: datetime) -> list[dict]:
     """Each step's state on `day`: done, missed, failed, running, upcoming or off (not scheduled that day)."""
     out = []
     for key, at, name, what, who, days, grace in STEPS:
-        step_at = (datetime.combine(day, journal.close_time(day)) - timedelta(minutes=15)).time() if key == "paper-close" and journal.is_trading_day(day) else at
+        if key == "paper-close" and journal.is_trading_day(day):
+            step_at = (datetime.combine(day, journal.close_time(day)) - timedelta(minutes=19)).time()
+        elif key == "paper-sync" and journal.is_trading_day(day):
+            step_at = (datetime.combine(day, journal.close_time(day)) + timedelta(minutes=20)).time()
+        else:
+            step_at = at
         due = datetime.combine(day, step_at, NY)
         row = {"key": key, "time": f"{due.astimezone(CT):%-I:%M %p} CT", "name": name, "what": what, "who": who, "day": day.isoformat()}
         if not _due(days, day):

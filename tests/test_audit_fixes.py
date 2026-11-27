@@ -265,6 +265,58 @@ class ExecutionAndRiskFixes(unittest.TestCase):
         rec = asyncio.run(entries.run(now=at(date(2026, 11, 16), 22, 0), dry=True))
         self.assertEqual(rec["note"], "nothing new")
 
+    def test_backup_close_does_not_crash_on_existing_dead_exits_and_late_limit_skips_wide_spread(self):
+        from factor_rotation import cli
+        day = date(2026, 11, 27)
+        # Existing exits file with a DEAD order: backup close trigger must exit cleanly without FileExistsError
+        book._write(book.ROOT / "exits" / f"{day}.json", {
+            "session": day.isoformat(), "exits": [{"trade_id": "T1", "reason": "time limit"}],
+            "orders": [{"trade_id": "T1", "symbol": "AAA", "kind": "MOC", "status": "Inactive"}],
+        })
+        with mock.patch.object(cli, "_today", return_value=day), \
+                mock.patch.object(cli, "datetime") as dt, \
+                mock.patch.object(book, "close_session") as cs:
+            dt.now.return_value = at(day, 12, 46)
+            dt.combine = datetime.combine
+            cli._paper(N(job="close", execute=True, flatten=False, args=[]))
+        cs.assert_not_called()
+
+        # late_limit skips broken wide spread (> 2%) instead of crossing a stub quote
+        day2 = date(2026, 11, 30)
+        trade = {
+            "id": "2026-11-25-S01", "book": "swing", "name": "AAA", "setup": "breakout", "direction": "long",
+            "entry_date": "2026-11-25", "first_session": "2026-11-25", "horizon_days": 1, "notional": 10_000,
+            "stop": {"spread_pct": -5.0}, "why": "x", "wrong_if": "y", "source": "s", "pass": "night", "lead": "AAA",
+            "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 100.0}],
+        }
+        book._write(entries.path(date(2026, 11, 25)), {
+            "session": "2026-11-25", "handled": ["night"], "trades": [trade], "marks": {},
+            "exits": [], "runs": [], "last_attempt": None,
+        })
+        book._write(book.ROOT / "fills" / "2026-11-25.json", {
+            "session": "2026-11-25", "pulled_at": at(date(2026, 11, 25), 16, 20).isoformat(),
+            "fills": [{"order_ref": "2026-11-25-S01|AAA", "symbol": "AAA", "side": "BOT", "shares": 100.0,
+                       "price": 100.0, "commission": 1.0, "time": at(date(2026, 11, 25), 10, 0).isoformat(), "exec_id": "E1"}],
+            "positions": {"AAA": 100.0}, "net_liquidation": 1_000_000.0, "marks": {},
+        })
+
+        class FakeBroker:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): return None
+            async def fills(self): return []
+            async def positions(self): return {"AAA": 100.0}
+            async def place(self, orders): return orders
+            async def cancel(self, ids): return 0
+
+        async def wide_q(syms, overnight):
+            return {s: (90.0, 110.0) for s in syms}, {}  # 20% stub spread
+
+        with mock.patch.object(book, "quotes", return_value={"AAA": 100.0}):
+            out = asyncio.run(book._close_once(day2, book.ROOT / "exits" / f"{day2}.json",
+                                               broker=FakeBroker(), dry=False, late_limit=True, quotes_fn=wide_q))
+        self.assertEqual(out["orders"], [])
+        self.assertTrue(any("spread 20.0% > 2%" in w for w in out["warnings"]))
+
     def test_portfolio_all_excludes_retired_small_book(self):
         day = date(2026, 11, 23)
         book._write(book.ROOT / "book.json", {"started": "2026-11-15", "capital": {"swing": 1_000_000}})
@@ -323,8 +375,9 @@ class HalfDayAndCalendarFixes(unittest.TestCase):
                     mock.patch.object(routine.storage, "modified", return_value=None):
                 rows = {r["key"]: r for r in routine.check(bf, at(bf, 12, 50))}
                 self.assertEqual(rows["pass-midday"]["state"], "off")
-                self.assertEqual(rows["paper-close"]["time"], "11:45 AM CT")
+                self.assertEqual(rows["paper-close"]["time"], "11:41 AM CT")
                 self.assertEqual(rows["paper-close"]["state"], "running")
+                self.assertEqual(rows["paper-sync"]["time"], "12:20 PM CT")
 
                 # Thanksgiving eve (Wed Nov 25): pass-night must be "off" because tomorrow is Thanksgiving
                 eve = date(2026, 11, 25)
@@ -347,6 +400,36 @@ class IsolationDepthQuotesSideXfeedStatsFixes(unittest.TestCase):
         self.assertIn("Read(**/lessons.md)", passes.DISALLOWED)
         self.assertIn("Bash(uv run fr paper learn*)", passes.DISALLOWED)
         self.assertIn("Bash(uv run fr paper enter*)", passes.DISALLOWED)
+
+    def test_passes_skips_already_recorded_and_logs_early_failure(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            jroot = root / "journal"
+            logs = root / "pass-logs"
+            prop = jroot / "paper" / "proposals" / "2026-11-27.json"
+            prop.parent.mkdir(parents=True, exist_ok=True)
+            prop.write_text(json.dumps({"session": "2026-11-27", "passes": [{"pass": "morning", "at": "2026-11-27T10:00:00-05:00"}], "proposals": []}))
+            with mock.patch.object(journal, "JOURNAL", jroot), \
+                    mock.patch.object(passes, "LOGS", logs), \
+                    mock.patch("factor_rotation.watch.send") as send, \
+                    mock.patch.object(passes, "subprocess") as sub:
+                # Already recorded -> returns ok=True without alerting or invoking Claude
+                with mock.patch.object(passes, "datetime") as dt:
+                    dt.now.return_value = at(date(2026, 11, 27), 10, 15)
+                    out = passes.run("morning")
+                self.assertTrue(out["ok"])
+                self.assertTrue(out["already_recorded"])
+                send.assert_not_called()
+                sub.run.assert_not_called()
+                # Outside window -> writes failure log to data/pass-logs so it is never invisible
+                with mock.patch.object(passes, "datetime") as dt, \
+                        mock.patch.object(passes, "binary", return_value="/bin/echo"), \
+                        mock.patch.dict("os.environ", {"FR_CLAUDE_TOKEN": "tok"}):
+                    dt.now.return_value = at(date(2026, 11, 27), 7, 45)
+                    fail_out = passes._run("morning")
+                self.assertFalse(fail_out["ok"])
+                self.assertIn("not the time", fail_out["error"])
+                self.assertTrue((logs / "2026-11-27-morning.json").exists())
 
     def test_depth_ignores_failed_tool_calls_index_md_and_duplicate_packet_reads(self):
         with tempfile.TemporaryDirectory() as tmp:
