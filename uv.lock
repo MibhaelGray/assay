@@ -330,6 +330,7 @@ dependencies = [
     { name = "pandas-market-calendars" },
     { name = "playwright" },
     { name = "pyarrow" },
+    { name = "requests" },
     { name = "yfinance" },
 ]
 
@@ -341,6 +342,7 @@ requires-dist = [
     { name = "pandas-market-calendars", specifier = ">=5.6.0" },
     { name = "playwright", specifier = ">=1.65.2" },
     { name = "pyarrow", specifier = ">=26.0.0" },
+    { name = "requests", specifier = ">=2.34.2" },
     { name = "yfinance", specifier = ">=1.8.0" },
 ]
 

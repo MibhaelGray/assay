@@ -53,6 +53,8 @@ def main(argv: list[str] | None = None) -> None:
     c.add_argument("--full", action="store_true", help="and not a half day (the midday pass)")
     c.add_argument("--closing", action="store_true",
                    help="and now is in the close job's window, the 30 minutes before today's close (4:00 PM or 1:00 PM ET)")
+    c.add_argument("--tomorrow", action="store_true",
+                   help="exit 0 if tomorrow (New York) is a trading day: the night pass runs only the evening before a session")
     c = sub.add_parser("market", help="write tonight's market rows for the dashboard from the brief")
     c.add_argument("--as-of", default=None)
     c.add_argument("--out", type=Path, default=Path("market.json"))
@@ -80,21 +82,26 @@ def main(argv: list[str] | None = None) -> None:
                                            "side: `report` to score the side facts instead of pulling them; "
                                            "preflight: optional label (e.g. 'Night pass'); packet: pass slot (night/morning/midday)")
     c.add_argument("--no-quotes", action="store_true", help="preflight: check gateway connectivity only, skip the 10197 quote check")
-    c = sub.add_parser("edgar", help="read SEC EDGAR primary filings cleanly using SEC_USER_AGENT (edgar.py)")
-    c.add_argument("job", choices=["read"])
-    c.add_argument("url", help="https://www.sec.gov/... filing URL")
-    c.add_argument("--max-chars", type=int, default=14_000, help="character cap on extracted plain text")
     c.add_argument("--flatten", action="store_true", help="close: exit every open trade at today's close")
     c.add_argument("--reason", default="", help="halt: why, kept in the HALT file")
     c.add_argument("--book", choices=["swing"],
                    help="resume: lift the book's 10%% pause (drawdown.py) instead of the HALT file")
+    c = sub.add_parser("edgar", help="read SEC EDGAR primary filings cleanly using SEC_USER_AGENT (edgar.py)")
+    c.add_argument("job", choices=["read"])
+    c.add_argument("url", help="https://www.sec.gov/... filing URL")
+    c.add_argument("--max-chars", type=int, default=14_000, help="character cap on extracted plain text")
     c = sub.add_parser("pass", help="run one of the swing book's research passes as a background job (see passes.py)")
     c.add_argument("name", choices=["night", "late", "morning", "midday"])
     c.add_argument("--shadow", action="store_true", help="a trial run: work on a copy of the journal with orders off")
     c = sub.add_parser("x", help="posts from the accounts the owner follows on X, read by a plain script (xfeed.py)")
-    c.add_argument("job", choices=["login", "pull"])
+    c.add_argument("job", choices=["login", "pull", "audit-login", "audit"])
     c.add_argument("--hours", type=float, default=None, help="pull: read this far back instead of to the last stored post")
     c.add_argument("--show", action="store_true", help="pull: run Chrome in a window you can watch")
+    c.add_argument("--limit", type=int, default=50, help="audit: profiles to read this run (0 = no cap)")
+    c.add_argument("--per", type=int, default=100, help="audit: highlights to keep per profile (the 5 newest are always kept)")
+    c.add_argument("--pause", type=float, default=18.0, help="audit: seconds between profiles (X's guest limit is 50 timeline reads per 15 minutes)")
+    c.add_argument("--days", type=float, default=3.0, help="audit: skip profiles read this recently")
+    c.add_argument("--handles", type=Path, default=None, help="audit: a file of handles (default: following.csv)")
     c = sub.add_parser("watch", help="the watchdog: phone alerts when a pass, a job or the paper gateway breaks (watch.py)")
     c.add_argument("--test", action="store_true", help="send one test alert and stop")
     c.add_argument("--telegram-chats", action="store_true", help="list the chats that messaged the Telegram bot, to find FR_TELEGRAM_CHAT")
@@ -134,6 +141,12 @@ def main(argv: list[str] | None = None) -> None:
         from . import xfeed
         if a.job == "login":
             xfeed.login()
+        elif a.job == "audit-login":
+            xfeed.audit_login()
+        elif a.job == "audit":
+            r = xfeed.audit(limit=a.limit, per=a.per, pause=a.pause, days=a.days, handles=a.handles)
+            print(json.dumps(r))
+            sys.exit(0 if r["ok"] else 1)
         else:
             r = xfeed.pull(headless=False if a.show else None, hours=a.hours)
             print(json.dumps(r))
@@ -145,6 +158,8 @@ def main(argv: list[str] | None = None) -> None:
         else:
             watch.test() if a.test else watch.run()
     elif a.cmd == "trading-day":
+        if a.tomorrow:
+            sys.exit(0 if journal.is_trading_day(_today() + timedelta(days=1)) else 1)
         sys.exit(0 if _trading_day(a.full, a.closing) else 1)
     elif a.cmd == "serve":
         from . import serve

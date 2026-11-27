@@ -42,7 +42,7 @@ Yahoo is unofficial and can miss a split on its first day. `fr bars` repairs tha
 | `fr paper close` | 2:45 PM | `journal/paper/exits/`: time limits, and stops not already taken out during the day, sent into the closing auction |
 | `fr paper sync` | 3:20 PM | `journal/paper/fills/`: the day's fills, commissions, positions and account value |
 
-The night pass skips Friday nights; the morning and midday passes run only on trading days. A by-hand order labelled `cleanup-<trade id>` (no `|SYMBOL`) is counted against that trade in the fill's own symbol, so a sync that rewrites the day's fills can't reopen it.
+The night pass runs only on the evening before a session (`fr trading-day --tomorrow`, since 2026-11-25): it skips Friday nights and the evening before a holiday, and the pass for the session after a holiday runs on the holiday's own evening. The morning and midday passes run only on trading days. A by-hand order labelled `cleanup-<trade id>` (no `|SYMBOL`) is counted against that trade in the fill's own symbol, so a sync that rewrites the day's fills can't reopen it.
 
 The dashboard page lives in `dashboard/page.html`. The Refresh button only appears under `fr serve`. A refresh during the session stores a partial bar for the day, so the screen and the proposals' plan results wait for a session until its bars have been pulled after 4:15 PM ET. `fr dashboard` wraps the page with `dashboard/shim.js` (a stand-in for the claude.ai runtime) and `dashboard/tokens.css`, and embeds tonight's market rows, so it opens from disk with no server. Charts load d3 from a CDN.
 

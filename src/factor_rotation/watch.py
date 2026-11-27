@@ -133,8 +133,8 @@ def failed_jobs() -> list[tuple[str, str, str]]:
 
 
 def _pass_days(kind: str, day: date, trading) -> bool:
-    if kind == "sun-thu":
-        return day.weekday() in (6, 0, 1, 2, 3)
+    if kind == "sun-thu":   # the night pass: the evening before a session (run.sh skips it when tomorrow is closed)
+        return trading(day + timedelta(days=1))
     if kind == "full":
         from .journal import is_half_day
         return trading(day) and not is_half_day(day)

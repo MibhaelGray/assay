@@ -42,8 +42,17 @@ class Passes(unittest.TestCase):
 
     def test_no_pass_is_expected_on_a_holiday_or_a_friday_night(self):
         self.assertEqual(watch.missing_passes(at("2026-11-26T15:00"), trading=lambda d: False), [])
-        friday_night = watch.missing_passes(at("2026-11-20T22:30"), trading=lambda d: True)
+        weekdays = lambda d: d.weekday() < 5  # noqa: E731
+        friday_night = watch.missing_passes(at("2026-11-20T22:30"), trading=weekdays)
         self.assertFalse([k for k, *_ in friday_night if k.startswith("pass:night")])
+
+    def test_the_night_pass_is_expected_only_the_evening_before_a_session(self):
+        # Thanksgiving 2026-11-26: no night pass on Wednesday evening, one on the holiday's own evening for Friday.
+        nyse = lambda d: d.weekday() < 5 and d.isoformat() != "2026-11-26"  # noqa: E731
+        eve = watch.missing_passes(at("2026-11-25T22:30"), trading=nyse)
+        self.assertFalse([k for k, *_ in eve if k.startswith("pass:night")])
+        holiday = watch.missing_passes(at("2026-11-26T22:30"), trading=nyse)
+        self.assertIn("pass:night:2026-11-26", [k for k, *_ in holiday])
 
     def test_last_nights_pass_is_still_checked_after_midnight(self):
         found = watch.missing_passes(at("2026-11-18T01:00"), trading=lambda d: True)

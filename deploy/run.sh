@@ -75,7 +75,7 @@ case "$1" in
       uv run fr trading-day --closing || exit 0
       exec uv run fr paper preflight --no-quotes "Paper close"
     elif [ "$hm" -ge 2000 ] && [ "$hm" -le 2045 ]; then
-      [ "$wd" = 5 ] || [ "$wd" = 6 ] && exit 0
+      uv run fr trading-day --tomorrow || exit 0   # no night pass when tomorrow is closed
       exec uv run fr paper preflight "Night pass"
     fi
     exit 0 ;;
@@ -89,9 +89,10 @@ case "$1" in
     # Facts recorded beside the night's verdicts, which no research pass reads (paper/side.py). Yahoo only.
     exec uv run fr paper side ;;
   pass-night)
-    # Sunday to Thursday evenings, for the next session. launchd starts it Monday to Friday and on Sunday
-    # (install.py); Friday's run stops here.
-    [ "$(TZ=America/New_York date +%u)" = 5 ] && exit 0
+    # The evening before a session only. launchd starts it Monday to Friday and on Sunday (install.py); a run
+    # whose tomorrow is closed stops here: Friday's, and the evening before a holiday (the pass for the session
+    # after a holiday runs on the holiday's own evening, on the latest prices).
+    uv run fr trading-day --tomorrow || exit 0
     exec uv run fr pass night ;;
   pass-morning)
     uv run fr trading-day || exit 0
