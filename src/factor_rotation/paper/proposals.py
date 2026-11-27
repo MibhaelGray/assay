@@ -69,6 +69,8 @@ def pass_session(kind: str, now: datetime) -> date:
     if not open_day or not window[0] <= t <= window[1]:
         ct = lambda x: f"{(x.hour - 1) % 12 or 12}:{x.minute:02d} {'PM' if x.hour - 1 >= 12 else 'AM'}"  # noqa: E731
         raise ValueError(f"the {kind} pass runs on a trading day between {ct(window[0])} and {ct(window[1])} CT")
+    if kind == "midday" and journal.is_half_day(today):
+        raise ValueError("there is no midday pass on a half day; the market closes at 12:00 PM CT")
     return today
 
 
@@ -121,15 +123,18 @@ def _plan(plan, legs: list[str], who: str) -> dict:
     return out
 
 
-def reports_inside(symbols: list[str], session: date, horizon: int) -> list[str]:
-    """Stock legs whose earnings reaction falls inside the time limit, as plain sentences."""
+def reports_inside(symbols: list[str], session: date, horizon: int, kind: str | None = None) -> list[str]:
+    """Stock legs whose earnings reaction falls inside the time limit, as plain sentences.
+    When `kind` is given (morning/midday), the time limit starts on the next session (entries.first_session),
+    so reports trading on session `horizon` from that start are caught too."""
     from ..screen import _Days, _next_report
 
     stocks = [s for s in symbols if s not in ETFS]
     reports = earnings.load().get("names", {})
     if not stocks or not reports:
         return []
-    days = _Days(journal.previous_trading_day(session))
+    first = session if (kind is None or kind in NIGHT_KINDS) else journal.next_trading_day(session)
+    days = _Days(journal.previous_trading_day(first))
     out = []
     for s in stocks:
         n = _next_report(s, reports, days)
@@ -172,7 +177,7 @@ def _from_screen(c: dict, rank: int, screen: dict) -> dict:
             "long": sides[0] if sides else [], "short": sides[1] if sides else [], "plan": rules.default_plan(c) if sides else None}
 
 
-def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dict:
+def _proposal(raw: dict, session: date, screen: dict | None, cands: dict, kind: str | None = None) -> dict:
     who = str(raw.get("candidate") or raw.get("name") or "a proposal")
     if raw.get("candidate"):
         if raw["candidate"] not in cands:
@@ -228,7 +233,7 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict) -> dic
         if not _text(raw.get("hedge_why")):   # every take, hedged or outright (the owner, 2026-11-16)
             raise ValueError(f"{who}: a take needs hedge_why: why it is better hedged against this fund than outright, or "
                              "outright than hedged (the S&P 500 is the benchmark)")
-        if (inside := reports_inside(legs, session, p["plan"]["horizon_days"])) and not _text(raw.get("through_earnings")):
+        if (inside := reports_inside(legs, session, p["plan"]["horizon_days"], kind=kind)) and not _text(raw.get("through_earnings")):
             raise ValueError(f"{who}: {'; '.join(inside)}, inside the {p['plan']['horizon_days']}-session time limit. Shorten the "
                              "time limit, or give through_earnings saying why the trade holds through the report")
         p.update({"reasoning": {k: reasoning[k].strip() for k in journal.REASONING}, "wrong_if": raw["wrong_if"].strip(),

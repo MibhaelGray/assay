@@ -38,7 +38,9 @@ retry() {
 }
 
 case "$1" in
-  bars)         exec uv run fr bars ;;
+  bars)
+    uv run fr trading-day || exit 0
+    exec uv run fr bars ;;
   paper-close|paper-sync)
     # Nothing to do until the paper account is set up in .env (docs/operations.md).
     [ -n "${FR_PAPER_ACCOUNT:-}" ] || { echo "FR_PAPER_ACCOUNT not set; skipping $1" >&2; exit 0; }
@@ -65,6 +67,9 @@ case "$1" in
     if [ "$hm" -ge 900 ] && [ "$hm" -le 1015 ]; then
       uv run fr trading-day || exit 0
       exec uv run fr paper preflight "Morning pass"
+    elif [ "$hm" -ge 1105 ] && [ "$hm" -le 1130 ]; then
+      uv run fr trading-day || exit 0
+      exec uv run fr paper preflight "Mid-morning check"
     elif [ "$hm" -ge 1225 ] && [ "$hm" -le 1244 ]; then
       uv run fr trading-day --closing || exit 0
       exec uv run fr paper preflight --no-quotes "Paper close"

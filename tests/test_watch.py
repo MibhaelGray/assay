@@ -30,9 +30,9 @@ class Passes(unittest.TestCase):
         found = watch.missing_passes(at("2026-11-17T14:30"), trading=lambda d: True)
         self.assertFalse([k for k, *_ in found if k.startswith("pass:midday")])
 
-    def test_a_missing_pass_is_reported_after_75_minutes_not_before(self):
-        self.assertFalse([k for k, *_ in watch.missing_passes(at("2026-11-17T14:00"), trading=lambda d: True) if "midday" in k])
-        found = watch.missing_passes(at("2026-11-17T14:20"), trading=lambda d: True)
+    def test_a_missing_pass_is_reported_after_pass_late_not_before(self):
+        self.assertFalse([k for k, *_ in watch.missing_passes(at("2026-11-17T14:25"), trading=lambda d: True) if "midday" in k])
+        found = watch.missing_passes(at("2026-11-17T14:40"), trading=lambda d: True)
         self.assertIn("pass:midday:2026-11-17", [k for k, *_ in found])
 
     def test_a_failed_pass_is_reported(self):

@@ -18,7 +18,7 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-from . import journal, transcripts
+from . import journal, storage, transcripts
 from .config import NY  # importing config also loads FR_* settings from .env, the token among them
 
 log = logging.getLogger(__name__)
@@ -37,6 +37,22 @@ APP_BUILDS = Path.home() / "Library" / "Application Support" / "Claude" / "claud
 READING = ["Read", "Glob", "Grep", "WebSearch", "WebFetch", "Agent", "Skill",
            f"Write({DRAFTS}/**)", f"Edit({DRAFTS}/**)", "Bash(uv run fr trading-day)", "Bash(uv run fr paper desk)",
            "Bash(uv run fr quotes:*)", "Bash(uv run fr edgar read:*)", "Bash(uv run fr paper packet:*)"]
+# Programmatic guard enforcing Folder 2 isolation (uninfluenced judge) and secret protection in headless passes.
+DISALLOWED = [
+    "Read(.env)", "Read(.env.*)", "Grep(.env)", "Grep(.env.*)", "Glob(.env*)",
+    "Read(**/lessons.md)", "Grep(**/lessons.md)",
+    "Read(**/paper/side/**)", "Grep(**/paper/side/**)", "Glob(**/paper/side/**)",
+    "Read(**/paper/postmortems/**)", "Grep(**/paper/postmortems/**)", "Glob(**/paper/postmortems/**)",
+    "Read(**/journal/archive/**)", "Grep(**/journal/archive/**)", "Glob(**/journal/archive/**)",
+    "Read(**/research/agents/**)", "Grep(**/research/agents/**)", "Glob(**/research/agents/**)",
+    "Read(**/research/transcripts/**)", "Grep(**/research/transcripts/**)", "Glob(**/research/transcripts/**)",
+    "Bash(uv run fr paper learn*)", "Bash(*fr paper learn*)",
+    "Bash(uv run fr paper holds*)", "Bash(*fr paper holds*)",
+    "Bash(uv run fr paper side*)", "Bash(*fr paper side*)",
+    "Bash(uv run fr paper enter*)", "Bash(*fr paper enter*)",
+    "Bash(uv run fr paper close*)", "Bash(*fr paper close*)",
+    "Bash(uv run fr paper sync*)", "Bash(*fr paper sync*)",
+]
 # What each pass may run on top of the reading tools. Each leaves the session's proposals file rewritten
 # (paper/daily.py). Headless since 2026-11-16 so the judge is always Fable 5.2 at high effort: a pass scheduled in
 # the Claude app runs on whatever model the app is set to. "late" is a second night pass, by hand (`fr pass late`).
@@ -50,6 +66,8 @@ HEADLESS = f"""
 Running as a background job, not in the Claude app (the owner's setup, 2026-11-16):
 - You are the judge, on Fable 5.2 at high effort. Start every research agent with the Agent tool's `model: "sonnet"`
   and `effort: "medium"`, one name to an agent, as the skill says.
+- The working directory is already the repository root. Run every `uv run fr ...` command directly without prefixing
+  `cd ... &&` (chained `cd` commands are refused by the tool allowlist).
 - There is no IBKR connector here. Take market numbers from `uv run fr quotes` (for example
   `uv run fr quotes SPY QQQ IWM ^VIX ^TNX CL=F ES=F NQ=F`), Yahoo prices.
 - Write every draft under `{DRAFTS}/`: the pass's draft as `{DRAFTS}/<pass>.json` (night.json, late.json, morning.json
@@ -151,15 +169,23 @@ def _run(name: str, shadow: bool = False) -> dict:
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
     writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)"]   # "//" marks an absolute path
     cmd = [exe, "-p", "--model", MODEL, "--effort", EFFORT, "--output-format", "json", "--permission-mode", "dontAsk",
-           "--allowedTools", *READING, *spec["allow"], *writes]
+           "--allowedTools", *READING, *spec["allow"], *writes,
+           "--disallowedTools", *DISALLOWED]
     prompt = (PROMPTS / spec["prompt"]).read_text() + HEADLESS
     if name in proposals.LATE[1:]:
         prompt = AGAIN.format(name=name) + prompt
+    log_path = LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json"
+    done = None
     try:
         done = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=TIMEOUT, env=env)
         reply = json.loads(done.stdout)
     except (OSError, subprocess.TimeoutExpired, ValueError) as e:
-        return {"pass": name, "ok": False, "shadow": shadow, "error": repr(e)[:300]}
+        stderr_tail = (getattr(done, "stderr", "") or getattr(e, "stderr", "") or "")[-400:].strip()
+        out = {"pass": name, "ok": False, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
+               "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
+               "error": repr(e)[:300], **({"stderr": stderr_tail} if stderr_tail else {})}
+        storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
+        return out
     after = (root / leaves).stat().st_mtime if (root / leaves).exists() else None
     out = {"pass": name, "shadow": shadow, "started": now.isoformat(timespec="seconds"),
            "minutes": round((datetime.now(NY) - now).total_seconds() / 60, 1),
@@ -167,5 +193,5 @@ def _run(name: str, shadow: bool = False) -> dict:
            "turns": reply.get("num_turns"), "agents": (reply.get("subagent_stats") or {}).get("spawned"),
            "refused": [f"{d.get('tool_name')}: {str(d.get('tool_input'))[:120]}" for d in reply.get("permission_denials", [])],
            "message": reply.get("result"), "transcript": _keep(reply.get("session_id"), root, f"{session}-{name}")}
-    (LOGS / f"{now.date()}-{name}{'-shadow' if shadow else ''}.json").write_text(json.dumps(out, indent=1) + "\n")
+    storage.atomic_write_text(log_path, json.dumps(out, indent=1) + "\n")
     return out

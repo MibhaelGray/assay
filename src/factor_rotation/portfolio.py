@@ -50,7 +50,7 @@ def fills(which: str = "swing") -> list[dict]:
     """A book's fills, oldest first; "all" is every running book's together."""
     if not book.ROOT.exists():
         return []
-    return book._book_fills(None if which == "all" else which)
+    return book._book_fills(set(running()) if which == "all" else which)
 
 
 def _held(fs: list[dict]) -> dict[str, dict]:

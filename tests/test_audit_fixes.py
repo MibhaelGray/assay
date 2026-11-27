@@ -1,0 +1,462 @@
+"""Regression tests for the comprehensive Assay audit fixes. No network, no gateway.
+
+    uv run python -m unittest discover -s tests
+"""
+
+import asyncio
+import json
+import os
+import tempfile
+import unittest
+from datetime import date, datetime, time, timedelta
+from pathlib import Path
+from types import SimpleNamespace as N
+from unittest import mock
+
+import pandas as pd
+
+from factor_rotation import bars, edgar, journal, live, passes, portfolio, quotes, routine, storage, xfeed
+from factor_rotation.config import NY
+from factor_rotation.paper import book, broker, depth, entries, gateway, holds, learn, proposals, rules, side
+
+
+def at(d: date, h: int, m: int = 0) -> datetime:
+    return datetime.combine(d, time(h, m), NY)
+
+
+class EdgarAndTickerFixes(unittest.TestCase):
+    def test_html_to_text_recovers_after_display_none_div_and_void_tags(self):
+        html = (
+            "<html><head><meta charset='utf-8'><title>8-K</title></head>"
+            "<body>"
+            "<div style='display: none'><ix:header><ix:hidden><div>hidden nested</div></ix:hidden></ix:header></div>"
+            "<p>Revenue rose 22% year over year to $1.4 billion.<br>Guidance raised.</p>"
+            "</body></html>"
+        )
+        text = edgar.html_to_text(html)
+        self.assertIn("Revenue rose 22% year over year", text)
+        self.assertIn("Guidance raised.", text)
+        self.assertNotIn("hidden nested", text)
+
+    def test_cached_doc_text_refetches_empty_cache_and_never_caches_empty(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with mock.patch.object(edgar, "_cache_dir", return_value=root):
+                doc_path = root / "docs" / "0001_ex991.htm.txt"
+                doc_path.parent.mkdir(parents=True, exist_ok=True)
+                doc_path.write_text("")  # corrupted 0-byte file from earlier bug
+                calls = []
+
+                def fake_fetch(url):
+                    calls.append(url)
+                    return b"<html><body><p>Actual press release body.</p></body></html>"
+
+                text = edgar._cached_doc_text(1, "0001", "ex991.htm", "https://www.sec.gov/x", 5000, fetcher=fake_fetch)
+                self.assertEqual(len(calls), 1)
+                self.assertIn("Actual press release body.", text)
+                self.assertIn("Actual press release body.", doc_path.read_text())
+
+                # Empty response must not be cached on disk
+                empty_path = root / "docs" / "0002_empty.htm.txt"
+                out = edgar._cached_doc_text(1, "0002", "empty.htm", "https://www.sec.gov/e", 5000, fetcher=lambda _: b"<div></div>")
+                self.assertEqual(out, "")
+                self.assertFalse(empty_path.exists())
+
+    def test_share_class_symbols_work_across_journal_bars_edgar_broker_gateway(self):
+        for sym in ("BRK B", "BF B", "MOG A", "BRK.B"):
+            self.assertIsNotNone(journal.SYMBOL.match(sym))
+        self.assertEqual(bars._ticker("BRK B"), "BRK-B")
+        self.assertEqual(bars._ticker("BRK.B"), "BRK-B")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            with mock.patch.object(edgar, "_cache_dir", return_value=Path(tmp)):
+                ciks = edgar.ticker_ciks(fetcher=lambda _: json.dumps({"0": {"ticker": "BRK-B", "cik_str": 1067983}}).encode())
+                self.assertEqual(ciks["BRK B"], 1067983)
+                self.assertEqual(ciks["BRK.B"], 1067983)
+                self.assertEqual(ciks["BRK-B"], 1067983)
+
+        # gateway._contracts preserves caller's symbol ("BRK B" or "BRK.B")
+        m = gateway.IBMarket.__new__(gateway.IBMarket)
+
+        class FakeIB:
+            async def qualifyContractsAsync(self, *contracts):
+                return [N(symbol=c.symbol, conId=42, secType="STK") for c in contracts]
+
+        m.ib = FakeIB()
+        out_space = asyncio.run(m._contracts(["BRK B"], overnight=False))
+        out_dot = asyncio.run(m._contracts(["BRK.B"], overnight=False))
+        self.assertIn("BRK B", out_space)
+        self.assertIn("BRK.B", out_dot)
+
+
+class RawCloseAdjustmentFixes(unittest.TestCase):
+    def test_bars_frame_stores_raw_close_and_merge_recent_backfills_legacy_schema(self):
+        idx = pd.to_datetime(["2026-11-23", "2026-11-24", "2026-11-25"])
+        raw = pd.DataFrame({
+            "Open": [100.0, 102.0, 104.0],
+            "High": [101.0, 103.0, 105.0],
+            "Low": [99.0, 101.0, 103.0],
+            "Close": [100.0, 102.0, 104.0],
+            "Adj Close": [95.0, 96.9, 98.8],
+            "Volume": [1000.0, 1000.0, 1000.0],
+        }, index=idx)
+        df = bars._frame("DIV", raw, repair=False)
+        self.assertIn("raw_close", df.columns)
+        self.assertAlmostEqual(df["raw_close"].iloc[-1], 104.0)
+        self.assertAlmostEqual(df["close"].iloc[-1], 98.8)
+
+        # Merging into an older parquet without raw_close must backfill cleanly with no NaNs
+        legacy = pd.DataFrame({
+            "symbol": ["DIV", "DIV"],
+            "date": pd.to_datetime(["2026-11-20", "2026-11-23"]),
+            "open": [94.0, 95.0], "high": [95.0, 95.95], "low": [93.0, 94.05],
+            "close": [94.0, 95.0], "volume": [1000.0, 1000.0],
+        })
+        merged = bars._merge_recent(df, legacy)
+        self.assertIsNotNone(merged)
+        self.assertFalse(merged["raw_close"].isna().any())
+
+    def test_learn_and_holds_are_immune_to_retroactive_dividend_adjustment(self):
+        # Stock trades at unadjusted 100 on Nov 17 -> 102 on Nov 18 (real return +2.00%).
+        # Later a 5% dividend adjusts historical closes by 0.95 (close=95 -> 96.9, raw_close=100 -> 102).
+        # Pass mark recorded at entry is unadjusted 100.0. Must still score +200 bp, NOT -310 bp!
+        px = pd.DataFrame([
+            {"symbol": "AAA", "date": pd.Timestamp("2026-11-16"), "open": 95.0, "close": 95.0, "raw_close": 100.0},
+            {"symbol": "AAA", "date": pd.Timestamp("2026-11-17"), "open": 95.0, "close": 96.9, "raw_close": 102.0},
+            {"symbol": "SPY", "date": pd.Timestamp("2026-11-16"), "open": 500.0, "close": 500.0, "raw_close": 500.0},
+            {"symbol": "SPY", "date": pd.Timestamp("2026-11-17"), "open": 500.0, "close": 500.0, "raw_close": 500.0},
+        ])
+        prop = {
+            "id": "2026-11-17-P01", "session": "2026-11-17", "pass": "night",
+            "long": ["AAA"], "short": [], "plan": {"horizon_days": 1, "stop": {"spread_pct": -5.0}},
+        }
+        mark_doc = {"at": at(date(2026, 11, 16), 21, 0).isoformat(), "prices": {"AAA": 100.0, "SPY": 500.0}}
+        with mock.patch.object(entries, "marks", return_value=mark_doc), \
+                mock.patch.object(journal, "_bars_settled", return_value=True):
+            res = learn._mark_outcome(prop, px, ix=None, today=date(2026, 11, 20))
+        self.assertAlmostEqual(res["bps"], 200.0, places=1)
+
+        # Also check holds._path gives +200 bp!
+        px_map = {
+            "AAA": {date(2026, 11, 16): (95.0, 95.0, 100.0), date(2026, 11, 17): (95.0, 96.9, 102.0)},
+        }
+        with mock.patch.object(entries, "marks", return_value=mark_doc):
+            held, stopped, src = holds._path(prop, px_map, lambda _: True, today=date(2026, 11, 20))
+        self.assertEqual(src, "pass_mark")
+        self.assertAlmostEqual(held[0], 200.0, places=1)
+        self.assertAlmostEqual(stopped[0], 200.0, places=1)
+
+
+class ExecutionAndRiskFixes(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.root = Path(self.tmp.name)
+        for p in (
+            mock.patch.object(journal, "JOURNAL", self.root),
+            mock.patch.object(book, "ROOT", self.root / "paper"),
+            mock.patch.object(entries.asyncio, "sleep", mock.AsyncMock()),
+            mock.patch.object(entries, "_tell"),
+        ):
+            p.start()
+            self.addCleanup(p.stop)
+
+    def test_partial_fill_stop_uses_filled_notional(self):
+        trade = {
+            "id": "T1", "notional": 10_000,
+            "stop": {"spread_pct": -5.0},
+            "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 100.0}],
+        }
+        # Only 50 of 100 shares filled ($5,000 actual notional). Stock drops -5.2% to $94.80 (-$260).
+        # Against planned $10,000 that looked like -2.6% (missed stop!); against filled $5,000 it IS -5.2%!
+        held = [{"symbol": "AAA", "side": "long", "shares": 50, "entry_price": 100.0}]
+        reason = rules.stop_reason(trade, held, {"AAA": 94.80}, "10:00 AM CT")
+        self.assertIsNotNone(reason)
+        self.assertIn("5.2%", reason)
+
+    def test_apply_caps_includes_proposal_id_and_unfilled_reason_does_not_cross_contaminate(self):
+        open_t = [{"id": "O1", "legs": [{"symbol": "XXX", "side": "long", "shares": 100, "ref_price": 100.0}]}]
+        new_t = [{"id": "N1", "proposal_id": "P01", "legs": [{"symbol": "YYY", "side": "long", "shares": 100, "ref_price": 100.0}]}]
+        kept, skipped = rules.apply_caps(new_t, open_t, max_gross=15_000, max_symbol=50_000)
+        self.assertEqual(kept, [])
+        self.assertEqual(skipped[0]["proposal_id"], "P01")
+
+        # P02 (same pass) must NOT inherit P01's cap skip reason when proposal_id is present
+        entry_doc = {"trades": [], "runs": [{"skipped": [{"name": "N1", "proposal_id": "P01", "pass": "night", "reason": "gross would be $20,000"}]}]}
+        self.assertEqual(learn.unfilled_reason({"id": "P01", "pass": "night"}, entry_doc), "cap_skipped")
+        self.assertEqual(learn.unfilled_reason({"id": "P02", "pass": "night"}, entry_doc), "other")
+
+    def test_unfilled_intraday_exit_stays_open_for_retry(self):
+        day = date(2026, 11, 17)
+        # Seed an open trade with entry fills
+        trade = {
+            "id": "2026-11-17-S01", "book": "swing", "name": "AAA", "setup": "breakout", "direction": "long",
+            "entry_date": day.isoformat(), "first_session": day.isoformat(), "horizon_days": 3, "notional": 10_000,
+            "stop": {"spread_pct": -4.0}, "why": "x", "wrong_if": "y", "source": "s", "pass": "night", "lead": "AAA",
+            "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 100.0}],
+        }
+        book._write(entries.path(day), {
+            "session": day.isoformat(), "handled": ["night"], "trades": [trade], "marks": {},
+            "exits": [], "runs": [], "last_attempt": None,
+        })
+        book._write(book.ROOT / "fills" / f"{day}.json", {
+            "session": day.isoformat(), "pulled_at": at(day, 9, 31).isoformat(),
+            "fills": [{"order_ref": "2026-11-17-S01|AAA", "symbol": "AAA", "side": "BOT", "shares": 100.0,
+                       "price": 100.0, "commission": 1.0, "time": at(day, 9, 31).isoformat(), "exec_id": "E1"}],
+            "positions": {"AAA": 100.0}, "net_liquidation": 1_000_000.0, "marks": {},
+        })
+        # Broker rejects / fails to fill the intraday stop exit
+        class RejectExitBroker:
+            async def __aenter__(self): return self
+            async def __aexit__(self, *a): return None
+            async def cancel(self, ids): return 0
+            async def place(self, orders):
+                return [{**o, "order_id": 1, "status": "Cancelled", "note": "rejected"} for o in orders]
+            async def fills(self): return []
+
+        async def q(syms, overnight):
+            return {s: (94.0, 94.1) for s in syms}, {}
+
+        rec = asyncio.run(entries.run(
+            now=at(day, 10, 0), broker=RejectExitBroker(),
+            quotes=q, stop_prices=lambda syms: {s: 94.0 for s in syms},
+        ))
+        self.assertEqual(rec["exits"], [])
+        self.assertTrue(any("filled nothing" in w for w in rec["warnings"]))
+        # Trade MUST remain "open", not stuck in "closing"
+        saved = entries.load(day)
+        self.assertEqual(saved["exits"], [])
+        self.assertEqual(book.trades()[0]["state"], "open")
+
+    def test_overnight_wants_out_does_not_spin_and_holiday_eve_has_no_overnight_venue(self):
+        # Wednesday evening before Thanksgiving 2026-11-26 -> no overnight venue!
+        self.assertIsNone(entries.venue(at(date(2026, 11, 25), 21, 0)))
+        # Thanksgiving evening before Black Friday 2026-11-27 -> overnight venue IS open!
+        self.assertEqual(entries.venue(at(date(2026, 11, 26), 21, 0)), "overnight")
+
+        # Overnight run with a review exit (wants_out) and no pending entries must exit early with "nothing new"
+        day = date(2026, 11, 17)
+        trade = {
+            "id": "2026-11-16-S01", "book": "swing", "name": "AAA", "setup": "breakout", "direction": "long",
+            "entry_date": "2026-11-16", "first_session": "2026-11-16", "horizon_days": 3, "notional": 10_000,
+            "stop": {"spread_pct": -4.0}, "why": "x", "wrong_if": "y", "source": "s", "pass": "night", "lead": "AAA",
+            "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 100.0}],
+        }
+        book._write(entries.path(date(2026, 11, 16)), {
+            "session": "2026-11-16", "handled": ["night"], "trades": [trade], "marks": {},
+            "exits": [], "runs": [], "last_attempt": None,
+        })
+        book._write(book.ROOT / "fills" / "2026-11-16.json", {
+            "session": "2026-11-16", "pulled_at": at(date(2026, 11, 16), 16, 20).isoformat(),
+            "fills": [{"order_ref": "2026-11-16-S01|AAA", "symbol": "AAA", "side": "BOT", "shares": 100.0,
+                       "price": 100.0, "commission": 1.0, "time": at(date(2026, 11, 16), 10, 0).isoformat(), "exec_id": "E1"}],
+            "positions": {"AAA": 100.0}, "net_liquidation": 1_000_000.0, "marks": {},
+        })
+        book._write(entries.path(day), {
+            "session": day.isoformat(), "handled": ["night"], "trades": [], "marks": {},
+            "exits": [], "runs": [], "last_attempt": at(date(2026, 11, 16), 21, 0).isoformat(),
+        })
+        book._write(book.ROOT / "proposals" / f"{day}.json", {
+            "session": day.isoformat(), "passes": [{"pass": "night", "at": at(date(2026, 11, 16), 20, 45).isoformat()}], "proposals": [],
+        })
+        book._write(book.ROOT / "pass_reviews" / f"{day}.json", {
+            "session": day.isoformat(), "passes": [{"pass": "night", "reviews": [{"trade_id": "2026-11-16-S01", "action": "exit", "reason": "broken"}]}],
+        })
+        rec = asyncio.run(entries.run(now=at(date(2026, 11, 16), 22, 0), dry=True))
+        self.assertEqual(rec["note"], "nothing new")
+
+    def test_portfolio_all_excludes_retired_small_book(self):
+        day = date(2026, 11, 23)
+        book._write(book.ROOT / "book.json", {"started": "2026-11-15", "capital": {"swing": 1_000_000}})
+        book._write(entries.path(day), {
+            "session": day.isoformat(), "handled": ["night"],
+            "trades": [
+                {"id": "2026-11-23-S01", "book": "dynamic", "name": "AAA", "setup": "breakout", "direction": "long",
+                 "entry_date": day.isoformat(), "horizon_days": 3, "notional": 10_000, "why": "x", "wrong_if": "y", "source": "s",
+                 "legs": [{"symbol": "AAA", "side": "long", "shares": 100, "ref_price": 100.0}]},
+                {"id": "2026-11-23-M01", "book": "small", "name": "BBB", "setup": "breakout", "direction": "long",
+                 "entry_date": day.isoformat(), "horizon_days": 3, "notional": 500, "why": "x", "wrong_if": "y", "source": "s",
+                 "legs": [{"symbol": "BBB", "side": "long", "shares": 5, "ref_price": 100.0}]},
+            ],
+            "marks": {}, "exits": [], "runs": [], "last_attempt": None,
+        })
+        book._write(book.ROOT / "fills" / f"{day}.json", {
+            "session": day.isoformat(), "pulled_at": at(day, 16, 20).isoformat(),
+            "fills": [
+                {"order_ref": "2026-11-23-S01|AAA", "symbol": "AAA", "side": "BOT", "shares": 100.0, "price": 100.0, "commission": 1.0, "time": at(day, 10, 0).isoformat(), "exec_id": "E1"},
+                {"order_ref": "2026-11-23-M01|BBB", "symbol": "BBB", "side": "BOT", "shares": 5.0, "price": 100.0, "commission": 1.0, "time": at(day, 10, 0).isoformat(), "exec_id": "E2"},
+            ],
+            "positions": {"AAA": 100.0}, "net_liquidation": 1_000_000.0, "marks": {},
+        })
+        all_fills = portfolio.fills("all")
+        self.assertEqual([f["symbol"] for f in all_fills], ["AAA"])
+
+
+class HalfDayAndCalendarFixes(unittest.TestCase):
+    def test_black_friday_half_day_across_journal_live_proposals_routine(self):
+        bf = date(2026, 11, 27)  # Black Friday: 1:00 PM ET close
+        self.assertTrue(journal.is_half_day(bf))
+        self.assertEqual(live.session_minutes(bf), 210)
+
+        # journal._bars_settled: 1:20 PM ET on Black Friday IS settled (15 min after 1:00 PM ET close)
+        with mock.patch.object(journal.storage, "modified", return_value=at(bf, 13, 20)):
+            self.assertTrue(journal._bars_settled(bf))
+
+        # live.snapshot: bar at 12:55 PM ET ends at 1:00 PM ET (fraction = 1.0); bar at 1:05 PM ET is post!
+        idx = pd.DatetimeIndex([at(bf, 9, 30), at(bf, 12, 55), at(bf, 13, 5)])
+        df = pd.DataFrame({"Open": [10, 11, 11.2], "High": [11, 11.5, 11.3], "Low": [9.9, 10.9, 11.1],
+                           "Close": [10.5, 11.1, 11.25], "Volume": [100, 200, 0]}, index=idx)
+        snap = live.snapshot(df)
+        self.assertEqual(snap["phase"], "post")
+        self.assertEqual(snap["regular"]["minutes"], 210)
+        self.assertEqual(snap["regular"]["fraction"], 1.0)
+
+        # proposals.pass_session rejects midday on Black Friday
+        with self.assertRaises(ValueError):
+            proposals.pass_session("midday", at(bf, 13, 0))
+
+        # routine.check marks pass-midday off and schedules paper-close at 11:45 AM CT (12:45 PM ET)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            with mock.patch.object(journal, "JOURNAL", root), \
+                    mock.patch.object(routine, "LOGS", root / "logs"), \
+                    mock.patch.object(routine.storage, "modified", return_value=None):
+                rows = {r["key"]: r for r in routine.check(bf, at(bf, 12, 50))}
+                self.assertEqual(rows["pass-midday"]["state"], "off")
+                self.assertEqual(rows["paper-close"]["time"], "11:45 AM CT")
+                self.assertEqual(rows["paper-close"]["state"], "running")
+
+                # Thanksgiving eve (Wed Nov 25): pass-night must be "off" because tomorrow is Thanksgiving
+                eve = date(2026, 11, 25)
+                eve_rows = {r["key"]: r for r in routine.check(eve, at(eve, 21, 0))}
+                self.assertEqual(eve_rows["pass-night"]["state"], "off")
+
+    def test_reports_inside_accounts_for_morning_first_session_shift(self):
+        # Morning pass on Tuesday Nov 17 with horizon=2 holds through Thu Nov 19 close (first_session=Wed Nov 18).
+        # An earnings report AMC Wed Nov 18 (trades Thu Nov 19) is inside the 2-session hold!
+        fake_earnings = {"names": {"AAA": [{"date": "2026-11-18", "session": "after_close"}]}}
+        with mock.patch.object(proposals.earnings, "load", return_value=fake_earnings):
+            hits = proposals.reports_inside(["AAA"], date(2026, 11, 17), horizon=2, kind="morning")
+            self.assertEqual(len(hits), 1)
+            self.assertIn("AAA", hits[0])
+
+
+class IsolationDepthQuotesSideXfeedStatsFixes(unittest.TestCase):
+    def test_passes_disallowed_blocks_secrets_and_scorecards(self):
+        self.assertIn("Read(.env)", passes.DISALLOWED)
+        self.assertIn("Read(**/lessons.md)", passes.DISALLOWED)
+        self.assertIn("Bash(uv run fr paper learn*)", passes.DISALLOWED)
+        self.assertIn("Bash(uv run fr paper enter*)", passes.DISALLOWED)
+
+    def test_depth_ignores_failed_tool_calls_index_md_and_duplicate_packet_reads(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            p = Path(tmp) / "agent-1.jsonl"
+            rows = [
+                {"type": "user", "message": {"content": "NAMES: AAA\nResearch AAA."}},
+                {"type": "assistant", "message": {"model": depth.AGENT_MODEL, "content": [
+                    {"type": "tool_use", "id": "t1", "name": "WebFetch", "input": {"url": "https://blocked.example"}},
+                    {"type": "tool_use", "id": "t2", "name": "WebFetch", "input": {"url": "https://ok.example"}},
+                    {"type": "tool_use", "id": "t3", "name": "Read", "input": {"file_path": "data/pass-packets/2026-11-25-night/INDEX.md"}},
+                    {"type": "tool_use", "id": "t4", "name": "Read", "input": {"file_path": "data/pass-packets/2026-11-25-night/AAA.md"}},
+                    {"type": "tool_use", "id": "t5", "name": "Read", "input": {"file_path": "data/pass-packets/2026-11-25-night/AAA.md"}},
+                ]}},
+                {"type": "user", "message": {"content": [
+                    {"type": "tool_result", "tool_use_id": "t1", "is_error": True, "content": "403 Forbidden"},
+                    {"type": "tool_result", "tool_use_id": "t2", "is_error": False, "content": "OK"},
+                ]}},
+            ]
+            p.write_text("\n".join(json.dumps(r) for r in rows) + "\n")
+            a = depth._agent(p)
+            # t1 failed (ignored), t2 ok (1 read), t3 INDEX.md (ignored), t4 AAA.md (1 packet read), t5 dup AAA.md (ignored)
+            self.assertEqual(a["reads"], 2)
+            self.assertEqual(a["packet_reads"], 1)
+
+    def test_quotes_renders_after_hours_prices(self):
+        fake = {
+            "NVDA": {
+                "regularMarketPrice": 140.0, "regularMarketPreviousClose": 138.0, "regularMarketChangePercent": 1.45,
+                "regularMarketTime": int(at(date(2026, 11, 25), 16, 0).timestamp()),
+                "marketState": "POST", "postMarketPrice": 147.0, "postMarketChangePercent": 5.0,
+                "postMarketTime": int(at(date(2026, 11, 25), 17, 15).timestamp()),
+            }
+        }
+        with mock.patch.object(bars, "_quotes", return_value=fake):
+            rows = quotes.fetch(["NVDA"])
+        self.assertEqual(rows[0]["post_market"], 147.0)
+        self.assertIn("after-hours 147.00 (+5.00%)", quotes.text(rows))
+
+    def test_side_pull_uses_yahoo_ticker_and_avoids_intraday_lookahead(self):
+        seen = []
+
+        class FakeTicker:
+            def __init__(self, sym):
+                seen.append(sym)
+                self.info = {"quoteType": "EQUITY", "currentPrice": 120.0, "previousClose": 100.0, "targetMeanPrice": 110.0}
+                self.eps_trend = None
+                self.eps_revisions = None
+                self.upgrades_downgrades = None
+                self.insider_purchases = None
+
+        with mock.patch("yfinance.Ticker", FakeTicker):
+            got = side.pull("BRK B", at(date(2026, 11, 25), 11, 15))
+        self.assertEqual(seen, ["BRK-B"])
+        self.assertFalse(got["pre_open"])
+        # Uses previousClose (100) instead of intraday currentPrice (120) -> target_gap = 110/100 - 1 = +0.10
+        self.assertAlmostEqual(got["facts"]["target_gap"], 0.10, places=4)
+
+    def test_xfeed_audit_continues_past_missing_profile_and_stops_on_rate_limit(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            handles_file = root / "handles.txt"
+            handles_file.write_text("missing_user\ngood_user\n")
+
+            def fake_html(s, h):
+                return ""
+
+            def fake_uid(s, guest, h):
+                return None if h == "missing_user" else "999"
+
+            def fake_call(s, guest, op, vars_, qids):
+                return {"data": {"user": {"result": {"timeline": {"timeline": {"instructions": [
+                    {"entries": [{"content": {"itemContent": {"tweet_results": {"result": {
+                        "rest_id": "123", "details": {"full_text": "hello", "created_at_ms": 1764000000000},
+                        "core": {"user_results": {"result": {"core": {"screen_name": "good_user"}}}},
+                    }}}}}]}
+                ]}}}}}}
+
+            with mock.patch.object(xfeed, "root", return_value=root), \
+                    mock.patch.object(xfeed, "_profile_html", fake_html), \
+                    mock.patch.object(xfeed, "_user_id", fake_uid), \
+                    mock.patch.object(xfeed, "_guest_call", fake_call):
+                res = xfeed.audit(limit=10, pause=0.0, handles=handles_file)
+            self.assertTrue(res["ok"])
+            self.assertEqual(res["done"], 1)
+            self.assertEqual(res["failed"], ["missing_user"])
+
+    def test_learn_main_test_includes_hac_vs_spy_and_regime_split(self):
+        rows = []
+        for i, sess in enumerate(("2026-11-20", "2026-11-23", "2026-11-24", "2026-11-26", "2026-11-27")):
+            rows.append({
+                "id": f"{sess}-P01", "session": sess, "verdict": "take", "setup": "breakout", "direction": "long",
+                "plan_bps": 200.0 + i * 10, "plan_mature": True, "default_plan_bps": 180.0 + i * 10,
+                "default_plan_mature": True, "spy_bps": 50.0, "fill_status": "filled", "paper_bps": 170.0,
+            })
+            rows.append({
+                "id": f"{sess}-P02", "session": sess, "verdict": "pass", "setup": "breakout", "direction": "long",
+                "plan_bps": 20.0, "plan_mature": True, "default_plan_bps": 20.0,
+                "default_plan_mature": True, "spy_bps": 50.0, "fill_status": None, "paper_bps": None,
+            })
+        mt = learn.main_test(rows)
+        self.assertIsNotNone(mt["session_clustered"]["p_value_hac"])
+        self.assertEqual(mt["vs_spy"]["n_takes"], 5)
+        self.assertAlmostEqual(mt["vs_spy"]["plan_mean_bps"], 220.0 - 50.0 - learn.EST_COST_BPS, places=1)
+        self.assertEqual(mt["regimes"]["pre_uninfluenced"]["n_takes"], 3)
+        self.assertEqual(mt["regimes"]["uninfluenced"]["n_takes"], 2)
+        rendered = "\n".join(learn._main_test_lines(mt))
+        self.assertIn("Second test: takes vs SPY", rendered)
+        self.assertIn("Regime split (default plan)", rendered)
+        self.assertIn("HAC p=", rendered)
+
+
+if __name__ == "__main__":
+    unittest.main()

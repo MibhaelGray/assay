@@ -15,7 +15,7 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
-from . import localdash
+from . import localdash, storage
 from .config import CT
 
 BRANCH = "gh-pages"
@@ -72,6 +72,5 @@ def run(root: Path = Path("."), pull: bool = False, force: bool = False) -> dict
         _git("add", "-A", cwd=site)
         _git("commit", "-q", "-m", f"Dashboard published {now:%Y-%m-%d %-I:%M %p} CT", cwd=site)
         _git("push", "-q", "-f", remote, BRANCH, cwd=site)
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps({"hash": digest, "at": now.isoformat(timespec="seconds")}))
+    storage.atomic_write_text(STATE, json.dumps({"hash": digest, "at": now.isoformat(timespec="seconds")}))
     return {**out, "pushed": True}

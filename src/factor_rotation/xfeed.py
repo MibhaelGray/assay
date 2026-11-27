@@ -183,7 +183,8 @@ def pull(headless: bool | None = None, hours: float | None = None, now: datetime
     from playwright.sync_api import sync_playwright
 
     now = now or datetime.now(NY)
-    headless = os.environ.get("FR_X_HEADLESS", "0") == "1"   # X refuses headless Chrome, so a window opens if headless is None else headless
+    # X refuses headless Chrome by default, so a window opens unless FR_X_HEADLESS=1 or headless=True is passed.
+    headless = (os.environ.get("FR_X_HEADLESS", "0") == "1") if headless is None else headless
     have = stored(now=now)
     newest = max((datetime.fromisoformat(a.replace("Z", "+00:00")) for a in have.values()), default=None)
     floor = now - timedelta(hours=hours or MAX_HOURS)
@@ -518,15 +519,21 @@ def audit(limit: int = AUDIT_LIMIT, per: int = AUDIT_PER, pause: float = AUDIT_P
                   f"({len(latest)} newest, {len(top)} highlights)", flush=True)
         except Exception as e:  # noqa: BLE001
             result["failed"].append(h)
-            result["why"] = f"@{h}: {type(e).__name__}: {e}"
-            break
+            err_msg = f"@{h}: {type(e).__name__}: {e}"
+            if "rate limit" in str(e).lower():
+                result["why"] = err_msg
+                result["rate_limited"] = True
+                break
+            result.setdefault("errors", []).append(err_msg)
+            log.warning("x_audit_profile_failed %s", err_msg)
+            continue
         if i < len(todo):
             time.sleep(random.uniform(max(0.0, pause * 0.85), pause * 1.15))
             if i % 25 == 0:
                 long = random.uniform(60, 120)
                 print(f"  paused {long:.0f}s after {i} profiles", flush=True)
                 time.sleep(long)
-    result["ok"] = result["done"] > 0 and not result.get("why")
+    result["ok"] = result["done"] > 0 and not result.get("rate_limited")
     with (_audit_root() / "runs.jsonl").open("a") as f:
         f.write(json.dumps(result, ensure_ascii=False) + "\n")
     log.info("x_audit %s", result)

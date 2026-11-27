@@ -29,6 +29,7 @@ import re
 from datetime import date, datetime
 from pathlib import Path
 
+from .. import storage
 from ..config import NY
 from . import proposals
 
@@ -50,7 +51,9 @@ def folder() -> Path:
     """Where Claude Code keeps this project's session transcripts."""
     if os.environ.get("FR_TRANSCRIPTS"):
         return Path(os.environ["FR_TRANSCRIPTS"])
-    return Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", str(Path.cwd().resolve()))
+    repo = Path(__file__).resolve().parents[3]
+    base = repo if (repo / "pyproject.toml").exists() else Path.cwd().resolve()
+    return Path.home() / ".claude" / "projects" / re.sub(r"[^A-Za-z0-9]", "-", str(base))
 
 
 def _lines(path: Path):
@@ -79,8 +82,19 @@ def _model(path: Path) -> str | None:
 def _agent(path: Path) -> dict:
     meta_path = path.with_name(path.name.replace(".jsonl", ".meta.json"))
     meta = json.loads(meta_path.read_text()) if meta_path.exists() else {}
+    entries = list(_lines(path))
+    failed_ids: set[str] = set()
+    for x in entries:
+        if x.get("type") != "user":
+            continue
+        content = (x.get("message") or {}).get("content")
+        if isinstance(content, list):
+            for b in content:
+                if isinstance(b, dict) and b.get("type") == "tool_result" and b.get("is_error") and b.get("tool_use_id"):
+                    failed_ids.add(str(b["tool_use_id"]))
     prompt, searches, reads, packet_reads, other, models = None, 0, 0, 0, 0, {}
-    for x in _lines(path):
+    seen_packets: set[str] = set()
+    for x in entries:
         m = x.get("message") or {}
         if x.get("type") == "user" and prompt is None:
             prompt = _text(m.get("content"))
@@ -90,6 +104,9 @@ def _agent(path: Path) -> dict:
             models[m["model"]] = models.get(m["model"], 0) + 1
         for b in m.get("content") or []:
             if isinstance(b, dict) and b.get("type") == "tool_use":
+                tid = str(b.get("id") or "")
+                if tid and tid in failed_ids:
+                    continue
                 name = b.get("name", "").lower()
                 inp = b.get("input") or {}
                 if "search" in name and "tool" not in name:
@@ -97,8 +114,13 @@ def _agent(path: Path) -> dict:
                 elif "fetch" in name:
                     reads += 1
                 elif name == "read" and "pass-packets" in str(inp.get("file_path") or ""):
-                    reads += 1
-                    packet_reads += 1
+                    fp = str(inp.get("file_path") or "")
+                    if Path(fp).name.upper() == "INDEX.MD":
+                        other += 1
+                    elif fp not in seen_packets:
+                        seen_packets.add(fp)
+                        reads += 1
+                        packet_reads += 1
                 elif name == "bash" and "fr edgar read" in str(inp.get("command") or ""):
                     reads += 1
                 else:
@@ -196,10 +218,9 @@ def keep(session: date, m: dict | None = None) -> Path | None:
     if not m["measured"]:
         return None
     path = proposals.root() / "research" / f"{session}.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
     doc = json.loads(path.read_text()) if path.exists() else {"session": session.isoformat(), "passes": []}
     doc["passes"] = [p for p in doc["passes"] if p["session_id"] != m["session_id"]] + [{"at": datetime.now(NY).isoformat(timespec="seconds"), **m}]
-    path.write_text(json.dumps(doc, indent=1) + "\n")
+    storage.atomic_write_text(path, json.dumps(doc, indent=1) + "\n")
     return path
 
 
@@ -235,8 +256,7 @@ def keep_reports(session: date, kind: str, session_id: str | None = None) -> Pat
     if not agents:
         return None
     path = proposals.root().parent / "research" / "agents" / f"{session}-{kind}.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
     doc = json.loads(path.read_text()) if path.exists() else {"session": session.isoformat(), "pass": kind, "runs": []}
     doc["runs"] = [r for r in doc["runs"] if r["session_id"] != session_id] + [{"session_id": session_id, "agents": agents}]
-    path.write_text(json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
+    storage.atomic_write_text(path, json.dumps(doc, indent=1, ensure_ascii=False) + "\n")
     return path

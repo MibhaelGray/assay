@@ -25,11 +25,12 @@ import urllib.request
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
+from . import storage
 from .config import NY
 
 STATE = Path("data/watch.json")
 REPEAT = timedelta(hours=3)
-PASS_LATE = timedelta(minutes=75)
+PASS_LATE = timedelta(minutes=95)
 PASS_LOGS = Path("data/pass-logs")
 LABEL = "com.factor-rotation."
 # The scheduled passes, New York time: (pass, start, which days). Night runs Sunday to Thursday; the other two on
@@ -108,8 +109,7 @@ def _state() -> dict:
 
 
 def _save(state: dict) -> None:
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps(state, indent=1, sort_keys=True))
+    storage.atomic_write_text(STATE, json.dumps(state, indent=1, sort_keys=True))
 
 
 # ---- checks: each returns a list of (key, title, text) ----------------------------------------------------------
@@ -163,8 +163,9 @@ def missing_passes(now: datetime, trading=None) -> list[tuple[str, str, str]]:
             mine = [d for p, at, d in logs if p == kind and begin - timedelta(minutes=10) <= at <= begin + timedelta(hours=3)]
             when = begin.astimezone(_ct()).strftime("%-I:%M %p CT")
             if not mine:
+                late_min = int(PASS_LATE.total_seconds() // 60)
                 found.append((f"pass:{kind}:{day}", f"No {kind} pass",
-                              f"The {kind} pass due at {when} has no log 75 minutes later. Check ~/Library/Logs/factor-rotation/pass-{kind}.log."))
+                              f"The {kind} pass due at {when} has no log {late_min} minutes later. Check ~/Library/Logs/factor-rotation/pass-{kind}.log."))
             elif not any(d.get("ok") for d in mine):
                 found.append((f"pass:{kind}:{day}", f"The {kind} pass failed",
                               f"The {kind} pass that started at {when} did not record. Its log is in data/pass-logs."))

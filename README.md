@@ -58,8 +58,8 @@ One paper book of $1,000,000 on an IBKR paper account, live since the night of 2
 - A pass judges up to 25 candidates (no more than 6 of one kind of setup) and takes every idea at conviction 3 or more, each with its own stop (1–8%) and time limit (1–10 sessions).
 - Each trade is sized by its risk: it loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5. A typical trade is 3% of the book a side; none is over 6%. The rules are in the `swing-pass` skill and `paper/rules.py`.
 - A trade's hardest-to-fill leg is ordered first; its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own.
-- Every order needs the paper gateway's own bid and ask. Inside a 2% spread an order hits the bid or the ask, and whatever doesn't fill at once is cancelled, so nothing is left resting. If any leg's spread is over 2% when the trade is due, the trade is passed on: it never enters (since 2026-11-18, trades fill at once or not at all). Overnight, a leg with no overnight market is passed on the same way, and the night screen drops names over a 2% overnight spread before the pass researches them. Entries can go in after hours, overnight and pre-market; exits go in regular hours.
-- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing` `fr paper halt` stops new entries by hand.
+- Every order needs the paper gateway's own bid and ask. Overnight and regular-hours entries only cross inside a 0.5% spread (2% in extended hours and on exits), and whatever doesn't fill at once is cancelled, so nothing is left resting. A night take wider than 0.5% or without an overnight market queues for 8:35 AM CT in regular hours instead of being dropped; regular-hours entries try midpoint for 10 seconds before crossing and stand down if the spread stays wide or the trade already ran more than 1 ATR in our direction. Entries can go in after hours, overnight, pre-market and regular hours; exits go in regular hours.
+- A book down 10% of its capital from its high pauses itself until `fr paper resume --book swing`. `fr paper halt` stops new entries by hand.
 
 ## Safety
 

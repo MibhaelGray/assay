@@ -17,7 +17,7 @@ LOGS = Path.home() / "Library" / "Logs" / "factor-rotation"
 # key, time, name, what, who runs it, days, minutes before a step with nothing to show is called missed
 STEPS = [
     ("pass-morning", time(9, 45), "Morning pass", "Judges the pre-market and the first minutes of trading. Its takes trade as soon as it records.", "research", "session", 120),
-    ("pass-midday", time(13, 0), "Midday pass", "Judges the morning's trading and reviews every open trade.", "research", "session", 120),
+    ("pass-midday", time(13, 0), "Midday pass", "Judges the morning's trading and reviews every open trade.", "research", "full", 120),
     ("paper-close", time(15, 45), "Paper close", "Enforces stops and time limits; exits go as market-on-close orders.", "job", "session", 15),
     ("paper-sync", time(16, 20), "Paper sync", "Pulls the day's fills, positions and account value.", "job", "session", 20),
     ("bars", time(16, 30), "Bars", "Five years of daily prices for every name.", "job", "session", 30),
@@ -66,7 +66,8 @@ def _evidence(key: str, day: date) -> tuple[datetime | None, str | None]:
     if key == "paper-sync":
         doc = _read(paper / "fills" / f"{day}.json")
         at = _at(doc and doc.get("pulled_at"))
-        return (at, None) if at and at.time() >= time(16, 15) else (None, None)
+        cutoff = time(13, 15) if journal.is_half_day(day) else time(16, 15)
+        return (at, None) if at and at.time() >= cutoff else (None, None)
     if key == "bars":  # the file's time only shows the latest pull, so earlier days come from the job's own log
         m = storage.modified(bars.bars_path("SPY"))
         m = m.astimezone(NY) if m else None
@@ -112,14 +113,17 @@ def _log_tail(key: str, since: datetime) -> str | None:
 def _due(days: str, day: date) -> bool:
     if days == "session":
         return journal.is_trading_day(day)
-    return journal.next_trading_day(day) - day <= timedelta(days=3) and day.weekday() in (6, 0, 1, 2, 3)  # Sun-Thu
+    if days == "full":
+        return journal.is_trading_day(day) and not journal.is_half_day(day)
+    return journal.is_trading_day(day + timedelta(days=1))  # evening before any trading day
 
 
 def check(day: date, now: datetime) -> list[dict]:
     """Each step's state on `day`: done, missed, failed, running, upcoming or off (not scheduled that day)."""
     out = []
     for key, at, name, what, who, days, grace in STEPS:
-        due = datetime.combine(day, at, NY)
+        step_at = (datetime.combine(day, journal.close_time(day)) - timedelta(minutes=15)).time() if key == "paper-close" and journal.is_trading_day(day) else at
+        due = datetime.combine(day, step_at, NY)
         row = {"key": key, "time": f"{due.astimezone(CT):%-I:%M %p} CT", "name": name, "what": what, "who": who, "day": day.isoformat()}
         if not _due(days, day):
             out.append({**row, "state": "off", "detail": "Not scheduled on this day"})

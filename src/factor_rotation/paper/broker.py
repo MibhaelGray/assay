@@ -149,12 +149,13 @@ class IBPaper:
         out, placed = [], []
         # Qualify all unique symbols in one round-trip instead of one per order, cutting quote-to-order latency.
         unique_syms = list(dict.fromkeys(o["symbol"] for o in orders))
+        by_ib = {s.replace(".", " "): s for s in unique_syms}
         qualified: dict[str, Contract] = {}
         for i in range(0, len(unique_syms), 50):
             batch = [Stock(s.replace(".", " "), "SMART", "USD") for s in unique_syms[i:i + 50]]
             for c in await _answer(self.ib.qualifyContractsAsync(*batch), "qualify contracts"):
                 if c and getattr(c, "conId", 0) and c.secType == "STK":
-                    qualified[c.symbol.replace(" ", ".")] = c
+                    qualified[by_ib.get(c.symbol, c.symbol)] = c
         for o in orders:
             q = qualified.get(o["symbol"])
             if not q:
@@ -207,9 +208,11 @@ class IBPaper:
             e = f.execution
             if e.acctNumber != self.s.account:
                 continue
-            # An order sent to the OVERNIGHT venue by contract id comes back with no symbol: take it from the order's ref.
-            sym = f.contract.symbol or (e.orderRef.rsplit("|", 1)[-1] if "|" in (e.orderRef or "") else "")
-            out.append({"order_ref": e.orderRef, "symbol": sym.replace(" ", "."), "side": e.side,
+            # Prefer the symbol from orderRef (preserves exact project spelling like "BRK B" or "BRK.B"),
+            # falling back to IBKR's contract symbol (which also uses spaces like "BRK B").
+            ref_sym = e.orderRef.rsplit("|", 1)[-1] if "|" in (e.orderRef or "") else ""
+            sym = ref_sym or f.contract.symbol
+            out.append({"order_ref": e.orderRef, "symbol": sym, "side": e.side,
                         "shares": float(e.shares), "price": e.price, "commission": getattr(f.commissionReport, "commission", None),
                         "time": f.time.isoformat() if f.time else None, "exec_id": e.execId})
         return out
@@ -229,14 +232,14 @@ class IBPaper:
         return list(out.values())
 
     async def positions(self) -> dict[str, float]:
-        return {p.contract.symbol.replace(" ", "."): float(p.position) for p in self.ib.positions(self.s.account) if p.position}
+        return {p.contract.symbol: float(p.position) for p in self.ib.positions(self.s.account) if p.position}
 
     async def marks(self) -> dict[str, float]:
         """symbol -> IBKR's own price for each position the account holds, the prices its account value uses.
         {} if the gateway won't say: the books' accounts then fall back to the latest daily close."""
         try:
             await _answer(self.ib.reqAccountUpdatesAsync(self.s.account), "account updates")
-            return {p.contract.symbol.replace(" ", "."): float(p.marketPrice) for p in self.ib.portfolio(self.s.account)
+            return {p.contract.symbol: float(p.marketPrice) for p in self.ib.portfolio(self.s.account)
                     if p.position and p.marketPrice and p.marketPrice > 0}
         except Exception as e:  # noqa: BLE001 - the marks are a nicety, never a failed sync
             log.warning("paper_marks_failed %r", e)

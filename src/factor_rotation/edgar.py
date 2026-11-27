@@ -24,6 +24,7 @@ from datetime import date, datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
+from . import storage
 from .config import settings
 
 log = logging.getLogger(__name__)
@@ -37,8 +38,9 @@ RATE = 8                      # SEC permits 10 requests/second; stay safely unde
 TICKERS_TTL = 24 * 3600       # refresh ticker->CIK map once a day
 SUBMISSIONS_TTL = 6 * 3600    # refresh per-company submissions list every 6 hours
 PAGE_SIZE = 100
-MAX_PAGES = 15                # safety cap on EFTS pagination per query
-MAX_FORM4_FETCH = 60          # cap uncached Form 4 XML fetches in a single screen call
+MAX_PAGES = 30                # safety cap on EFTS pagination per query (3,000 hits)
+MAX_FORM4_FETCH = 150         # cap uncached Form 4 XML fetches in a single screen call
+FORM4_CACHE_DAYS = 30         # prune cached Form 4 parses older than this many days
 FORM4_SINGLE_MIN = 100_000.0  # one officer/director open-market buy
 FORM4_CLUSTER_MIN = 50_000.0  # combined open-market buys by 2+ officers/directors
 SEC_HOSTS = {"sec.gov", "www.sec.gov", "data.sec.gov", "efts.sec.gov"}
@@ -123,8 +125,7 @@ def ticker_ciks(fetcher=_get) -> dict[str, int]:
         raw = json.loads(path.read_text())
     else:
         raw = json.loads(fetcher(TICKERS_URL))
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(raw))
+        storage.atomic_write_text(path, json.dumps(raw))
     out: dict[str, int] = {}
     for row in raw.values():
         t = str(row["ticker"]).upper()
@@ -132,12 +133,15 @@ def ticker_ciks(fetcher=_get) -> dict[str, int]:
         out[t] = cik
         if "-" in t:
             out.setdefault(t.replace("-", "."), cik)
+            out.setdefault(t.replace("-", " "), cik)
     return out
 
 
-def _efts_hits(forms: str, start: date, end: date, fetcher=_get) -> list[dict]:
-    """Paginate SEC EFTS search-index for `forms` between `start` and `end` (inclusive)."""
+def _efts_hits(forms: str, start: date, end: date, fetcher=_get) -> tuple[list[dict], bool]:
+    """Paginate SEC EFTS search-index for `forms` between `start` and `end` (inclusive).
+    Returns (hits, truncated) where `truncated` is True if MAX_PAGES was reached before `total`."""
     hits: list[dict] = []
+    truncated = False
     for page in range(MAX_PAGES):
         q = urllib.parse.urlencode({
             "forms": forms,
@@ -153,7 +157,10 @@ def _efts_hits(forms: str, start: date, end: date, fetcher=_get) -> list[dict]:
         total = ((payload.get("hits") or {}).get("total") or {}).get("value", 0)
         if not batch or len(hits) >= total:
             break
-    return hits
+        if page == MAX_PAGES - 1 and len(hits) < total:
+            truncated = True
+            log.warning("edgar_efts_truncated forms=%s got=%d total=%d", forms, len(hits), total)
+    return hits, truncated
 
 
 def _doc_url(cik: int, hit_id: str, adsh: str) -> str:
@@ -224,12 +231,13 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
 
     cik_to_sym: dict[int, str] = {}
     for sym in symbols:
-        c = t2c.get(sym) or t2c.get(sym.replace(".", "-"))
+        c = t2c.get(sym) or t2c.get(sym.replace(".", "-")) or t2c.get(sym.replace(" ", "-"))
         if c is not None:
             cik_to_sym.setdefault(c, sym)
 
     by_symbol: dict[str, list[dict]] = {}
     counts = {"8k_material": 0, "8k_earnings": 0, "13d": 0, "late": 0, "form4_buys": 0}
+    truncated: list[str] = []
     seen_acc: set[tuple[str, str, str]] = set()
 
     def add(sym: str, event: dict) -> None:
@@ -241,7 +249,10 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
 
     try:
         # 1. Material 8-Ks and earnings 8-Ks (Item 2.02)
-        for h in _efts_hits("8-K", start, as_of, fetcher):
+        hits_8k, trunc_8k = _efts_hits("8-K", start, as_of, fetcher)
+        if trunc_8k:
+            truncated.append("8-K")
+        for h in hits_8k:
             src = h.get("_source") or {}
             if src.get("sequence") != 1:
                 continue
@@ -265,7 +276,10 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
                 counts["8k_earnings"] += 1
 
         # 2. Initial Schedule 13Ds and NT 10-K / NT 10-Q late-filing notices
-        for h in _efts_hits("SC 13D,SCHEDULE 13D,NT 10-K,NT 10-Q", start, as_of, fetcher):
+        hits_other, trunc_other = _efts_hits("SC 13D,SCHEDULE 13D,NT 10-K,NT 10-Q", start, as_of, fetcher)
+        if trunc_other:
+            truncated.append("13D/NT")
+        for h in hits_other:
             src = h.get("_source") or {}
             if src.get("sequence") != 1:
                 continue
@@ -292,8 +306,12 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
         f4_path = _cache_dir() / "form4.json"
         f4_cache = json.loads(f4_path.read_text()) if f4_path.exists() else {}
         fetched = 0
+        f4_capped = 0
         buys_by_sym: dict[str, list[dict]] = {}
-        for h in _efts_hits("4", f4_start, as_of, fetcher):
+        hits_f4, trunc_f4 = _efts_hits("4", f4_start, as_of, fetcher)
+        if trunc_f4:
+            truncated.append("4")
+        for h in hits_f4:
             src = h.get("_source") or {}
             if src.get("sequence") != 1 or (src.get("form") or "").upper() != "4":
                 continue
@@ -307,9 +325,12 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
             url = _doc_url(cik, h.get("_id") or "", adsh)
             if adsh not in f4_cache:
                 if fetched >= max_form4_fetch:
+                    f4_capped += 1
                     continue
                 try:
-                    f4_cache[adsh] = parse_form4(fetcher(url))
+                    parsed = parse_form4(fetcher(url))
+                    parsed["_cached"] = as_of.isoformat()
+                    f4_cache[adsh] = parsed
                     fetched += 1
                 except Exception as e:  # noqa: BLE001
                     log.warning("edgar_form4_failed symbol=%s adsh=%s error=%r", sym, adsh, e)
@@ -331,9 +352,13 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
                 "adsh": adsh,
                 "url": url,
             })
-        if fetched:
-            f4_path.parent.mkdir(parents=True, exist_ok=True)
-            f4_path.write_text(json.dumps(f4_cache))
+        if f4_capped:
+            log.warning("edgar_form4_capped skipped=%d cap=%d", f4_capped, max_form4_fetch)
+            truncated.append(f"4_xml({f4_capped})")
+        cutoff = (as_of - timedelta(days=FORM4_CACHE_DAYS)).isoformat()
+        pruned = {k: v for k, v in f4_cache.items() if not v.get("_cached") or v["_cached"] >= cutoff}
+        if fetched or len(pruned) != len(f4_cache):
+            storage.atomic_write_text(f4_path, json.dumps(pruned))
         for sym, rows in buys_by_sym.items():
             total_val = sum(r["value"] for r in rows)
             distinct = {n.upper() for r in rows for n in r["names"]}
@@ -365,6 +390,7 @@ def fetch_recent(symbols: list[str], as_of: date, lookback_days: int = 2, form4_
         "window": [start.isoformat(), as_of.isoformat()],
         "matched_ciks": len(cik_to_sym),
         "counts": counts,
+        "truncated": truncated,
         "by_symbol": by_symbol,
     }
 
@@ -373,20 +399,33 @@ class _HTMLText(HTMLParser):
     """Strip HTML/iXBRL tags into clean readable paragraphs without external dependencies."""
 
     SKIP = {"script", "style", "head", "title", "ix:header", "ix:hidden", "noscript"}
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
     BREAK = {"p", "div", "tr", "li", "h1", "h2", "h3", "h4", "h5", "h6", "br", "hr", "section", "article"}
     CELL = {"td", "th"}
 
     def __init__(self):
         super().__init__()
-        self._skip = 0
+        self._skip_stack: list[str] = []
         self.parts: list[str] = []
 
     def handle_starttag(self, tag, attrs):
         t = tag.lower()
-        if t in self.SKIP or any(k.lower() == "style" and "display:none" in (v or "").replace(" ", "").lower() for k, v in attrs):
-            self._skip += 1
+        if self._skip_stack:
+            if t not in self.VOID:
+                self._skip_stack.append(t)
             return
-        if self._skip:
+        if t in self.SKIP or any(k.lower() == "style" and "display:none" in (v or "").replace(" ", "").lower() for k, v in attrs):
+            if t not in self.VOID:
+                self._skip_stack.append(t)
+            return
+        if t in self.BREAK:
+            self.parts.append("\n")
+        elif t in self.CELL:
+            self.parts.append(" | ")
+
+    def handle_startendtag(self, tag, attrs):
+        t = tag.lower()
+        if self._skip_stack:
             return
         if t in self.BREAK:
             self.parts.append("\n")
@@ -395,13 +434,17 @@ class _HTMLText(HTMLParser):
 
     def handle_endtag(self, tag):
         t = tag.lower()
-        if t in self.SKIP and self._skip:
-            self._skip -= 1
-        elif not self._skip and t in self.BREAK:
+        if self._skip_stack:
+            for i in range(len(self._skip_stack) - 1, -1, -1):
+                if self._skip_stack[i] == t:
+                    del self._skip_stack[i:]
+                    break
+            return
+        if t in self.BREAK:
             self.parts.append("\n")
 
     def handle_data(self, data):
-        if not self._skip:
+        if not self._skip_stack:
             self.parts.append(data)
 
 
@@ -446,8 +489,7 @@ def company_submissions(cik: int, fetcher=_get) -> dict:
     if path.exists() and time.time() - path.stat().st_mtime < SUBMISSIONS_TTL:
         return json.loads(path.read_text())
     data = json.loads(fetcher(SUBMISSIONS_URL.format(cik=cik)))
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data))
+    storage.atomic_write_text(path, json.dumps(data))
     return data
 
 
@@ -491,12 +533,11 @@ def _cached_doc_text(cik: int, acc: str, doc: str, url: str, max_chars: int, fet
     acc_no = acc.replace("-", "")
     safe = re.sub(r"[^A-Za-z0-9._-]", "_", doc)
     path = _cache_dir() / "docs" / f"{acc_no}_{safe}.txt"
-    if path.exists():
-        text = path.read_text()
-    else:
+    text = path.read_text() if path.exists() else ""
+    if not text.strip():
         text = html_to_text(fetcher(url), max_chars=12_000, trim_boilerplate=True)
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(text)
+        if text.strip():
+            storage.atomic_write_text(path, text)
     if len(text) > max_chars:
         cut = text.rfind("\n", 0, max_chars)
         return text[:cut if cut > max_chars // 2 else max_chars].rstrip() + "\n[... trimmed for brevity ...]"

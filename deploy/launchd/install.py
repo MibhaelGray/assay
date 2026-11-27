@@ -37,8 +37,8 @@ SCHEDULE = {
     "paper-sync": ["16:20"],
     "side-facts": ["22:15", "23:45", "11:15", "14:15"],
     "keep-awake": ["16:40"],
-    # 10 min before each pass (7:20 PM, 8:35 AM, 11:50 AM CT) and 5 min before close (2:40 PM / 11:40 AM CT).
-    "gateway-preflight": ["09:35", "12:40", "12:50", "15:40", "20:20"],
+    # 10 min before each pass (7:20 PM, 8:35 AM, 11:50 AM CT), mid-morning (10:15 AM CT), and 5 min before close (2:40 PM / 11:40 AM CT).
+    "gateway-preflight": ["09:35", "11:15", "12:40", "12:50", "15:40", "20:20"],
     # 7:30 PM, 8:45 AM and 12:00 PM Central.
     "pass-night": ["20:30"],
     "pass-morning": ["09:45"],

@@ -519,18 +519,25 @@ def _symbol_hits(sym: str, f: dict, hedge: str, hedge_ret: pd.Series, spy_ret1: 
                     primary_links=earn_links)
                 gap_hit = True
             if not gap_hit and ago <= 1:
-                # Reported recently without a large gap: still surface via Door 1 (no move bar).
+                # Reported recently without a qualifying gap-held/faded setup: still surface via Door 1 (no move bar).
                 move_sign = (f["live"]["move"] if f.get("live") and f["live"]["phase"] != "regular" else day_ret)
                 d = -1 if move_sign < 0 else 1
-                add("earnings_report", d, max(0.5, abs(rel_atr)), f"{head}; reported without a large gap", primary_links=earn_links)
+                note = "closed in the middle of its range" if abs(gap_atr) >= 1.5 else "reported without a large gap"
+                add("earnings_report", d, max(0.5, abs(rel_atr)), f"{head}; {note}", primary_links=earn_links)
             had_earnings_hit = True
         # Catch earnings 8-Ks (Item 2.02) even when Yahoo's earnings calendar missed or mistimed the report.
         if not had_earnings_hit and earn_links:
             ev = next(e for e in edgar_hits if e.get("setup") == "edgar_earnings")
-            move_sign = (f["live"]["move"] if f.get("live") and f["live"]["phase"] != "regular" else ret1)
+            ext_live = f.get("live") if (f.get("live") and f["live"]["phase"] != "regular") else None
+            move_sign = ext_live["move"] if ext_live else ret1
             d = -1 if move_sign < 0 else 1
             strength = max(0.5, abs(move_sign / atrp) if atrp else 0.5)
-            add("earnings_report", d, strength, f"{ev['why']}; {_pct(ret1)} today ({ret1 / atrp:+.1f} ATR)", primary_links=earn_links)
+            if ext_live:
+                phase_lbl = "after-hours" if ext_live["phase"] == "post" else "pre-market"
+                move_txt = f"{_pct(move_sign)} {phase_lbl} ({ext_live['move_atr']:+.1f} ATR), {_pct(ret1)} regular"
+            else:
+                move_txt = f"{_pct(ret1)} today ({ret1 / atrp:+.1f} ATR)"
+            add("earnings_report", d, strength, f"{ev['why']}; {move_txt}", primary_links=earn_links)
     heavy = f["vol_ratio"] >= HEAVY_VOLUME
     move_atr = ret1 / atrp
     if heavy and f["close"] > f["hi52_close"]:
@@ -648,7 +655,7 @@ def _with_live(frame: pd.DataFrame, snaps: dict[str, dict]) -> tuple[pd.DataFram
         if day == last[sym]:   # a partial bar stored by a dashboard refresh during the session
             drop.append((sym, day))
         add.append({**bar, "symbol": sym})
-        if snap["regular"]["minutes"] < live.SESSION_MINUTES:
+        if snap["regular"]["minutes"] < live.session_minutes(snap["date"]):
             partial[sym] = {"minutes": snap["regular"]["minutes"], "fraction": snap["regular"]["fraction"]}
     if drop:
         gone = pd.MultiIndex.from_tuples(drop)
@@ -855,7 +862,7 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
         from .paper import entries
         if entries.venue(now) == "overnight":
             swept = (sweep or _gateway_sweep)(names)
-    check = (OvernightCheck(books, swept) if slot == "night" else None)
+    check = (OvernightCheck(books, swept) if slot in proposals.NIGHT_KINDS else None)
     payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check,
                            "sweep": swept}, edgar_events=edgar_events)
     if swept and swept.get("quotes"):
@@ -937,10 +944,15 @@ def _run(frame: pd.DataFrame, live_: dict | None = None, edgar_events: dict | No
     spy_overnight = spy_q["last"] / float(close["SPY"].iloc[-1]) - 1 if _usable(spy_q) is not None else 0.0
     r60 = rets.iloc[-60:]
 
+    prev_ts = pd.Timestamp(journal.previous_trading_day(as_of))
     found, feats, held_back = [], {}, []
     for sym, df in frame.groupby("symbol"):
-        if df["date"].max() != as_of_ts:
-            continue
+        sym_max = df["date"].max()
+        if sym_max != as_of_ts:
+            # On live screens, keep a stock halted/delayed-open today if it has prior-day bars and a breaking
+            # EDGAR filing or pre/post-market live quote so Door 1 catalysts aren't silently dropped.
+            if not (live_ and sym_max >= prev_ts and (sym in edgar_by_sym or sym in snaps)):
+                continue
         f = _features(df)
         if f is None:
             continue
@@ -996,6 +1008,8 @@ def _run(frame: pd.DataFrame, live_: dict | None = None, edgar_events: dict | No
                  f"worst {today[0][0]} {_pct(today[0][1])}; spread {nums['today_sd']:+.1f} sd today, z {nums['z_50d']:+.1f}")
         reporting = [s for s in members if (n := _next_report(s, reports, days)) and n["sessions_away"] is not None
                      and n["sessions_away"] <= 5]
+        if len(members) - len(reporting) < 3:
+            continue   # matches rules._sides(): fewer than 3 non-reporting members isn't tradable as a basket
         found.append({"name": b["name"], "basket_id": b["id"], "kind": "basket", "members": members, "hedge": b["hedge"],
                       **hits[0], "chart": chart, "numbers": journal._records(pd.DataFrame([nums]))[0],
                       "members_reporting_within_5": reporting, "also": [], "members_flagged": []})
@@ -1122,10 +1136,11 @@ def _regime_notes(as_of: date) -> list[str]:
 
 
 def write() -> tuple[str, dict]:
+    from . import storage
+
     payload = build()
     path = journal.JOURNAL / "screens" / f"{payload['as_of']}.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
+    storage.atomic_write_text(path, json.dumps(payload, indent=1, default=journal._json_default) + "\n")
     return str(path), payload
 
 
@@ -1135,12 +1150,13 @@ def live_path(session: date | str, slot: str):
 
 
 def write_live(slot: str, now: datetime | None = None) -> tuple[str, dict]:
+    from . import storage
+
     payload = build_live(slot, now)
     path = live_path(payload["session"], slot)
-    path.parent.mkdir(parents=True, exist_ok=True)
     if raw := payload.pop("_sweep_quotes", None):   # every quote the sweep saw, beside the screen
-        path.with_name(path.stem + "-overnight.json").write_text(json.dumps(raw) + "\n")
-    path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
+        storage.atomic_write_text(path.with_name(path.stem + "-overnight.json"), json.dumps(raw) + "\n")
+    storage.atomic_write_text(path, json.dumps(payload, indent=1, default=journal._json_default) + "\n")
     return str(path), payload
 
 

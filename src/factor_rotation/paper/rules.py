@@ -274,15 +274,31 @@ def apply_caps(new: list[dict], open_trades: list[dict], max_gross: float = MAX_
     for t in new:
         trial = [*open_trades, *kept, t]
         gross, net = exposure(trial)
+        meta = {"name": t["id"], **({"proposal_id": t["proposal_id"]} if t.get("proposal_id") else {})}
         if len(trial) > MAX_OPEN:
-            skipped.append({"name": t["id"], "reason": f"over {MAX_OPEN} open trades"})
+            skipped.append({**meta, "reason": f"over {MAX_OPEN} open trades"})
         elif gross > max_gross:
-            skipped.append({"name": t["id"], "reason": f"gross would be ${gross:,.0f}, over ${max_gross:,.0f}"})
+            skipped.append({**meta, "reason": f"gross would be ${gross:,.0f}, over ${max_gross:,.0f}"})
         elif (big := [s for s, v in net.items() if abs(v) > max_symbol and s in {l['symbol'] for l in t['legs']}]):
-            skipped.append({"name": t["id"], "reason": f"net exposure to {', '.join(big)} over ${max_symbol:,.0f}"})
+            skipped.append({**meta, "reason": f"net exposure to {', '.join(big)} over ${max_symbol:,.0f}"})
         else:
             kept.append(t)
     return kept, skipped
+
+
+def filled_notional(trade: dict, held: list[dict]) -> float:
+    """One-side entry notional of the shares actually filled, falling back to planned `trade["notional"]`.
+    Keeps stop percentages and bps accurate when a trade is only partially filled."""
+    if not held:
+        return float(trade["notional"])
+    legs = trade.get("legs") or []
+    by_sym = {h["symbol"]: h["shares"] for h in held}
+    partial = bool(legs) and any(by_sym.get(l["symbol"], 0) < l["shares"] for l in legs)
+    if not partial:
+        return float(trade["notional"])
+    sides = {s: sum(h["shares"] * h["entry_price"] for h in held if h["side"] == s) for s in ("long", "short")}
+    actual = max(sides.values())
+    return float(actual) if actual > 0 else float(trade["notional"])
 
 
 def spread_return(held: list[dict], prices: dict[str, float]) -> float | None:
@@ -310,8 +326,9 @@ def stop_reason(trade: dict, held: list[dict], prices: dict[str, float], when: s
             return f"stopped: {rule['symbol']} at {px:,.2f} at {when}, {side} {rule[side]:,.2f}"
     if "spread_pct" in stop:
         pnl = spread_return(held, prices)
-        if pnl is not None and pnl / trade["notional"] * 100 <= stop["spread_pct"]:
-            return f"stopped: down {abs(pnl / trade['notional'] * 100):.1f}% at {when}, past the {abs(stop['spread_pct']):g}% stop"
+        denom = filled_notional(trade, held)
+        if pnl is not None and denom > 0 and pnl / denom * 100 <= stop["spread_pct"]:
+            return f"stopped: down {abs(pnl / denom * 100):.1f}% at {when}, past the {abs(stop['spread_pct']):g}% stop"
     return None
 
 

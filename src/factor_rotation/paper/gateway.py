@@ -58,12 +58,13 @@ class IBMarket:
 
     async def _contracts(self, symbols: list[str], overnight: bool) -> dict:
         from ib_async import Contract, Stock
+        by_ib = {s.replace(".", " "): s for s in symbols}
         out = {}
         for i in range(0, len(symbols), SNAPSHOT_BATCH):
             chunk = [Stock(s.replace(".", " "), "SMART", "USD") for s in symbols[i:i + SNAPSHOT_BATCH]]
             for c in await asyncio.wait_for(self.ib.qualifyContractsAsync(*chunk), 60):
                 if c and getattr(c, "conId", 0):
-                    out[c.symbol.replace(" ", ".")] = Contract(conId=c.conId, exchange="OVERNIGHT") if overnight else c
+                    out[by_ib.get(c.symbol, c.symbol)] = Contract(conId=c.conId, exchange="OVERNIGHT") if overnight else c
         return out
 
     async def quotes(self, symbols: list[str], overnight: bool, tries: int = 1, need_books: bool = False) -> dict[str, float]:

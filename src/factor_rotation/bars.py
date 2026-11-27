@@ -41,7 +41,7 @@ def bars_path(symbol: str) -> str:
 
 
 def _ticker(symbol: str) -> str:
-    return INDEXES.get(symbol, symbol.replace(" ", "-"))
+    return INDEXES.get(symbol, symbol.replace(" ", "-").replace(".", "-"))
 
 
 def _read(path: str) -> pd.DataFrame | None:
@@ -86,12 +86,23 @@ def _fix_fresh_split(symbol: str, df: pd.DataFrame) -> pd.DataFrame:
 
 
 def _frame(symbol: str, raw: pd.DataFrame, repair: bool = True) -> pd.DataFrame:
-    df = raw.rename(columns=str.lower)[["open", "high", "low", "close", "volume"]].dropna(subset=["open", "close"])
+    cols = raw.rename(columns=str.lower)
+    want = ["open", "high", "low", "close", "volume"]
+    has_adj = "adj close" in cols.columns
+    df = cols[want + (["adj close"] if has_adj else [])].dropna(subset=["open", "close"]).copy()
     if df.empty:
         return df
+    df["raw_close"] = df["close"].astype(float)
+    if has_adj:
+        adj = df.pop("adj close").astype(float)
+        valid = df["raw_close"] > 0
+        factor = (adj / df["raw_close"]).where(valid, 1.0).fillna(1.0)
+        for col in ("open", "high", "low"):
+            df[col] = df[col].astype(float) * factor
+        df["close"] = adj.where(adj.notna(), df["raw_close"])
     df = df.rename_axis("date").reset_index()
     df["date"] = pd.to_datetime(df["date"]).dt.tz_localize(None).dt.normalize()
-    df[["open", "high", "low", "close"]] *= SCALE.get(symbol, 1)
+    df[["open", "high", "low", "close", "raw_close"]] *= SCALE.get(symbol, 1)
     df.insert(0, "symbol", symbol)
     return _fix_fresh_split(symbol, df) if repair else df
 
@@ -119,6 +130,8 @@ def _merge_recent(new: pd.DataFrame, stored: pd.DataFrame) -> pd.DataFrame | Non
     if new.empty or stored.empty or new["date"].max() < stored["date"].max():
         return None
     old = stored.assign(date=pd.to_datetime(stored["date"]))
+    if "raw_close" in new.columns and "raw_close" not in old.columns:
+        old = old.assign(raw_close=old["close"])
     both = new[new["date"] < new["date"].max()].merge(old[["date", "close"]], on="date", suffixes=("", "_old"))
     if both.empty or ((both["close"] / both["close_old"] - 1).abs() > OVERLAP_TOLERANCE).any():
         return None
@@ -135,7 +148,7 @@ def collect_recent(symbols: list[str], days: int = 5) -> dict:
 
     def pull(names: list[str]) -> dict[str, pd.DataFrame]:
         with _yahoo:
-            data = yf.download(names, period=f"{days}d", interval="1d", auto_adjust=True, group_by="ticker",
+            data = yf.download(names, period=f"{days}d", interval="1d", auto_adjust=False, group_by="ticker",
                                threads=PULL_THREADS, timeout=PULL_TIMEOUT, progress=False)
         columns = set(data.columns.get_level_values(0)) if not data.empty else set()
         return {t: f for t in names if t in columns and not (f := _frame(tickers[t], data[t], repair=False)).empty}
@@ -166,19 +179,25 @@ def _session_before(day: date) -> date:
     return NYSE.valid_days(day - timedelta(days=10), day - timedelta(days=1))[-1].date()
 
 
+QUOTE_CHUNK = 200
+
+
 def _quotes(tickers: list[str], fields: str = QUOTE_FIELDS) -> dict[str, dict]:
-    """Yahoo's bulk quote: every name in one request, through the signed-in session yfinance keeps. Not a public
-    yfinance call, so any failure returns nothing and the names take the 5-day pull instead."""
+    """Yahoo's bulk quote, chunked so large universes stay well under URL length limits. Through the signed-in
+    session yfinance keeps; any failure returns what succeeded so missing names take the 5-day pull instead."""
     from yfinance.data import YfData
 
-    try:
-        with _yahoo:
-            body = YfData().get_raw_json(QUOTE_URL, params={"symbols": ",".join(tickers), "fields": fields},
-                                         timeout=PULL_TIMEOUT)
-        return {q["symbol"]: q for q in body["quoteResponse"]["result"]}
-    except Exception as e:
-        log.warning("bulk_quote_failed error=%r", e)
-        return {}
+    out: dict[str, dict] = {}
+    for i in range(0, len(tickers), QUOTE_CHUNK):
+        batch = tickers[i:i + QUOTE_CHUNK]
+        try:
+            with _yahoo:
+                body = YfData().get_raw_json(QUOTE_URL, params={"symbols": ",".join(batch), "fields": fields},
+                                             timeout=PULL_TIMEOUT)
+            out.update({q["symbol"]: q for q in body["quoteResponse"]["result"]})
+        except Exception as e:
+            log.warning("bulk_quote_failed batch=%d error=%r", i // QUOTE_CHUNK, e)
+    return out
 
 
 def _quote_bar(symbol: str, q: dict) -> dict | None:
@@ -189,7 +208,7 @@ def _quote_bar(symbol: str, q: dict) -> dict | None:
         return None
     k = SCALE.get(symbol, 1)
     return {"symbol": symbol, "date": pd.Timestamp(datetime.fromtimestamp(t, NY).date()), "open": o * k,
-            "high": max(o, h, c) * k, "low": min(o, l, c) * k, "close": c * k,
+            "high": max(o, h, c) * k, "low": min(o, l, c) * k, "close": c * k, "raw_close": c * k,
             "volume": float(q.get("regularMarketVolume") or 0)}
 
 
@@ -205,7 +224,9 @@ def _merge_quote(bar: dict, stored: pd.DataFrame, today: date) -> pd.DataFrame |
     keep = stored.iloc[:-1] if day == last else stored
     if bar["symbol"] not in INDEXES and not keep.empty and abs(bar["close"] / keep["close"].iloc[-1] - 1) >= SUSPECT_MOVE:
         return None
-    return pd.concat([keep, pd.DataFrame([bar])[stored.columns].astype(stored.dtypes.to_dict())], ignore_index=True)
+    row = pd.DataFrame([bar])
+    cols = list(stored.columns)
+    return pd.concat([keep, row[cols].astype(stored.dtypes.to_dict())], ignore_index=True)
 
 
 def collect_quotes(symbols: list[str]) -> dict:
@@ -240,7 +261,7 @@ def collect(symbols: list[str], period: str = "5y") -> dict:
         chunk = symbols[i:i + CHUNK]
         tickers = {_ticker(s): s for s in chunk}
         with _yahoo:
-            data = yf.download(list(tickers), period=period, interval="1d", auto_adjust=True, group_by="ticker",
+            data = yf.download(list(tickers), period=period, interval="1d", auto_adjust=False, group_by="ticker",
                                threads=True, progress=False)
         for ticker, symbol in tickers.items():
             df = pd.DataFrame()

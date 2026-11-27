@@ -10,16 +10,17 @@ with what its original plan would have made. `brief()` puts all of it on one pag
 """
 
 import json
+import math
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from statistics import mean, median
 
 import pandas as pd
 
-from .. import bars, journal
+from .. import bars, journal, storage
 from ..config import CT, NY
 from ..universe import ETFS
-from . import book, proposals
+from . import book, proposals, rules
 
 TAGS = {
     "right_reason": "made money, and for the reason given",
@@ -31,6 +32,11 @@ SMALL = 30                    # below this many results a group's average is an 
 MIN_RANKED = 4                # a night's ranking is scored once this many of its ranked ideas have finished
 RANK_NIGHTS = 20              # about how many scored nights a ranking needs before its average means something
 LESSONS = "lessons.md"
+EST_COST_BPS = 25.0           # transparent round-trip cost assumption (spread + commissions) for plan tests
+UNINFLUENCED_FROM = "2026-11-26"  # first session where the judge ran without lessons.md / fr paper learn
+POWER_Z_ALPHA = 1.64485       # one-sided alpha = 0.05
+POWER_Z_BETA = 0.84162        # 80% power
+POWER_CLUSTER_DEFF = 1.25     # conservative inflation for within-session correlation across same-day takes
 # Every verdict's stop is replayed on the order job's own checks (entries.STOP_EVERY, every 10 minutes in regular
 # hours, until 20 minutes before the close) from stored 5-minute bars, and again at each close: the owner,
 # 2026-11-22, so takes and passes are scored the way the book actually trades. A day whose 5-minute bars haven't
@@ -45,9 +51,7 @@ def _text(v) -> bool:
 
 def _write(kind: str, name: str, payload: dict) -> Path:
     path = proposals.root() / kind / f"{name}.json"
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
-    return path
+    return storage.atomic_write_text(path, json.dumps(payload, indent=1, default=journal._json_default) + "\n")
 
 
 # ---- Post-mortems ---------------------------------------------------------------------------------------------
@@ -123,10 +127,11 @@ def _checks(day: date, after: datetime | None = None) -> list[datetime]:
 
 
 def _intraday_hit(day: date, legs: list[str], w: dict, entry: dict, pct: float, ix: dict, after: datetime | None,
-                  today: date) -> tuple[str, tuple[datetime, float] | None]:
+                  today: date, scale: dict[str, float] | None = None) -> tuple[str, tuple[datetime, float] | None]:
     """Replay a spread stop on `day`'s checks. ("hit", (when, return)) at the first check past it, ("clear", None)
     if none was, ("wait", None) while the day's 5-minute bars aren't stored yet, ("none", None) once they aren't
-    coming. A check's price is the close of the last 5-minute bar that finished by then."""
+    coming. A check's price is the close of the last 5-minute bar that finished by then.
+    `scale` maps symbol -> f(day) / f(entry_day) so mid-hold dividends/splits stay exact on unadjusted 5m bars."""
     close = datetime.combine(day, journal.close_time(day), NY)
     open_ = datetime.combine(day, time(9, 30), NY)
     series = {}
@@ -140,7 +145,7 @@ def _intraday_hit(day: date, legs: list[str], w: dict, entry: dict, pct: float, 
         seen = {s: x[x.index <= t - timedelta(minutes=5)] for s, x in series.items()}
         if any(v.empty for v in seen.values()):
             continue
-        ret = sum(w[s] * (seen[s].iloc[-1] / entry[s] - 1) for s in legs)
+        ret = sum(w[s] * ((seen[s].iloc[-1] * (scale.get(s, 1.0) if scale else 1.0)) / entry[s] - 1) for s in legs)
         if ret * 100 <= pct:
             return "hit", (t, ret)
     return "clear", None
@@ -187,8 +192,56 @@ def _outright_and_hedged_legs(p: dict) -> tuple[tuple[list[str], list[str]], tup
     return outright, hedged
 
 
+def _default_legs_and_plan(p: dict) -> tuple[tuple[list[str], list[str]], dict]:
+    """Mechanical default legs (hedged where available) and default plan (rules.default_plan) for apples-to-apples
+    scoring of takes and passes under the exact same rules."""
+    _, hedged = _outright_and_hedged_legs(p)
+    legs = hedged if hedged is not None else (list(p["long"]), list(p["short"]))
+    sig = p.get("signal") or {}
+    plan = rules.default_plan({"kind": p.get("kind") or "stock", "setup": p["setup"], "numbers": sig.get("numbers") or {}})
+    return legs, plan
+
+
+def unfilled_reason(p: dict, entry_doc: dict | None) -> str:
+    """Classify why a take never filled in the paper book: spread_liquidity, cap_skipped, gateway_fault, or other."""
+    if not entry_doc:
+        return "other"
+    pid, kind = p["id"], p.get("pass")
+    trade = next((t for t in entry_doc.get("trades", []) if t.get("proposal_id") == pid), None)
+    text_parts: list[str] = []
+    if trade:
+        if trade.get("stood_down"):
+            text_parts.append(str(trade["stood_down"]))
+        tid = trade.get("id")
+        for run in entry_doc.get("runs", []):
+            for w in run.get("warnings", []):
+                if tid and tid in w:
+                    text_parts.append(w)
+    else:
+        exact: list[str] = []
+        legacy: list[str] = []
+        for run in entry_doc.get("runs", []):
+            skips = run.get("skipped", [])
+            has_pid = any("proposal_id" in s for s in skips)
+            for s in skips:
+                if s.get("proposal_id") == pid or s.get("name") == pid:
+                    exact.append(str(s.get("reason") or ""))
+                elif not has_pid and kind and s.get("pass") == kind:
+                    legacy.append(str(s.get("reason") or ""))
+        text_parts.extend(exact if exact else legacy)
+    blob = " | ".join(text_parts).lower()
+    if any(k in blob for k in ("10089", "10197", "in use somewhere else", "no market data subscription", "timed out", "couldn't be asked")):
+        return "gateway_fault"
+    if any(k in blob for k in ("spread wider", "no bid or ask", "no overnight", "filled nothing", "no fill", "not chasing", "no overnight fills")):
+        return "spread_liquidity"
+    if any(k in blob for k in ("gross would be", "net exposure", "already holds", "over 60 open", "halted", "paused", "conviction came first")):
+        return "cap_skipped"
+    return "other"
+
+
 def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date | None = None,
-                  override_legs: tuple[list[str], list[str]] | None = None) -> dict | None:
+                  override_legs: tuple[list[str], list[str]] | None = None,
+                  override_plan: dict | None = None) -> dict | None:
     """The plan result of a verdict from one of the three daily passes: from each leg's price when the order job
     first acted on the pass (entries marks: the same moment for a take and a pass) to the close where its stop
     is hit or its time limit ends, before costs. A morning or midday verdict is already partway through its
@@ -212,13 +265,43 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
     entry = m["prices"]
     if lost := [s for s in [*legs, "SPY"] if s not in entry]:
         return {"status": "unpriced", "note": f"no price for {', '.join(lost)} when the {p['pass']} pass was acted on"}
-    horizon = p["plan"]["horizon_days"]
+    plan_cfg = override_plan if override_plan is not None else p["plan"]
+    horizon = plan_cfg["horizon_days"]
     first = entries.first_session(p["pass"], session)
     days = ([session] if first != session else []) + journal.sessions_from(first, horizon)
     due = days[-1]
-    close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in px[px["symbol"].isin([*legs, "SPY"])].groupby("symbol")}
+    sub = px[px["symbol"].isin([*legs, "SPY"])]
+    close = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"] for s, g in sub.groupby("symbol")}
+    raw_close = (
+        {s: g.assign(day=g["date"].dt.date).set_index("day")["raw_close"].dropna() for s, g in sub.groupby("symbol")}
+        if "raw_close" in sub.columns else {}
+    )
+
+    def factor_on(sym: str, day: date) -> float:
+        cs, rs = close.get(sym), raw_close.get(sym)
+        if cs is None or rs is None or day not in cs.index or day not in rs.index:
+            return 1.0
+        r = float(rs.loc[day])
+        return float(cs.loc[day]) / r if r > 0 else 1.0
+
+    def anchor_factor(sym: str, anchor: date) -> float:
+        cs, rs = close.get(sym), raw_close.get(sym)
+        if cs is None or rs is None or rs.empty:
+            return 1.0
+        if anchor in rs.index and anchor in cs.index and rs.loc[anchor] > 0:
+            return float(cs.loc[anchor]) / float(rs.loc[anchor])
+        common = rs.index.intersection(cs.index)
+        later = [d for d in sorted(common) if d >= anchor]
+        pick = later[0] if later else (sorted(common)[-1] if len(common) else None)
+        if pick is not None and rs.loc[pick] > 0:
+            return float(cs.loc[pick]) / float(rs.loc[pick])
+        return 1.0
+
+    anchor_day = journal.previous_trading_day(session) if p.get("pass") in proposals.NIGHT_KINDS else session
+    f0 = {s: anchor_factor(s, anchor_day) for s in [*legs, "SPY"]}
+    adj_entry = {s: entry[s] * f0[s] for s in [*legs, "SPY"]}
     w = journal._weights({"long": longs or None, "short": shorts or None})
-    stop = p["plan"].get("stop") or {}
+    stop = plan_cfg.get("stop") or {}
     replay = ix is not None and "spread_pct" in stop and session >= INTRADAY_FROM
     today = today or date.today()
     at = datetime.fromisoformat(m["at"]).astimezone(NY) if m.get("at") else None
@@ -227,22 +310,23 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
         if any(s not in close or d not in close[s].index for s in [*legs, "SPY"]) or not journal._bars_settled(d):
             break
         if replay:
-            how, hit = _intraday_hit(d, legs, w, entry, stop["spread_pct"], ix, at if d == session else None, today)
+            day_scale = {s: factor_on(s, d) / f0[s] for s in legs}
+            how, hit = _intraday_hit(d, legs, w, entry, stop["spread_pct"], ix, at if d == session else None, today, scale=day_scale)
             if how == "wait":
                 break
             if how == "none":
                 intraday = "closes only on some days: no 5-minute bars"
             if hit:
                 when, ret = hit
-                path.append((d, ret, close["SPY"][d] / entry["SPY"] - 1))
+                path.append((d, ret, close["SPY"][d] / adj_entry["SPY"] - 1))
                 status = "stopped"
                 note = (f"Stopped at {when.astimezone(CT):%-I:%M %p} CT on {d}: down {abs(ret) * 100:.1f}% "
                         f"at a 10-minute check, past the {abs(stop['spread_pct']):g}% stop")
                 break
-        ret = sum(w[s] * (close[s][d] / entry[s] - 1) for s in legs)
-        path.append((d, ret, close["SPY"][d] / entry["SPY"] - 1))
-        hits = [f"{r['symbol']} closed at {close[r['symbol']][d]:,.2f} ({journal.rule_text(r)})"
-                for r in stop.get("rules", []) if journal._rule_hit(r, close[r["symbol"]][d])]
+        ret = sum(w[s] * (close[s][d] / adj_entry[s] - 1) for s in legs)
+        path.append((d, ret, close["SPY"][d] / adj_entry["SPY"] - 1))
+        hits = [f"{r['symbol']} closed at {close[r['symbol']][d] / f0[r['symbol']]:,.2f} ({journal.rule_text(r)})"
+                for r in stop.get("rules", []) if journal._rule_hit(r, close[r["symbol"]][d] / f0[r["symbol"]])]
         if "spread_pct" in stop and ret * 100 <= stop["spread_pct"]:
             hits.append(f"down {abs(ret) * 100:.1f}% from the pass's price, past the {abs(stop['spread_pct']):g}% stop")
         if hits:
@@ -258,7 +342,7 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
             if d in seen:
                 break
             if all(s in close and d in close[s].index for s in [*legs, "SPY"]):
-                live_mark = (d, sum(w[s] * (close[s][d] / entry[s] - 1) for s in legs), close["SPY"][d] / entry["SPY"] - 1)
+                live_mark = (d, sum(w[s] * (close[s][d] / adj_entry[s] - 1) for s in legs), close["SPY"][d] / adj_entry["SPY"] - 1)
                 break
     if not path and not live_mark:
         return {"status": "open", "mature": False, "due": due.isoformat(), "note": "its first close hasn't settled"}
@@ -274,14 +358,19 @@ def _mark_outcome(p: dict, px: pd.DataFrame, ix: dict | None = None, today: date
 
 def outcomes() -> list[dict]:
     """One row per proposal: the verdict, the result of its own plan on daily bars (`plan_bps`, before costs,
-    None until it finishes), both outright and hedged replays for apples-to-apples comparison, its door/route,
+    None until it finishes), both outright and hedged replays, identical mechanical default-plan scoring
+    (`default_plan_bps`) for apples-to-apples take-vs-pass testing, fill status / unfilled reason, its door/route,
     and for a take that was traded, the paper result after commissions."""
     from ..screen import route_of
+    from . import entries
 
     props = proposals.every()
     if not props:
         return []
     paper = {r["proposal_id"]: r for r in book.rows(book.MAIN) if r.get("proposal_id")}
+    trades_by_pid = {t["proposal_id"]: t for t in book.trades()
+                     if book.book_of(t) == book.MAIN and t.get("proposal_id")}
+    entry_docs: dict[str, dict | None] = {}
     tags = postmortems()
     default_hedges = {h for p in props if (h := (p.get("signal") or {}).get("hedge"))}
     symbols = sorted({s for p in props for s in [*p["long"], *p["short"]]} | default_hedges | {"SPY"})
@@ -289,18 +378,35 @@ def outcomes() -> list[dict]:
     ix = bars.load_intraday([s for s in symbols if s in set(intraday_symbols()) | default_hedges])
     out = []
     for p in props:
-        plan = outright = hedged = None
+        plan = outright = hedged = def_plan_res = None
         if p["plan"] and (p["long"] or p["short"]) and not px.empty:
             plan = _mark_outcome(p, px, ix)
             out_legs, hdg_legs = _outright_and_hedged_legs(p)
             own_legs = (list(p["long"]), list(p["short"]))
             outright = plan if out_legs == own_legs else _mark_outcome(p, px, ix, override_legs=out_legs)
             hedged = plan if hdg_legs == own_legs else (_mark_outcome(p, px, ix, override_legs=hdg_legs) if hdg_legs else None)
+            def_legs, def_plan = _default_legs_and_plan(p)
+            if def_legs == own_legs and def_plan == p["plan"]:
+                def_plan_res = plan
+            else:
+                def_plan_res = _mark_outcome(p, px, ix, override_legs=def_legs, override_plan=def_plan)
         done = bool(plan) and plan["status"] in ("time", "stopped")
         out_done = bool(outright) and outright["status"] in ("time", "stopped")
         hdg_done = bool(hedged) and hedged["status"] in ("time", "stopped")
+        def_done = bool(def_plan_res) and def_plan_res["status"] in ("time", "stopped")
         door, route = (p["door"], p["route"]) if p.get("door") and p.get("route") else route_of(p["setup"], p["kind"])
         r = paper.get(p["id"])
+        tr = trades_by_pid.get(p["id"])
+        fill_status = u_reason = None
+        if p["decision"] == "take":
+            if tr and tr.get("held"):
+                fill_status = "filled"
+            else:
+                fill_status = "unfilled"
+                sess = p["session"]
+                if sess not in entry_docs:
+                    entry_docs[sess] = entries.load(date.fromisoformat(sess))
+                u_reason = unfilled_reason(p, entry_docs[sess])
         reason = (r or {}).get("reason") or ""
         managed = "early exit" if reason.startswith(("review:", "midday check:")) else "extended" if (r or {}).get("extended") else None
         m = tags.get((r or {}).get("id"))
@@ -314,15 +420,20 @@ def outcomes() -> list[dict]:
             "stats": p.get("stats"), "wrong_if": p.get("wrong_if"), "reasoning": p.get("reasoning"), "hedge_why": p.get("hedge_why"),
             "why": (p.get("signal") or {}).get("why"),
             "plan_status": plan["status"] if plan else None, "plan_bps": plan["bps"] if done else None,
+            "spy_bps": plan.get("spy_bps") if done else None,
             "plan_mature": bool(plan and plan.get("mature")), "plan_due": plan.get("due") if plan else None,
             "plan_so_far_bps": plan["bps"] if plan and not done and "bps" in plan else None,
             "plan_note": plan.get("note") if plan else None, "plan_exit": plan.get("exit_date") if done else None,
+            "default_plan_bps": def_plan_res["bps"] if def_done else None,
+            "default_plan_mature": bool(def_plan_res and def_plan_res.get("mature")),
+            "default_plan_so_far_bps": def_plan_res["bps"] if def_plan_res and not def_done and "bps" in def_plan_res else None,
             "outright_bps": outright["bps"] if out_done else None,
             "outright_mature": bool(outright and outright.get("mature")),
             "outright_so_far_bps": outright["bps"] if outright and not out_done and "bps" in outright else None,
             "hedged_bps": hedged["bps"] if hdg_done else None,
             "hedged_mature": bool(hedged and hedged.get("mature")),
             "hedged_so_far_bps": hedged["bps"] if hedged and not hdg_done and "bps" in hedged else None,
+            "fill_status": fill_status, "unfilled_reason": u_reason,
             "trade_id": r and r["id"], "state": r and r["state"], "paper_bps": r["bps"] if r and r["state"] == "closed" else None,
             "exit_reason": reason or None, "managed": managed, "tag": m and m["tag"], "lesson": m and m["lesson"],
         })
@@ -364,18 +475,92 @@ def _spearman(xs: list[float], ys: list[float]) -> float | None:
     return sum((x - ma) * (y - mb) for x, y in zip(a, b)) / (va * vb) ** 0.5 if va and vb else None
 
 
+def _t_pvalue(t_stat: float | None, df: int) -> float | None:
+    """One-sided Student-t p-value for H1: mean > 0 (pure Python via Simpson's rule, zero external deps)."""
+    if t_stat is None or df < 1 or not math.isfinite(t_stat):
+        return None
+    x = abs(t_stat)
+    if x >= 50.0:
+        return 0.0 if t_stat > 0 else 1.0
+    if x == 0.0:
+        return 0.5
+    coeff = math.exp(math.lgamma((df + 1) / 2) - math.lgamma(df / 2)) / math.sqrt(df * math.pi)
+    power = -(df + 1) / 2
+    steps = 400
+    h = x / steps
+    pdf = lambda u: coeff * (1.0 + (u * u) / df) ** power  # noqa: E731
+    total = pdf(0.0) + pdf(x)
+    for i in range(1, steps):
+        total += (4.0 if i % 2 else 2.0) * pdf(i * h)
+    half_area = total * h / 3.0
+    p = 0.5 - half_area if t_stat > 0 else 0.5 + half_area
+    return round(min(1.0, max(0.0, p)), 4)
+
+
+def _sample_sd(values: list[float]) -> float | None:
+    if len(values) < 2:
+        return None
+    m = mean(values)
+    return (sum((v - m) ** 2 for v in values) / (len(values) - 1)) ** 0.5
+
+
+def _session_stat(values: list[float], max_lag: int = 4) -> dict:
+    """Mean, session-clustered t-stat and one-sided p-value across session-level observations, plus Newey-West
+    (Bartlett HAC) lag-adjusted t_hac/p_value_hac to account for overlapping multi-day holds."""
+    n = len(values)
+    if not n:
+        return {"sessions": 0, "mean_bps": None, "t": None, "p_value": None, "t_hac": None, "p_value_hac": None}
+    m = mean(values)
+    sd = _sample_sd(values) if n >= 3 else None
+    t_val = m / (sd / math.sqrt(n)) if sd and sd > 0 else None
+    t_hac = None
+    if n >= 3:
+        dev = [v - m for v in values]
+        g0 = sum(d * d for d in dev) / (n - 1)
+        lags = min(max_lag, n - 2)
+        lrv = g0
+        for lag in range(1, lags + 1):
+            w = 1.0 - lag / (lags + 1)
+            gl = sum(dev[i] * dev[i - lag] for i in range(lag, n)) / (n - 1)
+            lrv += 2.0 * w * gl
+        if lrv > 0:
+            t_hac = m / math.sqrt(lrv / n)
+    return {"sessions": n, "mean_bps": round(m, 1),
+            "t": round(t_val, 2) if t_val is not None else None,
+            "p_value": _t_pvalue(t_val, n - 1),
+            "t_hac": round(t_hac, 2) if t_hac is not None else None,
+            "p_value_hac": _t_pvalue(t_hac, n - 1)}
+
+
+def _trimmed_mean(values: list[float], pct: float = 0.05) -> float | None:
+    if not values:
+        return None
+    s = sorted(values)
+    k = int(len(s) * pct)
+    if k == 0 and len(s) >= 5:
+        k = 1
+    core = s[k:len(s) - k] if k and len(s) > 2 * k else s
+    return mean(core)
+
+
 def _rank_summary(groups: list[tuple[str, list[tuple[dict, float]]]]) -> dict:
     scored = []
     for session, items in groups:
         ic = _spearman([-r["rank"] for r, _ in items], [v for _, v in items]) if len(items) >= MIN_RANKED else None
         if ic is not None:
             scored.append({"session": session, "finished": len(items), "ranked": items[0][0]["ranked"], "ic": round(ic, 3)})
-    ics = [n["ic"] for n in scored]
-    sd = (sum((v - mean(ics)) ** 2 for v in ics) / (len(ics) - 1)) ** 0.5 if len(ics) > 2 else 0
+    # Cluster by session: average multiple passes within the same session into one observation so 3 passes/day
+    # don't inflate `t` as if their overlapping holds were independent.
+    by_session: dict[str, list[float]] = {}
+    for row in scored:
+        by_session.setdefault(row["session"], []).append(row["ic"])
+    session_ics = [mean(vs) for _, vs in sorted(by_session.items())]
+    sd = (sum((v - mean(session_ics)) ** 2 for v in session_ics) / (len(session_ics) - 1)) ** 0.5 if len(session_ics) > 2 else 0
     third = lambda r: min(2, (r["rank"] - 1) * 3 // r["ranked"])  # noqa: E731
     done = [item for _, items in groups for item in items]
-    return {"finished": len(done), "nights": len(scored), "nights_needed": RANK_NIGHTS,
-            "ic": round(mean(ics), 3) if ics else None, "t": round(mean(ics) / (sd / len(ics) ** 0.5), 2) if sd else None,
+    return {"finished": len(done), "nights": len(session_ics), "passes": len(scored), "nights_needed": RANK_NIGHTS,
+            "ic": round(mean(session_ics), 3) if session_ics else None,
+            "t": round(mean(session_ics) / (sd / len(session_ics) ** 0.5), 2) if sd else None,
             "thirds": {name: _stat([v for r, v in done if third(r) == k]) for k, name in enumerate(("top", "middle", "bottom"))},
             "by_night": scored}
 
@@ -399,6 +584,197 @@ def rank_table(rows: list[dict] | None = None) -> dict:
         if len(live) >= MIN_RANKED:
             live_groups.append((session, live))
     return {"ranked": len(ranked), **_rank_summary(settled_groups), "so_far": _rank_summary(live_groups)}
+
+
+def _default_settled(r: dict) -> bool:
+    return r.get("default_plan_bps") is not None and r.get("default_plan_mature", True)
+
+
+def main_test(rows: list[dict] | None = None, cost_bps: float = EST_COST_BPS) -> dict:
+    """Pre-registered statistical test of PROJECT.md's main question: do takes beat passes after costs?
+
+    Separates:
+      - raw_gap_bps: custom take plan vs screen-default pass plan, after cost_bps
+      - default_gap_bps: identical mechanical default plan for BOTH takes and passes, after cost_bps
+      - plan_custom_bps: judge's custom stop/horizon/hedge minus default plan on takes
+      - session_clustered: one takes-minus-passes observation per session (default plan, after cost_bps)
+      - stratified: Mantel-Haenszel harmonic-weighted difference within (setup, direction) strata (default plan,
+        after cost_bps), both pooled and session-clustered
+      - outliers: ex-top-2 takes, 5% trimmed mean gap, and median gap (default plan, after cost_bps)
+      - power: takes needed for 80% power at one-sided p < 0.05 given observed take/pass dispersion
+      - execution: realized filled paper book vs unfilled takes broken out by reason
+    """
+    rows = outcomes() if rows is None else rows
+    settled = [r for r in rows if _settled(r)]
+    raw_t = [float(r["plan_bps"]) for r in settled if r["verdict"] == "take"]
+    raw_p = [float(r["plan_bps"]) for r in settled if r["verdict"] == "pass"]
+    raw_gap = round(mean(raw_t) - mean(raw_p) - cost_bps, 1) if raw_t and raw_p else None
+
+    def_settled = [r for r in rows if _default_settled(r)]
+    dt = [float(r["default_plan_bps"]) for r in def_settled if r["verdict"] == "take"]
+    dp = [float(r["default_plan_bps"]) for r in def_settled if r["verdict"] == "pass"]
+    def_gap = round(mean(dt) - mean(dp) - cost_bps, 1) if dt and dp else None
+
+    custom_deltas = [float(r["plan_bps"]) - float(r["default_plan_bps"])
+                     for r in rows if r["verdict"] == "take" and _settled(r) and _default_settled(r)]
+    plan_custom = round(mean(custom_deltas), 1) if custom_deltas else None
+
+    # Session-clustered default-plan take-minus-pass gap (after costs).
+    by_sess: dict[str, list[dict]] = {}
+    for r in def_settled:
+        if r["verdict"] in ("take", "pass"):
+            by_sess.setdefault(r["session"], []).append(r)
+    sess_gaps: list[float] = []
+    sess_strat_gaps: list[float] = []
+    for _, grp in sorted(by_sess.items()):
+        ts = [float(r["default_plan_bps"]) for r in grp if r["verdict"] == "take"]
+        ps = [float(r["default_plan_bps"]) for r in grp if r["verdict"] == "pass"]
+        if ts and ps:
+            sess_gaps.append(mean(ts) - mean(ps) - cost_bps)
+        # Within-session stratification by (setup, direction).
+        strata_s: dict[tuple[str, str], tuple[list[float], list[float]]] = {}
+        for r in grp:
+            bucket = strata_s.setdefault((r["setup"], r["direction"]), ([], []))
+            (bucket[0] if r["verdict"] == "take" else bucket[1]).append(float(r["default_plan_bps"]))
+        w_sum = num = 0.0
+        for st, sp in strata_s.values():
+            if st and sp:
+                w = (len(st) * len(sp)) / (len(st) + len(sp))
+                w_sum += w
+                num += w * (mean(st) - mean(sp))
+        if w_sum > 0:
+            sess_strat_gaps.append(num / w_sum - cost_bps)
+    session_clustered = _session_stat(sess_gaps)
+
+    # Pooled stratification by (setup, direction) across all settled sessions (default plan, after costs).
+    pooled_strata: dict[tuple[str, str], tuple[list[float], list[float]]] = {}
+    for r in def_settled:
+        if r["verdict"] in ("take", "pass"):
+            bucket = pooled_strata.setdefault((r["setup"], r["direction"]), ([], []))
+            (bucket[0] if r["verdict"] == "take" else bucket[1]).append(float(r["default_plan_bps"]))
+    w_sum = num = 0.0
+    matched_strata = matched_t = matched_p = 0
+    for st, sp in pooled_strata.values():
+        if st and sp:
+            matched_strata += 1
+            matched_t += len(st)
+            matched_p += len(sp)
+            w = (len(st) * len(sp)) / (len(st) + len(sp))
+            w_sum += w
+            num += w * (mean(st) - mean(sp))
+    stratified = {
+        "strata": matched_strata, "takes": matched_t, "passes": matched_p,
+        "mean_bps": round(num / w_sum - cost_bps, 1) if w_sum > 0 else None,
+        "session_clustered": _session_stat(sess_strat_gaps),
+    }
+
+    # Outlier sensitivity on settled default-plan takes vs passes (after costs).
+    ex_top_2 = None
+    if len(dt) > 2 and dp:
+        ex_top_2 = round(mean(sorted(dt)[:-2]) - mean(dp) - cost_bps, 1)
+    trim_t, trim_p = _trimmed_mean(dt, 0.05), _trimmed_mean(dp, 0.05)
+    trimmed_5 = round(trim_t - trim_p - cost_bps, 1) if trim_t is not None and trim_p is not None else None
+    median_gap = round(median(dt) - median(dp) - cost_bps, 1) if dt and dp else None
+    outliers = {"ex_top_2_bps": ex_top_2, "trimmed_5pct_bps": trimmed_5, "median_gap_bps": median_gap}
+
+    # Power calculation: takes needed for 80% power at one-sided alpha = 0.05 given observed dispersion.
+    sd_t = _sample_sd(dt)
+    sd_p = _sample_sd(dp)
+    takes_200 = takes_100 = None
+    if sd_t and sd_t > 0:
+        ratio = max(1.0, len(dp) / len(dt)) if dp and dt else 1.0
+        eff_var = (sd_t ** 2 + ((sd_p ** 2) / ratio if sd_p else 0.0)) * POWER_CLUSTER_DEFF
+        z_sum = POWER_Z_ALPHA + POWER_Z_BETA
+        takes_200 = math.ceil((z_sum ** 2) * eff_var / (200.0 ** 2))
+        takes_100 = math.ceil((z_sum ** 2) * eff_var / (100.0 ** 2))
+
+    # Verdict uses the primary clustered p-value (preferring stratified session-clustered once >= 6 sessions match).
+    primary = stratified["session_clustered"] if stratified["session_clustered"]["sessions"] >= 6 else session_clustered
+    if not dt or (takes_200 is not None and len(dt) < takes_200) or primary["sessions"] < 10:
+        verdict = "UNDERPOWERED — too early to call"
+    elif primary["p_value"] is not None and primary["p_value"] < 0.05 and (primary["mean_bps"] or 0) > 0:
+        verdict = "PASS (p < 0.05)"
+    else:
+        verdict = "NO SIGNIFICANT EDGE"
+    power = {"take_sd_bps": round(sd_t, 1) if sd_t is not None else None, "n_takes": len(dt),
+             "takes_for_200bp": takes_200, "takes_for_100bp": takes_100, "verdict": verdict}
+
+    # Execution breakdown: filled vs unfilled takes (execution leak diagnostic).
+    takes_all = [r for r in rows if r["verdict"] == "take"]
+    filled_all = [r for r in takes_all if r.get("fill_status") == "filled"]
+    unfilled_all = [r for r in takes_all if r.get("fill_status") == "unfilled"]
+    closed_paper = [float(r["paper_bps"]) for r in filled_all if r.get("paper_bps") is not None]
+    unfilled_settled = [float(r["plan_bps"]) for r in unfilled_all if _settled(r)]
+    unfilled_live = [float(v) for r in unfilled_all if (v := _current_bps(r)) is not None]
+    u_reasons: dict[str, int] = {}
+    for r in unfilled_all:
+        k = r.get("unfilled_reason") or "other"
+        u_reasons[k] = u_reasons.get(k, 0) + 1
+    execution = {
+        "filled_takes": len(filled_all),
+        "closed_paper": _stat(closed_paper),
+        "unfilled_takes": len(unfilled_all),
+        "unfilled_settled": _stat(unfilled_settled),
+        "unfilled_so_far": _stat(unfilled_live),
+        "unfilled_reasons": u_reasons,
+    }
+
+    # Second test (PROJECT.md): takes vs SPY over the exact same hold, after costs.
+    vs_spy_takes = [float(r["plan_bps"]) - float(r["spy_bps"]) - cost_bps
+                    for r in settled if r["verdict"] == "take" and r.get("spy_bps") is not None]
+    by_sess_spy: dict[str, list[float]] = {}
+    for r in settled:
+        if r["verdict"] == "take" and r.get("spy_bps") is not None:
+            by_sess_spy.setdefault(r["session"], []).append(float(r["plan_bps"]) - float(r["spy_bps"]) - cost_bps)
+    paper_vs_spy = [float(r["paper_bps"]) - float(r["spy_bps"])
+                    for r in filled_all if r.get("paper_bps") is not None and r.get("spy_bps") is not None]
+    vs_spy = {
+        "n_takes": len(vs_spy_takes),
+        "plan_mean_bps": round(mean(vs_spy_takes), 1) if vs_spy_takes else None,
+        "session_clustered": _session_stat([mean(v) for _, v in sorted(by_sess_spy.items())]),
+        "paper_n": len(paper_vs_spy),
+        "paper_mean_bps": round(mean(paper_vs_spy), 1) if paper_vs_spy else None,
+    }
+
+    # Regime split: pre-uninfluenced (before 2026-11-26, when judge read lessons.md) vs uninfluenced desk.
+    def _regime_slice(subset: list[dict]) -> dict:
+        rt = [float(r["default_plan_bps"]) for r in subset if r["verdict"] == "take"]
+        rp = [float(r["default_plan_bps"]) for r in subset if r["verdict"] == "pass"]
+        by_s: dict[str, list[dict]] = {}
+        for r in subset:
+            if r["verdict"] in ("take", "pass"):
+                by_s.setdefault(r["session"], []).append(r)
+        sg = []
+        for _, grp in sorted(by_s.items()):
+            ts = [float(r["default_plan_bps"]) for r in grp if r["verdict"] == "take"]
+            ps = [float(r["default_plan_bps"]) for r in grp if r["verdict"] == "pass"]
+            if ts and ps:
+                sg.append(mean(ts) - mean(ps) - cost_bps)
+        return {
+            "n_takes": len(rt), "n_passes": len(rp),
+            "default_gap_bps": round(mean(rt) - mean(rp) - cost_bps, 1) if rt and rp else None,
+            "session_clustered": _session_stat(sg),
+        }
+
+    regimes = {
+        "pre_uninfluenced": _regime_slice([r for r in def_settled if r["session"] < UNINFLUENCED_FROM]),
+        "uninfluenced": _regime_slice([r for r in def_settled if r["session"] >= UNINFLUENCED_FROM]),
+    }
+
+    return {
+        "cost_bps": cost_bps,
+        "n_takes": len(raw_t), "n_passes": len(raw_p),
+        "raw_gap_bps": raw_gap,
+        "default_gap_bps": def_gap,
+        "plan_custom_bps": plan_custom,
+        "session_clustered": session_clustered,
+        "stratified": stratified,
+        "outliers": outliers,
+        "power": power,
+        "execution": execution,
+        "vs_spy": vs_spy,
+        "regimes": regimes,
+    }
 
 
 def _mode_table(rows: list[dict], prefix: str) -> dict:
@@ -430,6 +806,7 @@ def tables(rows: list[dict] | None = None) -> dict:
                    "by_verdict": {k: _stat([v for r, v in live if r["verdict"] == k]) for k in sorted({r["verdict"] for r, _ in live})}},
         "by_conviction": by(lambda r: r["conviction"] if r["conviction"] is not None else "none"),
         "rank": rank_table(rows),
+        "main_test": main_test(rows),
         "by_door": {f"{door} · {verdict}": s for (door, verdict), s in by(lambda r: (r["door"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "by_route": {f"{route} · {verdict}": s for (route, verdict), s in by(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
         "so_far_by_route": {f"{route} · {verdict}": s for (route, verdict), s in by_live(lambda r: (r["route"], "take" if r["verdict"] == "take" else "not taken")).items()},
@@ -486,6 +863,65 @@ def desk() -> str:
     return "\n".join(lines)
 
 
+def _main_test_lines(mt: dict) -> list[str]:
+    """Plain-text rendering of main_test() for the owner report."""
+    lines = ["", f"Main test (takes minus passes, settled, after {mt['cost_bps']:g} bp est. round-trip cost)"]
+    if mt["raw_gap_bps"] is None and mt["default_gap_bps"] is None:
+        lines.append("  not enough settled takes and passes yet")
+    else:
+        if mt["raw_gap_bps"] is not None:
+            lines.append(f"  {'Raw gap (custom vs default)':<34} {mt['raw_gap_bps']:+7.1f} bp   (n={mt['n_takes']} takes, {mt['n_passes']} passes)")
+        sc = mt["session_clustered"]
+        if mt["default_gap_bps"] is not None:
+            t_txt = f"  clustered t={sc['t']:+.2f}  p={sc['p_value']:.3f}" if sc["t"] is not None else ""
+            hac_txt = f"  HAC p={sc['p_value_hac']:.3f}" if sc.get("p_value_hac") is not None else ""
+            lines.append(f"  {'Same default plan (pooled)':<34} {mt['default_gap_bps']:+7.1f} bp   (session mean {sc['mean_bps']:+.1f} bp over {sc['sessions']} sessions{t_txt}{hac_txt})")
+        st = mt["stratified"]
+        if st["mean_bps"] is not None:
+            ssc = st["session_clustered"]
+            st_txt = f"  clustered t={ssc['t']:+.2f}  p={ssc['p_value']:.3f}" if ssc["t"] is not None else ""
+            hac_txt = f"  HAC p={ssc['p_value_hac']:.3f}" if ssc.get("p_value_hac") is not None else ""
+            lines.append(f"  {'Stratified (setup, direction)':<34} {st['mean_bps']:+7.1f} bp   ({st['strata']} matched strata: {st['takes']} takes, {st['passes']} passes; {ssc['sessions']} sessions{st_txt}{hac_txt})")
+        if mt["plan_custom_bps"] is not None:
+            lines.append(f"  {'Judge plan customization':<34} {mt['plan_custom_bps']:+7.1f} bp   (custom stop/horizon/hedge minus default on takes)")
+        vs = mt.get("vs_spy") or {}
+        if vs.get("plan_mean_bps") is not None:
+            vsc = vs["session_clustered"]
+            vt_txt = f"  clustered t={vsc['t']:+.2f}  p={vsc['p_value']:.3f}" if vsc.get("t") is not None else ""
+            paper_txt = f"; closed paper {vs['paper_mean_bps']:+.1f} bp (n={vs['paper_n']})" if vs.get("paper_mean_bps") is not None else ""
+            lines.append(f"  {'Second test: takes vs SPY':<34} {vs['plan_mean_bps']:+7.1f} bp   (n={vs['n_takes']} takes{vt_txt}{paper_txt})")
+        rg = mt.get("regimes") or {}
+        reg_parts = []
+        for key, lbl in (("pre_uninfluenced", f"pre-{UNINFLUENCED_FROM}"), ("uninfluenced", f"uninfluenced >={UNINFLUENCED_FROM}")):
+            rv = rg.get(key) or {}
+            if rv.get("default_gap_bps") is not None:
+                reg_parts.append(f"{lbl}: {rv['default_gap_bps']:+.1f} bp (n={rv['n_takes']}t/{rv['n_passes']}p)")
+        if reg_parts:
+            lines.append(f"  {'Regime split (default plan)':<34} " + "   |   ".join(reg_parts))
+        o = mt["outliers"]
+        parts = [f"{lbl}: {val:+.1f} bp" for lbl, val in (
+            ("ex-top-2", o["ex_top_2_bps"]), ("trimmed 5%", o["trimmed_5pct_bps"]), ("median", o["median_gap_bps"])
+        ) if val is not None]
+        if parts:
+            lines.append(f"  {'Outlier sensitivity':<34} " + "   ".join(parts))
+        pw = mt["power"]
+        if pw["takes_for_200bp"] is not None:
+            sd_lbl = f"Power (80% @ p<0.05, sd {pw['take_sd_bps']:.0f} bp)"
+            lines.append(f"  {sd_lbl:<34} {pw['n_takes']} / ~{pw['takes_for_200bp']} takes for +200 bp  ({pw['n_takes']} / ~{pw['takes_for_100bp']} for +100 bp)")
+        lines.append(f"  {'Verdict':<34} {pw['verdict']}")
+    ex = mt["execution"]
+    if ex["filled_takes"] or ex["unfilled_takes"]:
+        cp = ex["closed_paper"]
+        cp_txt = f"closed {cp['n']}: mean {cp['mean']:+.1f} bp, median {cp['median']:+.1f}, winners {cp['winners']:.0%}" if cp.get("n") else "none closed yet"
+        lines.append(f"  {'Realized book (filled takes)':<34} {ex['filled_takes']} filled   ({cp_txt})")
+        if ex["unfilled_takes"]:
+            reasons = ", ".join(f"{k.replace('_', ' ')} {n}" for k, n in sorted(ex["unfilled_reasons"].items(), key=lambda x: -x[1]))
+            us = ex["unfilled_settled"]
+            u_txt = f"settled {us['n']} mean {us['mean']:+.1f} bp" if us.get("n") else f"so far {ex['unfilled_so_far']['n']} mean {ex['unfilled_so_far']['mean']:+.1f} bp" if ex["unfilled_so_far"].get("n") else "unpriced"
+            lines.append(f"  {'Unfilled takes (execution leak)':<34} {ex['unfilled_takes']} unfilled   ({reasons}; {u_txt})")
+    return lines
+
+
 def brief() -> str:
     """Owner-only report card: the record so far (by verdict, conviction, rank, door/route, hedged vs outright,
     and setup), post-mortems, open trades, and standing lessons. Research passes run `fr paper desk` instead."""
@@ -497,8 +933,9 @@ def brief() -> str:
     lines = [f"{'Swing' if three else 'Automatic'} book record (owner report), {datetime.now(CT):%Y-%m-%d %-I:%M %p} CT: {t['proposals']} proposals, {t['finished']} settled{waiting_note}.",
              ("Plan result = the proposal's own plan from the price when its pass was acted on to its stop or time limit, before costs. "
               if three else "Plan result = the proposal's own plan on daily bars, first open to its stop or time limit, before costs. ")
-             + "Settled tables wait until an idea's time limit has passed, so early stop-outs don't count ahead of surviving peers. The passes are the control: the takes have to beat them.",
-             "", "By verdict (settled)"]
+             + "Settled tables wait until an idea's time limit has passed, so early stop-outs don't count ahead of surviving peers. The passes are the control: the takes have to beat them."]
+    lines += _main_test_lines(t["main_test"])
+    lines += ["", "By verdict (settled)"]
     lines += [_line(k, s) for k, s in t["by_verdict"].items()] or ["  nothing settled yet"]
     if t["so_far"]["n"]:
         lines += ["", f"All ideas so far (open + finished, marked to latest price; n={t['so_far']['n']})"]

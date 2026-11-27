@@ -116,7 +116,7 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
     stamp = {"session": session.isoformat(), "pass": kind, "recorded_at": now.isoformat()}
     new, notes = [], []
     for raw, rank in zip(raws, proposals._ranks(raws)):   # every verdict ranked
-        p = {**proposals._proposal(raw, session, screen, cands), **stamp, "rank": rank, "ranked": len(raws)}
+        p = {**proposals._proposal(raw, session, screen, cands, kind=kind), **stamp, "rank": rank, "ranked": len(raws)}
         if p["name"] in {x["name"] for x in new}:
             raise ValueError(f"{p['name']} has two verdicts in this draft")
         new.append(p)

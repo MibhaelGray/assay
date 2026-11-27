@@ -132,7 +132,12 @@ def main(argv: list[str] | None = None) -> None:
             print(json.dumps(bars.collect(extra, "2y")))
             return
         symbols = [s.strip().upper() for s in a.symbols.split(",")] if a.symbols else bar_universe() + extra
-        print(json.dumps(bars.collect(symbols + ([] if a.symbols else list(bars.INDEXES)), a.duration)))
+        all_syms = symbols + ([] if a.symbols else list(bars.INDEXES))
+        stats = bars.collect(all_syms, a.duration)
+        print(json.dumps(stats))
+        failed = stats.get("failed") or []
+        if not a.symbols and ("SPY" in failed or len(failed) > max(10, int(0.10 * len(all_syms)))):
+            sys.exit(1)
     elif a.cmd == "brief":
         as_of = date.fromisoformat(a.as_of) if a.as_of else _today()
         brief = journal.build_brief(as_of)
@@ -382,17 +387,18 @@ def _paper(a) -> None:
     if a.job in ("close", "sync") and not journal.is_trading_day(today):
         logging.info("market_closed date=%s", today)
         return
+    looking = _looking(a) if a.job in ("enter", "close") else False
     # A close job that starts late (the Mac woke from sleep, say) must not send after the auction cutoff:
     # market-on-close by 10 minutes before the session close (3:50 PM ET full day, 12:50 PM ET half day).
     # Missed exits go out the next session, since a trade past its time limit exits at the next check.
+    # Dry runs ("a look") are still allowed at any time of day so the operator can inspect pending exits.
     now_dt = datetime.now(NY)
     close_dt = datetime.combine(today, journal.close_time(today), NY)
-    if a.job == "close" and not (close_dt - timedelta(minutes=30) <= now_dt <= close_dt - timedelta(minutes=10, seconds=1)) and PaperSettings().send:
+    if a.job == "close" and not looking and not (close_dt - timedelta(minutes=30) <= now_dt <= close_dt - timedelta(minutes=10, seconds=1)) and PaperSettings().send:
         from .config import CT
         lo, hi = (close_dt - timedelta(minutes=30)).astimezone(CT), (close_dt - timedelta(minutes=11)).astimezone(CT)
         print(f"paper close: {now_dt.astimezone(CT):%-I:%M %p} CT is outside {lo:%-I:%M %p}-{hi:%-I:%M %p} CT, so nothing was sent")
         sys.exit(1)
-    looking = _looking(a) if a.job in ("enter", "close") else False
     if a.job == "enter":
         # The three-pass book's order job (paper/entries.py): trades a pass's takes and exits once it has recorded.
         from .paper import entries
@@ -405,8 +411,9 @@ def _paper(a) -> None:
                 return
             raise
         if not looking and (healed := entries.heal_gateway(r.get("no_quote") or {})):   # after the run: its connection is closed
-            entries.retry_soon()
-            r["warnings"].append(healed + "; the next try is in a minute or two.")
+            note = healed + "; the next try is in a minute or two."
+            r["warnings"].append(note)
+            entries.retry_soon(note=note)
         if r.get("note") and not any(r[k] for k in ("passes", "orders", "warnings")):
             # launchd runs this every minute; a run with nothing to do stays out of the log
             return None if os.environ.get("FR_SCHEDULED") == "1" else print(f"paper enter: {r['note']}")

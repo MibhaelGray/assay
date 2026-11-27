@@ -13,6 +13,7 @@ import os
 import posixpath
 import threading
 from datetime import datetime
+from pathlib import Path
 
 import pandas as pd
 import pyarrow as pa
@@ -20,6 +21,20 @@ import pyarrow.parquet as pq
 from pyarrow import fs
 
 from .config import settings
+
+
+def atomic_write_text(path: Path, text: str) -> Path:
+    """Write text to a temp file beside `path` and swap it in with os.replace so concurrent readers never see a
+    half-written or truncated JSON/markdown file."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(f".{path.name}.{os.getpid()}.{threading.get_ident()}.tmp")
+    try:
+        tmp.write_text(text)
+        os.replace(tmp, path)
+    finally:
+        if tmp.exists():
+            tmp.unlink(missing_ok=True)
+    return path
 
 
 def _resolve(path: str) -> tuple[fs.FileSystem, str]:

@@ -17,6 +17,8 @@ a stop that couldn't be checked); `alerts()` hands the latest to the dashboard a
 """
 
 import asyncio
+import contextlib
+import fcntl
 import json
 import logging
 from datetime import date, datetime, time, timedelta
@@ -46,9 +48,20 @@ def _read(path: Path) -> dict | None:
 
 
 def _write(path: Path, payload: dict) -> Path:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=1, default=journal._json_default) + "\n")
-    return path
+    return storage.atomic_write_text(path, json.dumps(payload, indent=1, default=journal._json_default) + "\n")
+
+
+@contextlib.contextmanager
+def _fills_lock():
+    """Serialize read-modify-write updates to fills/<session>.json across concurrent jobs."""
+    lock_path = ROOT / ".fills.lock"
+    lock_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(lock_path, "a+") as fh:
+        fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
 
 
 def _all(kind: str) -> list[dict]:
@@ -244,6 +257,28 @@ async def sync(today: date, broker=None) -> dict:
         return await _pull(b, today)
 
 
+async def _pull_fills(b, today: date) -> dict:
+    """Fast fills-only pull for mid-run order checks (entries.py): skips account summary and marks so a slow
+    gateway never stalls a 30-second timeout between a lead fill and its hedge follow-up."""
+    path = ROOT / "fills" / f"{today}.json"
+    new = await b.fills()
+    with _fills_lock():
+        existing = _read(path) or {}
+        old = existing.get("fills", [])
+        seen = {f["exec_id"] for f in new}
+        payload = {
+            "session": today.isoformat(),
+            "pulled_at": existing.get("pulled_at") or datetime.now(NY).isoformat(),
+            "fills_pulled_at": datetime.now(NY).isoformat(),
+            "fills": [*[f for f in old if f["exec_id"] not in seen], *new],
+            "positions": existing.get("positions", {}),
+            "net_liquidation": existing.get("net_liquidation"),
+            "marks": existing.get("marks", {}),
+        }
+        _write(path, payload)
+    return payload
+
+
 async def _pull(b, today: date) -> dict:
     """`sync` on a connection that is already open."""
     path = ROOT / "fills" / f"{today}.json"
@@ -257,12 +292,15 @@ async def _pull(b, today: date) -> dict:
     # IBKR's own prices for what the account holds. With nothing held there is nothing to price, and the gateway
     # doesn't answer the request at all: it timed out after 30 seconds on every pull of an empty account.
     marks = await b.marks() if positions and hasattr(b, "marks") else {}
-    old = (_read(path) or {}).get("fills", [])
-    seen = {f["exec_id"] for f in new}
-    payload = {"session": today.isoformat(), "pulled_at": datetime.now(NY).isoformat(),
-               "fills": [*[f for f in old if f["exec_id"] not in seen], *new], "positions": positions, "net_liquidation": nav,
-               "marks": marks}
-    _write(path, payload)
+    with _fills_lock():
+        existing = _read(path) or {}
+        old = existing.get("fills", [])
+        seen = {f["exec_id"] for f in new}
+        payload = {"session": today.isoformat(), "pulled_at": datetime.now(NY).isoformat(),
+                   "fills": [*[f for f in old if f["exec_id"] not in seen], *new], "positions": positions,
+                   "net_liquidation": nav if nav is not None else existing.get("net_liquidation"),
+                   "marks": marks}
+        _write(path, payload)
     payload["mismatches"] = reconcile(positions)
     return payload
 
@@ -405,8 +443,22 @@ def alerts() -> list[str]:
 
 
 # ---- Results ----------------------------------------------------------------------------------------------
+def _adj_factor_on(bar: dict, symbol: str, day: date) -> float:
+    """close / raw_close on `day` (1.0 when raw_close isn't stored or missing). Dividing a later adjusted close
+    by this entry-date factor yields the exact split- and dividend-adjusted mark anchored to the unadjusted fill."""
+    r = bar.get((symbol, day))
+    if r is None:
+        return 1.0
+    raw = getattr(r, "raw_close", None)
+    if raw is None or pd.isna(raw) or raw <= 0:
+        return 1.0
+    return float(r.close) / float(raw)
+
+
 def rows(which: str | None = None) -> list[dict]:
     """One row per trade for the dashboard and the report: one book's, or (None) both."""
+    from . import entries
+
     ts = [t for t in trades() if which is None or book_of(t) == which]
     symbols = sorted({leg["symbol"] for t in ts for leg in t["legs"]})
     px = bars.load(symbols) if symbols else pd.DataFrame()
@@ -414,7 +466,7 @@ def rows(which: str | None = None) -> list[dict]:
     last = {}
     if not px.empty:
         latest = px.sort_values("date").groupby("symbol").last()
-        last = {s: (r.close, r.date.date()) for s, r in latest.iterrows()}
+        last = {s: (float(r.close), r.date.date()) for s, r in latest.iterrows()}
     # The close before each symbol's latest bar: what a leg's change on the day is measured from.
     before = {s: float(g["close"].iloc[-2]) for s, g in px.sort_values("date").groupby("symbol") if len(g) > 1} if not px.empty else {}
     today = datetime.now(NY).date()
@@ -424,35 +476,43 @@ def rows(which: str | None = None) -> list[dict]:
         days = journal.sessions_from(_first(t), t["horizon_days"])
         missing = sorted({leg["symbol"] for leg in t["legs"]} - {h["symbol"] for h in t["held"]}) if t["held"] else []
         stop_pct = (t.get("stop") or {}).get("spread_pct")
+        n = rules.filled_notional(t, t["held"]) if t["held"] else float(t["notional"])
         detail = []
         if t["held"]:
             closed = t["state"] == "closed"
+            d0 = date.fromisoformat(t["entry_date"])
             for h in t["held"]:
                 close, on = last.get(h["symbol"], (None, None))
+                f0 = _adj_factor_on(bar, h["symbol"], d0)
                 # A close from before the entry says nothing about this trade: it is still at its fill.
-                px = h["exit_price"] if closed else close if close is not None and on >= date.fromisoformat(t["entry_date"]) else h["entry_price"]
+                px_mark = h["exit_price"] if closed else (close / f0) if close is not None and on >= d0 else h["entry_price"]
                 sign = 1 if h["side"] == "long" else -1
                 # On the day: from the last close, or from the fill for a leg entered on the latest bar's session.
-                held_before = close is not None and on > date.fromisoformat(t["entry_date"]) and h["symbol"] in before
-                base = before[h["symbol"]] if held_before else h["entry_price"]
-                detail.append({"symbol": h["symbol"], "side": h["side"], "shares": h["shares"], "entry": h["entry_price"], "last": px,
-                               "pnl": round(sign * h["shares"] * (px - h["entry_price"]), 2),
-                               "value": round(sign * h["shares"] * px, 2),
-                               "day_pnl": None if closed else round(sign * h["shares"] * (px - base), 2)})
+                held_before = close is not None and on > d0 and h["symbol"] in before
+                base = (before[h["symbol"]] / f0) if held_before else h["entry_price"]
+                detail.append({"symbol": h["symbol"], "side": h["side"], "shares": h["shares"], "entry": h["entry_price"], "last": round(px_mark, 4),
+                               "pnl": round(sign * h["shares"] * (px_mark - h["entry_price"]), 2),
+                               "value": round(sign * h["shares"] * px_mark, 2),
+                               "day_pnl": None if closed else round(sign * h["shares"] * (px_mark - base), 2)})
             gross = sum(leg["pnl"] for leg in detail)
             if not closed:
                 day_pnl = round(sum(leg["day_pnl"] for leg in detail), 2)
             pnl = gross - t["commission"]
-            if not closed and not missing and stop_pct is not None:
-                room = round(gross / t["notional"] * 100 - stop_pct, 1)
-            if closed and not t["exit"].get("intraday"):  # the model is open to close; a trade closed at 9:40 AM has none
-                d0, d1 = date.fromisoformat(t["entry_date"]), date.fromisoformat(t["exit"]["session"])
+            if not closed and not missing and stop_pct is not None and n > 0:
+                room = round(gross / n * 100 - stop_pct, 1)
+            if closed and not t["exit"].get("intraday"):  # the model is open/verdict-mark to close; an intraday exit has none
+                d1 = date.fromisoformat(t["exit"]["session"])
+                m_prices = ((entries.marks(d0, t["pass"]) or {}).get("prices") or {}) if t.get("pass") else {}
                 try:
-                    model = sum((1 if h["side"] == "long" else -1) * h["shares"] *
-                                (bar[(h["symbol"], d1)].close - bar[(h["symbol"], d0)].open) for h in t["held"])
+                    if m_prices and all(h["symbol"] in m_prices for h in t["held"]):
+                        model = sum((1 if h["side"] == "long" else -1) * h["shares"] *
+                                    (bar[(h["symbol"], d1)].close / _adj_factor_on(bar, h["symbol"], d0) - m_prices[h["symbol"]])
+                                    for h in t["held"])
+                    else:
+                        model = sum((1 if h["side"] == "long" else -1) * h["shares"] *
+                                    (bar[(h["symbol"], d1)].close - bar[(h["symbol"], d0)].open) for h in t["held"])
                 except KeyError:
                     model = None
-        n = t["notional"]
         out.append({
             "id": t["id"], "book": book_of(t), "name": t["name"], "setup": t["setup"], "direction": t["direction"],
             "entry_date": t["entry_date"], "exit_date": (t["exit"] or {}).get("session"), "state": t["state"],
@@ -472,11 +532,12 @@ def rows(which: str | None = None) -> list[dict]:
 
 
 # ---- Profit and loss over time ------------------------------------------------------------------------------
-def _book_fills(which: str | None = None) -> list[dict]:
+def _book_fills(which: str | set[str] | tuple[str, ...] | list[str] | None = None) -> list[dict]:
     """Every fill on one of the book's orders with its session and time, oldest first. The intraday book's fills
     (trade ids I-... and X-...) can land in the same fills files when a pull runs; they are its own book's."""
     out = []
-    mine = {t["id"] for t in recorded() if which is None or book_of(t) == which}   # a pull also brings back fills on orders that aren't this book's:
+    allowed = {which} if isinstance(which, str) else set(which) if which is not None else None
+    mine = {t["id"] for t in recorded() if allowed is None or book_of(t) in allowed}   # a pull also brings back fills on orders that aren't this book's:
     for (trade_id, _), fs in _fills_by_ref().items():   # the first book's, after the restart, and the other way round
         if trade_id.startswith(("I-", "X-")) or trade_id not in mine:
             continue
@@ -509,6 +570,10 @@ def pnl_by_session(fills: list[dict] | None = None) -> list[dict]:
         return []
     px = bars.load(sorted({"SPY", *(f["symbol"] for f in fills)}))
     closes = {s: g.assign(day=g["date"].dt.date).set_index("day")["close"].sort_index() for s, g in px.groupby("symbol")} if not px.empty else {}
+    raw_closes = (
+        {s: g.assign(day=g["date"].dt.date).set_index("day")["raw_close"].dropna().sort_index() for s, g in px.groupby("symbol")}
+        if (not px.empty and "raw_close" in px.columns) else {}
+    )
     today = datetime.now(NY).date()
     first = fills[0]["session"]
     traded = {f["session"] for f in fills}
@@ -525,7 +590,17 @@ def pnl_by_session(fills: list[dict] | None = None) -> list[dict]:
         def mark(symbol: str, latest: dict) -> float:
             s = closes.get(symbol)
             s = s[s.index <= d] if s is not None else None
-            return float(s.iloc[-1]) if s is not None and len(s) and s.index[-1] >= latest["session"] else latest["price"]
+            if s is None or not len(s) or s.index[-1] < latest["session"]:
+                return latest["price"]
+            rs = raw_closes.get(symbol)
+            if rs is not None and latest["session"] in rs.index and latest["session"] in s.index and rs.loc[latest["session"]] > 0:
+                f0 = float(s.loc[latest["session"]]) / float(rs.loc[latest["session"]])
+                return float(s.iloc[-1]) / f0
+            if rs is not None:
+                rs_le = rs[rs.index <= d]
+                if len(rs_le) and rs_le.index[-1] >= latest["session"]:
+                    return float(rs_le.iloc[-1])
+            return float(s.iloc[-1])
         out.append({"date": d.isoformat(), "pnl": _pnl_of([f for f in fills if f["session"] <= d], mark),
                     "final": d in spy and journal._bars_settled(d), "spy": spy_on(d)})
     return out

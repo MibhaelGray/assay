@@ -15,11 +15,11 @@ Yahoo finds candidates and sizes trades. It never prices an order: that takes th
 """
 
 import logging
-from datetime import datetime, time
+from datetime import date, datetime, time
 
 import pandas as pd
 
-from . import bars
+from . import bars, journal
 from .config import CT, NY
 
 log = logging.getLogger(__name__)
@@ -27,6 +27,12 @@ log = logging.getLogger(__name__)
 OPEN, CLOSE = time(9, 30), time(16, 0)
 BAR = pd.Timedelta(minutes=5)
 SESSION_MINUTES = 390
+
+
+def session_minutes(day: date) -> int:
+    """Length of `day`'s regular NYSE session in minutes (390 on a full day, 210 on a half day)."""
+    c = journal.close_time(day)
+    return (c.hour - OPEN.hour) * 60 + c.minute - OPEN.minute
 # The share of a day's volume that has usually traded by each minute after the open: heavy at the open, quiet
 # over lunch, and about a seventh of the day in the last fifteen minutes with the closing auction. Used to turn
 # "volume so far" into a full day's worth, so a name isn't called quiet at noon for having traded half a day.
@@ -62,15 +68,18 @@ def snapshot(df: pd.DataFrame) -> dict | None:
     day = df.index[-1].date()
     df = df[df.index.date == day]
     t = df.index.time
-    pre, reg, post = df[t < OPEN], df[(t >= OPEN) & (t < CLOSE)], df[t >= CLOSE]
+    close_t = journal.close_time(day)
+    day_minutes = session_minutes(day)
+    pre, reg, post = df[t < OPEN], df[(t >= OPEN) & (t < close_t)], df[t >= close_t]
     out = {"date": day, "price": float(df["Close"].iloc[-1]), "at": (df.index[-1] + BAR).isoformat(),
            "phase": "post" if len(post) else "regular" if len(reg) else "pre", "regular": None, "pre": None, "post": None}
     if len(reg):
         end = reg.index[-1] + BAR
-        minutes = min(SESSION_MINUTES, (end.hour - OPEN.hour) * 60 + end.minute - OPEN.minute)
+        minutes = min(day_minutes, (end.hour - OPEN.hour) * 60 + end.minute - OPEN.minute)
+        scaled_minutes = minutes * SESSION_MINUTES / day_minutes if day_minutes > 0 else SESSION_MINUTES
         out["regular"] = {"open": float(reg["Open"].iloc[0]), "high": float(reg["High"].max()), "low": float(reg["Low"].min()),
                           "close": float(reg["Close"].iloc[-1]), "volume": float(reg["Volume"].sum()), "minutes": int(minutes),
-                          "fraction": round(volume_fraction(minutes), 4)}
+                          "fraction": round(volume_fraction(scaled_minutes), 4)}
     for name, part in (("pre", pre), ("post", post)):
         if len(part):
             out[name] = {"last": float(part["Close"].iloc[-1]), "bars": int(len(part))}

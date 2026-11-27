@@ -10,7 +10,8 @@ vocabulary of a proposal), what counts as a tradable symbol, and the helpers tha
 import json
 import os
 import re
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
+from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
@@ -31,15 +32,18 @@ def _calendar():
     return NYSE
 
 
+@lru_cache(maxsize=256)
 def is_trading_day(day: date) -> bool:
     return not _calendar().valid_days(day, day).empty
 
 
+@lru_cache(maxsize=256)
 def next_trading_day(as_of: date) -> date:
     days = _calendar().valid_days(as_of + pd.Timedelta(days=1), as_of + pd.Timedelta(days=10))
     return days[0].date()
 
 
+@lru_cache(maxsize=256)
 def previous_trading_day(day: date) -> date:
     days = _calendar().valid_days(day - pd.Timedelta(days=10), day - pd.Timedelta(days=1))
     return days[-1].date()
@@ -49,7 +53,7 @@ def previous_trading_day(day: date) -> date:
 # a member, inside the standard universe or not; bars for names outside it are pulled with the paper book's
 # legs (book.symbols_held). Indexes can't be bought, so they can't be legs.
 BASKET_SIZE = (3, 10)
-SYMBOL = re.compile(r"^[A-Z][A-Z0-9.]{0,6}$")
+SYMBOL = re.compile(r"^(?=.{1,8}$)[A-Z][A-Z0-9]*(?:[ .][A-Z0-9]+)?$")
 NOT_TRADABLE = {*INDEXES, "SPX", "NDX", "RUT", "DJI", "SOX", "VIX1D", "VIX9D", "VIX6M", "FVX", "TYX"}
 
 
@@ -134,8 +138,7 @@ def build_brief(as_of: date, write: bool = True) -> dict:
     }
     if write:
         path = JOURNAL / "briefs" / f"{as_of}.json"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(json.dumps(brief, indent=2, default=_json_default) + "\n")
+        storage.atomic_write_text(path, json.dumps(brief, indent=2, default=_json_default) + "\n")
     return brief
 
 
@@ -155,10 +158,10 @@ def _weights(idea: dict) -> dict[str, float]:
 
 
 def _bars_settled(trade_date: date) -> bool:
-    """Whether the stored bars were pulled after this session's close. A dashboard refresh during the session
-    stores a partial bar for the day, which is no result."""
+    """Whether the stored bars were pulled after this session's close (4:15 PM ET on full days, 1:15 PM ET on
+    half days). A dashboard refresh during the session stores a partial bar for the day, which is no result."""
     pulled = storage.modified(bars_path("SPY"))
-    close = datetime.combine(trade_date, time(16, 15), NY)
+    close = datetime.combine(trade_date, close_time(trade_date), NY) + timedelta(minutes=15)
     return pulled is not None and pulled.astimezone(NY) >= close
 
 

@@ -13,11 +13,12 @@ from .config import NY
 
 INDEXES = {"VIX": "^VIX", "VIX3M": "^VIX3M", "VIX9D": "^VIX9D", "VIX1D": "^VIX1D", "VIX6M": "^VIX6M", "TNX": "^TNX", "FVX": "^FVX"}
 FIELDS = ("regularMarketPrice,regularMarketPreviousClose,regularMarketChangePercent,regularMarketTime,regularMarketOpen,"
-          "regularMarketDayHigh,regularMarketDayLow,regularMarketVolume,preMarketPrice,preMarketChangePercent,preMarketTime,marketState")
+          "regularMarketDayHigh,regularMarketDayLow,regularMarketVolume,preMarketPrice,preMarketChangePercent,preMarketTime,"
+          "postMarketPrice,postMarketChangePercent,postMarketTime,marketState")
 
 
 def fetch(names: list[str]) -> list[dict]:
-    tickers = {INDEXES.get(n.upper(), n.upper().replace(" ", "-")): n.upper() for n in names}
+    tickers = {INDEXES.get(n.upper(), bars._ticker(n.upper())): n.upper() for n in names}
     got = bars._quotes(list(tickers), FIELDS)
     out = []
     for t, name in tickers.items():
@@ -33,6 +34,9 @@ def fetch(names: list[str]) -> list[dict]:
         if q.get("marketState") == "PRE" and q.get("preMarketPrice"):
             row.update(pre_market=q["preMarketPrice"], pre_market_change_pct=q.get("preMarketChangePercent"),
                        pre_market_as_of=datetime.fromtimestamp(q["preMarketTime"], NY).strftime("%-I:%M %p ET") if q.get("preMarketTime") else None)
+        elif q.get("marketState") in ("POST", "POSTPOST") and q.get("postMarketPrice"):
+            row.update(post_market=q["postMarketPrice"], post_market_change_pct=q.get("postMarketChangePercent"),
+                       post_market_as_of=datetime.fromtimestamp(q["postMarketTime"], NY).strftime("%-I:%M %p ET") if q.get("postMarketTime") else None)
         out.append(row)
     return out
 
@@ -46,5 +50,7 @@ def text(rows: list[dict]) -> str:
         line = f"{r['name']:<9} last {r['last']:>10,.2f}  {r['change_pct'] or 0:+6.2f}% on prior close {r['prior_close'] or float('nan'):,.2f}  as of {r['as_of']}"
         if "pre_market" in r:
             line += f"  | pre-market {r['pre_market']:,.2f} ({r['pre_market_change_pct'] or 0:+.2f}%) at {r['pre_market_as_of']}"
+        elif "post_market" in r:
+            line += f"  | after-hours {r['post_market']:,.2f} ({r['post_market_change_pct'] or 0:+.2f}%) at {r['post_market_as_of']}"
         lines.append(line)
     return "\n".join(lines)

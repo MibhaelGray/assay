@@ -24,10 +24,11 @@ of its members.
 import json
 import logging
 import time as clock
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, time, timedelta
 from pathlib import Path
 from statistics import mean
 
+from .. import bars, journal, storage
 from ..config import NY
 from ..universe import ETFS
 from . import proposals
@@ -95,7 +96,8 @@ def pull(symbol: str, now: datetime) -> dict:
     """One name's facts from Yahoo. Every part is tried on its own, so one missing table costs only its facts."""
     import yfinance as yf
 
-    t = yf.Ticker(symbol)
+    t = yf.Ticker(bars._ticker(symbol))
+    pre_open = (not journal.is_trading_day(now.date())) or (now.time() < time(9, 30))
     facts, raw, errors = {}, {}, []
 
     def part(name, fn):
@@ -112,7 +114,11 @@ def pull(symbol: str, now: datetime) -> dict:
         facts["short_change"] = _change(i.get("sharesShort"), i.get("sharesShortPriorMonth"))
         if i.get("dateShortInterest"):
             raw["short_as_of"] = datetime.fromtimestamp(i["dateShortInterest"], NY).date().isoformat()
-        price, target = _num(i.get("currentPrice") or i.get("regularMarketPrice")), _num(i.get("targetMeanPrice"))
+        # Avoid intraday post-entry look-ahead on target_gap if pulled during regular hours.
+        ref_px = (i.get("currentPrice") or i.get("regularMarketPrice")) if pre_open else (
+            i.get("regularMarketPreviousClose") or i.get("previousClose") or i.get("currentPrice") or i.get("regularMarketPrice")
+        )
+        price, target = _num(ref_px), _num(i.get("targetMeanPrice"))
         facts["target_gap"] = round(target / price - 1, 5) if price and target else None
         facts["rating_mean"] = _num(i.get("recommendationMean"))
         raw["analysts"] = i.get("numberOfAnalystOpinions")
@@ -152,7 +158,8 @@ def pull(symbol: str, now: datetime) -> dict:
     if raw.get("type") in (None, "EQUITY"):
         for name, fn in (("estimates", estimates), ("ratings", ratings), ("insiders", insiders)):
             part(name, fn)
-    out = {"at": now.isoformat(timespec="seconds"), "facts": {k: v for k, v in facts.items() if v is not None}, "raw": raw}
+    out = {"at": now.isoformat(timespec="seconds"), "pre_open": pre_open,
+           "facts": {k: v for k, v in facts.items() if v is not None}, "raw": raw}
     return {**out, "errors": errors} if errors else out
 
 
@@ -202,8 +209,7 @@ def record(now: datetime | None = None, puller=pull, dry: bool = False, pause: f
         (out["pulled"] if got.get("facts") else out["failed"]).append(s)
     if todo:
         doc["runs"].append({k: out[k] for k in ("at", "pulled", "failed", "borrow_error") if k in out})
-        path(session).parent.mkdir(parents=True, exist_ok=True)
-        path(session).write_text(json.dumps(doc, indent=1) + "\n")
+        storage.atomic_write_text(path(session), json.dumps(doc, indent=1) + "\n")
     return out
 
 

@@ -25,7 +25,7 @@ import xml.etree.ElementTree as ET
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
-from .. import edgar, journal, quotes
+from .. import edgar, journal, quotes, storage
 from ..config import CT, NY
 
 log = logging.getLogger(__name__)
@@ -180,7 +180,7 @@ def build(slot: str, screen_doc: dict | None = None, now: datetime | None = None
     out_dir.mkdir(parents=True, exist_ok=True)
 
     market_path = out_dir / "MARKET.md"
-    market_path.write_text(market_packet(now=now, quotes_fn=quotes_fn, rss_fn=rss_fn))
+    storage.atomic_write_text(market_path, market_packet(now=now, quotes_fn=quotes_fn, rss_fn=rss_fn))
 
     fetch = fetcher or edgar._get
     try:
@@ -194,20 +194,20 @@ def build(slot: str, screen_doc: dict | None = None, now: datetime | None = None
         for c in screen_doc.get("candidates") or []:
             kind, name = c.get("kind"), c.get("name") or ""
             if kind == "stock":
-                cik = t2c.get(name) or t2c.get(name.replace(".", "-"))
+                cik = t2c.get(name) or t2c.get(name.replace(".", "-")) or t2c.get(name.replace(" ", "-"))
                 if not cik:
                     continue
                 filings = edgar.recent_filings_text(name, cik, as_of, fetcher=fetch)
                 if not filings:
                     continue
                 p = out_dir / f"{_safe_name(name)}.md"
-                p.write_text(_format_stock_packet(name, filings, as_of))
+                storage.atomic_write_text(p, _format_stock_packet(name, filings, as_of))
                 packets[name] = str(p)
             elif kind == "basket":
                 members = [m["symbol"] if isinstance(m, dict) else str(m) for m in (c.get("members") or [])][:6]
                 by_member: dict[str, list[dict]] = {}
                 for sym in members:
-                    cik = t2c.get(sym) or t2c.get(sym.replace(".", "-"))
+                    cik = t2c.get(sym) or t2c.get(sym.replace(".", "-")) or t2c.get(sym.replace(" ", "-"))
                     if not cik:
                         continue
                     filings = edgar.recent_filings_text(
@@ -217,7 +217,7 @@ def build(slot: str, screen_doc: dict | None = None, now: datetime | None = None
                         by_member[sym] = filings
                 if by_member:
                     p = out_dir / f"{_safe_name(name)}.md"
-                    p.write_text(_format_basket_packet(name, by_member, as_of))
+                    storage.atomic_write_text(p, _format_basket_packet(name, by_member, as_of))
                     packets[name] = str(p)
 
     index_lines = [
@@ -233,7 +233,7 @@ def build(slot: str, screen_doc: dict | None = None, now: datetime | None = None
     else:
         index_lines.append("- None (no recent SEC filings matched for shortlisted stocks).")
     index_path = out_dir / "INDEX.md"
-    index_path.write_text("\n".join(index_lines) + "\n")
+    storage.atomic_write_text(index_path, "\n".join(index_lines) + "\n")
 
     return {
         "dir": str(out_dir),
