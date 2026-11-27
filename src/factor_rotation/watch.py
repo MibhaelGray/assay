@@ -7,6 +7,7 @@ an account number, a position or a dollar amount: only what broke and where to l
 
 What it checks:
 - a scheduled job that exited with an error (launchd keeps each job's last exit status);
+- the schedule's clock (deploy/launchd/clock.py), which starts every timed job, hasn't ticked for 10 minutes;
 - a scheduled research pass that hasn't recorded 75 minutes after it started, or whose log says it failed;
 - the order job's last two runs both left a trade unsent for want of a quote from the gateway;
 - the paper gateway doesn't answer, or answers but has lost IBKR, on two checks in a row;
@@ -32,6 +33,8 @@ STATE = Path("data/watch.json")
 REPEAT = timedelta(hours=3)
 PASS_LATE = timedelta(minutes=95)
 PASS_LOGS = Path("data/pass-logs")
+CLOCK = Path("data/clock.json")     # written by deploy/launchd/clock.py on every tick, 30 seconds apart
+CLOCK_LATE = timedelta(minutes=10)
 LABEL = "com.factor-rotation."
 # The scheduled passes, New York time: (pass, start, which days). Night runs Sunday to Thursday; the other two on
 # trading days. Kept beside deploy/launchd/install.py, which starts them.
@@ -130,6 +133,20 @@ def failed_jobs() -> list[tuple[str, str, str]]:
             found.append((f"job:{job}:{status}", f"Job failed: {job}",
                           f"The {job} job's last run exited with status {status}. Its log is ~/Library/Logs/factor-rotation/{job}.log."))
     return found
+
+
+def stopped_clock(now: datetime) -> list[tuple[str, str, str]]:
+    """The clock that starts the timed jobs has stopped ticking. No file means it was never installed here."""
+    try:
+        tick = datetime.fromisoformat(json.loads(CLOCK.read_text())["tick"])
+    except (OSError, ValueError, KeyError):
+        return []
+    if now - tick <= CLOCK_LATE:
+        return []
+    return [("clock:stopped", "The schedule's clock has stopped",
+             f"No timed job (passes, close, nightly) will start until it runs again. It last ticked "
+             f"{int((now - tick).total_seconds() // 60)} minutes ago. Reinstall it with "
+             "`python3 deploy/launchd/install.py clock`; its log is ~/Library/Logs/factor-rotation/clock.log.")]
 
 
 def _pass_days(kind: str, day: date, trading) -> bool:
@@ -265,7 +282,7 @@ def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_prob
     # Gateway connectivity and 10197 quote checks moved to scheduled pre-flight checks before each pass and close
     # (paper/gateway.py:preflight) so the watchdog isn't polling the gateway every 5 minutes while the owner trades
     # on their phone. Pass check_gateway=True (or probe/quote_probe) to run them here explicitly.
-    found = [*failed_jobs(), *missing_passes(now), *refused_quotes(now)]
+    found = [*failed_jobs(), *stopped_clock(now), *missing_passes(now), *refused_quotes(now)]
     if check_gateway or probe is not None:
         found += gateway(now, state, probe)
     if (check_gateway or quote_probe is not None) and not any(k.startswith("quotes:") for k, _, _ in found):

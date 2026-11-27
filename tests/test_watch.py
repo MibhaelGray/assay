@@ -173,3 +173,19 @@ class Sending(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+def test_stopped_clock_alerts_after_ten_minutes(tmp_path, monkeypatch):
+    """The clock (deploy/launchd/clock.py) starts every timed job, so the watchdog says when it stops ticking."""
+    import json
+    from datetime import datetime, timedelta
+    from factor_rotation import watch
+    from factor_rotation.config import NY
+    now = datetime(2026, 11, 27, 13, 30, tzinfo=NY)
+    monkeypatch.setattr(watch, "CLOCK", tmp_path / "clock.json")
+    assert watch.stopped_clock(now) == []                      # never installed
+    watch.CLOCK.write_text(json.dumps({"tick": (now - timedelta(minutes=2)).isoformat()}))
+    assert watch.stopped_clock(now) == []
+    watch.CLOCK.write_text(json.dumps({"tick": (now - timedelta(minutes=25)).isoformat()}))
+    (key, title, text), = watch.stopped_clock(now)
+    assert key == "clock:stopped" and "25 minutes" in text

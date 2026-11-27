@@ -2,6 +2,10 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
+# The schedule's clock (deploy/launchd/clock.py), every 30 seconds: it starts each timed job below when its New York
+# time comes, whatever time zone the Mac is set to. It needs no lock, no .env and no caffeinate.
+if [ "${1:-}" = clock ]; then exec python3 deploy/launchd/clock.py; fi
+
 # One job of a kind at a time: a later job waits for the one running. flock on Linux, lockf on macOS. Paper jobs
 # use the paper gateway and have their own lock, so a long data job can't make the 3:45 PM exits miss the
 # market-on-close cutoff.
@@ -94,7 +98,7 @@ case "$1" in
     # Facts recorded beside the night's verdicts, which no research pass reads (paper/side.py). Yahoo only.
     exec uv run fr paper side ;;
   pass-night)
-    # The evening before a session only. launchd starts it Monday to Friday and on Sunday (install.py); a run
+    # The evening before a session only. The clock starts it Monday to Friday and on Sunday (install.py); a run
     # whose tomorrow is closed stops here: Friday's, and the evening before a holiday (the pass for the session
     # after a holiday runs on the holiday's own evening, on the latest prices).
     uv run fr trading-day --tomorrow || exit 0
