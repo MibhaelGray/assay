@@ -1,0 +1,4053 @@
+{
+ "session": "2026-11-27",
+ "note": "Side facts: no research pass reads this file (paper/side.py).",
+ "symbols": {
+  "A": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0204,
+    "short_days_to_cover": 2.45,
+    "short_change": 0.00502,
+    "target_gap": 0.11711,
+    "rating_mean": 1.77273,
+    "est_change_30d": -0.00558,
+    "est_change_7d": 0.00041,
+    "est_net_up_30d": -5.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": 0.128,
+    "insider_buys_6m": 7.0,
+    "insider_sales_6m": 2.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 3900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 20,
+    "eps_trend": {
+     "0q": {
+      "current": 1.55437,
+      "7daysAgo": 1.49587,
+      "30daysAgo": 1.49806,
+      "90daysAgo": 1.51369
+     },
+     "+1q": {
+      "current": 1.61015,
+      "7daysAgo": 1.60692,
+      "30daysAgo": 1.6075,
+      "90daysAgo": 1.60568
+     },
+     "0y": {
+      "current": 6.71812,
+      "7daysAgo": 6.71539,
+      "30daysAgo": 6.75582,
+      "90daysAgo": 6.6108
+     },
+     "+1y": {
+      "current": 7.54969,
+      "7daysAgo": 7.47374,
+      "30daysAgo": 7.4707,
+      "90daysAgo": 7.45298
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 3900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "ADI": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0225,
+    "short_days_to_cover": 2.03,
+    "short_change": -0.02984,
+    "target_gap": 0.32494,
+    "rating_mean": 1.37143,
+    "est_change_30d": 0.02516,
+    "est_change_7d": 0.02398,
+    "est_net_up_30d": 4.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": 0.005,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 22.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 2900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 32,
+    "eps_trend": {
+     "0q": {
+      "current": 3.82368,
+      "7daysAgo": 3.83056,
+      "30daysAgo": 3.83059,
+      "90daysAgo": 3.81059
+     },
+     "+1q": {
+      "current": 4.13907,
+      "7daysAgo": 4.08643,
+      "30daysAgo": 4.08429,
+      "90daysAgo": 4.06029
+     },
+     "0y": {
+      "current": 16.9229,
+      "7daysAgo": 16.52667,
+      "30daysAgo": 16.50759,
+      "90daysAgo": 16.40552
+     },
+     "+1y": {
+      "current": 19.85602,
+      "7daysAgo": 19.59881,
+      "30daysAgo": 19.57756,
+      "90daysAgo": 19.17462
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 2900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "AGCO": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0748,
+    "short_days_to_cover": 5.14,
+    "short_change": 0.13337,
+    "target_gap": 0.16926,
+    "rating_mean": 2.4375,
+    "est_change_30d": -0.01444,
+    "est_change_7d": -0.00057,
+    "est_net_up_30d": -12.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": -0.039,
+    "insider_buys_6m": 11.0,
+    "insider_sales_6m": 6.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 400000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 15,
+    "eps_trend": {
+     "0q": {
+      "current": 2.1053,
+      "7daysAgo": 2.13844,
+      "30daysAgo": 2.3755,
+      "90daysAgo": 2.40465
+     },
+     "+1q": {
+      "current": 1.20571,
+      "7daysAgo": 1.22743,
+      "30daysAgo": 1.25029,
+      "90daysAgo": 1.25743
+     },
+     "0y": {
+      "current": 5.50788,
+      "7daysAgo": 5.511,
+      "30daysAgo": 5.58859,
+      "90daysAgo": 5.62441
+     },
+     "+1y": {
+      "current": 6.94008,
+      "7daysAgo": 6.93591,
+      "30daysAgo": 7.31622,
+      "90daysAgo": 7.30739
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Underweight",
+      "target": 113.0,
+      "was": 99.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 136.0,
+      "was": 146.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 145.0,
+      "was": 140.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 400000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "ALSN": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0368,
+    "short_days_to_cover": 2.87,
+    "short_change": -0.05942,
+    "target_gap": 0.15875,
+    "est_change_30d": 0.0289,
+    "est_change_7d": 0.00381,
+    "est_net_up_30d": 3.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 3.0,
+    "insider_net_pct_6m": -0.001,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 850000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": 2.50571,
+      "7daysAgo": 2.47081,
+      "30daysAgo": 2.48537,
+      "90daysAgo": 2.59942
+     },
+     "+1q": {
+      "current": 2.61853,
+      "7daysAgo": 2.57253,
+      "30daysAgo": 2.785,
+      "90daysAgo": 2.785
+     },
+     "0y": {
+      "current": 10.23959,
+      "7daysAgo": 10.2007,
+      "30daysAgo": 9.95196,
+      "90daysAgo": 9.98748
+     },
+     "+1y": {
+      "current": 11.59851,
+      "7daysAgo": 11.4874,
+      "30daysAgo": 11.25618,
+      "90daysAgo": 11.24209
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-07",
+      "firm": "Freedom Broker",
+      "action": "main",
+      "to": "Buy",
+      "target": 147.0,
+      "was": 144.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 140.0,
+      "was": 135.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 139.0,
+      "was": 132.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 850000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "AMCR": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.05,
+    "short_days_to_cover": 6.23,
+    "short_change": -0.01969,
+    "target_gap": 0.08027,
+    "rating_mean": 2.15385,
+    "est_change_30d": -0.01868,
+    "est_change_7d": 0.00046,
+    "est_net_up_30d": -3.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.2814,
+    "borrow_shares": 500000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 12,
+    "eps_trend": {
+     "0q": {
+      "current": 0.79923,
+      "7daysAgo": 0.798,
+      "30daysAgo": 0.85333,
+      "90daysAgo": 0.8675
+     },
+     "+1q": {
+      "current": 0.9875,
+      "7daysAgo": 1.0275,
+      "30daysAgo": 1.02667,
+      "90daysAgo": 1.0425
+     },
+     "0y": {
+      "current": 3.93182,
+      "7daysAgo": 3.93,
+      "30daysAgo": 4.00667,
+      "90daysAgo": 4.0375
+     },
+     "+1y": {
+      "current": 4.16484,
+      "7daysAgo": 4.168,
+      "30daysAgo": 4.332,
+      "90daysAgo": 4.33994
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 50.0,
+      "was": 52.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Truist Securities",
+      "action": "main",
+      "to": "Buy",
+      "target": 53.0,
+      "was": 51.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2814,
+     "rebate": 3.5986,
+     "shares": 500000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "AMGN": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0248,
+    "short_days_to_cover": 4.84,
+    "short_change": 0.00392,
+    "target_gap": -0.06065,
+    "rating_mean": 2.65714,
+    "est_change_30d": 0.02332,
+    "est_change_7d": 0.00102,
+    "est_net_up_30d": 23.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": 17.0,
+    "insider_net_pct_6m": -0.0,
+    "insider_buys_6m": 11.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 2000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 30,
+    "eps_trend": {
+     "0q": {
+      "current": 5.60526,
+      "7daysAgo": 5.6433,
+      "30daysAgo": 5.77213,
+      "90daysAgo": 5.80226
+     },
+     "+1q": {
+      "current": 5.70111,
+      "7daysAgo": 5.72,
+      "30daysAgo": 5.616,
+      "90daysAgo": 5.59333
+     },
+     "0y": {
+      "current": 23.5527,
+      "7daysAgo": 23.5286,
+      "30daysAgo": 23.01604,
+      "90daysAgo": 23.04147
+     },
+     "+1y": {
+      "current": 25.12565,
+      "7daysAgo": 25.04794,
+      "30daysAgo": 24.47562,
+      "90daysAgo": 24.39759
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-12",
+      "firm": "Argus Research",
+      "action": "main",
+      "to": "Buy",
+      "target": 515.0,
+      "was": 460.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Freedom Broker",
+      "action": "down",
+      "to": "Hold",
+      "target": 470.0,
+      "was": 450.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Leerink Partners",
+      "action": "main",
+      "to": "Market Perform",
+      "target": 464.0,
+      "was": 395.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "Guggenheim",
+      "action": "main",
+      "to": "Neutral",
+      "target": 435.0,
+      "was": 378.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Canaccord Genuity",
+      "action": "main",
+      "to": "Hold",
+      "target": 440.0,
+      "was": 384.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 530.0,
+      "was": 470.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Scotiabank",
+      "action": "main",
+      "to": "Sector Outperform",
+      "target": 530.0,
+      "was": 500.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 465.0,
+      "was": 405.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 425.0,
+      "was": 350.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "TD Cowen",
+      "action": "main",
+      "to": "Buy",
+      "target": 531.0,
+      "was": 452.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Goldman Sachs",
+      "action": "main",
+      "to": "Buy",
+      "target": 536.0,
+      "was": 481.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 410.0,
+      "was": 359.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 2000000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "AVY": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0309,
+    "short_days_to_cover": 3.06,
+    "short_change": -0.10557,
+    "target_gap": 0.06084,
+    "rating_mean": 1.54545,
+    "est_change_30d": 0.00171,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 3.0,
+    "insider_net_pct_6m": -0.01,
+    "insider_buys_6m": 1.0,
+    "insider_sales_6m": 2.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": 2.40645,
+      "7daysAgo": 2.40645,
+      "30daysAgo": 2.48095,
+      "90daysAgo": 2.48162
+     },
+     "+1q": {
+      "current": 2.59642,
+      "7daysAgo": 2.59555,
+      "30daysAgo": 2.68777,
+      "90daysAgo": 2.69064
+     },
+     "0y": {
+      "current": 10.1909,
+      "7daysAgo": 10.1909,
+      "30daysAgo": 10.17351,
+      "90daysAgo": 10.16483
+     },
+     "+1y": {
+      "current": 11.07837,
+      "7daysAgo": 11.07837,
+      "30daysAgo": 11.18564,
+      "90daysAgo": 11.18624
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 191.0,
+      "was": 186.0
+     },
+     {
+      "date": "2026-10-31",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 230.0,
+      "was": 225.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 200.0,
+      "was": 190.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "BAC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0,
+    "short_days_to_cover": 0.0,
+    "short_change": -0.39311,
+    "target_gap": 0.28713,
+    "rating_mean": 1.48,
+    "est_change_30d": -0.0142,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": -17.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 22,
+    "eps_trend": {
+     "0q": {
+      "current": 1.10278,
+      "7daysAgo": 1.10278,
+      "30daysAgo": 1.111,
+      "90daysAgo": 1.1602
+     },
+     "+1q": {
+      "current": 1.19444,
+      "7daysAgo": 1.19875,
+      "30daysAgo": 1.21333,
+      "90daysAgo": 1.2444
+     },
+     "0y": {
+      "current": 4.36754,
+      "7daysAgo": 4.36754,
+      "30daysAgo": 4.43045,
+      "90daysAgo": 4.67973
+     },
+     "+1y": {
+      "current": 5.09634,
+      "7daysAgo": 5.09634,
+      "30daysAgo": 5.14132,
+      "90daysAgo": 5.29151
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 62.0,
+      "was": 67.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 59.5,
+      "was": 62.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "BALL": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0402,
+    "short_days_to_cover": 3.62,
+    "short_change": 0.00652,
+    "target_gap": 0.08091,
+    "rating_mean": 1.71429,
+    "est_change_30d": -0.00383,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": -5.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": 3.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.3155,
+    "borrow_shares": 2600000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 13,
+    "eps_trend": {
+     "0q": {
+      "current": 0.92383,
+      "7daysAgo": 0.92383,
+      "30daysAgo": 0.9754,
+      "90daysAgo": 0.9891
+     },
+     "+1q": {
+      "current": 1.00434,
+      "7daysAgo": 1.00434,
+      "30daysAgo": 0.99814,
+      "90daysAgo": 1.00395
+     },
+     "0y": {
+      "current": 4.00233,
+      "7daysAgo": 4.00233,
+      "30daysAgo": 4.0177,
+      "90daysAgo": 4.02452
+     },
+     "+1y": {
+      "current": 4.47312,
+      "7daysAgo": 4.47312,
+      "30daysAgo": 4.51785,
+      "90daysAgo": 4.52277
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-05",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 77.0,
+      "was": 75.0
+     },
+     {
+      "date": "2026-11-05",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Outperform",
+      "target": 77.0,
+      "was": 73.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 68.0,
+      "was": 63.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 76.0,
+      "was": 78.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "JP Morgan",
+      "action": "down",
+      "to": "Neutral",
+      "target": 65.0,
+      "was": 65.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Mizuho",
+      "action": "main",
+      "to": "Outperform",
+      "target": 75.0,
+      "was": 72.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.3155,
+     "rebate": 3.5645,
+     "shares": 2600000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "BBD": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0092,
+    "short_days_to_cover": 0.86,
+    "short_change": 2.64643,
+    "target_gap": 0.70576,
+    "rating_mean": 2.42857,
+    "est_change_30d": 0.00386,
+    "est_change_7d": -0.01871,
+    "est_net_up_30d": -3.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": 0.829,
+    "insider_buys_6m": 2.0,
+    "insider_sales_6m": 2.0,
+    "borrow_fee": 0.6041,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 6,
+    "eps_trend": {
+     "0q": {
+      "current": 0.11189,
+      "7daysAgo": 0.11189,
+      "30daysAgo": 0.12299,
+      "90daysAgo": 0.12888
+     },
+     "+1q": {
+      "current": 0.12476,
+      "7daysAgo": 0.12476,
+      "30daysAgo": 0.12976,
+      "90daysAgo": 0.14785
+     },
+     "0y": {
+      "current": 0.45475,
+      "7daysAgo": 0.46342,
+      "30daysAgo": 0.453,
+      "90daysAgo": 0.49051
+     },
+     "+1y": {
+      "current": 0.48378,
+      "7daysAgo": 0.49078,
+      "30daysAgo": 0.52344,
+      "90daysAgo": 0.55943
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-29",
+      "firm": "JP Morgan",
+      "action": "down",
+      "to": "Neutral",
+      "target": 0.0,
+      "was": 0.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.6041,
+     "rebate": 3.2759,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "BBY": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0928,
+    "short_days_to_cover": 6.23,
+    "short_change": 0.04168,
+    "target_gap": -0.03444,
+    "rating_mean": 2.80769,
+    "est_change_30d": 0.02664,
+    "est_change_7d": 0.02598,
+    "est_net_up_30d": 1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 2.0,
+    "insider_net_pct_6m": -0.116,
+    "insider_buys_6m": 19.0,
+    "insider_sales_6m": 6.0,
+    "borrow_fee": 0.2545,
+    "borrow_shares": 2500000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 21,
+    "eps_trend": {
+     "0q": {
+      "current": 2.64491,
+      "7daysAgo": 2.57934,
+      "30daysAgo": 2.57942,
+      "90daysAgo": 2.55361
+     },
+     "+1q": {
+      "current": 1.43185,
+      "7daysAgo": 1.42305,
+      "30daysAgo": 1.42648,
+      "90daysAgo": 1.40909
+     },
+     "0y": {
+      "current": 6.98588,
+      "7daysAgo": 6.80897,
+      "30daysAgo": 6.80458,
+      "90daysAgo": 6.69863
+     },
+     "+1y": {
+      "current": 7.36461,
+      "7daysAgo": 7.22173,
+      "30daysAgo": 7.22541,
+      "90daysAgo": 7.16057
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-06",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 102.0,
+      "was": 88.0
+     },
+     {
+      "date": "2026-11-06",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 95.0,
+      "was": 85.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2545,
+     "rebate": 3.6255,
+     "shares": 2500000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "BURL": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0957,
+    "short_days_to_cover": 2.59,
+    "short_change": -0.03245,
+    "target_gap": 0.31804,
+    "rating_mean": 1.8,
+    "est_change_30d": -0.01993,
+    "est_change_7d": -0.01762,
+    "est_net_up_30d": -1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": -0.028,
+    "insider_buys_6m": 4.0,
+    "insider_sales_6m": 9.0,
+    "borrow_fee": 0.2802,
+    "borrow_shares": 1400000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 17,
+    "eps_trend": {
+     "0q": {
+      "current": 4.91198,
+      "7daysAgo": 5.19819,
+      "30daysAgo": 5.22019,
+      "90daysAgo": 5.33003
+     },
+     "+1q": {
+      "current": 2.16729,
+      "7daysAgo": 2.26833,
+      "30daysAgo": 2.284,
+      "90daysAgo": 2.34525
+     },
+     "0y": {
+      "current": 11.56449,
+      "7daysAgo": 11.77189,
+      "30daysAgo": 11.79961,
+      "90daysAgo": 11.77562
+     },
+     "+1y": {
+      "current": 13.08796,
+      "7daysAgo": 13.56109,
+      "30daysAgo": 13.68658,
+      "90daysAgo": 13.85206
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Cantor Fitzgerald",
+      "action": "init",
+      "to": "Neutral",
+      "target": 270.0,
+      "was": 0.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2802,
+     "rebate": 3.5998,
+     "shares": 1400000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "C": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0004,
+    "short_days_to_cover": 0.06,
+    "short_change": 0.83211,
+    "target_gap": 0.32882,
+    "rating_mean": 1.65217,
+    "est_change_30d": 0.00139,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 6.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": 0.0,
+    "insider_buys_6m": 10.0,
+    "insider_sales_6m": 1.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 21,
+    "eps_trend": {
+     "0q": {
+      "current": 2.30066,
+      "7daysAgo": 2.30066,
+      "30daysAgo": 2.28456,
+      "90daysAgo": 2.30738
+     },
+     "+1q": {
+      "current": 3.214,
+      "7daysAgo": 3.245,
+      "30daysAgo": 3.282,
+      "90daysAgo": 3.34092
+     },
+     "0y": {
+      "current": 11.4046,
+      "7daysAgo": 11.4046,
+      "30daysAgo": 11.38875,
+      "90daysAgo": 11.18105
+     },
+     "+1y": {
+      "current": 13.06276,
+      "7daysAgo": 13.06276,
+      "30daysAgo": 13.05007,
+      "90daysAgo": 12.88329
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 148.5,
+      "was": 147.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "CNH": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0475,
+    "short_days_to_cover": 2.59,
+    "short_change": -0.14362,
+    "target_gap": 0.25416,
+    "rating_mean": 1.88889,
+    "est_change_30d": 0.04349,
+    "est_change_7d": -0.00402,
+    "est_net_up_30d": -1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 2.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 18,
+    "eps_trend": {
+     "0q": {
+      "current": 0.09822,
+      "7daysAgo": 0.09809,
+      "30daysAgo": 0.09742,
+      "90daysAgo": 0.09809
+     },
+     "+1q": {
+      "current": 0.06707,
+      "7daysAgo": 0.06509,
+      "30daysAgo": 0.07139,
+      "90daysAgo": 0.07139
+     },
+     "0y": {
+      "current": 0.47053,
+      "7daysAgo": 0.47243,
+      "30daysAgo": 0.45092,
+      "90daysAgo": 0.45185
+     },
+     "+1y": {
+      "current": 0.67896,
+      "7daysAgo": 0.67202,
+      "30daysAgo": 0.68704,
+      "90daysAgo": 0.68633
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 15.0,
+      "was": 13.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Underweight",
+      "target": 12.0,
+      "was": 11.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 16.0,
+      "was": 17.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Overweight",
+      "target": 15.0,
+      "was": 14.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 17.5,
+      "was": 18.0
+     },
+     {
+      "date": "2026-11-10",
+      "firm": "Baird",
+      "action": "main",
+      "to": "Outperform",
+      "target": 16.0,
+      "was": 15.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "CRWD": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0223,
+    "short_days_to_cover": 2.44,
+    "short_change": -0.05816,
+    "target_gap": 0.19169,
+    "rating_mean": 1.61224,
+    "est_change_30d": 0.02104,
+    "est_change_7d": 0.02113,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 2.0,
+    "insider_net_pct_6m": -0.098,
+    "insider_buys_6m": 17.0,
+    "insider_sales_6m": 103.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 9000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 48,
+    "eps_trend": {
+     "0q": {
+      "current": 0.36071,
+      "7daysAgo": 0.35708,
+      "30daysAgo": 0.35708,
+      "90daysAgo": 0.35714
+     },
+     "+1q": {
+      "current": 0.36307,
+      "7daysAgo": 0.35566,
+      "30daysAgo": 0.35539,
+      "90daysAgo": 0.35407
+     },
+     "0y": {
+      "current": 1.28323,
+      "7daysAgo": 1.25668,
+      "30daysAgo": 1.25679,
+      "90daysAgo": 1.31233
+     },
+     "+1y": {
+      "current": 1.65407,
+      "7daysAgo": 1.61123,
+      "30daysAgo": 1.61123,
+      "90daysAgo": 1.65243
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-09",
+      "firm": "Bernstein",
+      "action": "main",
+      "to": "Market Perform",
+      "target": 177.0,
+      "was": 132.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Deutsche Bank",
+      "action": "up",
+      "to": "Buy",
+      "target": 300.0,
+      "was": 240.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 9000000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "CVI": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1676,
+    "short_days_to_cover": 3.38,
+    "short_change": 0.11881,
+    "target_gap": 0.44594,
+    "rating_mean": 3.6,
+    "est_change_30d": 0.21206,
+    "est_change_7d": -0.01368,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4135,
+    "borrow_shares": 1700000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 4,
+    "eps_trend": {
+     "0q": {
+      "current": 1.63946,
+      "7daysAgo": 1.69946,
+      "30daysAgo": 1.56333,
+      "90daysAgo": 0.31902
+     },
+     "+1q": {
+      "current": 2.88,
+      "7daysAgo": 2.69,
+      "30daysAgo": 1.502,
+      "90daysAgo": 0.448
+     },
+     "0y": {
+      "current": 4.32635,
+      "7daysAgo": 4.38635,
+      "30daysAgo": 3.56942,
+      "90daysAgo": 0.11654
+     },
+     "+1y": {
+      "current": 8.02076,
+      "7daysAgo": 8.78434,
+      "30daysAgo": 4.55204,
+      "90daysAgo": 2.18866
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4135,
+     "rebate": 3.4665,
+     "shares": 1700000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "DELL": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.035,
+    "short_days_to_cover": 1.31,
+    "short_change": -0.17429,
+    "target_gap": 0.67764,
+    "rating_mean": 1.82759,
+    "est_change_30d": 0.15322,
+    "est_change_7d": 0.15667,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": 0.027,
+    "insider_buys_6m": 132.0,
+    "insider_sales_6m": 154.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 3700000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 25,
+    "eps_trend": {
+     "0q": {
+      "current": 8.58238,
+      "7daysAgo": 7.38547,
+      "30daysAgo": 7.44449,
+      "90daysAgo": 4.72541
+     },
+     "+1q": {
+      "current": 6.99667,
+      "7daysAgo": 6.098,
+      "30daysAgo": 6.105,
+      "90daysAgo": 4.616
+     },
+     "0y": {
+      "current": 29.86916,
+      "7daysAgo": 25.82351,
+      "30daysAgo": 25.90075,
+      "90daysAgo": 18.82044
+     },
+     "+1y": {
+      "current": 30.48959,
+      "7daysAgo": 28.48325,
+      "30daysAgo": 26.8056,
+      "90daysAgo": 20.15625
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 3700000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "DINO": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0368,
+    "short_days_to_cover": 2.3,
+    "short_change": -0.21421,
+    "target_gap": 0.37812,
+    "rating_mean": 2.52941,
+    "est_change_30d": 0.30745,
+    "est_change_7d": -0.01094,
+    "est_net_up_30d": 11.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": 0.012,
+    "insider_buys_6m": 12.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 2900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 16,
+    "eps_trend": {
+     "0q": {
+      "current": 7.03165,
+      "7daysAgo": 7.32022,
+      "30daysAgo": 6.01435,
+      "90daysAgo": 2.99223
+     },
+     "+1q": {
+      "current": 4.49675,
+      "7daysAgo": 4.82008,
+      "30daysAgo": 4.04682,
+      "90daysAgo": 1.94517
+     },
+     "0y": {
+      "current": 24.41146,
+      "7daysAgo": 24.68146,
+      "30daysAgo": 18.67104,
+      "90daysAgo": 13.48029
+     },
+     "+1y": {
+      "current": 16.8297,
+      "7daysAgo": 17.5222,
+      "30daysAgo": 15.14012,
+      "90daysAgo": 9.37352
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 130.0,
+      "was": 127.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 2900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "DK": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1451,
+    "short_days_to_cover": 4.78,
+    "short_change": 0.05396,
+    "target_gap": 0.52125,
+    "rating_mean": 2.14286,
+    "est_change_30d": 0.24277,
+    "est_change_7d": -0.04238,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 2.0,
+    "insider_net_pct_6m": -0.194,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 17.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 600000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 14,
+    "eps_trend": {
+     "0q": {
+      "current": 5.77664,
+      "7daysAgo": 6.19028,
+      "30daysAgo": 4.66011,
+      "90daysAgo": 2.3038
+     },
+     "+1q": {
+      "current": 3.71991,
+      "7daysAgo": 3.94791,
+      "30daysAgo": 3.56621,
+      "90daysAgo": 1.26712
+     },
+     "0y": {
+      "current": 22.73475,
+      "7daysAgo": 23.74082,
+      "30daysAgo": 18.29362,
+      "90daysAgo": 11.93916
+     },
+     "+1y": {
+      "current": 11.54456,
+      "7daysAgo": 12.20122,
+      "30daysAgo": 9.08826,
+      "90daysAgo": 4.48907
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-11",
+      "firm": "Freedom Broker",
+      "action": "up",
+      "to": "Buy",
+      "target": 88.0,
+      "was": 86.0
+     },
+     {
+      "date": "2026-11-09",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 70.0,
+      "was": 62.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 600000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "DLTR": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0677,
+    "short_days_to_cover": 4.71,
+    "short_change": 0.03268,
+    "target_gap": 0.00154,
+    "rating_mean": 2.53333,
+    "est_change_30d": 0.02782,
+    "est_change_7d": 0.02734,
+    "est_net_up_30d": -1.0,
+    "rating_net_30d": -1.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": -0.846,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 3000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 27,
+    "eps_trend": {
+     "0q": {
+      "current": 2.58623,
+      "7daysAgo": 2.61206,
+      "30daysAgo": 2.6114,
+      "90daysAgo": 2.66787
+     },
+     "+1q": {
+      "current": 1.91944,
+      "7daysAgo": 1.9385,
+      "30daysAgo": 1.93303,
+      "90daysAgo": 1.92154
+     },
+     "0y": {
+      "current": 8.14597,
+      "7daysAgo": 7.92917,
+      "30daysAgo": 7.92552,
+      "90daysAgo": 7.50052
+     },
+     "+1y": {
+      "current": 7.98529,
+      "7daysAgo": 7.8869,
+      "30daysAgo": 7.89356,
+      "90daysAgo": 7.85364
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-05",
+      "firm": "Loop Capital",
+      "action": "down",
+      "to": "Hold",
+      "target": 140.0,
+      "was": 140.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 3000000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "EC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0297,
+    "short_days_to_cover": 3.98,
+    "short_change": -0.04304,
+    "target_gap": 0.17848,
+    "rating_mean": 3.45455,
+    "est_change_30d": 0.10605,
+    "est_change_7d": -0.00151,
+    "est_net_up_30d": 3.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 1.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 4.3376,
+    "borrow_shares": 450000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 11,
+    "eps_trend": {
+     "0q": {
+      "current": 0.83084,
+      "7daysAgo": 0.6703,
+      "30daysAgo": 0.6703,
+      "90daysAgo": 0.364
+     },
+     "+1q": {
+      "current": 0.338,
+      "7daysAgo": 0.604,
+      "30daysAgo": 0.544,
+      "90daysAgo": 0.44
+     },
+     "0y": {
+      "current": 2.62,
+      "7daysAgo": 2.62395,
+      "30daysAgo": 2.3688,
+      "90daysAgo": 2.13211
+     },
+     "+1y": {
+      "current": 1.83558,
+      "7daysAgo": 2.06293,
+      "30daysAgo": 1.88478,
+      "90daysAgo": 1.53043
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-29",
+      "firm": "Jefferies",
+      "action": "up",
+      "to": "Hold",
+      "target": 19.0,
+      "was": 9.0
+     }
+    ],
+    "borrow": {
+     "fee": 4.3376,
+     "rebate": -0.4576,
+     "shares": 450000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "GATX": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1027,
+    "short_days_to_cover": 9.66,
+    "short_change": -0.00537,
+    "target_gap": 0.17565,
+    "rating_mean": 1.0,
+    "est_change_30d": 0.01965,
+    "est_change_7d": 0.00069,
+    "est_net_up_30d": 4.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": 0.025,
+    "insider_buys_6m": 23.0,
+    "insider_sales_6m": 7.0,
+    "borrow_fee": 0.2663,
+    "borrow_shares": 300000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 3,
+    "eps_trend": {
+     "0q": {
+      "current": 2.31523,
+      "7daysAgo": 2.30892,
+      "30daysAgo": 2.57291,
+      "90daysAgo": 2.5727
+     },
+     "+1q": {
+      "current": 2.70295,
+      "7daysAgo": 2.6253,
+      "30daysAgo": 2.69427,
+      "90daysAgo": 2.69548
+     },
+     "0y": {
+      "current": 10.42887,
+      "7daysAgo": 10.42166,
+      "30daysAgo": 10.22791,
+      "90daysAgo": 10.22798
+     },
+     "+1y": {
+      "current": 11.27459,
+      "7daysAgo": 11.30594,
+      "30daysAgo": 11.25806,
+      "90daysAgo": 11.27061
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-05",
+      "firm": "Susquehanna",
+      "action": "main",
+      "to": "Positive",
+      "target": 220.0,
+      "was": 218.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2663,
+     "rebate": 3.6137,
+     "shares": 300000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "GLXY": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1979,
+    "short_days_to_cover": 3.43,
+    "short_change": -0.05704,
+    "target_gap": 1.94658,
+    "rating_mean": 1.4375,
+    "est_change_30d": 0.91761,
+    "est_change_7d": -1.96198,
+    "est_net_up_30d": 3.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -3.0,
+    "insider_net_pct_6m": 0.243,
+    "insider_buys_6m": 21.0,
+    "insider_sales_6m": 5.0,
+    "borrow_fee": 0.3321,
+    "borrow_shares": 1200000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 16,
+    "eps_trend": {
+     "0q": {
+      "current": -0.07917,
+      "7daysAgo": -0.0825,
+      "30daysAgo": -0.19083,
+      "90daysAgo": -0.03636
+     },
+     "+1q": {
+      "current": 0.01654,
+      "7daysAgo": 0.01018,
+      "30daysAgo": -0.06636,
+      "90daysAgo": -0.132
+     },
+     "0y": {
+      "current": -0.06232,
+      "7daysAgo": -0.02104,
+      "30daysAgo": -0.75643,
+      "90daysAgo": -0.78933
+     },
+     "+1y": {
+      "current": -0.21727,
+      "7daysAgo": -0.22727,
+      "30daysAgo": -0.46455,
+      "90daysAgo": -0.37636
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-09",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 27.0,
+      "was": 43.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Chardan Capital",
+      "action": "main",
+      "to": "Buy",
+      "target": 27.0,
+      "was": 35.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "Canaccord Genuity",
+      "action": "main",
+      "to": "Buy",
+      "target": 50.0,
+      "was": 50.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "Rosenblatt",
+      "action": "main",
+      "to": "Buy",
+      "target": 30.0,
+      "was": 30.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "HC Wainwright & Co.",
+      "action": "main",
+      "to": "Buy",
+      "target": 36.0,
+      "was": 40.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.3321,
+     "rebate": 3.5479,
+     "shares": 1200000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "HL": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0,
+    "short_days_to_cover": 0.0,
+    "short_change": -0.41982,
+    "target_gap": 0.89495,
+    "rating_mean": 2.3,
+    "est_change_30d": 0.03236,
+    "est_change_7d": -0.02871,
+    "est_net_up_30d": -2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -1.0,
+    "insider_net_pct_6m": 0.071,
+    "insider_buys_6m": 14.0,
+    "insider_sales_6m": 1.0,
+    "borrow_fee": 0.2661,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": 0.13757,
+      "7daysAgo": 0.14676,
+      "30daysAgo": 0.1503,
+      "90daysAgo": 0.21352
+     },
+     "+1q": {
+      "current": 0.23333,
+      "7daysAgo": 0.24,
+      "30daysAgo": 0.26,
+      "90daysAgo": 0.26
+     },
+     "0y": {
+      "current": 0.73556,
+      "7daysAgo": 0.7573,
+      "30daysAgo": 0.7125,
+      "90daysAgo": 0.82147
+     },
+     "+1y": {
+      "current": 0.90111,
+      "7daysAgo": 0.91145,
+      "30daysAgo": 0.95111,
+      "90daysAgo": 1.06385
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Scotiabank",
+      "action": "main",
+      "to": "Sector Perform",
+      "target": 20.0,
+      "was": 21.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2661,
+     "rebate": 3.6139,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "IP": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1676,
+    "short_days_to_cover": 8.44,
+    "short_change": 0.03651,
+    "target_gap": 0.31858,
+    "rating_mean": 1.72727,
+    "est_change_30d": -0.17776,
+    "est_change_7d": 0.00523,
+    "est_net_up_30d": -8.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -3.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4301,
+    "borrow_shares": 2200000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 10,
+    "eps_trend": {
+     "0q": {
+      "current": 0.42493,
+      "7daysAgo": 0.42493,
+      "30daysAgo": 0.7705,
+      "90daysAgo": 0.82492
+     },
+     "+1q": {
+      "current": 0.51764,
+      "7daysAgo": 0.51764,
+      "30daysAgo": 0.59531,
+      "90daysAgo": 0.59207
+     },
+     "0y": {
+      "current": 1.05609,
+      "7daysAgo": 1.0506,
+      "30daysAgo": 1.28441,
+      "90daysAgo": 1.34423
+     },
+     "+1y": {
+      "current": 2.74066,
+      "7daysAgo": 2.74999,
+      "30daysAgo": 3.0872,
+      "90daysAgo": 2.9898
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-30",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 41.0,
+      "was": 47.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 51.0,
+      "was": 62.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 39.0,
+      "was": 41.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4301,
+     "rebate": 3.4499,
+     "shares": 2200000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "ITUB": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0101,
+    "short_days_to_cover": 1.51,
+    "short_change": 0.80277,
+    "target_gap": 0.2391,
+    "rating_mean": 2.0,
+    "est_change_30d": -0.09982,
+    "est_change_7d": -0.05253,
+    "est_net_up_30d": -2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4135,
+    "borrow_shares": 7000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 8,
+    "eps_trend": {
+     "0q": {
+      "current": 0.22309,
+      "7daysAgo": 0.22309,
+      "30daysAgo": 0.23847,
+      "90daysAgo": 0.2438
+     },
+     "+1q": {
+      "current": 0.2287,
+      "7daysAgo": 0.2287,
+      "30daysAgo": 0.2287,
+      "90daysAgo": 0.24375
+     },
+     "0y": {
+      "current": 0.79954,
+      "7daysAgo": 0.84387,
+      "30daysAgo": 0.8882,
+      "90daysAgo": 0.89068
+     },
+     "+1y": {
+      "current": 0.8652,
+      "7daysAgo": 0.9117,
+      "30daysAgo": 0.96972,
+      "90daysAgo": 1.00159
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4135,
+     "rebate": 3.4665,
+     "shares": 7000000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "JPM": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.009,
+    "short_days_to_cover": 3.37,
+    "short_change": -0.06886,
+    "target_gap": 0.17968,
+    "rating_mean": 2.03846,
+    "est_change_30d": -0.00555,
+    "est_change_7d": -0.00449,
+    "est_net_up_30d": -4.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": -0.001,
+    "insider_buys_6m": 6.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 23,
+    "eps_trend": {
+     "0q": {
+      "current": 5.85966,
+      "7daysAgo": 5.85966,
+      "30daysAgo": 5.92149,
+      "90daysAgo": 5.9475
+     },
+     "+1q": {
+      "current": 6.24161,
+      "7daysAgo": 6.24327,
+      "30daysAgo": 6.24327,
+      "90daysAgo": 6.12945
+     },
+     "0y": {
+      "current": 23.91318,
+      "7daysAgo": 24.02101,
+      "30daysAgo": 24.04652,
+      "90daysAgo": 24.12453
+     },
+     "+1y": {
+      "current": 25.57306,
+      "7daysAgo": 25.57306,
+      "30daysAgo": 25.50124,
+      "90daysAgo": 24.95399
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 400.0,
+      "was": 395.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "LI": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.054,
+    "short_days_to_cover": 9.79,
+    "short_change": -0.04315,
+    "target_gap": 0.25173,
+    "rating_mean": 2.375,
+    "est_change_30d": 0.21762,
+    "est_change_7d": 0.21762,
+    "est_net_up_30d": -1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.8816,
+    "borrow_shares": 3400000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 23,
+    "eps_trend": {
+     "0q": {
+      "current": -0.167,
+      "7daysAgo": 0.57533,
+      "30daysAgo": 0.57533,
+      "90daysAgo": 0.76867
+     },
+     "+1q": {
+      "current": 0.02,
+      "7daysAgo": -0.15,
+      "30daysAgo": -0.15,
+      "90daysAgo": -0.15
+     },
+     "0y": {
+      "current": -3.153,
+      "7daysAgo": -4.03,
+      "30daysAgo": -4.03,
+      "90daysAgo": -3.58
+     },
+     "+1y": {
+      "current": 1.7974,
+      "7daysAgo": 1.185,
+      "30daysAgo": 1.185,
+      "90daysAgo": 5.31975
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.8816,
+     "rebate": 2.9984,
+     "shares": 3400000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "MPC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0247,
+    "short_days_to_cover": 2.52,
+    "short_change": -0.19318,
+    "target_gap": 0.29141,
+    "rating_mean": 2.33333,
+    "est_change_30d": 0.01582,
+    "est_change_7d": -0.02727,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 3.0,
+    "insider_net_pct_6m": -0.014,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 7.0,
+    "borrow_fee": 0.3471,
+    "borrow_shares": 2600000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 17,
+    "eps_trend": {
+     "0q": {
+      "current": 22.00944,
+      "7daysAgo": 23.84255,
+      "30daysAgo": 21.76652,
+      "90daysAgo": 11.43762
+     },
+     "+1q": {
+      "current": 14.87949,
+      "7daysAgo": 15.7789,
+      "30daysAgo": 16.20505,
+      "90daysAgo": 6.70979
+     },
+     "0y": {
+      "current": 67.52906,
+      "7daysAgo": 69.42243,
+      "30daysAgo": 66.47771,
+      "90daysAgo": 50.78455
+     },
+     "+1y": {
+      "current": 57.64019,
+      "7daysAgo": 60.14361,
+      "30daysAgo": 60.30776,
+      "90daysAgo": 32.61416
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-05",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Overweight",
+      "target": 466.0,
+      "was": 462.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Overweight",
+      "target": 564.0,
+      "was": 560.0
+     },
+     {
+      "date": "2026-11-04",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 458.0,
+      "was": 453.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.3471,
+     "rebate": 3.5329,
+     "shares": 2600000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "OSK": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0578,
+    "short_days_to_cover": 4.09,
+    "short_change": 0.21304,
+    "target_gap": 0.1302,
+    "rating_mean": 1.94444,
+    "est_change_30d": -0.17476,
+    "est_change_7d": 3e-05,
+    "est_net_up_30d": -10.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -2.0,
+    "insider_net_pct_6m": 0.033,
+    "insider_buys_6m": 2.0,
+    "insider_sales_6m": 1.0,
+    "borrow_fee": 0.4135,
+    "borrow_shares": 1300000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 17,
+    "eps_trend": {
+     "0q": {
+      "current": 2.71568,
+      "7daysAgo": 2.71598,
+      "30daysAgo": 3.85589,
+      "90daysAgo": 3.83951
+     },
+     "+1q": {
+      "current": 1.77173,
+      "7daysAgo": 1.77173,
+      "30daysAgo": 2.12818,
+      "90daysAgo": 2.25181
+     },
+     "0y": {
+      "current": 8.85198,
+      "7daysAgo": 8.85174,
+      "30daysAgo": 10.72651,
+      "90daysAgo": 10.74299
+     },
+     "+1y": {
+      "current": 12.72936,
+      "7daysAgo": 12.72908,
+      "30daysAgo": 14.02808,
+      "90daysAgo": 13.98439
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 168.0,
+      "was": 182.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 139.0,
+      "was": 147.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 140.0,
+      "was": 135.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "DA Davidson",
+      "action": "main",
+      "to": "Buy",
+      "target": 164.0,
+      "was": 168.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 145.0,
+      "was": 132.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 161.0,
+      "was": 174.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4135,
+     "rebate": 3.4665,
+     "shares": 1300000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PANW": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0246,
+    "short_days_to_cover": 3.27,
+    "short_change": -0.05843,
+    "target_gap": 0.15718,
+    "rating_mean": 1.62963,
+    "est_change_30d": 0.02296,
+    "est_change_7d": 0.02413,
+    "est_net_up_30d": 27.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -1.0,
+    "insider_net_pct_6m": 0.098,
+    "insider_buys_6m": 5.0,
+    "insider_sales_6m": 20.0,
+    "borrow_fee": 0.4263,
+    "borrow_shares": 3400000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 51,
+    "eps_trend": {
+     "0q": {
+      "current": 1.00535,
+      "7daysAgo": 1.00521,
+      "30daysAgo": 1.00491,
+      "90daysAgo": 0.99404
+     },
+     "+1q": {
+      "current": 0.35625,
+      "7daysAgo": 0.36995,
+      "30daysAgo": 0.36995,
+      "90daysAgo": 0.23768
+     },
+     "0y": {
+      "current": 4.28006,
+      "7daysAgo": 4.17922,
+      "30daysAgo": 4.184,
+      "90daysAgo": 4.12512
+     },
+     "+1y": {
+      "current": 2.15596,
+      "7daysAgo": 2.12612,
+      "30daysAgo": 2.21057,
+      "90daysAgo": 2.28268
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-12",
+      "firm": "Jefferies",
+      "action": "main",
+      "to": "Buy",
+      "target": 400.0,
+      "was": 450.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4263,
+     "rebate": 3.4537,
+     "shares": 3400000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PARR": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1044,
+    "short_days_to_cover": 4.3,
+    "short_change": -0.07992,
+    "target_gap": 0.55359,
+    "rating_mean": 2.25,
+    "est_change_30d": 0.10053,
+    "est_change_7d": -0.02795,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": -0.076,
+    "insider_buys_6m": 10.0,
+    "insider_sales_6m": 8.0,
+    "borrow_fee": 0.4133,
+    "borrow_shares": 1100000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 8,
+    "eps_trend": {
+     "0q": {
+      "current": 7.31348,
+      "7daysAgo": 7.49514,
+      "30daysAgo": 6.98268,
+      "90daysAgo": 3.86269
+     },
+     "+1q": {
+      "current": 4.17,
+      "7daysAgo": 4.35667,
+      "30daysAgo": 4.764,
+      "90daysAgo": 2.175
+     },
+     "0y": {
+      "current": 26.91222,
+      "7daysAgo": 27.68592,
+      "30daysAgo": 24.45377,
+      "90daysAgo": 19.28338
+     },
+     "+1y": {
+      "current": 15.94815,
+      "7daysAgo": 16.57387,
+      "30daysAgo": 16.3475,
+      "90daysAgo": 11.81722
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4133,
+     "rebate": 3.4667,
+     "shares": 1100000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PBF": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.1245,
+    "short_days_to_cover": 4.28,
+    "short_change": 0.0284,
+    "target_gap": 0.40752,
+    "rating_mean": 3.33333,
+    "est_change_30d": 0.10249,
+    "est_change_7d": -0.01759,
+    "est_net_up_30d": 9.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 2.0,
+    "insider_net_pct_6m": -0.224,
+    "insider_buys_6m": 18.0,
+    "insider_sales_6m": 34.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 3900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 14,
+    "eps_trend": {
+     "0q": {
+      "current": 8.46506,
+      "7daysAgo": 9.12215,
+      "30daysAgo": 7.75379,
+      "90daysAgo": 3.8937
+     },
+     "+1q": {
+      "current": 4.70141,
+      "7daysAgo": 5.20323,
+      "30daysAgo": 5.67346,
+      "90daysAgo": 2.65723
+     },
+     "0y": {
+      "current": 26.89777,
+      "7daysAgo": 27.37931,
+      "30daysAgo": 24.39719,
+      "90daysAgo": 17.97351
+     },
+     "+1y": {
+      "current": 17.3975,
+      "7daysAgo": 17.3975,
+      "30daysAgo": 18.5575,
+      "90daysAgo": 11.0
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "Freedom Broker",
+      "action": "up",
+      "to": "Hold",
+      "target": 63.0,
+      "was": 55.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Neutral",
+      "target": 97.0,
+      "was": 94.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 3900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PBR": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0213,
+    "short_days_to_cover": 1.5,
+    "short_change": -0.25116,
+    "target_gap": 0.36329,
+    "rating_mean": 1.71429,
+    "est_change_30d": 0.06402,
+    "est_change_7d": 0.15865,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 13,
+    "eps_trend": {
+     "0q": {
+      "current": 1.72,
+      "7daysAgo": 0.0,
+      "30daysAgo": 0.0,
+      "90daysAgo": 0.0
+     },
+     "+1q": {
+      "current": 1.374,
+      "7daysAgo": 1.355,
+      "30daysAgo": 1.2195,
+      "90daysAgo": 0.9275
+     },
+     "0y": {
+      "current": 4.82,
+      "7daysAgo": 4.16,
+      "30daysAgo": 4.53,
+      "90daysAgo": 4.16
+     },
+     "+1y": {
+      "current": 4.11,
+      "7daysAgo": 4.265,
+      "30daysAgo": 4.13667,
+      "90daysAgo": 3.98667
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PCAR": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0286,
+    "short_days_to_cover": 3.41,
+    "short_change": 0.03969,
+    "target_gap": 0.15888,
+    "rating_mean": 2.10526,
+    "est_change_30d": -0.01467,
+    "est_change_7d": 0.00078,
+    "est_net_up_30d": -7.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": -4.0,
+    "insider_net_pct_6m": 0.021,
+    "insider_buys_6m": 4.0,
+    "insider_sales_6m": 4.0,
+    "borrow_fee": 0.4135,
+    "borrow_shares": 4600000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 16,
+    "eps_trend": {
+     "0q": {
+      "current": 1.68052,
+      "7daysAgo": 1.67357,
+      "30daysAgo": 1.75731,
+      "90daysAgo": 1.73693
+     },
+     "+1q": {
+      "current": 1.46167,
+      "7daysAgo": 1.42,
+      "30daysAgo": 1.6149,
+      "90daysAgo": 1.6174
+     },
+     "0y": {
+      "current": 5.87026,
+      "7daysAgo": 5.86566,
+      "30daysAgo": 5.95765,
+      "90daysAgo": 5.97158
+     },
+     "+1y": {
+      "current": 6.86863,
+      "7daysAgo": 6.92291,
+      "30daysAgo": 7.13942,
+      "90daysAgo": 7.18495
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 134.0,
+      "was": 162.0
+     },
+     {
+      "date": "2026-10-31",
+      "firm": "Freedom Broker",
+      "action": "up",
+      "to": "Buy",
+      "target": 120.0,
+      "was": 132.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 132.0,
+      "was": 142.0
+     },
+     {
+      "date": "2026-10-28",
+      "firm": "Truist Securities",
+      "action": "main",
+      "to": "Hold",
+      "target": 124.0,
+      "was": 125.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4135,
+     "rebate": 3.4665,
+     "shares": 4600000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PKG": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0334,
+    "short_days_to_cover": 3.31,
+    "short_change": -0.19293,
+    "target_gap": 0.09054,
+    "est_change_30d": 0.0095,
+    "est_change_7d": -0.00013,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 800000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 9,
+    "eps_trend": {
+     "0q": {
+      "current": 2.81572,
+      "7daysAgo": 2.81573,
+      "30daysAgo": 2.80576,
+      "90daysAgo": 2.80085
+     },
+     "+1q": {
+      "current": 3.12824,
+      "7daysAgo": 3.12826,
+      "30daysAgo": 2.74871,
+      "90daysAgo": 2.7148
+     },
+     "0y": {
+      "current": 10.6106,
+      "7daysAgo": 10.61193,
+      "30daysAgo": 10.51076,
+      "90daysAgo": 10.49928
+     },
+     "+1y": {
+      "current": 14.39463,
+      "7daysAgo": 14.23354,
+      "30daysAgo": 13.33605,
+      "90daysAgo": 12.93639
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 800000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PNC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0203,
+    "short_days_to_cover": 4.13,
+    "short_change": -0.02086,
+    "target_gap": 0.19626,
+    "rating_mean": 1.82609,
+    "est_change_30d": -0.00074,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": -0.039,
+    "insider_buys_6m": 1.0,
+    "insider_sales_6m": 6.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 3800000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 21,
+    "eps_trend": {
+     "0q": {
+      "current": 5.03078,
+      "7daysAgo": 5.03078,
+      "30daysAgo": 5.0586,
+      "90daysAgo": 5.09928
+     },
+     "+1q": {
+      "current": 4.99317,
+      "7daysAgo": 5.01344,
+      "30daysAgo": 5.0371,
+      "90daysAgo": 5.03751
+     },
+     "0y": {
+      "current": 18.95597,
+      "7daysAgo": 18.95597,
+      "30daysAgo": 18.97001,
+      "90daysAgo": 18.88372
+     },
+     "+1y": {
+      "current": 21.35275,
+      "7daysAgo": 21.35275,
+      "30daysAgo": 21.44597,
+      "90daysAgo": 21.51594
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 278.0,
+      "was": 286.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Oppenheimer",
+      "action": "main",
+      "to": "Outperform",
+      "target": 274.0,
+      "was": 269.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 259.0,
+      "was": 258.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 3800000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "PSX": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0267,
+    "short_days_to_cover": 2.98,
+    "short_change": 0.3273,
+    "target_gap": 0.21614,
+    "rating_mean": 2.1,
+    "est_change_30d": 0.06166,
+    "est_change_7d": -0.00673,
+    "est_net_up_30d": 12.0,
+    "rating_net_30d": 1.0,
+    "target_net_30d": 5.0,
+    "insider_net_pct_6m": -0.008,
+    "insider_buys_6m": 9.0,
+    "insider_sales_6m": 8.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 5700000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 19,
+    "eps_trend": {
+     "0q": {
+      "current": 10.89331,
+      "7daysAgo": 11.13109,
+      "30daysAgo": 10.6458,
+      "90daysAgo": 6.3698
+     },
+     "+1q": {
+      "current": 7.77823,
+      "7daysAgo": 8.14156,
+      "30daysAgo": 7.91837,
+      "90daysAgo": 4.42544
+     },
+     "0y": {
+      "current": 34.60651,
+      "7daysAgo": 34.84096,
+      "30daysAgo": 32.59668,
+      "90daysAgo": 25.77148
+     },
+     "+1y": {
+      "current": 31.17828,
+      "7daysAgo": 32.07978,
+      "30daysAgo": 30.35085,
+      "90daysAgo": 20.68967
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Neutral",
+      "target": 302.0,
+      "was": 297.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 290.0,
+      "was": 284.0
+     },
+     {
+      "date": "2026-10-31",
+      "firm": "Freedom Broker",
+      "action": "up",
+      "to": "Hold",
+      "target": 258.0,
+      "was": 173.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Overweight",
+      "target": 346.0,
+      "was": 345.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Piper Sandler",
+      "action": "main",
+      "to": "Neutral",
+      "target": 268.0,
+      "was": 264.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 5700000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "REGN": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.025,
+    "short_days_to_cover": 2.53,
+    "short_change": 0.14445,
+    "target_gap": 0.0093,
+    "rating_mean": 1.78571,
+    "est_change_30d": 0.1729,
+    "est_change_7d": 0.00013,
+    "est_net_up_30d": 23.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 15.0,
+    "insider_net_pct_6m": 0.025,
+    "insider_buys_6m": 16.0,
+    "insider_sales_6m": 15.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 1100000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 27,
+    "eps_trend": {
+     "0q": {
+      "current": 25.81452,
+      "7daysAgo": 25.39075,
+      "30daysAgo": 20.44426,
+      "90daysAgo": 15.60878
+     },
+     "+1q": {
+      "current": 15.88889,
+      "7daysAgo": 15.88889,
+      "30daysAgo": 12.79444,
+      "90daysAgo": 13.12375
+     },
+     "0y": {
+      "current": 69.02089,
+      "7daysAgo": 69.01224,
+      "30daysAgo": 58.8462,
+      "90daysAgo": 53.54745
+     },
+     "+1y": {
+      "current": 62.12389,
+      "7daysAgo": 62.124,
+      "30daysAgo": 50.6286,
+      "90daysAgo": 50.40074
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "Leerink Partners",
+      "action": "main",
+      "to": "Market Perform",
+      "target": 997.0,
+      "was": 835.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Bernstein",
+      "action": "main",
+      "to": "Market Perform",
+      "target": 812.0,
+      "was": 756.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 855.0,
+      "was": 779.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Truist Securities",
+      "action": "main",
+      "to": "Buy",
+      "target": 982.0,
+      "was": 780.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Sector Perform",
+      "target": 913.0,
+      "was": 810.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Guggenheim",
+      "action": "main",
+      "to": "Buy",
+      "target": 1100.0,
+      "was": 1030.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 925.0,
+      "was": 750.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 1075.0,
+      "was": 900.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Canaccord Genuity",
+      "action": "main",
+      "to": "Buy",
+      "target": 1175.0,
+      "was": 922.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Cantor Fitzgerald",
+      "action": "main",
+      "to": "Overweight",
+      "target": 980.0,
+      "was": 795.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Baird",
+      "action": "main",
+      "to": "Neutral",
+      "target": 875.0,
+      "was": 761.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "B of A Securities",
+      "action": "main",
+      "to": "Buy",
+      "target": 1030.0,
+      "was": 908.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 1100000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "SANM": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0539,
+    "short_days_to_cover": 1.49,
+    "short_change": -0.04855,
+    "target_gap": 0.80414,
+    "est_change_30d": 0.1901,
+    "est_change_7d": 0.19003,
+    "est_net_up_30d": 1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -1.0,
+    "insider_net_pct_6m": -0.005,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 4.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 850000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 4,
+    "eps_trend": {
+     "0q": {
+      "current": 3.67833,
+      "7daysAgo": 2.9475,
+      "30daysAgo": 3.01,
+      "90daysAgo": 3.01
+     },
+     "+1q": {
+      "current": 3.58924,
+      "7daysAgo": 2.9,
+      "30daysAgo": 2.9,
+      "90daysAgo": 2.9
+     },
+     "0y": {
+      "current": 16.83101,
+      "7daysAgo": 14.14332,
+      "30daysAgo": 14.1425,
+      "90daysAgo": 13.94169
+     },
+     "+1y": {
+      "current": 11.84333,
+      "7daysAgo": 11.62,
+      "30daysAgo": 11.62,
+      "90daysAgo": 11.62
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 230.0,
+      "was": 270.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 850000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "SJM": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0377,
+    "short_days_to_cover": 3.31,
+    "short_change": -0.03944,
+    "target_gap": 0.10574,
+    "rating_mean": 2.10526,
+    "est_change_30d": 0.02534,
+    "est_change_7d": 0.0247,
+    "est_net_up_30d": 2.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": 0.02,
+    "insider_buys_6m": 8.0,
+    "insider_sales_6m": 7.0,
+    "borrow_fee": 0.2956,
+    "borrow_shares": 1200000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 16,
+    "eps_trend": {
+     "0q": {
+      "current": 2.30799,
+      "7daysAgo": 2.54234,
+      "30daysAgo": 2.5444,
+      "90daysAgo": 2.53226
+     },
+     "+1q": {
+      "current": 2.36828,
+      "7daysAgo": 2.51971,
+      "30daysAgo": 2.51996,
+      "90daysAgo": 2.5471
+     },
+     "0y": {
+      "current": 11.04564,
+      "7daysAgo": 10.7794,
+      "30daysAgo": 10.77271,
+      "90daysAgo": 10.68938
+     },
+     "+1y": {
+      "current": 9.19286,
+      "7daysAgo": 9.21857,
+      "30daysAgo": 9.21286,
+      "90daysAgo": 9.01
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.2956,
+     "rebate": 3.5844,
+     "shares": 1200000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "SW": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0514,
+    "short_days_to_cover": 4.6,
+    "short_change": 0.01852,
+    "target_gap": 0.29284,
+    "est_change_30d": -0.20404,
+    "est_change_7d": -0.16051,
+    "est_net_up_30d": -7.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -4.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4784,
+    "borrow_shares": 2900000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 15,
+    "eps_trend": {
+     "0q": {
+      "current": 0.55929,
+      "7daysAgo": 0.55918,
+      "30daysAgo": 0.73433,
+      "90daysAgo": 0.77218
+     },
+     "+1q": {
+      "current": 0.49667,
+      "7daysAgo": 0.58,
+      "30daysAgo": 0.74,
+      "90daysAgo": 0.73667
+     },
+     "0y": {
+      "current": 1.44464,
+      "7daysAgo": 1.72085,
+      "30daysAgo": 1.81496,
+      "90daysAgo": 1.98983
+     },
+     "+1y": {
+      "current": 3.22122,
+      "7daysAgo": 3.29972,
+      "30daysAgo": 3.43435,
+      "90daysAgo": 3.3558
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-03",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Overweight",
+      "target": 55.0,
+      "was": 56.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Citigroup",
+      "action": "main",
+      "to": "Buy",
+      "target": 50.0,
+      "was": 54.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 57.0,
+      "was": 69.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Truist Securities",
+      "action": "main",
+      "to": "Buy",
+      "target": 51.0,
+      "was": 54.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4784,
+     "rebate": 3.4016,
+     "shares": 2900000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "TEX": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0765,
+    "short_days_to_cover": 4.36,
+    "short_change": -0.07478,
+    "target_gap": 0.25401,
+    "rating_mean": 2.0,
+    "est_change_30d": -0.01527,
+    "est_change_7d": -0.00084,
+    "est_net_up_30d": -9.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -1.0,
+    "insider_net_pct_6m": 0.011,
+    "insider_buys_6m": 21.0,
+    "insider_sales_6m": 2.0,
+    "borrow_fee": 0.2782,
+    "borrow_shares": 1800000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 12,
+    "eps_trend": {
+     "0q": {
+      "current": 1.06187,
+      "7daysAgo": 1.07165,
+      "30daysAgo": 1.20644,
+      "90daysAgo": 1.23458
+     },
+     "+1q": {
+      "current": 1.17345,
+      "7daysAgo": 1.16051,
+      "30daysAgo": 1.115,
+      "90daysAgo": 1.13857
+     },
+     "0y": {
+      "current": 4.91544,
+      "7daysAgo": 4.91955,
+      "30daysAgo": 4.99164,
+      "90daysAgo": 5.0234
+     },
+     "+1y": {
+      "current": 5.83389,
+      "7daysAgo": 5.83532,
+      "30daysAgo": 5.92962,
+      "90daysAgo": 5.96658
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-10",
+      "firm": "Evercore ISI Group",
+      "action": "main",
+      "to": "Outperform",
+      "target": 79.0,
+      "was": 83.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 84.0,
+      "was": 86.0
+     },
+     {
+      "date": "2026-10-29",
+      "firm": "Truist Securities",
+      "action": "reit",
+      "to": "Buy",
+      "target": 87.0,
+      "was": 85.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.2782,
+     "rebate": 3.6018,
+     "shares": 1800000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "TFC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0264,
+    "short_days_to_cover": 4.0,
+    "short_change": 0.11976,
+    "target_gap": 0.11291,
+    "rating_mean": 2.54545,
+    "est_change_30d": -0.01293,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": -8.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": 0.006,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.4298,
+    "borrow_shares": 9100000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 19,
+    "eps_trend": {
+     "0q": {
+      "current": 1.22815,
+      "7daysAgo": 1.22815,
+      "30daysAgo": 1.22449,
+      "90daysAgo": 1.20946
+     },
+     "+1q": {
+      "current": 1.12007,
+      "7daysAgo": 1.11708,
+      "30daysAgo": 1.10916,
+      "90daysAgo": 1.12544
+     },
+     "0y": {
+      "current": 4.14149,
+      "7daysAgo": 4.14149,
+      "30daysAgo": 4.19572,
+      "90daysAgo": 4.62407
+     },
+     "+1y": {
+      "current": 4.86792,
+      "7daysAgo": 4.86792,
+      "30daysAgo": 4.9176,
+      "90daysAgo": 5.00845
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Underweight",
+      "target": 51.5,
+      "was": 50.5
+     }
+    ],
+    "borrow": {
+     "fee": 0.4298,
+     "rebate": 3.4502,
+     "shares": 9100000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "TTC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0505,
+    "short_days_to_cover": 5.99,
+    "short_change": -0.06029,
+    "target_gap": 0.04796,
+    "est_change_30d": 0.00666,
+    "est_change_7d": -0.00029,
+    "est_net_up_30d": 5.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": -0.001,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.4135,
+    "borrow_shares": 3000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 5,
+    "eps_trend": {
+     "0q": {
+      "current": 0.97333,
+      "7daysAgo": 0.974,
+      "30daysAgo": 0.964,
+      "90daysAgo": 0.964
+     },
+     "+1q": {
+      "current": 0.875,
+      "7daysAgo": 0.8725,
+      "30daysAgo": 0.8725,
+      "90daysAgo": 0.8725
+     },
+     "0y": {
+      "current": 4.63667,
+      "7daysAgo": 4.638,
+      "30daysAgo": 4.606,
+      "90daysAgo": 4.606
+     },
+     "+1y": {
+      "current": 5.1,
+      "7daysAgo": 5.084,
+      "30daysAgo": 5.066,
+      "90daysAgo": 5.066
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4135,
+     "rebate": 3.4665,
+     "shares": 3000000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "USB": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0,
+    "short_days_to_cover": 0.0,
+    "short_change": -0.73626,
+    "target_gap": 0.17499,
+    "rating_mean": 1.79167,
+    "est_change_30d": 0.00204,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 17.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 3.0,
+    "insider_net_pct_6m": -0.009,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 3.0,
+    "borrow_fee": 0.4081,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 22,
+    "eps_trend": {
+     "0q": {
+      "current": 1.40933,
+      "7daysAgo": 1.40933,
+      "30daysAgo": 1.41053,
+      "90daysAgo": 1.38674
+     },
+     "+1q": {
+      "current": 1.31738,
+      "7daysAgo": 1.31738,
+      "30daysAgo": 1.31227,
+      "90daysAgo": 1.30922
+     },
+     "0y": {
+      "current": 5.28868,
+      "7daysAgo": 5.28868,
+      "30daysAgo": 5.27793,
+      "90daysAgo": 5.21481
+     },
+     "+1y": {
+      "current": 5.85789,
+      "7daysAgo": 5.85789,
+      "30daysAgo": 5.83517,
+      "90daysAgo": 5.79756
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 66.0,
+      "was": 64.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Oppenheimer",
+      "action": "main",
+      "to": "Outperform",
+      "target": 74.0,
+      "was": 73.0
+     },
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 65.5,
+      "was": 65.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4081,
+     "rebate": 3.4719,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "VALE": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0099,
+    "short_days_to_cover": 1.2,
+    "short_change": -0.26109,
+    "target_gap": 0.48615,
+    "rating_mean": 2.36,
+    "est_change_30d": -0.10286,
+    "est_change_7d": -0.04014,
+    "est_net_up_30d": -6.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": -4.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4083,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 24,
+    "eps_trend": {
+     "0q": {
+      "current": 0.5,
+      "7daysAgo": 0.45667,
+      "30daysAgo": 0.5075,
+      "90daysAgo": 0.5375
+     },
+     "+1q": {
+      "current": 0.31667,
+      "7daysAgo": 0.3475,
+      "30daysAgo": 0.375,
+      "90daysAgo": 0.4075
+     },
+     "0y": {
+      "current": 1.63027,
+      "7daysAgo": 1.69845,
+      "30daysAgo": 1.81718,
+      "90daysAgo": 1.88955
+     },
+     "+1y": {
+      "current": 1.809,
+      "7daysAgo": 1.873,
+      "30daysAgo": 1.89755,
+      "90daysAgo": 2.01355
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-03",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 13.0,
+      "was": 15.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Freedom Broker",
+      "action": "main",
+      "to": "Buy",
+      "target": 9.5,
+      "was": 12.0
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Neutral",
+      "target": 13.5,
+      "was": 14.5
+     },
+     {
+      "date": "2026-11-02",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 14.5,
+      "was": 15.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.4083,
+     "rebate": 3.4717,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "VLO": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0301,
+    "short_days_to_cover": 2.37,
+    "short_change": -0.10077,
+    "target_gap": 0.2801,
+    "rating_mean": 2.6,
+    "est_change_30d": -7e-05,
+    "est_change_7d": -0.00761,
+    "est_net_up_30d": 16.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_net_pct_6m": -0.007,
+    "insider_buys_6m": 3.0,
+    "insider_sales_6m": 2.0,
+    "borrow_fee": 0.3075,
+    "borrow_shares": 3100000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 19,
+    "eps_trend": {
+     "0q": {
+      "current": 19.50906,
+      "7daysAgo": 20.03906,
+      "30daysAgo": 19.74088,
+      "90daysAgo": 10.13725
+     },
+     "+1q": {
+      "current": 13.23736,
+      "7daysAgo": 13.87736,
+      "30daysAgo": 14.50905,
+      "90daysAgo": 6.82874
+     },
+     "0y": {
+      "current": 59.77639,
+      "7daysAgo": 60.23472,
+      "30daysAgo": 59.78033,
+      "90daysAgo": 42.8393
+     },
+     "+1y": {
+      "current": 49.85512,
+      "7daysAgo": 51.2229,
+      "30daysAgo": 52.1379,
+      "90daysAgo": 30.08322
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-02",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Equal-Weight",
+      "target": 420.0,
+      "was": 411.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.3075,
+     "rebate": 3.5725,
+     "shares": 3100000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "VRTX": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0259,
+    "short_days_to_cover": 3.67,
+    "short_change": 0.36123,
+    "target_gap": 0.05537,
+    "rating_mean": 1.625,
+    "est_change_30d": -0.03201,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 0.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 9.0,
+    "insider_net_pct_6m": -0.008,
+    "insider_buys_6m": 6.0,
+    "insider_sales_6m": 13.0,
+    "borrow_fee": 0.25,
+    "borrow_shares": 1300000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 28,
+    "eps_trend": {
+     "0q": {
+      "current": 4.1024,
+      "7daysAgo": 4.1024,
+      "30daysAgo": 4.63396,
+      "90daysAgo": 4.93739
+     },
+     "+1q": {
+      "current": 4.68125,
+      "7daysAgo": 4.68125,
+      "30daysAgo": 4.784,
+      "90daysAgo": 4.85333
+     },
+     "0y": {
+      "current": 18.135,
+      "7daysAgo": 18.135,
+      "30daysAgo": 18.73466,
+      "90daysAgo": 19.03728
+     },
+     "+1y": {
+      "current": 19.91716,
+      "7daysAgo": 19.91716,
+      "30daysAgo": 20.39659,
+      "90daysAgo": 21.99736
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-11-04",
+      "firm": "Barclays",
+      "action": "main",
+      "to": "Overweight",
+      "target": 626.0,
+      "was": 617.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Overweight",
+      "target": 570.0,
+      "was": 560.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Goldman Sachs",
+      "action": "main",
+      "to": "Buy",
+      "target": 725.0,
+      "was": 654.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Morgan Stanley",
+      "action": "main",
+      "to": "Overweight",
+      "target": 660.0,
+      "was": 665.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Scotiabank",
+      "action": "main",
+      "to": "Sector Outperform",
+      "target": 660.0,
+      "was": 558.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "UBS",
+      "action": "main",
+      "to": "Buy",
+      "target": 640.0,
+      "was": 615.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "TD Cowen",
+      "action": "main",
+      "to": "Buy",
+      "target": 575.0,
+      "was": 550.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Wells Fargo",
+      "action": "main",
+      "to": "Overweight",
+      "target": 650.0,
+      "was": 550.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "RBC Capital",
+      "action": "main",
+      "to": "Outperform",
+      "target": 600.0,
+      "was": 576.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Stifel",
+      "action": "main",
+      "to": "Hold",
+      "target": 563.0,
+      "was": 500.0
+     },
+     {
+      "date": "2026-11-03",
+      "firm": "Cantor Fitzgerald",
+      "action": "main",
+      "to": "Overweight",
+      "target": 619.0,
+      "was": 595.0
+     }
+    ],
+    "borrow": {
+     "fee": 0.25,
+     "rebate": 3.63,
+     "shares": 1300000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "WAB": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0271,
+    "short_days_to_cover": 3.24,
+    "short_change": -0.0692,
+    "target_gap": 0.16282,
+    "rating_mean": 1.41667,
+    "est_change_30d": 0.01152,
+    "est_change_7d": 0.0011,
+    "est_net_up_30d": 10.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 0.0,
+    "insider_net_pct_6m": -0.025,
+    "insider_buys_6m": 1.0,
+    "insider_sales_6m": 14.0,
+    "borrow_fee": 0.4088,
+    "borrow_shares": 1500000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 12,
+    "eps_trend": {
+     "0q": {
+      "current": 2.67693,
+      "7daysAgo": 2.67862,
+      "30daysAgo": 2.63834,
+      "90daysAgo": 2.64025
+     },
+     "+1q": {
+      "current": 2.94658,
+      "7daysAgo": 2.94658,
+      "30daysAgo": 2.9257,
+      "90daysAgo": 2.91796
+     },
+     "0y": {
+      "current": 10.99045,
+      "7daysAgo": 10.97835,
+      "30daysAgo": 10.86528,
+      "90daysAgo": 10.86295
+     },
+     "+1y": {
+      "current": 12.59817,
+      "7daysAgo": 12.5781,
+      "30daysAgo": 12.47636,
+      "90daysAgo": 12.44222
+     }
+    },
+    "rating_actions": [],
+    "borrow": {
+     "fee": 0.4088,
+     "rebate": 3.4712,
+     "shares": 1500000,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  },
+  "WFC": {
+   "at": "2026-11-26T23:45:05-05:00",
+   "facts": {
+    "short_pct_float": 0.0,
+    "short_days_to_cover": 0.0,
+    "short_change": 0.63672,
+    "target_gap": 0.20305,
+    "rating_mean": 1.77778,
+    "est_change_30d": -0.00011,
+    "est_change_7d": 0.0,
+    "est_net_up_30d": 1.0,
+    "rating_net_30d": 0.0,
+    "target_net_30d": 1.0,
+    "insider_buys_6m": 0.0,
+    "insider_sales_6m": 0.0,
+    "borrow_fee": 0.4002,
+    "borrow_shares": 10000000.0
+   },
+   "raw": {
+    "type": "EQUITY",
+    "short_as_of": "2026-11-12",
+    "analysts": 24,
+    "eps_trend": {
+     "0q": {
+      "current": 1.86388,
+      "7daysAgo": 1.86388,
+      "30daysAgo": 1.86599,
+      "90daysAgo": 1.86311
+     },
+     "+1q": {
+      "current": 1.79432,
+      "7daysAgo": 1.78653,
+      "30daysAgo": 1.78766,
+      "90daysAgo": 1.75858
+     },
+     "0y": {
+      "current": 7.34156,
+      "7daysAgo": 7.34156,
+      "30daysAgo": 7.3424,
+      "90daysAgo": 7.30556
+     },
+     "+1y": {
+      "current": 8.05513,
+      "7daysAgo": 8.05513,
+      "30daysAgo": 8.06034,
+      "90daysAgo": 7.96739
+     }
+    },
+    "rating_actions": [
+     {
+      "date": "2026-10-30",
+      "firm": "JP Morgan",
+      "action": "main",
+      "to": "Neutral",
+      "target": 92.0,
+      "was": 91.5
+     }
+    ],
+    "borrow": {
+     "fee": 0.4002,
+     "rebate": 3.4798,
+     "shares": 10000000,
+     "capped": true,
+     "as_of": "2026.11.26 23:33:58"
+    }
+   }
+  }
+ },
+ "runs": [
+  {
+   "at": "2026-11-26T23:45:05-05:00",
+   "pulled": [
+    "A",
+    "ADI",
+    "AGCO",
+    "ALSN",
+    "AMCR",
+    "AMGN",
+    "AVY",
+    "BAC",
+    "BALL",
+    "BBD",
+    "BBY",
+    "BURL",
+    "C",
+    "CNH",
+    "CRWD",
+    "CVI",
+    "DELL",
+    "DINO",
+    "DK",
+    "DLTR",
+    "EC",
+    "GATX",
+    "GLXY",
+    "HL",
+    "IP",
+    "ITUB",
+    "JPM",
+    "LI",
+    "MPC",
+    "OSK",
+    "PANW",
+    "PARR",
+    "PBF",
+    "PBR",
+    "PCAR",
+    "PKG",
+    "PNC",
+    "PSX",
+    "REGN",
+    "SANM",
+    "SJM",
+    "SW",
+    "TEX",
+    "TFC",
+    "TTC",
+    "USB",
+    "VALE",
+    "VLO",
+    "VRTX",
+    "WAB",
+    "WFC"
+   ],
+   "failed": []
+  }
+ ]
+}

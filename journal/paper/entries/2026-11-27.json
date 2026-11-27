@@ -1,0 +1,198 @@
+{
+ "session": "2026-11-27",
+ "handled": [
+  "night"
+ ],
+ "trades": [
+  {
+   "id": "2026-11-27-S01",
+   "book": "dynamic",
+   "source": "proposal 2026-11-27-P01",
+   "proposal_id": "2026-11-27-P01",
+   "conviction": 3,
+   "name": "LI",
+   "setup": "earnings_gap_held",
+   "direction": "long",
+   "why": "Vehicle margin went from 9.4% to 15.3% a quarter ahead of management's own target, cash flow turned positive and Q4 is guided to a profit; the stock took that over a soft volume guide, +11% on 3.5x volume closing near the high, and the 12-1 delivery figure should show a large step up from October because the guide was given with most of November known.",
+   "wrong_if": "Li Auto reports November deliveries under about 36,000 on 12-1 (the Q4 guide needs 40,000-43,000 a month); or it lowers the Q4 delivery guide of 110,000-115,000 or the Q4 profit target; or two or more covering brokers downgrade it after the print, inside the window.",
+   "entry_date": "2026-11-27",
+   "horizon_days": 4,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "LI",
+     "side": "long",
+     "shares": 2111,
+     "ref_price": 11.8402
+    },
+    {
+     "symbol": "FXI",
+     "side": "short",
+     "shares": 788,
+     "ref_price": 31.69
+    }
+   ],
+   "hedge": "FXI",
+   "pass": "night",
+   "first_session": "2026-11-27",
+   "lead": "LI",
+   "atr_pct": 0.0404,
+   "defer_regular": "queued for 8:35 AM CT: spread wider than 0.5% (LI 0.5%)"
+  },
+  {
+   "id": "2026-11-27-S02",
+   "book": "dynamic",
+   "source": "proposal 2026-11-27-P02",
+   "proposal_id": "2026-11-27-P02",
+   "conviction": 3,
+   "name": "ITUB",
+   "setup": "overnight_move",
+   "direction": "long",
+   "why": "Lula named Bradesco's chairman Luiz Trabuco finance minister on Thursday and the Planalto confirmed he accepted; Brazil's index rose 6.1% with long rates down more than 50 bp, it is still about 20% under its October peak after the election selloff, and a re-rating of the fiscal risk premium on a confirmed appointment usually takes more than one session. Itau is the cleanest bank to hold it in.",
+   "wrong_if": "Trabuco withdraws or Lula walks back the appointment; or Lula names an economic team or sets terms that the Brazilian press reports as overruling him on the surplus target; or the long-end swap rates and the real give back Thursday's move (rates retrace the 50 bp, USD/BRL back above about 5.80) on political pushback, inside the window.",
+   "entry_date": "2026-11-27",
+   "horizon_days": 5,
+   "stop": {
+    "spread_pct": -6.0
+   },
+   "notional": 25000,
+   "sizing": {
+    "risk_dollars": 1500,
+    "stop_pct": -6.0,
+    "limited_by": "risk"
+   },
+   "legs": [
+    {
+     "symbol": "ITUB",
+     "side": "long",
+     "shares": 3602,
+     "ref_price": 6.94
+    }
+   ],
+   "hedge": null,
+   "pass": "night",
+   "first_session": "2026-11-27",
+   "lead": "ITUB",
+   "atr_pct": 0.04212,
+   "defer_regular": "queued for 8:35 AM CT: spread wider than 0.5% (ITUB 0.8%)"
+  }
+ ],
+ "marks": {
+  "night": {
+   "at": "2026-11-26T22:35:48-05:00",
+   "source": "Yahoo, latest price in any session",
+   "prices": {
+    "A": 178.44,
+    "ADI": 335.87,
+    "AGCO": 106.62,
+    "ALSN": 123.15,
+    "AMCR": 45.0191,
+    "AMGN": 469.5,
+    "AVY": 191.64,
+    "BAC": 48.7345,
+    "BALL": 67.18,
+    "BBD": 2.46,
+    "BBY": 102.75,
+    "BURL": 250.06,
+    "C": 114.55,
+    "CIBR": 94.83,
+    "CNH": 11.9,
+    "COPX": 59.58,
+    "CRWD": 209.01,
+    "CVI": 30.43,
+    "DELL": 302.98,
+    "DINO": 86.11,
+    "DK": 53.04,
+    "DLTR": 152.155,
+    "EC": 13.06,
+    "FXI": 31.69,
+    "GATX": 186.28,
+    "GDX": 74.5,
+    "GLXY": 12.05,
+    "HL": 11.35,
+    "IBB": 217.5,
+    "IP": 32.1,
+    "ITUB": 6.94,
+    "JPM": 318.44,
+    "LI": 11.8402,
+    "MPC": 346.0,
+    "OSK": 140.35,
+    "PANW": 342.8677,
+    "PARR": 59.62,
+    "PBF": 56.7485,
+    "PBR": 16.2502,
+    "PCAR": 108.83,
+    "PKG": 246.87,
+    "PNC": 220.33,
+    "PSX": 236.08,
+    "REGN": 981.87,
+    "SANM": 140.01,
+    "SJM": 130.26,
+    "SMH": 428.0018,
+    "SOXX": 129.7115,
+    "SPY": 720.43,
+    "SW": 41.65,
+    "TEX": 59.01,
+    "TFC": 47.81,
+    "TTC": 105.92,
+    "USB": 58.54,
+    "VALE": 9.7767,
+    "VLO": 323.0,
+    "VRTX": 523.1448,
+    "WAB": 287.59,
+    "WFC": 81.21,
+    "XLB": 51.4,
+    "XLE": 60.86,
+    "XLF": 56.7499,
+    "XLI": 163.4,
+    "XLK": 156.92,
+    "XLP": 92.6577,
+    "XLV": 183.92,
+    "XRT": 89.85
+   }
+  }
+ },
+ "exits": [],
+ "runs": [
+  {
+   "at": "2026-11-26T22:35:48-05:00",
+   "venue": "overnight",
+   "dry_run": false,
+   "passes": [
+    "night"
+   ],
+   "new": [
+    "2026-11-27-S01",
+    "2026-11-27-S02"
+   ],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [],
+   "skipped": [],
+   "passed": [],
+   "deferred": [
+    "2026-11-27-S01",
+    "2026-11-27-S02"
+   ],
+   "warnings": [
+    "2026-11-27-S01 LI: spread wider than 0.5% (LI 0.5%), so the trade queues for 8:35 AM CT.",
+    "2026-11-27-S02 ITUB: spread wider than 0.5% (ITUB 0.8%), so the trade queues for 8:35 AM CT."
+   ],
+   "takes": {
+    "night": 2
+   }
+  }
+ ],
+ "last_attempt": "2026-11-27T01:27:24-05:00",
+ "last_fault": false,
+ "last_wide": false
+}

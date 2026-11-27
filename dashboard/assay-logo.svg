@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="Assay">
+  <title>Assay</title>
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4D27A"/>
+      <stop offset="0.55" stop-color="#D4A437"/>
+      <stop offset="1" stop-color="#A97A1C"/>
+    </linearGradient>
+  </defs>
+  <!-- hallmark plate: an assay office stamps metal that passed its test -->
+  <rect x="16" y="16" width="480" height="480" rx="112" fill="#0E1726"/>
+  <rect x="44" y="44" width="424" height="424" rx="88" fill="none" stroke="url(#gold)" stroke-width="6" opacity="0.35"/>
+  <!-- the A: two legs of a price path meeting at the peak -->
+  <path d="M120 392 L256 112 L392 392" fill="none" stroke="url(#gold)" stroke-width="44" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- crossbar as a test line: a tick that passes it -->
+  <path d="M176 292 L232 292 L262 252 L300 318 L336 292" fill="none" stroke="#F7F3E8" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

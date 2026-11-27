@@ -1,0 +1,137 @@
+{
+ "session": "2026-11-27",
+ "passes": [
+  {
+   "pass": "night",
+   "at": "2026-11-26T22:34:54.022653-05:00",
+   "reviews": [
+    {
+     "trade_id": "2026-11-18-S06",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "Its time limit ended at the close on 11-25 and the book still shows it open (no exit was recorded that day), so close it at the next open. In profit: Disney closed at a 52-week closing high of 125.60 on 11-25, brokers raised targets, Doomsday tracking is strong; no wrong-if event found."
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "action": "exit",
+     "thesis": "played_out",
+     "reason": "Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. The refiners fell another 3.2% against XLE on Wednesday to a 20-day low and the 11-25 EIA report showed gasoline and distillate builds, so the expected move has happened; no wrong-if event."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "action": "exit",
+     "thesis": "weakened",
+     "reason": "Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open instead of carrying an unplanned session. No wrong-if event (SQM itself guides Q4 prices lower, no upgrades found; lithium futures not found), but the move the take expected did not come inside the window."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "action": "exit",
+     "thesis": "weakened",
+     "reason": "Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. No wrong-if event (no buyback step-up, UOB downgraded, BofA cut), but NetEase turned up 3.8% on Wednesday against FXI -0.4% and there is nothing dated ahead to stay for."
+    },
+    {
+     "trade_id": "2026-11-19-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Nothing found ending the process: Quebecor has not withdrawn, the special committee is still reviewing, BCE has not denied talks, and the minister has only promised a rigorous review. Nothing newer than 11-24 found. Friday is its last session."
+    },
+    {
+     "trade_id": "2026-11-19-S06",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No confirmation of an approach from Clorox or a major outlet, no upgrades or targets above $110 found, no guide raise; but the stock rose 3.9% on Wednesday to 110.94 with no news I could find, and the trade is 2.3% from its stop. Friday is its last session."
+    },
+    {
+     "trade_id": "2026-11-19-S07",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Brokers raised targets after the print (Bernstein $40, Guggenheim $38, Barclays and BofA $35), none under $33, no downgrade, no Spotify breakdown, outlook unchanged. Friday is its last session."
+    },
+    {
+     "trade_id": "2026-11-20-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No frontier-lab launch aimed at consulting, no downgrades and no guide trim found; Accenture rose 3.5% on Wednesday. Friday is its last session, and with Nasdaq futures +2% tonight the rotation test in its wrong-if is live."
+    },
+    {
+     "trade_id": "2026-11-20-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No safety, label or supply news on Orzeyful or Mimrylo, no guidance change, and the 12-11 Capital Markets Day stands; Takeda +1.8% against XLV -0.6% on Wednesday."
+    },
+    {
+     "trade_id": "2026-11-23-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No denial from Canadian Solar or Recurrent, no asset sale or financing announced and no rescue buyer reported; the stock bounced 12.5% on Wednesday with no news found. Q3 results on 12-3 fall after the plan ends."
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No EMEA sale or buyer announced, no reaffirmed guide and no second upgrade found (Argus downgraded on 11-19; one undated JPMorgan upgrade is unverified), but the stock rose 4.8% on Wednesday with no news and the trade sits on its stop, which code will act on."
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "action": "exit",
+     "thesis": "broken",
+     "reason": "News has changed the story: the Houthis said on 11-25 that they struck Saudi Arabia's Ras Tanura refinery and terminal and the ports of Jeddah and Jizan, and Iran's Fars agency reported a tanker hitting a mine in Hormuz the same day (OilPrice, 11-25 11:18 PM CT; FXEmpire, 11-26). Brent settled +3.5% on Wednesday and WTI is $85.7 tonight, +2.4%. The short rested on the war premium deflating; the attacks have spread from ships to Saudi export plant. None of the listed wrong-if lines is confirmed (no strike on Iran, no halt in Hormuz, the EIA report showed a 1.1M-barrel build), and Saudi Arabia has not confirmed damage."
+    },
+    {
+     "trade_id": "2026-11-24-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Full-year guide raised and Q4 guided up about 7%, no downgrade found; Abercrombie rose another 5.3% on Wednesday against XRT flat. No Thanksgiving or Black Friday sales read is out yet."
+    },
+    {
+     "trade_id": "2026-11-24-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "Foot Locker comps were positive (+0.5%, US banner +4.1%), targets were raised with no downgrade or cut under $150; Dick's +3.5% on Wednesday. A headline says the call warned of near-term pain from Nike's Jordan reset: that is from the 11-24 call itself, and I could not read whether it names allocations before year-end."
+    },
+    {
+     "trade_id": "2026-11-24-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No carrier has said its 2027 fiber build is unchanged, Cantor and JPMorgan cut targets and kept ratings, no upgrade or insider buying found. The $200M repurchase programme was announced with the results, before the take, not added after."
+    },
+    {
+     "trade_id": "2026-11-24-S05",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "Copper is +4.6% tonight and rose up to 3.4% in London on Thursday; the metals press ties it to a weaker dollar and short covering with tech (UBS calls it a bear-market rally), not to a supply shock or China stimulus, and a 12-9 hike is still 96-98% priced. No wrong-if event, but the price has turned against it."
+    },
+    {
+     "trade_id": "2026-11-25-S01",
+     "action": "hold",
+     "thesis": "weakened",
+     "reason": "No new contract, guide raise, insider buying or upgrade found since the 11-19 report; the collection of delayed receivables was said on the call before the take. Maximus rose 3.2% on Wednesday against KIE +1.0% with no news, and the trade is 1.6% from its stop. One undated headline says the buyback authorisation is $400M: unverified."
+    },
+    {
+     "trade_id": "2026-11-25-S02",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No definitive data-center, power or desalination agreement, the Texas audit and pause stand, only the regular $0.60 dividend (record 12-1), no upgrades found. The 4% rise on Wednesday came with the tape."
+    },
+    {
+     "trade_id": "2026-11-25-S03",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No downgrade and no retaliation on US farm goods found; Deere closed +4.4% on its report and CNH rose 8% on the read-through, which is the reading the take made."
+    },
+    {
+     "trade_id": "2026-11-25-S04",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No upgrade (brokers raised forecasts after the print, ratings unchanged as far as I could find), no enlarged buyback or material award, and no one-off cause reported for the fall; Jacobs fell another 4.3% on Wednesday against XLI +0.8%."
+    },
+    {
+     "trade_id": "2026-11-25-S05",
+     "action": "hold",
+     "thesis": "intact",
+     "reason": "No equity or equity-linked financing, no downgrade and no insider sale found; the 10-year is 4.85%, under the 5.0% line."
+    }
+   ]
+  }
+ ]
+}

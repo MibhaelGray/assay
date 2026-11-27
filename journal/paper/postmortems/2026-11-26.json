@@ -1,0 +1,48 @@
+{
+ "postmortems": [
+  {
+   "trade_id": "2026-11-17-S06",
+   "proposal_id": "2026-11-17-P60",
+   "name": "AGNC",
+   "setup": "breakdown",
+   "bps": 111.4,
+   "tag": "right_luck",
+   "what_happened": "Short AGNC against TLT made 111 bp, but not inside its plan and not for the reason given. No wrong-if event came (a 12-9 hike stayed 90-98% priced, no book value update, no buyback), yet through its five sessions AGNC rose against TLT (+1.9% against +0.2% on 11-23, +2.6% against -0.2% on 11-24) and the premium to book did not come out. The close job did not close it on 11-24; the profit came the next morning, when a haven bid lifted TLT 1.2% with AGNC -0.9%.",
+   "lesson": "A premium-to-book short on a 17% yielder needs a dated event that makes holders reprice (a book value release, a dividend decision); rates and spreads drifting against it were not enough in a week, and the gain here came from the hedge on an unplanned extra session.",
+   "at": "2026-11-26T21:38:56.271816-05:00"
+  },
+  {
+   "trade_id": "2026-11-18-S01",
+   "proposal_id": "2026-11-18-P01",
+   "name": "NKE",
+   "setup": "breakdown",
+   "bps": -297.4,
+   "tag": "thesis_broke",
+   "what_happened": "Short NKE against XRT lost 297 bp. The estimate cuts the take waited for did come (Needham cut FY28 EPS to $1.22, Cantor's target went to $33, Berenberg kept Sell and cut to $27) and none of the wrong-if events happened, but the stock did not fall on them: the -6% investor-day reversal had already priced the later turnaround. On 11-24 Dick's said the Nike brand is performing well at Foot Locker and Nike rose about 6% against XRT +2-3%, which took the trade to its loss.",
+   "lesson": "Broker cuts that follow a heavy-volume flush are confirmation of a move already made, not new selling; with only a quarter of analysts on Buy there was nobody left to disappoint. Check which reports inside the window read through to the name directly (Dick's owns Foot Locker, Nike's largest wholesale door), not only to the hedge.",
+   "at": "2026-11-26T21:38:56.271816-05:00"
+  },
+  {
+   "trade_id": "2026-11-18-S03",
+   "proposal_id": "2026-11-18-P32",
+   "name": "TGT",
+   "setup": "breakout",
+   "bps": 226.7,
+   "tag": "right_reason",
+   "what_happened": "Long TGT against XRT made 227 bp. The print kept being bought as the take expected: Walmart raised its full-year guide on 11-19 and called the holiday quarter off to a good start, Target said November was in line and accelerating, brokers raised targets with no downgrade, and on 11-24 Target rose 4.7% against XRT +2.3-3.0% as Dollar Tree's traffic print lifted the discounters. No wrong-if event.",
+   "lesson": "A beat on traffic and comps that reverses a sceptical pre-market read and leaves broker targets sitting at the price kept working for four sessions, and peers reporting to the same shopper inside the window (Walmart, Dollar Tree) carried it further.",
+   "at": "2026-11-26T21:38:56.271816-05:00"
+  },
+  {
+   "trade_id": "2026-11-18-S04",
+   "proposal_id": "2026-11-18-P33",
+   "name": "GDX",
+   "setup": "breakdown",
+   "bps": 774.8,
+   "tag": "right_luck",
+   "what_happened": "Short GDX outright made 775 bp, the largest part of it not for the reason given. The break in gold and the miners held, but the rate story wobbled inside the window: on 11-23 GDX rose 6.4-6.7% and gold 3-4% after Bessent warned the Fed against over-tightening and bets on a half-point hike faded, and the 10-year slid from 5.09% to 4.90-4.93%, on the wrong-if line. Gold fell 2.7% on 11-24, and on the morning of 11-25 GDX fell another 4.6% with gold -2.9% while the 10-year dropped to 4.83%, under the line: metals were sold in a haven bid for bonds with the VIX near 29, the opposite of the yields-up reason. The close job had not closed it on its time limit on 11-24, so the biggest leg came on an unplanned extra session.",
+   "lesson": "The short was right on direction (a metal at a one-year low with nothing under it kept falling) and wrong on the driver: by the end gold was falling with yields, on liquidation, not on the Fed. When a take's driver flips while the price still goes its way, the wrong_if tied to that driver (the 10-year line) is a reason to bank it, as the morning pass did, not to stay.",
+   "at": "2026-11-26T21:38:56.271816-05:00"
+  }
+ ]
+}

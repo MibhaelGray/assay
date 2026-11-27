@@ -1,0 +1,647 @@
+{
+ "session": "2026-11-27",
+ "passes": [
+  {
+   "at": "2026-11-26T22:34:54-05:00",
+   "measured": true,
+   "session_id": "8faa78ec-aa6d-4ba7-b9d9-7ab40fd14f91",
+   "judge": {
+    "model": "claude-fable-5-2",
+    "effort": "high"
+   },
+   "agents": [
+    {
+     "what": "Research BBY",
+     "names": [
+      "BBY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 9,
+     "reads": 9,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Big banks",
+     "names": [
+      "Big banks"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 7,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CRWD (second)",
+     "names": [
+      "CRWD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 7,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SANM (second)",
+     "names": [
+      "SANM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 5,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ITUB",
+     "names": [
+      "ITUB"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BURL",
+     "names": [
+      "BURL"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check A",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 18,
+     "reads": 1,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Packaging",
+     "names": [
+      "Packaging"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SJM",
+     "names": [
+      "SJM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 9,
+     "packet_reads": 1,
+     "other_tools": 2
+    },
+    {
+     "what": "Market stories research",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 3,
+     "reads": 3,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check D",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 15,
+     "reads": 0,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research SANM",
+     "names": [
+      "SANM"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 8,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PBR",
+     "names": [
+      "PBR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 5,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Packaging (second)",
+     "names": [
+      "Packaging"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research A (second)",
+     "names": [
+      "A"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 6,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research LI",
+     "names": [
+      "LI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DLTR",
+     "names": [
+      "DLTR"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 6,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research AMGN (second)",
+     "names": [
+      "AMGN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GLXY",
+     "names": [
+      "GLXY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check B",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 15,
+     "reads": 3,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BBD (second)",
+     "names": [
+      "BBD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 5,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research LI (second)",
+     "names": [
+      "LI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 6,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research PANW",
+     "names": [
+      "PANW"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Refiners",
+     "names": [
+      "Refiners"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research REGN",
+     "names": [
+      "REGN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 8,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research HL",
+     "names": [
+      "HL"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VALE",
+     "names": [
+      "VALE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research Trucks and farm machinery",
+     "names": [
+      "Trucks and farm machinery"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 5,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DELL (second)",
+     "names": [
+      "DELL"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 5,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VRTX",
+     "names": [
+      "VRTX"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 7,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research ADI",
+     "names": [
+      "ADI"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 6,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research EC",
+     "names": [
+      "EC"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research AMGN",
+     "names": [
+      "AMGN"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research CRWD",
+     "names": [
+      "CRWD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research VALE (second)",
+     "names": [
+      "VALE"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 7,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research BBD",
+     "names": [
+      "BBD"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 8,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research GLXY (second)",
+     "names": [
+      "GLXY"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 6,
+     "reads": 3,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Research DELL",
+     "names": [
+      "DELL"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 4,
+     "packet_reads": 1,
+     "other_tools": 1
+    },
+    {
+     "what": "Open-trade news check C",
+     "names": [],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 19,
+     "reads": 3,
+     "packet_reads": 0,
+     "other_tools": 1
+    },
+    {
+     "what": "Research A",
+     "names": [
+      "A"
+     ],
+     "model": "claude-sonnet-5-5",
+     "effort": "medium",
+     "searches": 5,
+     "reads": 7,
+     "packet_reads": 1,
+     "other_tools": 1
+    }
+   ],
+   "names": {
+    "BBY": {
+     "searches": 9.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Big banks": {
+     "searches": 6.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "CRWD": {
+     "searches": 13.0,
+     "reads": 10.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "SANM": {
+     "searches": 14.0,
+     "reads": 13.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "ITUB": {
+     "searches": 6.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "BURL": {
+     "searches": 7.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Packaging": {
+     "searches": 12.0,
+     "reads": 6.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "SJM": {
+     "searches": 7.0,
+     "reads": 9.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "PBR": {
+     "searches": 6.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "A": {
+     "searches": 11.0,
+     "reads": 13.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "LI": {
+     "searches": 12.0,
+     "reads": 10.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "DLTR": {
+     "searches": 6.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "AMGN": {
+     "searches": 13.0,
+     "reads": 7.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "GLXY": {
+     "searches": 12.0,
+     "reads": 6.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "BBD": {
+     "searches": 14.0,
+     "reads": 8.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "PANW": {
+     "searches": 6.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "Refiners": {
+     "searches": 6.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "REGN": {
+     "searches": 8.0,
+     "reads": 8.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "HL": {
+     "searches": 6.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "VALE": {
+     "searches": 12.0,
+     "reads": 7.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "Trucks and farm machinery": {
+     "searches": 6.0,
+     "reads": 5.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "DELL": {
+     "searches": 10.0,
+     "reads": 9.0,
+     "agents": 2,
+     "shared_with": 0
+    },
+    "VRTX": {
+     "searches": 8.0,
+     "reads": 7.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "ADI": {
+     "searches": 6.0,
+     "reads": 6.0,
+     "agents": 1,
+     "shared_with": 0
+    },
+    "EC": {
+     "searches": 7.0,
+     "reads": 4.0,
+     "agents": 1,
+     "shared_with": 0
+    }
+   },
+   "thin": {},
+   "flags": [],
+   "floors": {
+    "max_names_per_agent": 2,
+    "min_searches": 8,
+    "min_reads": 5,
+    "packet_min_searches": 6,
+    "packet_min_reads": 4
+   }
+  }
+ ]
+}
