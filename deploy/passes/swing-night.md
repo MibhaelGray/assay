@@ -1,7 +1,7 @@
 Run the swing book's NIGHT PASS for the Assay project. It is a full pass on the latest prices (after-hours, up to 7:00 PM CT), and its trades go out as soon as it records. Record it by about 9:00 PM CT, so its takes trade in tonight's overnight session.
 
-1. The working directory is already the repo root (`/Users/michael/Projects/ETF Factor Rotation`); run every `uv run fr ...` command directly without prefixing `cd ... &&`. The night pass runs the evening before each session, Sunday included.
-2. Read `/Users/michael/Projects/ETF Factor Rotation/.claude/skills/swing-pass/SKILL.md` in full and follow it with `night` as the pass: the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.
+1. The working directory is already the repo root (`/Users/michael/Projects/Assay`); run every `uv run fr ...` command directly without prefixing `cd ... &&`. The night pass runs the evening before each session, Sunday included.
+2. Read `/Users/michael/Projects/Assay/.claude/skills/swing-pass/SKILL.md` in full and follow it with `night` as the pass: the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.
 
 What the pass must leave behind: the live screen (`uv run fr screen --live night`); a verdict, conviction and rank on every candidate of that screen and a hold, exit or extend on every trade the book has open or is waiting to enter, recorded together with `uv run fr paper propose <draft>` using `"pass": "night"`; post-mortems for closed trades that have none; and a short note in `journal/research/<session>-night.md`.
 
