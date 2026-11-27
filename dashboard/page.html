@@ -620,7 +620,7 @@
   <section class="fr-view" id="paper" data-view="paper" hidden>
     <div class="fr-viewhead"><h2>Swing research</h2><p>What the research pass judged and how its calls did. Positions and dollar results are on <button type="button" class="fr-link" data-view-to="portfolio">Portfolio</button>.</p></div>
     <div class="fr-papernotes" data-draw="paper-notes" data-source="mkt_paper mkt_paper_account"></div>
-    <div class="fr-band fr-paperband" aria-label="Research record" data-draw="paper-band" data-source="mkt_paper mkt_paper_proposals mkt_paper_rank mkt_paper_account"></div>
+    <div class="fr-band fr-paperband" aria-label="Research record" data-draw="paper-band" data-source="mkt_paper mkt_paper_proposals mkt_paper_rank mkt_paper_test mkt_paper_account"></div>
     <div class="fr-panel">
       <div class="fr-phead"><h3>All ideas so far</h3><span class="fr-sub" data-draw="paper-live-sum" data-source="mkt_paper_proposals">—</span>
         <p>Every priced verdict, open and finished together — finished plans at their final result, still-open plans marked to the latest price. Lets you compare all takes against all passes right now, while the top strip waits for each plan's time limit to finish.</p></div>
@@ -642,9 +642,9 @@
       <div class="fr-tablewrap" data-draw="paper-verdicts" data-source="mkt_paper_proposals"></div>
     </div>
     <details class="fr-method"><summary>How the swing book works</summary>
-      <p>The swing book trades on an IBKR paper account, never a live one. It was started again from zero with $1,000,000, and it is the only book. Three times a day a full research pass runs: at 7:30 PM CT (Sunday to Thursday, for the next session), 8:45 AM CT and 12:00 PM CT. Each pass starts from a screen of about 1,040 stocks and funds on the latest prices, whether after-hours, pre-market or the regular session. Research agents study each of about 40 shortlisted names, and the pass writes a verdict on every one: take or pass, a conviction from 1 to 5, a rank and its reasoning.</p>
-      <p>Every take of a pass is traded, strongest conviction first until the book's capital is in use, as soon as the pass records, usually within a minute. Every order hits IBKR’s own bid or ask, and whatever it doesn’t fill at once is cancelled, so nothing is left resting. With no quote, or a spread wider than 2% on any leg, nothing is sent for that trade, and the order job tries again every 15 minutes until 2:40 PM CT. A trade's hardest-to-fill leg goes first and its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own. Each take carries its own plan: a time limit of up to 10 sessions and a stop between 1% and 8%. Its size comes from that stop and its conviction: a trade loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5, so a wild stock gets fewer dollars than a calm one. Every pass also reviews each open trade and can close one early for a stated reason, or ask for a winner on its last session to run up to 3 sessions longer, once. It can never widen a stop or hold a loser past its time limit.</p>
-      <p>At 2:45 PM CT every open trade is checked against its stop and time limit, and the ones leaving are sent as market-on-close orders. Every verdict, taken or passed, is scored from the prices at the moment its pass recorded, so the passes are the control for the takes. The book pauses if it falls $100,000 below its high. The first book’s record, and the intraday book’s, are kept in the journal’s archive.</p>
+      <p>The swing book trades on an IBKR paper account, never a live one. It was started again from zero with $1,000,000, and it is the only book. Three times a day a full research pass runs: at 7:30 PM CT (the evening before each session), 8:45 AM CT and 12:00 PM CT, with no midday pass on a half day. Each pass starts from a screen of about 1,240 stocks and funds on the latest prices, whether after-hours, overnight, pre-market or the regular session. Research agents study each of up to 25 shortlisted names, and the pass writes a verdict on every one: take or pass, a conviction from 1 to 5, a rank and its reasoning.</p>
+      <p>Every take of a pass is traded, strongest conviction first until the book's capital is in use, as soon as the pass records, usually within a minute. Every order is priced on IBKR’s own quote: in regular hours it first rests at the midpoint for 10 seconds when the spread allows, then crosses to the bid or ask, and whatever doesn’t fill is cancelled, so nothing is left resting. With no quote nothing is sent, and the order job tries again 3 minutes later. A leg’s spread must be under 0.5% for overnight and regular-hours entries and under 2% after hours and pre-market: an overnight take that is too wide waits for the 8:35 AM CT regular-hours try, and a regular-hours one is tried three times before it stands down. What hasn’t filled is tried again every 15 minutes until 20 minutes before the close (2:40 PM CT, or 11:40 AM CT on a half day). A trade's hardest-to-fill leg goes first and its other legs only follow what that leg has filled, so a stuck order never leaves a hedge on its own. Each take carries its own plan: a time limit of up to 10 sessions and a stop between 1% and 8%. Its size comes from that stop and its conviction: a trade loses about 0.15% of the book if stopped at conviction 3, up to twice that at conviction 5, so a wild stock gets fewer dollars than a calm one. Every pass also reviews each open trade and can close one early for a stated reason, or ask for a winner on its last session to run up to 3 sessions longer, once. It can never widen a stop or hold a loser past its time limit.</p>
+      <p>Stops are checked every 10 minutes in regular hours on the gateway’s midpoints, and a trade past its stop exits at once at the bid or ask. At 2:45 PM CT (11:45 AM CT on a half day) every open trade is checked against its stop and time limit, and the ones leaving are sent as market-on-close orders. Long plus short stays under 1.5 times the book’s capital. Every verdict, taken or passed, is scored from the prices at the moment its pass recorded, so the passes are the control for the takes. The main test compares them on the same default plan after costs, one figure per session, matched by setup and direction. The book pauses if it falls $100,000 below its high. The first book’s record, and the intraday book’s, are kept in the journal’s archive.</p>
     </details>
   </section>
 
@@ -798,8 +798,10 @@
     fn: (market) => market.filter((r) => r.section === 'paper').sort((a, b) => b.entry_date.localeCompare(a.entry_date) || a.id.localeCompare(b.id)) });
   dash.calc('mkt_paper_proposals', { inputs: ['market'], title: 'Research verdicts', description: 'Every candidate the research pass judged for the swing book: take or pass, conviction, reasoning, and the result of its own plan on daily bars.',
     fn: (market) => market.filter((r) => r.section === 'paper_proposal').sort((a, b) => b.session.localeCompare(a.session) || (a.rank || 1e6) - (b.rank || 1e6) || a.id.localeCompare(b.id)) });
-  dash.calc('mkt_paper_rank', { inputs: ['market'], title: 'Ranking against results', description: 'Whether the research pass’s ranking of each night’s candidates predicts their plan results: the rank correlation night by night, and the results of each night’s top, middle and bottom third.',
+  dash.calc('mkt_paper_rank', { inputs: ['market'], title: 'Ranking against results', description: 'Whether each research pass’s ranking of its candidates predicts their plan results: the rank correlation pass by pass, averaged into one figure per session, and the results of each pass’s top, middle and bottom third.',
     fn: (market) => market.filter((r) => r.section === 'paper_rank') });
+  dash.calc('mkt_paper_test', { inputs: ['market'], title: 'Main test', description: 'The pre-registered test of the main question: do takes beat passes after costs, on the same default plan, averaged per session, matched by setup and direction, with outlier checks and the takes needed to call it.',
+    fn: (market) => market.filter((r) => r.section === 'paper_test') });
   dash.calc('mkt_paper_account', { inputs: ['market'], title: 'Paper account', description: 'The paper account’s value and positions at the last sync.',
     fn: (market) => market.filter((r) => r.section === 'paper_account') });
   dash.calc('mkt_portfolio_pos', { inputs: ['market'], title: 'Portfolio positions', description: 'Each symbol a paper book holds: shares, average cost, latest price, market value, today’s change and total profit and loss.',
@@ -1157,6 +1159,8 @@
   const PASS_NAME = { night: 'Night pass', late: 'Late pass', late2: 'Late pass 2', late3: 'Late pass 3', late4: 'Late pass 4', morning: 'Morning pass', midday: 'Midday pass' };
   const PASS_TIMES = 'Passes start at 7:30 PM (Sunday to Thursday), 8:45 AM and 12:00 PM CT';
   const JOBS3 = [[585, 'Morning pass', '8:45 AM CT', 'A full pass on pre-market prices; its trades go out when it finishes'], [780, 'Midday pass', '12:00 PM CT', 'A full pass on the morning’s trading; its trades go out when it finishes'], [945, 'Exit check', '2:45 PM CT', 'Stops and time limits on open trades']];
+  // A half day closes at 1:00 PM ET: no midday pass, and the exit check moves to 12:45 PM ET (11:45 AM CT).
+  const JOBS3_HALF = [JOBS3[0], [765, 'Exit check', '11:45 AM CT', 'Stops and time limits on open trades (half day, the market closes at 12:00 PM CT)']];
   const NIGHT_JOB = [1230, 'Night pass', '7:30 PM CT', 'A full pass on after-hours prices for the next session; its trades go out when it finishes'];
   let designOn = false;
   const applyDesign = () => {
@@ -1181,7 +1185,8 @@
     if (threePass()) {   // the night pass runs the evening before each session
       for (const s of (a && a.sessions_ahead) || []) {
         const eve = new Date(Date.parse(`${s}T00:00:00Z`) - 864e5).toISOString().slice(0, 10);
-        for (const [d, j] of [[eve, NIGHT_JOB], ...JOBS3.map((x) => [s, x])]) if (d > now.date || (d === now.date && now.mins < j[0])) return { name: j[1], time: j[2], what: j[3], day: d === now.date ? 'Today' : day(d, '%a %b %-d') };
+        const jobs = ((a && a.half_days) || []).includes(s) ? JOBS3_HALF : JOBS3;
+        for (const [d, j] of [[eve, NIGHT_JOB], ...jobs.map((x) => [s, x])]) if (d > now.date || (d === now.date && now.mins < j[0])) return { name: j[1], time: j[2], what: j[3], day: d === now.date ? 'Today' : day(d, '%a %b %-d') };
       }
       return null;
     }
@@ -1199,16 +1204,22 @@
   dash.draw('paper-notes', (el) => {
     const rows = okData('mkt_paper') || []; const a = paperAcct();
     const notes = [];
+    // Today's close check and entry cutoff: 2:45 / 2:40 PM CT, or 11:45 / 11:40 AM CT on a half day.
+    const half = ((a && a.half_days) || []).includes(nyNow().date);
+    const check = half ? '11:45 AM CT' : '2:45 PM CT'; const cutoff = half ? '11:40 AM CT' : '2:40 PM CT';
     if (a && a.halted) notes.push(`Paper trading is halted: ${a.halted}. No new trades open, and exits still go out.`);
     ((a && a.paused) || []).forEach((p) => notes.push(`Paused: ${p}. Exits still go out.`));
-    if (rows.some((r) => r.state === 'planned')) notes.push(`${rows.filter((r) => r.state === 'planned').length} trades have orders in, but their fills aren't loaded yet. Results appear after the next refresh or the 2:45 PM CT check.`);
-    rows.filter((r) => r.state === 'open' && r.stop_room_pct != null && r.stop_room_pct <= 0).forEach((r) => notes.push(`${pairTitle(r)} is past its stop. Stops only count at the 2:45 PM CT check: if it's still past then, it closes at today's close.`));
-    rows.filter((r) => isLive(r) && isBroken(r)).forEach((r) => notes.push(`${pairTitle(r)}: ${r.missing.join(', ')} never filled, ${threePass() ? 'so the order job keeps trying until 2:40 PM CT. If it still hasn’t filled at the 2:45 PM CT check, the other side closes at today’s close.' : 'so the other side closes at the 8:40 AM CT fill check, or the 2:45 PM CT check if that has passed.'}`));
+    if (rows.some((r) => r.state === 'planned')) notes.push(`${rows.filter((r) => r.state === 'planned').length} trades have orders in, but their fills aren't loaded yet. Results appear after the next refresh or the ${check} check.`);
+    rows.filter((r) => r.state === 'open' && r.stop_room_pct != null && r.stop_room_pct <= 0).forEach((r) => notes.push(`${pairTitle(r)} is past its stop on the latest prices. Stops are checked every 10 minutes in regular hours and a trade past its stop exits at once; if that exit can't be sent, it goes out at today's close from the ${check} check.`));
+    rows.filter((r) => isLive(r) && isBroken(r)).forEach((r) => notes.push(`${pairTitle(r)}: ${r.missing.join(', ')} never filled, ${threePass() ? `so the order job keeps trying until ${cutoff}. If it still hasn’t filled at the ${check} check, the other side closes at today’s close.` : `so the other side closes at the 8:40 AM CT fill check, or the ${check} check if that has passed.`}`));
     ((a && a.alerts) || []).forEach((t) => notes.push(t));
     if (a && (a.mismatches || []).length) notes.push(`The account and the books disagree on ${a.mismatches.length} position${a.mismatches.length === 1 ? '' : 's'}: ${a.mismatches.join('; ')}.`);
     el.replaceChildren(...notes.map((t) => h('p', 'fr-note is-warn', t)));
     el.hidden = !notes.length;
   });
+  // The rank table counts sessions in `nights` (the passes of one session are averaged into one observation)
+  // and the passes themselves in `passes`.
+  const rankOver = (rk) => `over ${rk.nights} session${rk.nights === 1 ? '' : 's'}${rk.passes != null ? ` (${rk.passes} pass${rk.passes === 1 ? '' : 'es'})` : ''}`;
   dash.draw('paper-band', (el) => {
     const rows = okData('mkt_paper'); const props = okData('mkt_paper_proposals');
     if (!rows || !props) { el.replaceChildren(); return; }
@@ -1221,7 +1232,22 @@
       const waitNote = wait ? ` · ${wait} stopped early, waiting` : '';
       if (!rs.length) return stat(label, '—', '', wait ? `${wait} stopped early, waiting for time limit` : 'None settled yet');
       const avg = d3.mean(rs, (r) => r.plan_bps);
-      return stat(label, fmtBp(avg), tone(avg), `Average over ${rs.length} settled${waitNote}`, `${rs.filter((r) => r.plan_bps > 0).length} of ${rs.length} made money, before costs`);
+      return stat(label, fmtBp(avg), tone(avg), `Average over ${rs.length} settled${waitNote}`, `${rs.filter((r) => r.plan_bps > 0).length} of ${rs.length} made money · each one's own plan, before costs`);
+    };
+    // The pre-registered main test (learn.main_test): takes vs passes on the same default plan, after costs, one
+    // observation per session, matched by setup and direction once there are 6 such sessions.
+    const mt = (okData('mkt_paper_test') || [])[0];
+    const mainTest = () => {
+      if (!mt || !mt.power) return stat('Main test', '—', '', 'Not built yet', 'Takes vs passes, same plan, after costs');
+      const matched = mt.stratified && mt.stratified.session_clustered && mt.stratified.session_clustered.sessions >= 6;
+      const p = matched ? mt.stratified.session_clustered : mt.session_clustered;
+      const v = String(mt.power.verdict || '');
+      const [word, cls] = v.startsWith('UNDERPOWERED') ? ['Too early', ''] : v.startsWith('PASS') ? ['Edge found', 'fr-pos'] : ['No edge', 'fr-neg'];
+      const pv = p.p_value == null ? '' : ` · p ${d3.format('.2f')(p.p_value)}`;
+      const need = mt.power.takes_for_200bp ? ` of about ${mt.power.takes_for_200bp} needed` : '';
+      return stat('Main test', word, cls,
+        `${matched ? 'Matched by setup' : 'Per session'}: ${fmtBp(p.mean_bps)}${pv} over ${p.sessions} session${p.sessions === 1 ? '' : 's'}`,
+        `Same plan, after ${mt.cost_bps} bp costs: ${fmtBp(mt.default_gap_bps)} · ${mt.power.n_takes} takes${need}`);
     };
     const takes = props.filter((r) => r.verdict === 'take').length;
     const sessions = new Set(props.map((r) => r.session)).size;
@@ -1232,12 +1258,12 @@
     const rk = (okData('mkt_paper_rank') || [])[0];
     const third = (k) => rk.thirds[k].n ? fmtBp(rk.thirds[k].mean) : '—';
     const ranking = !rk || !rk.ranked ? stat('Ranking', '—', '', threePass() ? 'Starts with the next pass' : 'Starts with the next evening pass', 'Every candidate is ranked, and the ranking is scored')
-      : !rk.nights ? stat('Ranking', '—', '', `${rk.ranked} verdicts ranked`, 'No ranked night has finished yet')
-      : stat('Ranking', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation over ${rk.nights} night${rk.nights === 1 ? '' : 's'}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}${rk.nights < rk.nights_needed ? ` · needs about ${rk.nights_needed}` : ''}`,
+      : !rk.nights ? stat('Ranking', '—', '', `${rk.ranked} verdicts ranked`, 'No ranked pass has finished yet')
+      : stat('Ranking', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation ${rankOver(rk)}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}${rk.nights < rk.nights_needed ? ` · needs about ${rk.nights_needed} sessions` : ''}`,
         `Top third ${third('top')} · bottom third ${third('bottom')}`);
     el.replaceChildren(
       stat('Verdicts', String(props.length), '', `${takes} taken · ${props.length - takes} not taken`, `Over ${sessions} session${sessions === 1 ? '' : 's'}`),
-      side('Taken', true), side('Not taken', false), ranking,
+      mainTest(), side('Taken', true), side('Not taken', false), ranking,
       stat('Closed trades', closed.length ? `${closed.filter((r) => r.pnl > 0).length} of ${closed.length} won` : '—', '',
         closed.length ? `Average ${fmtBp(d3.mean(closed, (r) => r.bps))} after commissions` : 'Nothing closed yet', slip.length ? `Fills vs model ${fmtBp(d3.mean(slip, (r) => r.slippage_bps))}` : null),
       next ? stat('Next step', next.time, '', `${next.day}: ${next.name.toLowerCase()}`, next.what) : stat('Next step', '—', ''));
@@ -1275,14 +1301,14 @@
     const rk = ((okData('mkt_paper_rank') || [])[0] || {}).so_far;
     const third = (k) => rk && rk.thirds && rk.thirds[k] && rk.thirds[k].n ? fmtBp(rk.thirds[k].mean) : '—';
     const ranking = !rk || !rk.nights ? stat('Ranking so far', '—', '', 'Not enough priced verdicts yet')
-      : stat('Ranking so far', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation over ${rk.nights} pass${rk.nights === 1 ? '' : 'es'}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}`,
+      : stat('Ranking so far', signed(rk.ic, '.2f'), tone(rk.ic), `Rank correlation ${rankOver(rk)}${rk.t == null ? '' : ` · t ${signed(rk.t, '.1f')}`}`,
         `Top third ${third('top')} · bottom third ${third('bottom')}`);
     el.replaceChildren(
       side('All takes', takes),
       side('All passes', rest),
       stat('Takes minus passes', fmtBp(gap), tone(gap),
         passGaps.length ? `Within-pass avg ${fmtBp(d3.mean(passGaps))} (${passGaps.filter((v) => v > 0).length} of ${passGaps.length} passes positive)` : 'All priced verdicts',
-        'Before costs · open plans at latest price'),
+        'Own plans, before costs · open plans at latest price · not the main test'),
       ranking);
   });
   // The P/L chart: one main line and, when asked, a line for each book.

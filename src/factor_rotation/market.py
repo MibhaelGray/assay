@@ -386,6 +386,12 @@ def _paper() -> list[dict]:
         rows.append({"section": "paper_rank", **learn.rank_table(verdicts)})
     except Exception as e:
         logging.getLogger(__name__).warning("paper_proposals_failed error=%r", e)
+        verdicts = None
+    if verdicts is not None:
+        try:  # the pre-registered main test (learn.main_test): the page's headline answer to takes vs passes
+            rows.append({"section": "paper_test", **learn.main_test(verdicts)})
+        except Exception as e:
+            logging.getLogger(__name__).warning("paper_test_failed error=%r", e)
     try:
         rows += [{"section": "paper_pnl", **r} for r in book.pnl_by_session()]
     except Exception as e:
@@ -395,10 +401,12 @@ def _paper() -> list[dict]:
     fills = sorted((book.ROOT / "fills").glob("*.json"))
     last = json.loads(fills[-1].read_text()) if fills else {}
     today = datetime.now(NY).date()
+    ahead = journal.sessions_from(today, 6)
     rows.append({"section": "paper_account", "session": last.get("session"), "pulled_at": last.get("pulled_at"),
                  "net_liquidation": last.get("net_liquidation"), "positions": len(last.get("positions") or {}),
                  "mismatches": book.reconcile(last["positions"]) if last.get("positions") is not None else [],
                  "halted": book.HALT.read_text().strip() if book.HALT.exists() else None, "alerts": book.alerts(),
                  "paused": [p.read_text().strip() for p in sorted(book.ROOT.glob("PAUSE-*"))],
-                 "sessions_ahead": [d.isoformat() for d in journal.sessions_from(today, 6)], **book.marks_info()})
+                 "sessions_ahead": [d.isoformat() for d in ahead],
+                 "half_days": [d.isoformat() for d in ahead if journal.is_half_day(d)], **book.marks_info()})
     return rows
