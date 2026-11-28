@@ -45,7 +45,7 @@
    "first_session": "2026-11-27",
    "lead": "LI",
    "atr_pct": 0.0404,
-   "defer_regular": "queued for 8:35 AM CT: spread wider than 0.5% (LI 0.5%)"
+   "deferred_from": "queued for 8:35 AM CT: spread wider than 0.5% (LI 0.5%)"
   },
   {
    "id": "2026-11-27-S02",
@@ -82,7 +82,8 @@
    "first_session": "2026-11-27",
    "lead": "ITUB",
    "atr_pct": 0.04212,
-   "defer_regular": "queued for 8:35 AM CT: spread wider than 0.5% (ITUB 0.8%)"
+   "deferred_from": "queued for 8:35 AM CT: spread wider than 0.5% (ITUB 0.8%)",
+   "stood_down": "passed: moved +12.5% (+3.0 ATR) in our direction before entry; not chasing"
   }
  ],
  "marks": {
@@ -160,7 +161,71 @@
    }
   }
  },
- "exits": [],
+ "exits": [
+  {
+   "trade_id": "2026-11-18-S06",
+   "book": "dynamic",
+   "session_number": 6,
+   "intraday": true,
+   "at": "8:30 AM CT",
+   "pass": "night",
+   "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open (no exit was recorded that day), so close it at the next open. In profit: Disney closed at a 52-week closing high of 125.60 on 11-25, brokers raised targets, Doomsday tracking is strong; no wrong-if event found."
+  },
+  {
+   "trade_id": "2026-11-18-S08",
+   "book": "dynamic",
+   "session_number": 6,
+   "intraday": true,
+   "at": "8:30 AM CT",
+   "pass": "night",
+   "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open instead of carrying an unplanned session. No wrong-if event (SQM itself guides Q4 prices lower, no upgrades found; lithium futures not found), but the move the take expected did not come inside the window."
+  },
+  {
+   "trade_id": "2026-11-19-S04",
+   "book": "dynamic",
+   "session_number": 5,
+   "intraday": true,
+   "at": "8:30 AM CT",
+   "pass": "night",
+   "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. No wrong-if event (no buyback step-up, UOB downgraded, BofA cut), but NetEase turned up 3.8% on Wednesday against FXI -0.4% and there is nothing dated ahead to stay for."
+  },
+  {
+   "trade_id": "2026-11-24-S01",
+   "book": "dynamic",
+   "session_number": 3,
+   "intraday": true,
+   "at": "8:30 AM CT",
+   "pass": "night",
+   "reason": "review: News has changed the story: the Houthis said on 11-25 that they struck Saudi Arabia's Ras Tanura refinery and terminal and the ports of Jeddah and Jizan, and Iran's Fars agency reported a tanker hitting a mine in Hormuz the same day (OilPrice, 11-25 11:18 PM CT; FXEmpire, 11-26). Brent settled +3.5% on Wednesday and WTI is $85.7 tonight, +2.4%. The short rested on the war premium deflating; the attacks have spread from ships to Saudi export plant. None of the listed wrong-if lines is confirmed (no strike on Iran, no halt in Hormuz, the EIA report showed a 1.1M-barrel build), and Saudi Arabia has not confirmed damage."
+  },
+  {
+   "trade_id": "2026-11-18-S07",
+   "book": "dynamic",
+   "session_number": 6,
+   "intraday": true,
+   "at": "8:40 AM CT",
+   "pass": "night",
+   "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. The refiners fell another 3.2% against XLE on Wednesday to a 20-day low and the 11-25 EIA report showed gasoline and distillate builds, so the expected move has happened; no wrong-if event."
+  },
+  {
+   "trade_id": "2026-11-23-S04",
+   "book": "dynamic",
+   "session_number": 3,
+   "intraday": true,
+   "at": "8:40 AM CT",
+   "pass": null,
+   "reason": "stopped: down 7.8% at 8:40 AM CT, past the 7% stop"
+  },
+  {
+   "trade_id": "2026-11-25-S01",
+   "book": "dynamic",
+   "session_number": 2,
+   "intraday": true,
+   "at": "10:12 AM CT",
+   "pass": null,
+   "reason": "stopped: down 5.8% at 10:12 AM CT, past the 5.5% stop"
+  }
+ ],
  "runs": [
   {
    "at": "2026-11-26T22:35:48-05:00",
@@ -190,9 +255,532 @@
    "takes": {
     "night": 2
    }
+  },
+  {
+   "at": "2026-11-27T09:30:43-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-18-S06",
+     "book": "dynamic",
+     "session_number": 6,
+     "intraday": true,
+     "at": "8:30 AM CT",
+     "pass": "night",
+     "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open (no exit was recorded that day), so close it at the next open. In profit: Disney closed at a 52-week closing high of 125.60 on 11-25, brokers raised targets, Doomsday tracking is strong; no wrong-if event found."
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "book": "dynamic",
+     "session_number": 6,
+     "intraday": true,
+     "at": "8:30 AM CT",
+     "pass": "night",
+     "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open instead of carrying an unplanned session. No wrong-if event (SQM itself guides Q4 prices lower, no upgrades found; lithium futures not found), but the move the take expected did not come inside the window."
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "book": "dynamic",
+     "session_number": 5,
+     "intraday": true,
+     "at": "8:30 AM CT",
+     "pass": "night",
+     "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. No wrong-if event (no buyback step-up, UOB downgraded, BofA cut), but NetEase turned up 3.8% on Wednesday against FXI -0.4% and there is nothing dated ahead to stay for."
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "book": "dynamic",
+     "session_number": 3,
+     "intraday": true,
+     "at": "8:30 AM CT",
+     "pass": "night",
+     "reason": "review: News has changed the story: the Houthis said on 11-25 that they struck Saudi Arabia's Ras Tanura refinery and terminal and the ports of Jeddah and Jizan, and Iran's Fars agency reported a tanker hitting a mine in Hormuz the same day (OilPrice, 11-25 11:18 PM CT; FXEmpire, 11-26). Brent settled +3.5% on Wednesday and WTI is $85.7 tonight, +2.4%. The short rested on the war premium deflating; the attacks have spread from ships to Saudi export plant. None of the listed wrong-if lines is confirmed (no strike on Iran, no halt in Hormuz, the EIA report showed a 1.1M-barrel build), and Saudi Arabia has not confirmed damage."
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S06",
+     "symbol": "DIS",
+     "action": "SELL",
+     "shares": 244,
+     "kind": "LMT",
+     "limit": 126.18,
+     "venue": "regular",
+     "ref_price": 126.37,
+     "priced_on": "gateway bid/ask",
+     "bid": 126.37,
+     "ask": 126.48,
+     "spread_pct": 0.087,
+     "order_id": 10,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S06",
+     "symbol": "XLC",
+     "action": "BUY",
+     "shares": 283,
+     "kind": "LMT",
+     "limit": 107.29,
+     "venue": "regular",
+     "ref_price": 107.13,
+     "priced_on": "gateway bid/ask",
+     "bid": 107.1,
+     "ask": 107.13,
+     "spread_pct": 0.028,
+     "order_id": 11,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "symbol": "SPY",
+     "action": "SELL",
+     "shares": 25,
+     "kind": "LMT",
+     "limit": 724.2,
+     "venue": "regular",
+     "ref_price": 725.29,
+     "priced_on": "gateway bid/ask",
+     "bid": 725.29,
+     "ask": 725.35,
+     "spread_pct": 0.008,
+     "order_id": 12,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S08",
+     "symbol": "SQM",
+     "action": "BUY",
+     "shares": 385,
+     "kind": "LMT",
+     "limit": 49.78,
+     "venue": "regular",
+     "ref_price": 49.71,
+     "priced_on": "gateway bid/ask",
+     "bid": 49.36,
+     "ask": 49.71,
+     "spread_pct": 0.707,
+     "order_id": 13,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "symbol": "FXI",
+     "action": "SELL",
+     "shares": 931,
+     "kind": "LMT",
+     "limit": 31.99,
+     "venue": "regular",
+     "ref_price": 32.04,
+     "priced_on": "gateway bid/ask",
+     "bid": 32.04,
+     "ask": 32.05,
+     "spread_pct": 0.031,
+     "order_id": 14,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-19-S04",
+     "symbol": "NTES",
+     "action": "BUY",
+     "shares": 278,
+     "kind": "LMT",
+     "limit": 108.35,
+     "venue": "regular",
+     "ref_price": 108.19,
+     "priced_on": "gateway bid/ask",
+     "bid": 107.55,
+     "ask": 108.19,
+     "spread_pct": 0.593,
+     "order_id": 15,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-24-S01",
+     "symbol": "USO",
+     "action": "BUY",
+     "shares": 160,
+     "kind": "LMT",
+     "limit": 140.1,
+     "venue": "regular",
+     "ref_price": 139.89,
+     "priced_on": "gateway bid/ask",
+     "bid": 139.84,
+     "ask": 139.89,
+     "spread_pct": 0.036,
+     "order_id": 16,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-18-S07 Refiners: the exit a pass asked for wasn't sent (spread wider than 2% (DK 2.4%, PARR 2.3%)); the 2:45 PM CT close job sends it into the closing auction.",
+    "2026-11-18-S08 SQM: intraday exit only partially filled; remaining shares will close at the close job.",
+    "2026-11-19-S04 NTES: intraday exit only partially filled; remaining shares will close at the close job."
+   ],
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-27T09:35:06-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-27-S01",
+     "symbol": "LI",
+     "action": "BUY",
+     "shares": 2111,
+     "kind": "LMT",
+     "limit": 12.49,
+     "venue": "regular",
+     "ref_price": 12.47,
+     "priced_on": "gateway bid/ask",
+     "bid": 12.46,
+     "ask": 12.47,
+     "spread_pct": 0.08,
+     "order_id": 20,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-27-S01",
+     "symbol": "FXI",
+     "action": "SELL",
+     "shares": 788,
+     "kind": "LMT",
+     "limit": 32.04,
+     "venue": "regular",
+     "ref_price": 32.09,
+     "priced_on": "gateway bid/ask",
+     "bid": 32.09,
+     "ask": 32.1,
+     "spread_pct": 0.031,
+     "order_id": 23,
+     "status": "Filled",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [
+    "2026-11-27-S02"
+   ],
+   "deferred": [],
+   "warnings": [
+    "2026-11-27-S02 ITUB: moved +12.5% (+3.0 ATR) in our direction before entry; not chasing, so the trade is passed on.",
+    "2026-11-18-S07 Refiners: the exit a pass asked for wasn't sent (spread wider than 2% (DK 2.1%)); the 2:45 PM CT close job sends it into the closing auction."
+   ],
+   "cancelled_unfilled": 0
+  },
+  {
+   "at": "2026-11-27T09:40:29-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-18-S07",
+     "book": "dynamic",
+     "session_number": 6,
+     "intraday": true,
+     "at": "8:40 AM CT",
+     "pass": "night",
+     "reason": "review: Its time limit ended at the close on 11-25 and the book still shows it open, so close it at the next open. The refiners fell another 3.2% against XLE on Wednesday to a 20-day low and the 11-25 EIA report showed gasoline and distillate builds, so the expected move has happened; no wrong-if event."
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "book": "dynamic",
+     "session_number": 3,
+     "intraday": true,
+     "at": "8:40 AM CT",
+     "pass": null,
+     "reason": "stopped: down 7.8% at 8:40 AM CT, past the 7% stop"
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "XLE",
+     "action": "SELL",
+     "shares": 407,
+     "kind": "LMT",
+     "limit": 61.69,
+     "venue": "regular",
+     "ref_price": 61.78,
+     "priced_on": "gateway bid/ask",
+     "bid": 61.78,
+     "ask": 61.79,
+     "spread_pct": 0.016,
+     "order_id": 37,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "MPC",
+     "action": "BUY",
+     "shares": 8,
+     "kind": "LMT",
+     "limit": 360.66,
+     "venue": "regular",
+     "ref_price": 360.12,
+     "priced_on": "gateway bid/ask",
+     "bid": 359.21,
+     "ask": 360.12,
+     "spread_pct": 0.253,
+     "order_id": 38,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "VLO",
+     "action": "BUY",
+     "shares": 9,
+     "kind": "LMT",
+     "limit": 330.14,
+     "venue": "regular",
+     "ref_price": 329.65,
+     "priced_on": "gateway bid/ask",
+     "bid": 328.85,
+     "ask": 329.65,
+     "spread_pct": 0.243,
+     "order_id": 39,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PSX",
+     "action": "BUY",
+     "shares": 12,
+     "kind": "LMT",
+     "limit": 243.6,
+     "venue": "regular",
+     "ref_price": 243.24,
+     "priced_on": "gateway bid/ask",
+     "bid": 242.81,
+     "ask": 243.24,
+     "spread_pct": 0.177,
+     "order_id": 40,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PBF",
+     "action": "BUY",
+     "shares": 50,
+     "kind": "LMT",
+     "limit": 58.54,
+     "venue": "regular",
+     "ref_price": 58.45,
+     "priced_on": "gateway bid/ask",
+     "bid": 58.14,
+     "ask": 58.45,
+     "spread_pct": 0.532,
+     "order_id": 41,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "DINO",
+     "action": "BUY",
+     "shares": 34,
+     "kind": "LMT",
+     "limit": 88.11,
+     "venue": "regular",
+     "ref_price": 87.98,
+     "priced_on": "gateway bid/ask",
+     "bid": 87.81,
+     "ask": 87.98,
+     "spread_pct": 0.193,
+     "order_id": 42,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "DK",
+     "action": "BUY",
+     "shares": 51,
+     "kind": "LMT",
+     "limit": 54.39,
+     "venue": "regular",
+     "ref_price": 54.31,
+     "priced_on": "gateway bid/ask",
+     "bid": 53.72,
+     "ask": 54.31,
+     "spread_pct": 1.092,
+     "order_id": 43,
+     "status": "Submitted",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "CVI",
+     "action": "BUY",
+     "shares": 92,
+     "kind": "LMT",
+     "limit": 31.59,
+     "venue": "regular",
+     "ref_price": 31.54,
+     "priced_on": "gateway bid/ask",
+     "bid": 31.29,
+     "ask": 31.54,
+     "spread_pct": 0.796,
+     "order_id": 44,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-18-S07",
+     "symbol": "PARR",
+     "action": "BUY",
+     "shares": 48,
+     "kind": "LMT",
+     "limit": 61.24,
+     "venue": "regular",
+     "ref_price": 61.15,
+     "priced_on": "gateway bid/ask",
+     "bid": 60.1,
+     "ask": 61.15,
+     "spread_pct": 1.732,
+     "order_id": 45,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "symbol": "XLB",
+     "action": "SELL",
+     "shares": 430,
+     "kind": "LMT",
+     "limit": 51.61,
+     "venue": "regular",
+     "ref_price": 51.69,
+     "priced_on": "gateway bid/ask",
+     "bid": 51.69,
+     "ask": 51.7,
+     "spread_pct": 0.019,
+     "order_id": 46,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-23-S04",
+     "symbol": "IP",
+     "action": "BUY",
+     "shares": 733,
+     "kind": "LMT",
+     "limit": 32.66,
+     "venue": "regular",
+     "ref_price": 32.61,
+     "priced_on": "gateway bid/ask",
+     "bid": 32.56,
+     "ask": 32.61,
+     "spread_pct": 0.153,
+     "order_id": 47,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-18-S07 Refiners: intraday exit only partially filled; remaining shares will close at the close job.",
+    "2026-11-23-S04 IP: intraday exit only partially filled; remaining shares will close at the close job."
+   ],
+   "cancelled_unfilled": 2
+  },
+  {
+   "at": "2026-11-27T11:12:14-05:00",
+   "venue": "regular",
+   "dry_run": false,
+   "passes": [],
+   "new": [],
+   "stood_down": [],
+   "exits": [
+    {
+     "trade_id": "2026-11-25-S01",
+     "book": "dynamic",
+     "session_number": 2,
+     "intraday": true,
+     "at": "10:12 AM CT",
+     "pass": null,
+     "reason": "stopped: down 5.8% at 10:12 AM CT, past the 5.5% stop"
+    }
+   ],
+   "cancelled": 0,
+   "orders": [
+    {
+     "trade_id": "2026-11-25-S01",
+     "symbol": "KIE",
+     "action": "SELL",
+     "shares": 416,
+     "kind": "LMT",
+     "limit": 66.09,
+     "venue": "regular",
+     "ref_price": 66.19,
+     "priced_on": "gateway bid/ask",
+     "bid": 66.19,
+     "ask": 66.2,
+     "spread_pct": 0.015,
+     "order_id": 52,
+     "status": "Filled",
+     "note": ""
+    },
+    {
+     "trade_id": "2026-11-25-S01",
+     "symbol": "MMS",
+     "action": "BUY",
+     "shares": 459,
+     "kind": "LMT",
+     "limit": 62.57,
+     "venue": "regular",
+     "ref_price": 62.48,
+     "priced_on": "gateway bid/ask",
+     "bid": 62.29,
+     "ask": 62.48,
+     "spread_pct": 0.305,
+     "order_id": 53,
+     "status": "Submitted",
+     "note": ""
+    }
+   ],
+   "skipped": [],
+   "passed": [],
+   "deferred": [],
+   "warnings": [
+    "2026-11-25-S01 MMS: intraday exit only partially filled; remaining shares will close at the close job."
+   ],
+   "cancelled_unfilled": 1
   }
  ],
- "last_attempt": "2026-11-27T01:27:24-05:00",
+ "last_attempt": "2026-11-27T11:12:14-05:00",
  "last_fault": false,
- "last_wide": false
+ "last_wide": false,
+ "last_stop_check": "2026-11-27T12:33:46-05:00"
 }
