@@ -210,6 +210,9 @@ def _run(name: str, shadow: bool = False) -> dict:
     env = {**os.environ, "CLAUDE_CODE_OAUTH_TOKEN": token, "FR_JOURNAL_DIR": str(root.resolve()),
            "FR_JUDGE_MODEL": MODEL, "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL,
            "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
+           # The owner's Claude auto-memory for this project was being put in front of the judge and every research
+           # agent (found 2026-11-27): notes on results and past trades. A pass reads none of it.
+           "CLAUDE_CODE_DISABLE_AUTO_MEMORY": "1",
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
     writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)"]   # "//" marks an absolute path
     cmd = [exe, "-p", "--model", MODEL, "--effort", EFFORT, "--output-format", "json", "--permission-mode", "dontAsk",

@@ -184,6 +184,28 @@ class Sending(unittest.TestCase):
             watch.run(at("2026-11-18T10:05"), quiet=True)
             self.assertEqual(send.call_count, 2)
 
+    def test_an_alert_whose_phone_push_failed_is_tried_again_on_the_next_run(self):
+        with tempfile.TemporaryDirectory() as d, \
+                mock.patch.dict(os.environ, {"FR_NTFY_TOPIC": "topic"}), \
+                mock.patch.object(watch, "STATE", Path(d) / "watch.json"), \
+                mock.patch.object(watch, "failed_jobs", return_value=[("job:paper-close:1", "Job failed: paper-close", "x")]), \
+                mock.patch.object(watch, "stopped_clock", return_value=[]), \
+                mock.patch.object(watch, "missing_passes", return_value=[]), \
+                mock.patch.object(watch, "missing_close", return_value=[]), \
+                mock.patch.object(watch, "stuck_closing", return_value=[]), \
+                mock.patch.object(watch, "refused_quotes", return_value=[]), \
+                mock.patch.object(watch, "send", side_effect=[False, True]) as send:
+            watch.run(at("2026-11-24T15:25"), quiet=True)   # the network is down: nothing reaches the phone
+            watch.run(at("2026-11-24T15:30"), quiet=True)   # so it is sent again five minutes later
+            self.assertEqual(send.call_count, 2)
+            watch.run(at("2026-11-24T15:35"), quiet=True)   # and once it has gone out, not again
+            self.assertEqual(send.call_count, 2)
+
+    def test_keep_awake_stopped_on_purpose_is_not_a_failed_job(self):
+        listing = f"-\t-15\t{watch.LABEL}keep-awake\n-\t1\t{watch.LABEL}nightly\n"
+        with mock.patch.object(watch.subprocess, "run", return_value=mock.Mock(stdout=listing)):
+            self.assertEqual([k for k, _, _ in watch.failed_jobs()], ["job:nightly:1"])
+
     def test_telegram_sends_when_both_settings_are_set(self):
         resp = mock.MagicMock(); resp.__enter__.return_value.status = 200
         with mock.patch.dict("os.environ", {"FR_NTFY_TOPIC": "", "FR_TELEGRAM_TOKEN": "t0k", "FR_TELEGRAM_CHAT": "42"}), \

@@ -631,6 +631,38 @@ class IsolationDepthQuotesSideXfeedStatsFixes(unittest.TestCase):
         self.assertTrue(any("no 4 or 5" in f for f in jm["flags"]))
         self.assertTrue(any("p_win on takes has collapsed" in f for f in jm["flags"]))
 
+class Audit1127(unittest.TestCase):
+    def test_a_pass_numbers_its_trades_past_the_highest_id_in_use_not_the_count(self):
+        from datetime import date as _date
+        from unittest import mock as _mock
+        from factor_rotation.paper import book as _book, entries as _entries, rules as _rules
+        # The night pass kept S01 and S03 (the caps dropped S02). Counting would give the next pass S03 again.
+        state = {"trades": [{"id": "2026-12-01-S01"}, {"id": "2026-12-01-S03"}], "marks": {"morning": {"prices": {}}}}
+        seen = {}
+
+        def proposal_trades(takes, day, prices, used, start, **kw):
+            seen["start"] = start
+            return [], []
+
+        with _mock.patch.object(_book, "capital", return_value=1_000_000), \
+                _mock.patch.object(_rules, "proposal_trades", side_effect=proposal_trades):
+            _entries.make_trades(_book.MAIN, "morning", [{"id": "p4", "long": ["DDD"], "short": ["IWM"]}], _date(2026, 12, 1),
+                                 state, [], lambda symbols: {}, {"new": [], "skipped": []}, None)
+        self.assertEqual(seen["start"], 4)
+        self.assertEqual(_entries._id_number("2026-11-25-S03"), 3)
+
+    def test_an_overnight_sweep_with_no_spy_quote_counts_as_no_sweep(self):
+        from factor_rotation import screen as _screen
+        good = {"bid": 99.9, "ask": 100.1, "last": 100.0, "volume": 5000.0}
+        blank = {"bid": None, "ask": None, "last": None, "volume": None}
+        whole = {"at": "t", "quotes": {"AAA": good, "SPY": good}}
+        self.assertIs(_screen._checked_sweep(whole), whole)
+        cut = _screen._checked_sweep({"at": "t", "quotes": {"AAA": good, "SPY": blank, "XLK": blank}})
+        self.assertNotIn("quotes", cut)
+        self.assertIn("no usable SPY quote", cut["why"])
+        self.assertIn("2 of 3", cut["why"])
+        self.assertEqual(_screen._checked_sweep({"why": "down"}), {"why": "down"})
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -183,7 +183,9 @@ def make_trades(which: str, kind: str, takes: list[dict], session: date, state: 
     counted = [t for t in same if t["id"] not in leaving]
     traded = (volumes or dollar_volumes)(sorted({s for p in takes for s in [*p["long"], *p["short"]]}))
     letter = book.ID_LETTER[which]
-    start = sum(book.book_of(t) == which for t in state["trades"]) + 1
+    # From the highest number in use, not the count: a take the caps dropped leaves a gap in the numbers, and
+    # counting would walk the next pass's first trade into an id (and order refs) another trade already has.
+    start = max((_id_number(t["id"]) for t in state["trades"] if book.book_of(t) == which), default=0) + 1
     made, skipped = rules.proposal_trades(takes, session.isoformat(), state["marks"][kind]["prices"], used, start=start,
                                           room=PASS_MAX_NEW or len(takes), capital=cap, volumes=traded)
     for t in made:   # S or M, not the first book's A: the gateway still reports that book's fills under its ids
@@ -913,6 +915,12 @@ def _tell(kind: str, record: dict, state: dict, where: str | None, blocked_why: 
         watch.send(*traded_note(kind, record, state, where, blocked_why))
     except Exception as e:  # noqa: BLE001
         log.warning("traded_note_failed %r", e)
+
+
+def _id_number(trade_id: str) -> int:
+    """The running number at the end of a trade id: 3 for 2026-11-25-S03."""
+    digits = trade_id.rsplit("-", 1)[-1].lstrip("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    return int(digits) if digits.isdigit() else 0
 
 
 def _save(session: date, state: dict, record: dict) -> None:

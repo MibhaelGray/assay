@@ -729,6 +729,17 @@ def _gateway_sweep(symbols: list[str]) -> dict:
             time.sleep(GATEWAY_RETRY_WAIT)
 
 
+def _checked_sweep(swept: dict) -> dict:
+    """A sweep with no usable SPY quote counts as no sweep. On 2026-11-26 the gateway stopped answering part-way
+    through (281 of 1,241 names blank, SPY among them): every move was measured "net of SPY's +0.0%" and the judge
+    was told SPY and the sector funds weren't trading."""
+    quotes = swept.get("quotes")
+    if not quotes or _usable(quotes.get("SPY")) is not None:
+        return swept
+    blank = sum(not any(q.values()) for q in quotes.values())
+    return {"why": f"the gateway sent no usable SPY quote, and nothing at all for {blank} of {len(quotes)} names"}
+
+
 def _usable(q: dict | None) -> float | None:
     """The spread of an overnight quote that counts: a real overnight trade and a spread inside the cross limit."""
     from .paper import rules
@@ -861,7 +872,7 @@ def build_live(slot: str, now: datetime | None = None, snaps: dict[str, dict] | 
     if slot not in ("morning", "midday"):
         from .paper import entries
         if entries.venue(now) == "overnight":
-            swept = (sweep or _gateway_sweep)(names)
+            swept = _checked_sweep((sweep or _gateway_sweep)(names))
     check = (OvernightCheck(books, swept) if slot in proposals.NIGHT_KINDS else None)
     payload = _run(frame, {"slot": slot, "session": session, "snaps": snaps, "partial": partial, "check": check,
                            "sweep": swept}, edgar_events=edgar_events)

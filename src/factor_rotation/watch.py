@@ -108,6 +108,12 @@ def send(title: str, text: str) -> bool:
     return sent
 
 
+def _phone_set() -> bool:
+    """Whether a phone channel (ntfy, or Telegram's token and chat) is set up at all."""
+    env = lambda k: os.environ.get(k, "").strip()  # noqa: E731
+    return bool(env("FR_NTFY_TOPIC") or (env("FR_TELEGRAM_TOKEN") and env("FR_TELEGRAM_CHAT")))
+
+
 def _state() -> dict:
     try:
         return json.loads(STATE.read_text())
@@ -133,6 +139,8 @@ def failed_jobs() -> list[tuple[str, str, str]]:
         if len(parts) != 3 or not parts[2].startswith(LABEL):
             continue
         job, status = parts[2][len(LABEL):], parts[1]
+        if (job, status) == ("keep-awake", "-15"):   # stopped on purpose (launchctl kickstart -k, or by hand)
+            continue
         if status not in ("0", "-") and job != "watch":
             found.append((f"job:{job}:{status}", f"Job failed: {job}",
                           f"The {job} job's last run exited with status {status}. Its log is ~/Library/Logs/factor-rotation/{job}.log."))
@@ -455,8 +463,9 @@ def run(now: datetime | None = None, probe=None, quiet: bool = False, quote_prob
         wait = timedelta(days=1) if key.startswith("job:") else REPEAT   # a job's status stands until its next run
         if last and now - datetime.fromisoformat(last) < wait:
             continue
-        send(title, text)
-        sent_at[key] = now.isoformat(timespec="seconds")
+        # A push that didn't go out (no network, as when the close job itself fails) is tried again on the next run.
+        if send(title, text) is not False or not _phone_set():
+            sent_at[key] = now.isoformat(timespec="seconds")
         out.append(f"{title}: {text}")
     # forget alerts older than a day, so the file stays small
     state["sent"] = {k: v for k, v in sent_at.items() if now - datetime.fromisoformat(v) < timedelta(days=2)}

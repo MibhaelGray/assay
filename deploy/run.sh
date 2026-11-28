@@ -6,7 +6,8 @@ cd "$(dirname "$0")/.."
 # time comes, whatever time zone the Mac is set to. It has its own flock, and needs no .env and no caffeinate.
 if [ "${1:-}" = clock ]; then exec python3 deploy/launchd/clock.py; fi
 
-# Keep-awake needs no lockf or wrapper caffeinate: launchd kickstarts it with -k (replacing any prior instance),
+# Keep-awake needs no lockf or wrapper caffeinate: one caffeinate holds until Friday 8:00 PM ET and is never
+# killed to be restarted (a start while it runs is a no-op, so there is no gap with nothing holding the Mac awake),
 # it records its own PID (preserved across exec) so clock.py can self-heal it after a reboot or crash, and it
 # prevents idle sleep across the active trading week (Sun 19:55 ET through Fri 20:00 ET).
 # Note: a closed lid without an external display still sleeps the Mac, and so does a flat battery.
@@ -14,14 +15,9 @@ if [ "${1:-}" = keep-awake ]; then
   mkdir -p data
   secs=$(python3 -c 'from datetime import datetime, timedelta; from zoneinfo import ZoneInfo
 n = datetime.now(ZoneInfo("America/New_York"))
-if n.weekday() < 5 and (9, 0) <= (n.hour, n.minute) < (16, 30):
-    e = n.replace(hour=16, minute=45, second=0, microsecond=0)
-elif n.weekday() == 4 and (n.hour, n.minute) >= (16, 30):
-    e = n.replace(hour=20, minute=0, second=0, microsecond=0)
-else:
-    e = n.replace(hour=9, minute=30, second=0, microsecond=0)
-    if e <= n:
-        e += timedelta(days=1)
+e = (n + timedelta(days=(4 - n.weekday()) % 7)).replace(hour=20, minute=0, second=0, microsecond=0)
+if e <= n:
+    e += timedelta(days=7)
 print(max(60, int((e - n).total_seconds())))')
   printf '%s\n' "$$" > data/.keep-awake.pid
   exec caffeinate -i -t "$secs"

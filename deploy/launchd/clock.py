@@ -52,7 +52,10 @@ MAX_LATE: dict[str, int | None] = {
 }
 CRITICAL = {"pass-morning", "pass-midday", "pass-night", "paper-close"}
 MAX_RETRIES = 5
-KILL_BEFORE_START = {"keep-awake"}
+# No job is killed to be restarted. keep-awake used to be (kickstart -k): for the second between the old caffeinate
+# dying and the new one starting nothing held the Mac awake, and on 2026-11-27 it idle-slept in that gap for 66
+# minutes. Its caffeinate now lasts to Friday 8:00 PM ET (run.sh); starting it while it runs changes nothing.
+KILL_BEFORE_START: set[str] = set()
 
 
 def _minutes(hhmm: str) -> int:

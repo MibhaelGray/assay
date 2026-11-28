@@ -123,7 +123,7 @@ class ClockTests(unittest.TestCase):
             self.assertIn("failed 5 times", s["missed"]["pass-morning 09:45"])
             self.assertNotIn("errors", s)
 
-    def test_start_auto_bootstraps_unloaded_service_and_uses_k_for_keep_awake(self):
+    def test_start_auto_bootstraps_unloaded_service_and_never_kills_keep_awake(self):
         with tempfile.TemporaryDirectory() as tmp:
             agents = Path(tmp)
             for job in ("pass-morning", "keep-awake"):
@@ -143,7 +143,9 @@ class ClockTests(unittest.TestCase):
             self.assertEqual(calls[0][:2], ["launchctl", "kickstart"])
             self.assertEqual(calls[1][:2], ["launchctl", "bootstrap"])
             self.assertEqual(calls[2][:2], ["launchctl", "kickstart"])
-            self.assertEqual(calls[3][:3], ["launchctl", "kickstart", "-k"])
+            # No -k: killing the running caffeinate leaves a gap with nothing holding the Mac awake (2026-11-27).
+            self.assertEqual(calls[3][:2], ["launchctl", "kickstart"])
+            self.assertNotIn("-k", calls[3])
 
     def test_weekend_days(self):
         saturday, _ = clock.due(ny("2026-11-28", "23:59"), {"day": "2026-11-28", "started": []})
