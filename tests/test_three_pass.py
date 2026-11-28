@@ -192,8 +192,9 @@ def candidate(name, hedge="HHH", setup="live_move", direction="long"):
             "hedge": hedge, "hedge_fit": None, "score": 3.0, "chart": "", "numbers": {"price": 50.0, "atr_pct": 0.02}, "also": []}
 
 
-def verdict(name, rank, decision="take", conviction=3, **kw):
-    v = {"candidate": name, "rank": rank, "decision": decision, "conviction": conviction, "reason": "the reason", **kw}
+def verdict(name, rank, decision="take", conviction=3, p_win=None, **kw):
+    v = {"candidate": name, "rank": rank, "decision": decision, "conviction": conviction,
+         "p_win": (55 if decision == "take" else 42) if p_win is None else p_win, "reason": "the reason", **kw}
     if decision == "take":
         v = {"reasoning": {k: "x" for k in ("what_changed", "story", "chart", "coming", "case_against")}, "wrong_if": "it gives the move back",
              "hedge_why": "its sector", "plan": {"horizon_days": 3, "stop": {"spread_pct": -5}}, **v}

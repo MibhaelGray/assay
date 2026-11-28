@@ -205,11 +205,11 @@ class CleanJudgeAndOwnerReport(Case):
         draft = {
             "session": DAY.isoformat(), "pass": "night", "summary": "test", "market": {"ES": "+0.1%"},
             "proposals": [
-                {"candidate": "AAA", "rank": 1, "decision": "take", "conviction": 3, "reason": "activist stake",
+                {"candidate": "AAA", "rank": 1, "decision": "take", "conviction": 3, "p_win": 58, "reason": "activist stake",
                  "reasoning": {"what_changed": "13D", "story": "activist", "chart": "flat", "coming": "none", "case_against": "risk"},
                  "wrong_if": "fund exits", "hedge": None, "hedge_why": "outright bet on activist",
                  "plan": {"horizon_days": 1, "stop": {"spread_pct": -5.0}}},
-                {"candidate": "BBB", "rank": 2, "decision": "pass", "conviction": 2, "reason": "no catalyst",
+                {"candidate": "BBB", "rank": 2, "decision": "pass", "conviction": 2, "p_win": 42, "reason": "no catalyst",
                  "pass_case": {"case_for": "oversold", "case_against": "no news", "why_not": "stretched"}},
             ],
             "reviews": [],

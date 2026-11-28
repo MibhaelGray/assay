@@ -208,7 +208,8 @@ def _run(name: str, shadow: bool = False) -> dict:
                 "started": now.isoformat(timespec="seconds"), "minutes": 0.0, "recorded": str(root / leaves)}
     DRAFTS.mkdir(parents=True, exist_ok=True)
     env = {**os.environ, "CLAUDE_CODE_OAUTH_TOKEN": token, "FR_JOURNAL_DIR": str(root.resolve()),
-           "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL, "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
+           "FR_JUDGE_MODEL": MODEL, "CLAUDE_CODE_SUBAGENT_MODEL": AGENT_MODEL,
+           "CLAUDE_CODE_MAX_WEB_SEARCHES_PER_SESSION": str(WEB_SEARCHES),
            **({"FR_PAPER_SEND": "0"} if shadow else {})}
     writes = [f"Write(/{root.resolve()}/research/**)", f"Edit(/{root.resolve()}/research/**)"]   # "//" marks an absolute path
     cmd = [exe, "-p", "--model", MODEL, "--effort", EFFORT, "--output-format", "json", "--permission-mode", "dontAsk",

@@ -279,6 +279,7 @@ class Research(Case):
         if not any("rank" in v for v in verdicts):
             verdicts = [{**v, "rank": i} for i, v in enumerate(verdicts, 1)]
         verdicts = [{**v, "pass_case": PASS_CASE} if v.get("decision") == "pass" and "pass_case" not in v else v for v in verdicts]
+        verdicts = [{**v, "p_win": 56 if v.get("decision") == "take" else 42} if "p_win" not in v else v for v in verdicts]
         out = daily.record({"session": DAY.isoformat(), "pass": "night", "proposals": verdicts}, SUNDAY_EVENING)
         legs = {s for p in out[1]["proposals"] for s in [*p["long"], *p["short"]]} | {"SPY"}
         state = entries.load(DAY) or entries._blank(DAY)

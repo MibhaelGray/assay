@@ -540,6 +540,97 @@ class IsolationDepthQuotesSideXfeedStatsFixes(unittest.TestCase):
         self.assertIn("Regime split (default plan)", rendered)
         self.assertIn("HAC p=", rendered)
 
+    def test_conviction_v2_p_win_validation_stamping_and_learn_metrics(self):
+        from factor_rotation.paper import daily
+        from factor_rotation import screen as screens
+
+        day = date(2026, 11, 30)
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            sc = {
+                "as_of": "2026-11-27", "session": day.isoformat(), "slot": "night", "live": True, "phase": "post",
+                "prices_at": "2026-11-27T13:00:00-05:00",
+                "candidates": [
+                    {"name": "AAA", "kind": "stock", "setup": "earnings_gap_held", "direction": "long",
+                     "why": "gap", "chart": "c", "numbers": {"atr_pct": 0.03}, "hedge": "XLK"},
+                    {"name": "BBB", "kind": "stock", "setup": "turn", "direction": "long",
+                     "why": "turn", "chart": "c", "numbers": {"atr_pct": 0.03}, "hedge": "XLK"},
+                ],
+                "in_book": [],
+            }
+            with mock.patch.object(journal, "JOURNAL", root), \
+                    mock.patch.object(book, "ROOT", root / "paper"), \
+                    mock.patch.object(proposals.earnings, "load", return_value={"names": {}}), \
+                    mock.patch.object(proposals, "pair_stats", return_value=None):
+                sp = screens.live_path(day, "night")
+                sp.parent.mkdir(parents=True, exist_ok=True)
+                sp.write_text(json.dumps(sc))
+
+                def base_draft(p1, p2):
+                    return {
+                        "session": day.isoformat(), "pass": "night", "summary": "s", "market": {},
+                        "proposals": [
+                            {"candidate": "AAA", "rank": 1, "decision": "take", "conviction": 4, "reason": "strong",
+                             "reasoning": {k: "x" for k in journal.REASONING}, "wrong_if": "w", "hedge_why": "h",
+                             "plan": {"horizon_days": 3, "stop": {"spread_pct": -5.0}}, **p1},
+                            {"candidate": "BBB", "rank": 2, "decision": "pass", "conviction": 2, "reason": "overlap",
+                             "pass_case": {"case_for": "a", "case_against": "b", "why_not": "c"}, **p2},
+                        ],
+                        "reviews": [],
+                    }
+
+                sun = at(date(2026, 11, 29), 20, 45)
+                # Missing, out-of-range, float, and bool p_win must all be refused
+                for bad in ({}, {"p_win": 4}, {"p_win": 96}, {"p_win": 55.0}, {"p_win": True}):
+                    with self.assertRaisesRegex(ValueError, "p_win"):
+                        daily.record(base_draft(bad, {"p_win": 45}), now=sun)
+
+                # Take under 50 (45) and pass over 50 (62, ranked below take) are both accepted and stamped scale=2 + judge
+                with mock.patch.dict(os.environ, {"FR_JUDGE_MODEL": "claude-fable-5-2"}):
+                    _, doc, _ = daily.record(base_draft({"p_win": 45}, {"p_win": 62}), now=sun)
+                self.assertEqual([p["p_win"] for p in doc["proposals"]], [45, 62])
+                self.assertEqual([p["scale"] for p in doc["proposals"]], [2, 2])
+                self.assertEqual([p["judge"] for p in doc["proposals"]], ["claude-fable-5-2", "claude-fable-5-2"])
+                self.assertEqual(doc["passes"][0]["scale"], 2)
+                self.assertEqual(doc["passes"][0]["judge"], "claude-fable-5-2")
+
+        # Verify learn.py scale-2 scoring, conviction gate, and collapse monitor
+        synth = []
+        for idx in range(30):
+            sess = f"2026-12-{(idx % 15) + 1:02d}"
+            synth.append({
+                "id": f"T4-{idx}", "session": sess, "verdict": "take", "conviction": 4, "scale": 2,
+                "p_win": 58 + (idx % 6), "rank": 1, "ranked": 4, "recorded_at": f"{sess}T21:00:00-05:00",
+                "judge": "claude-fable-5-2", "plan_bps": 250.0, "default_plan_bps": 220.0, "plan_mature": True,
+            })
+            synth.append({
+                "id": f"T3-{idx}", "session": sess, "verdict": "take", "conviction": 3, "scale": 2,
+                "p_win": 50 + (idx % 5), "rank": 2, "ranked": 4, "recorded_at": f"{sess}T21:00:00-05:00",
+                "judge": "claude-fable-5-2", "plan_bps": 80.0, "default_plan_bps": 70.0, "plan_mature": True,
+            })
+            synth.append({
+                "id": f"P1-{idx}", "session": sess, "verdict": "pass", "conviction": 2, "scale": 2,
+                "p_win": 42, "rank": 3, "ranked": 4, "recorded_at": f"{sess}T21:00:00-05:00",
+                "judge": "claude-fable-5-2", "plan_bps": -40.0, "default_plan_bps": -40.0, "plan_mature": True,
+            })
+            synth.append({
+                "id": f"P2-{idx}", "session": sess, "verdict": "pass", "conviction": 1, "scale": 2,
+                "p_win": 32, "rank": 4, "ranked": 4, "recorded_at": f"{sess}T21:00:00-05:00",
+                "judge": "claude-fable-5-2", "plan_bps": -120.0, "default_plan_bps": -120.0, "plan_mature": True,
+            })
+        pwt = learn.p_win_table(synth)
+        self.assertEqual(pwt["all"]["n"], 120)
+        self.assertGreater(pwt["all"]["auc"], 0.9)
+        cg = learn.conviction_gate(synth)
+        self.assertTrue(cg["due"])
+        self.assertEqual(cg["verdict"], "keep")
+        self.assertAlmostEqual(cg["gap_bps"], 170.0, places=1)
+        # Collapsed all-3 / single-p_win monitor check
+        collapsed = [{**r, "conviction": 3, "p_win": 55} for r in synth if r["verdict"] == "take"][:30]
+        jm = learn.judge_monitor(collapsed)
+        self.assertTrue(any("no 4 or 5" in f for f in jm["flags"]))
+        self.assertTrue(any("p_win on takes has collapsed" in f for f in jm["flags"]))
+
 
 if __name__ == "__main__":
     unittest.main()

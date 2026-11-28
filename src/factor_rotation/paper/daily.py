@@ -15,6 +15,7 @@ A pass records once. Verdicts are never rewritten.
 """
 
 import json
+import os
 from datetime import date, datetime
 from pathlib import Path
 
@@ -113,7 +114,9 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
         raise FileNotFoundError(f"no live screen for the {kind} pass of {session}; run `uv run fr screen --live {kind}` first")
     cands = {c["name"]: (i, c) for i, c in enumerate(screen["candidates"], 1)}
     raws = draft.get("proposals", [])
-    stamp = {"session": session.isoformat(), "pass": kind, "recorded_at": now.isoformat()}
+    judge = os.environ.get("FR_JUDGE_MODEL") or None
+    stamp = {"session": session.isoformat(), "pass": kind, "recorded_at": now.isoformat(),
+             "scale": proposals.SCALE, "judge": judge}
     new, notes = [], []
     for raw, rank in zip(raws, proposals._ranks(raws)):   # every verdict ranked
         p = {**proposals._proposal(raw, session, screen, cands, kind=kind), **stamp, "rank": rank, "ranked": len(raws)}
@@ -140,6 +143,7 @@ def record(draft: dict, now: datetime | None = None) -> tuple[Path, dict, list[s
     doc["screen"] = screen["as_of"]
     doc["passes"].append({"pass": kind, "at": now.isoformat(), "summary": str(draft.get("summary", "")), "market": draft.get("market", {}),
                           "proposals": len(new), "takes": len(takes), "reviews": len(reviews),
+                          "scale": proposals.SCALE, "judge": judge,
                           "prices_at": screen.get("prices_at"), "phase": screen.get("phase")})
     if reviews:   # written first: the order job acts once the proposals file names the pass
         path = proposals.root() / "pass_reviews" / f"{session}.json"

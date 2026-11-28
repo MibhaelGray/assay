@@ -22,6 +22,8 @@ from ..universe import ETFS
 from . import rules
 
 DECISIONS = ("take", "pass")
+P_WIN = (5, 95)   # integer percent chance the idea makes money as scored (logged only; never drives sizing)
+SCALE = 2         # conviction scale version: 1 = original (all takes were 3), 2 = redefined 4/5 + required p_win
 
 
 def root() -> Path:
@@ -198,6 +200,9 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict, kind: 
     c = raw.get("conviction")
     if not isinstance(c, int) or isinstance(c, bool) or not 1 <= c <= 5:
         raise ValueError(f"{who}: conviction must be 1-5, how strongly you believe the trade works, for a pass too")
+    pw = raw.get("p_win")
+    if not isinstance(pw, int) or isinstance(pw, bool) or not P_WIN[0] <= pw <= P_WIN[1]:
+        raise ValueError(f"{who}: p_win must be a whole number from {P_WIN[0]} to {P_WIN[1]} (percent chance the idea makes money as scored)")
     if not _text(raw.get("reason")):
         raise ValueError(f"{who}: give the reason for the verdict in a sentence")
     take = raw["decision"] == "take"
@@ -222,7 +227,7 @@ def _proposal(raw: dict, session: date, screen: dict | None, cands: dict, kind: 
         if not legs:
             raise ValueError(f"{who}: give the legs (long and/or short); the screen has no tradable default for it")
         p["plan"] = _plan(raw.get("plan"), legs, who)
-    p.update({"decision": raw["decision"], "conviction": c, "reason": raw["reason"].strip(), "reviewed": True,
+    p.update({"decision": raw["decision"], "conviction": c, "p_win": pw, "reason": raw["reason"].strip(), "reviewed": True,
               "reasoning": None, "wrong_if": None, "hedge_why": None, "through_earnings": None})
     if take:
         reasoning = raw.get("reasoning")

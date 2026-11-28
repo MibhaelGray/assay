@@ -34,6 +34,10 @@ RANK_NIGHTS = 20              # about how many scored nights a ranking needs bef
 LESSONS = "lessons.md"
 EST_COST_BPS = 25.0           # transparent round-trip cost assumption (spread + commissions) for plan tests
 UNINFLUENCED_FROM = "2026-11-26"  # first session where the judge ran without lessons.md / fr paper learn
+CONVICTION_V2_FROM = "2026-11-30" # first session on scale 2 (redefined 4/5 conviction + required p_win)
+P_WIN_BINS = ((5, 39), (40, 49), (50, 59), (60, 69), (70, 95))   # fixed before any p_win was scored
+GATE_FOURS = 30               # settled scale-2 takes at conviction 4 or 5 before the sizing review
+MONITOR_TAKES = 30            # collapse monitor window (latest scale-2 takes)
 POWER_Z_ALPHA = 1.64485       # one-sided alpha = 0.05
 POWER_Z_BETA = 0.84162        # 80% power
 POWER_CLUSTER_DEFF = 1.25     # conservative inflation for within-session correlation across same-day takes
@@ -413,7 +417,9 @@ def outcomes() -> list[dict]:
         out.append({
             "id": p["id"], "session": p["session"], "name": p["name"], "kind": p["kind"], "setup": p["setup"],
             "door": door, "route": route, "direction": p["direction"],
-            "source": p["source"], "pass": p.get("pass"), "verdict": _verdict(p), "decision": p["decision"], "conviction": p["conviction"], "reason": p["reason"],
+            "source": p["source"], "pass": p.get("pass"), "verdict": _verdict(p), "decision": p["decision"],
+            "conviction": p["conviction"], "p_win": p.get("p_win"), "scale": p.get("scale", 1),
+            "judge": p.get("judge"), "custom": bool(plan) and def_plan_res is not plan, "reason": p["reason"],
             "rank": p.get("rank"), "ranked": p.get("ranked"), "recorded_at": p.get("recorded_at"),
             "legs": " / ".join(filter(None, [", ".join(p["long"]) and f"long {', '.join(p['long'])}", ", ".join(p["short"]) and f"short {', '.join(p['short'])}"])),
             "horizon_days": (p["plan"] or {}).get("horizon_days"), "stop_pct": ((p["plan"] or {}).get("stop") or {}).get("spread_pct"),
@@ -777,6 +783,111 @@ def main_test(rows: list[dict] | None = None, cost_bps: float = EST_COST_BPS) ->
     }
 
 
+def _v2(r: dict) -> bool:
+    return r.get("scale") == 2 and r.get("p_win") is not None
+
+
+def _auc(scores: list[float], wins: list[bool]) -> float | None:
+    """Probability a winner received a higher score than a loser (ties count half). None without both classes."""
+    pos, neg = [s for s, w in zip(scores, wins) if w], [s for s, w in zip(scores, wins) if not w]
+    if not pos or not neg:
+        return None
+    return sum((a > b) + 0.5 * (a == b) for a in pos for b in neg) / (len(pos) * len(neg))
+
+
+def _p_score(rs: list[dict], key: str = "plan_bps") -> dict:
+    if not rs:
+        return {"n": 0}
+    said, won = [r["p_win"] / 100 for r in rs], [bool(r[key] > 0) for r in rs]
+    base = sum(won) / len(won)
+    brier = mean((s - w) ** 2 for s, w in zip(said, won))
+    auc = _auc(said, won)
+    return {"n": len(rs), "said": round(mean(said), 3), "won": round(base, 3), "brier": round(brier, 4),
+            "skill": round(1 - brier / (base * (1 - base)), 3) if 0 < base < 1 else None,
+            "auc": round(auc, 3) if auc is not None else None}
+
+
+def p_win_table(rows: list[dict] | None = None) -> dict:
+    """Calibration and discrimination of scale-2 `p_win` on settled proposals (scored on `plan_bps > 0`,
+    plus `takes_default` against `default_plan_bps > 0` for pooled ML target comparison)."""
+    rows = outcomes() if rows is None else rows
+    done = [r for r in rows if _v2(r) and _settled(r)]
+    takes = [r for r in done if r["verdict"] == "take"]
+    passes: dict[tuple, list[dict]] = {}
+    for r in done:
+        passes.setdefault((r["session"], r.get("recorded_at")), []).append(r)
+    by_session: dict[str, list[tuple[float, float]]] = {}
+    for (session, _), rs in sorted(passes.items()):
+        if len(rs) >= MIN_RANKED and all(r.get("rank") is not None for r in rs):
+            a = _spearman([r["p_win"] for r in rs], [r["plan_bps"] for r in rs])
+            b = _spearman([-r["rank"] for r in rs], [r["plan_bps"] for r in rs])
+            if a is not None and b is not None:
+                by_session.setdefault(session, []).append((a, b))
+    ics = [(mean(a for a, _ in v), mean(b for _, b in v)) for _, v in sorted(by_session.items())]
+    return {
+        "all": _p_score(done), "takes": _p_score(takes), "passes": _p_score([r for r in done if r["verdict"] != "take"]),
+        "takes_default": _p_score([r for r in takes if r.get("default_plan_bps") is not None], "default_plan_bps"),
+        "bins": {f"{lo}-{hi}": _p_score([r for r in done if lo <= r["p_win"] <= hi]) for lo, hi in P_WIN_BINS},
+        "nights": len(ics), "ic": round(mean(a for a, _ in ics), 3) if ics else None,
+        "rank_ic_same_rows": round(mean(b for _, b in ics), 3) if ics else None,
+    }
+
+
+def conviction_gate(rows: list[dict] | None = None) -> dict:
+    """Pre-registered sizing review: once GATE_FOURS scale-2 takes at conviction 4+ settle, compare them with
+    scale-2 3s (one difference per session that has both). If 4+ is not ahead, flatten `rules.CONVICTION_RISK`."""
+    rows = outcomes() if rows is None else rows
+    takes = [r for r in rows if r.get("scale") == 2 and r["verdict"] == "take" and _settled(r)]
+    high, base = [r for r in takes if r["conviction"] >= 4], [r for r in takes if r["conviction"] == 3]
+    diffs = []
+    for s in sorted({r["session"] for r in high} & {r["session"] for r in base}):
+        diffs.append(float(mean(r["plan_bps"] for r in high if r["session"] == s) - mean(r["plan_bps"] for r in base if r["session"] == s)))
+    due = len(high) >= GATE_FOURS
+    return {"fours": len(high), "threes": len(base), "needed": GATE_FOURS, "due": due,
+            "high": _stat([r["plan_bps"] for r in high]), "three": _stat([r["plan_bps"] for r in base]),
+            "sessions": len(diffs), "gap_bps": round(mean(diffs), 1) if diffs else None,
+            "verdict": None if not due else "keep" if diffs and mean(diffs) > 0 else "flatten"}
+
+
+def judge_monitor(rows: list[dict] | None = None) -> dict:
+    """Collapse and drift monitor for scale-2 verdicts (reads verdicts only, never outcomes)."""
+    rows = outcomes() if rows is None else rows
+    v2 = sorted((r for r in rows if _v2(r)), key=lambda r: r.get("recorded_at") or "")
+    takes = [r for r in v2 if r["verdict"] == "take"][-MONITOR_TAKES:]
+    vals = [r["p_win"] for r in takes]
+    flags = []
+    if len(takes) == MONITOR_TAKES:
+        high = sum(r["conviction"] >= 4 for r in takes) / len(takes)
+        top = max(vals.count(v) for v in set(vals)) / len(vals)
+        if high == 0:
+            flags.append(f"no 4 or 5 in the last {MONITOR_TAKES} takes: conviction is back to one level")
+        if high > 0.5:
+            flags.append(f"{high:.0%} of the last {MONITOR_TAKES} takes are 4 or 5: 4 is the new 3")
+        if len(set(vals)) < 5 or top > 0.4:
+            flags.append(f"p_win on takes has collapsed: {len(set(vals))} distinct values, {top:.0%} on one value")
+    passes: dict[tuple, list[dict]] = {}
+    for r in v2:
+        passes.setdefault((r["session"], r.get("recorded_at")), []).append(r)
+    echo = [c for rs in list(passes.values())[-20:] if len(rs) >= MIN_RANKED and all(r.get("rank") is not None for r in rs)
+            and (c := _spearman([r["p_win"] for r in rs], [-r["rank"] for r in rs])) is not None]
+    if len(echo) >= 10 and median(echo) >= 0.95:
+        flags.append(f"p_win repeats rank (median correlation {median(echo):.2f} over {len(echo)} passes)")
+    sessions = sorted({r["session"] for r in v2})
+    drift = None
+    if len(sessions) >= 20:
+        first, last = set(sessions[:10]), set(sessions[-10:])
+        a, b = [r["p_win"] for r in v2 if r["session"] in first], [r["p_win"] for r in v2 if r["session"] in last]
+        drift = round(mean(b) - mean(a), 1)
+        if abs(drift) > 5:
+            flags.append(f"average p_win moved {drift:+.1f} points between the first and latest 10 sessions")
+    judges = sorted({str(r["judge"]) for r in v2 if r.get("judge")})
+    if len(judges) > 1:
+        flags.append(f"more than one judge model on scale 2: {', '.join(judges)}; score them apart")
+    return {"takes": len(takes), "by_conviction": {c: sum(r["conviction"] == c for r in takes) for c in (3, 4, 5)},
+            "p_win_takes": {"mean": round(mean(vals), 1), "low": min(vals), "high": max(vals), "distinct": len(set(vals))} if takes else {},
+            "p_win_vs_rank": round(median(echo), 2) if echo else None, "drift": drift, "judges": judges, "flags": flags}
+
+
 def _mode_table(rows: list[dict], prefix: str) -> dict:
     settled = [r for r in rows if r.get(f"{prefix}_bps") is not None and r.get(f"{prefix}_mature", True)]
     live = [(r, v) for r in rows if (v := (r.get(f"{prefix}_bps") if r.get(f"{prefix}_bps") is not None else r.get(f"{prefix}_so_far_bps"))) is not None]
@@ -805,6 +916,14 @@ def tables(rows: list[dict] | None = None) -> dict:
         "so_far": {"n": len(live),
                    "by_verdict": {k: _stat([v for r, v in live if r["verdict"] == k]) for k in sorted({r["verdict"] for r, _ in live})}},
         "by_conviction": by(lambda r: r["conviction"] if r["conviction"] is not None else "none"),
+        "by_conviction_by_scale": {
+            str(sc): {k: _stat([r["plan_bps"] for r in done if r.get("scale", 1) == sc and (r["conviction"] if r["conviction"] is not None else "none") == k])
+                      for k in sorted({r["conviction"] if r["conviction"] is not None else "none" for r in done if r.get("scale", 1) == sc}, key=str)}
+            for sc in sorted({r.get("scale", 1) for r in done})
+        },
+        "p_win": p_win_table(rows),
+        "conviction_gate": conviction_gate(rows),
+        "judge_monitor": judge_monitor(rows),
         "rank": rank_table(rows),
         "main_test": main_test(rows),
         "by_door": {f"{door} · {verdict}": s for (door, verdict), s in by(lambda r: (r["door"], "take" if r["verdict"] == "take" else "not taken")).items()},
@@ -952,7 +1071,37 @@ def brief() -> str:
     lines += ["", "By route (settled)"] + ([_line(k, s) for k, s in t["by_route"].items()] or ["  nothing settled yet"])
     if t["so_far_by_route"]:
         lines += ["", "By route (all so far)"] + [_line(k, s) for k, s in t["so_far_by_route"].items()]
-    lines += ["", "By conviction (settled)"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing settled yet"])
+    by_sc = t.get("by_conviction_by_scale") or {}
+    if len(by_sc) > 1 or "2" in by_sc:
+        lines += ["", "By conviction (settled, separated by scale)"]
+        for sc, bucket in by_sc.items():
+            for k, s in bucket.items():
+                lbl = f"scale 1 · conviction {k} (undivided)" if sc == "1" and k == 3 else f"scale {sc} · conviction {k}"
+                lines.append(_line(lbl, s))
+    else:
+        lines += ["", "By conviction (settled)"] + ([_line(f"conviction {k}", s) for k, s in t["by_conviction"].items()] or ["  nothing settled yet"])
+    cg = t.get("conviction_gate") or {}
+    if cg.get("fours") or cg.get("threes"):
+        status = cg["verdict"].upper() if cg.get("verdict") else f"{cg['fours']}/{cg['needed']} settled 4+ takes"
+        gap_txt = f"  session gap {cg['gap_bps']:+.1f} bp ({cg['sessions']} sessions)" if cg.get("gap_bps") is not None else ""
+        lines.append(f"  {'Sizing gate (scale 2: 4+ vs 3)':<34} {status}{gap_txt}")
+    pw = t.get("p_win") or {}
+    if (pw.get("all") or {}).get("n"):
+        lines += ["", "p_win calibration (scale 2, settled)"]
+        for lbl, key in (("all verdicts", "all"), ("takes (own plan)", "takes"), ("takes (default plan)", "takes_default"), ("passes", "passes")):
+            s = pw.get(key) or {}
+            if s.get("n"):
+                sk = f"  skill {s['skill']:+.3f}" if s.get("skill") is not None else ""
+                auc = f"  AUC {s['auc']:.3f}" if s.get("auc") is not None else ""
+                lines.append(f"  {lbl:<34} n={s['n']:<4} said {s['said']:.0%}  won {s['won']:.0%}  brier {s['brier']:.4f}{sk}{auc}")
+        for b_lbl, s in (pw.get("bins") or {}).items():
+            if s.get("n"):
+                lines.append(f"  {'bin ' + b_lbl + '%':<34} n={s['n']:<4} said {s['said']:.0%}  won {s['won']:.0%}")
+        if pw.get("ic") is not None:
+            lines.append(f"  {'within-pass Spearman (p_win/rank)':<34} p_win {pw['ic']:+.3f}  vs  rank {pw['rank_ic_same_rows']:+.3f} ({pw['nights']} nights)")
+    jm = t.get("judge_monitor") or {}
+    if jm.get("flags"):
+        lines += ["", "Judge monitor flags (scale 2)"] + [f"  ! {f}" for f in jm["flags"]]
     rk = t["rank"]
     lines += ["", "By rank (1 = the best idea of its pass; settled passes only)"]
     if rk["nights"]:

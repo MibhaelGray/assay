@@ -3,7 +3,7 @@ Run a LATE PASS for the swing book of the Assay project: a second pass in the ni
 1. The working directory is already the repo root (`/Users/michael/Projects/Assay`); run every `uv run fr ...` command directly without prefixing `cd ... &&`. The late pass belongs to the same session as tonight's night pass.
 2. Read `/Users/michael/Projects/Assay/.claude/skills/swing-pass/SKILL.md` in full and follow it with `late` as the pass (the skill's table says what that is; where the skill says `night` in a command or a draft, use `late`): the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.
 
-What the pass must leave behind: the live screen (`uv run fr screen --live late`); a verdict, conviction and rank on every candidate of that screen and a hold, exit or extend on every trade the book has open or is waiting to enter, recorded together with `uv run fr paper propose <draft>` using `"pass": "late"`; and a short note in `journal/research/<session>-late.md`. Post-mortems are the night pass's; leave them.
+What the pass must leave behind: the live screen (`uv run fr screen --live late`); a verdict, conviction, `p_win` and rank on every candidate of that screen and a hold, exit or extend on every trade the book has open or is waiting to enter, recorded together with `uv run fr paper propose <draft>` using `"pass": "late"`; and a short note in `journal/research/<session>-late.md`. Post-mortems are the night pass's; leave them.
 
 Standing preferences from the owner:
 - This runs unattended. Do not ask questions or wait for approval; record what you can and say plainly in your final message what did not happen and why.

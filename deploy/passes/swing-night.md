@@ -3,7 +3,7 @@ Run the swing book's NIGHT PASS for the Assay project. It is a full pass on the 
 1. The working directory is already the repo root (`/Users/michael/Projects/Assay`); run every `uv run fr ...` command directly without prefixing `cd ... &&`. The night pass runs the evening before each session, Sunday included.
 2. Read `/Users/michael/Projects/Assay/.claude/skills/swing-pass/SKILL.md` in full and follow it with `night` as the pass: the rules under "For every pass", then "The pass, step by step". If the `swing-pass` skill is available in this session, invoke it instead of reading the file.
 
-What the pass must leave behind: the live screen (`uv run fr screen --live night`); a verdict, conviction and rank on every candidate of that screen and a hold, exit or extend on every trade the book has open or is waiting to enter, recorded together with `uv run fr paper propose <draft>` using `"pass": "night"`; post-mortems for closed trades that have none; and a short note in `journal/research/<session>-night.md`.
+What the pass must leave behind: the live screen (`uv run fr screen --live night`); a verdict, conviction, `p_win` and rank on every candidate of that screen and a hold, exit or extend on every trade the book has open or is waiting to enter, recorded together with `uv run fr paper propose <draft>` using `"pass": "night"`; post-mortems for closed trades that have none; and a short note in `journal/research/<session>-night.md`.
 
 Standing preferences from the owner:
 - This runs unattended. Do not ask questions or wait for approval; record what you can and say plainly in your final message what did not happen and why.
